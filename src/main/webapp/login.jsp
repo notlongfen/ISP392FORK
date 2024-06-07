@@ -19,6 +19,7 @@
             <input type="submit" name="action" value="Login"/>
             <input type="submit" name="action" value="Sign_Up"/>
             <input type="reset" value="Reset"/>
+            <input type="submit" name="action" value="Add_View"/>
         </form>
     </body>
 </html>

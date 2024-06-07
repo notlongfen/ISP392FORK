@@ -14,11 +14,11 @@
     </servlet>
     <servlet>
         <servlet-name>DeleteController</servlet-name>
-        <servlet-class>com.mycompany.isp392.controllers.DeleteController</servlet-class>
+        <servlet-class>com.mycompany.isp392.controllers.DeleteProductController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>EditController</servlet-name>
-        <servlet-class>com.mycompany.isp392.controllers.EditController</servlet-class>
+        <servlet-class>com.mycompany.isp392.controllers.EditProductController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>MainController</servlet-name>

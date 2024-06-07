@@ -27,6 +27,13 @@ public class ProductDTO {
         this.status = status;
         this.brandID = brandID;
     }
+    public ProductDTO( String productName, String description, int numberOfPurchase, int status, int brandID) {
+        this.productName = productName;
+        this.description = description;
+        this.numberOfPurchase = numberOfPurchase;
+        this.status = status;
+        this.brandID = brandID;
+    }
 
     public int getProductID() {
         return productID;
