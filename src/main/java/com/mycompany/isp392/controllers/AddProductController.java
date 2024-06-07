@@ -19,22 +19,21 @@ import java.sql.SQLException;
  */
 public class AddProductController extends HttpServlet {
 
-    private static final String ERROR = "manageProduct.jsp";
-    private static final String SUCCESS = "manageProduct.jsp";
+    private static final String ERROR = "login.jsp";
+    private static final String SUCCESS = "product.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            int productID = Integer.parseInt(request.getParameter("productID"));
             String productName = request.getParameter("productName");
             String description = request.getParameter("description");
             int numberOfPurchase = Integer.parseInt(request.getParameter("numberOfPurchase"));
             int status = Integer.parseInt(request.getParameter("status"));
             int brandID = Integer.parseInt(request.getParameter("brandID"));
 
-            ProductDTO product = new ProductDTO(productID, productName, description, numberOfPurchase, status, brandID);
+            ProductDTO product = new ProductDTO(productName, description, numberOfPurchase, status, brandID);
             ProductDAO productDAO = new ProductDAO();
             boolean check = productDAO.addProduct(product);
             if (check) {

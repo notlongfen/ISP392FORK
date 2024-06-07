@@ -13,11 +13,11 @@ import utils.DbUtils;
  * Data Access Object for handling database operations related to products.
  */
 public class ProductDAO {
-    private static final String ADD_PRODUCT = "INSERT INTO Products(productID, productName, description, numberOfPurchase, status, brandID) VALUES(?,?,?,?,?,?)";
+    private static final String ADD_PRODUCT = "INSERT INTO Products(productName, description, NumberOfPurchasing, status, BrandID)VALUES(?,?,?,?,?)";
     private static final String EDIT_PRODUCT = "UPDATE Products SET productName=?, description=? WHERE productID=?";
     private static final String DELETE_PRODUCT = "UPDATE Products SET status = -1 WHERE productID=?";
-    private static final String SELECT_PRODUCT = "SELECT productName, description, numberOfPurchase, brandID FROM Products WHERE productID=? and status=0";
-    private static final String SEARCH_PRODUCT = "SELECT productName, description, numberOfPurchase, brandID FROM Products WHERE productName like ? and status=0";
+    private static final String SELECT_PRODUCT = "SELECT productName, description, numberOfPurchasing, brandID FROM Products WHERE productID=? and status=0";
+    private static final String SEARCH_PRODUCT = "SELECT productName, description, numberOfPurchasing, brandID FROM Products WHERE productName like ? and status=0";
     public boolean addProduct(ProductDTO product) throws SQLException {
         boolean check = false;
         Connection conn = null;
@@ -26,15 +26,14 @@ public class ProductDAO {
             conn = DbUtils.getConnection();
             if (conn != null) {
                 ptm = conn.prepareStatement(ADD_PRODUCT);
-                ptm.setInt(1, product.getProductID());
-                ptm.setString(2, product.getProductName());
-                ptm.setString(3, product.getDescription());
-                ptm.setInt(4, product.getNumberOfPurchase());
-                ptm.setInt(5, product.getStatus());
-                ptm.setInt(6, product.getBrandID());
+                ptm.setString(1, product.getProductName());
+                ptm.setString(2, product.getDescription());
+                ptm.setInt(3, product.getNumberOfPurchase());
+                ptm.setInt(4, product.getStatus());
+                ptm.setInt(5, product.getBrandID());
                 check = ptm.executeUpdate() > 0;
             }
-        } catch (Exception e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         } finally {
             if (ptm != null) {
@@ -133,7 +132,7 @@ public class ProductDAO {
         return product;
     }
     
-     public List<ProductDTO> searchProducts(String productName) throws SQLException {
+     public List<ProductDTO> searchProducts(String searchText) throws SQLException {
         List<ProductDTO> products = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -142,7 +141,7 @@ public class ProductDAO {
             conn = DbUtils.getConnection();
             if (conn != null) {
                 ptm = conn.prepareStatement(SEARCH_PRODUCT);
-                ptm.setString(1, "%" + productName + "%"); 
+                ptm.setString(1, "%" + searchText + "%"); 
                 rs = ptm.executeQuery();
                 while (rs.next()) {
                     int productID = rs.getInt("productID");

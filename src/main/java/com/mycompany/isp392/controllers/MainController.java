@@ -24,6 +24,12 @@ public class MainController extends HttpServlet {
     private static final String REGISTER_PAGE = "Sign_Up";
     private static final String REGISTER_PAGE_VIEW = "signup.jsp";
     
+    private static final String ADD_PRODUCT_PAGE = "Add_View";
+    private static final String ADD_PRODUCT_PAGE_VIEW = "product.jsp";
+    
+    private static final String ADD_PRODUCT = "Ađd_Product";
+    private static final String ADD_PRODUCT_CONTROLLER = "AddProductController";
+    
     private static final String REGISTER = "Sign_In";
     private static final String REGISTER_CONTROLLER = "RegisterController";
 
@@ -114,6 +120,10 @@ public class MainController extends HttpServlet {
                 url = EDIT_CONTROLLER;
             } else if (CHECKOUT.equals(action)) {
                 url = CHECKOUT_CONTROLLER;
+            } else if (ADD_PRODUCT_PAGE.equals(action)) {
+                url = ADD_PRODUCT_PAGE_VIEW;
+            } else if (ADD_PRODUCT.equals(action)) {
+                url = ADD_PRODUCT_CONTROLLER;
             }
         } catch (Exception e) {
             log("error at MainController: " + e.toString());

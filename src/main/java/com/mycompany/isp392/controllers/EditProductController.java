@@ -5,7 +5,9 @@
 package com.mycompany.isp392.controllers;
 
 import com.mycompany.isp392.product.ProductDAO;
+import com.mycompany.isp392.product.ProductDTO;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,23 +18,27 @@ import java.sql.SQLException;
  *
  * @author tuan tran
  */
-public class DeleteController extends HttpServlet {
-    private static final String ERROR = "manageProduct.jsp";
+public class EditProductController extends HttpServlet {
+     private static final String ERROR = "editProduct.jsp";
     private static final String SUCCESS = "manageProduct.jsp";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-         String url = ERROR;
-        try {
+        String url = ERROR;
+       try {
             String productID = request.getParameter("productID");
+            String newName = request.getParameter("newName");
+            String newDescription = request.getParameter("newDescription");
+
             ProductDAO productDAO = new ProductDAO();
-            boolean check = productDAO.deleteProduct(productID);
+            boolean check = productDAO.editProduct(productID, newName, newDescription);
             if (check) {
-                request.setAttribute("MESSAGE", "Product deactivated successfully!");
+                request.setAttribute("MESSAGE", "Product updated successfully!");
                 url = SUCCESS;
             }
         } catch (SQLException e) {
-            log("Error at DeleteCloseOperation: " + e.toString());
+            log("Error at EditProductController: " + e.toString());
+            request.setAttribute("ERROR_MESSAGE", "Error updating product: " + e.getMessage());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
