@@ -19,12 +19,12 @@ public class ProductDetailsDTO {
     private int price;
     private Date importDate;
     private String image;
-    private boolean status;
+    private int status;
 
     public ProductDetailsDTO() {
     }
 
-    public ProductDetailsDTO(int productID, String color, String size, int stockQuantity, int price, Date importDate, String image, boolean status) {
+    public ProductDetailsDTO(int productID, String color, String size, int stockQuantity, int price, Date importDate, String image, int status) {
         this.productID = productID;
         this.color = color;
         this.size = size;
@@ -63,7 +63,7 @@ public class ProductDetailsDTO {
         return image;
     }
 
-    public boolean isStatus() {
+    public int getStatus() {
         return status;
     }
 
@@ -95,7 +95,7 @@ public class ProductDetailsDTO {
         this.image = image;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 
