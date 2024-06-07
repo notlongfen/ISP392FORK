@@ -10,10 +10,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author notlongfen
- */
 public class MainController extends HttpServlet {
 
     private static final String WELCOME = "login.jsp";
@@ -27,51 +23,6 @@ public class MainController extends HttpServlet {
     private static final String REGISTER = "Sign_In";
     private static final String REGISTER_CONTROLLER = "RegisterController";
 
-    private static final String CREATE_USER_PAGE = "Create_User_Page";
-    private static final String CREATE_USER_PAGE_VIEW = "createUser.jsp";
-
-    private static final String CREATE_USER = "Create_User";
-    private static final String CREATE_USER_CONTROLLER = "CreateUserController";
-
-    private static final String SEARCH = "Search";
-    private static final String SEARCH_CONTROLLER = "SearchController";
-
-    private static final String TOP1 = "TOP1";
-    private static final String TOP1_CONTROLLER = "Top1Controller";
-
-    private static final String UPDATE = "Update";
-    private static final String UPDATE_CONTROLLER = "UpdateController";
-
-    private static final String DELETE = "Delete";
-    private static final String DELETE_CONTROLLER = "DeleteController";
-
-    private static final String LOGOUT = "Logout";
-    private static final String LOGOUT_CONTROLLER = "LogoutController";
-
-    private static final String CREATE_PRODUCT_PAGE = "Create_Product_Page";
-    private static final String CREATE_PRODUCT_PAGE_VIEW = "createProduct.jsp";
-
-    private static final String CREATE_PRODUCT = "Create_Product";
-    private static final String CREATE_PRODUCT_CONTROLLER = "CreateProductController";
-
-    private static final String SHOPPING_PAGE = "Shopping_Page_View";
-    private static final String SHOPPING_PAGE_CONTROLLER = "ViewController";
-
-    private static final String ADD = "Add";
-    private static final String ADD_CONTROLLER = "AddController";
-
-    private static final String VIEW = "View";
-    private static final String VIEW_CONTROLLER = "viewCart.jsp";
-
-    private static final String REMOVE = "Remove";
-    private static final String REMOVE_CONTROLLER = "RemoveController";
-
-    private static final String EDIT = "Edit";
-    private static final String EDIT_CONTROLLER = "EditController";
-
-    private static final String CHECKOUT = "CheckOut";
-    private static final String CHECKOUT_CONTROLLER = "CheckOutController";
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -84,43 +35,14 @@ public class MainController extends HttpServlet {
                 url = REGISTER_PAGE_VIEW;
             } else if (REGISTER.equals(action)) {
                 url = REGISTER_CONTROLLER;
-            } else if (CREATE_USER_PAGE.equals(action)) {
-                url = CREATE_USER_PAGE_VIEW;
-            } else if (CREATE_USER.equals(action)) {
-                url = CREATE_USER_CONTROLLER;
-            } else if (SEARCH.equals(action)) {
-                url = SEARCH_CONTROLLER;
-            } else if (TOP1.equals(action)) {
-                url = TOP1_CONTROLLER;
-            } else if (UPDATE.equals(action)) {
-                url = UPDATE_CONTROLLER;
-            } else if (DELETE.equals(action)) {
-                url = DELETE_CONTROLLER;
-            } else if (LOGOUT.equals(action)) {
-                url = LOGOUT_CONTROLLER;
-            } else if (CREATE_PRODUCT_PAGE.equals(action)) {
-                url = CREATE_PRODUCT_PAGE_VIEW;
-            } else if (CREATE_PRODUCT.equals(action)) {
-                url = CREATE_PRODUCT_CONTROLLER;
-            } else if (SHOPPING_PAGE.equals(action)) {
-                url = SHOPPING_PAGE_CONTROLLER;
-            } else if (ADD.equals(action)) {
-                url = ADD_CONTROLLER;
-            } else if (VIEW.equals(action)) {
-                url = VIEW_CONTROLLER;
-            } else if (REMOVE.equals(action)) {
-                url = REMOVE_CONTROLLER;
-            } else if (EDIT.equals(action)) {
-                url = EDIT_CONTROLLER;
-            } else if (CHECKOUT.equals(action)) {
-                url = CHECKOUT_CONTROLLER;
-            }
+            } 
         } catch (Exception e) {
             log("error at MainController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
     }
+
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

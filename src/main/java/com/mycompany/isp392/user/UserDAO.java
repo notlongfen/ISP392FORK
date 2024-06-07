@@ -9,10 +9,10 @@ import utils.DbUtils;
 
 public class UserDAO {
 
-    private static final String LOGIN = "SELECT UserID, userName, roleID, phone, status FROM Users WHERE email = ? AND password = ? ";
+    private static final String LOGIN = "SELECT UserID, userName, roleID, phone, status FROM Users WHERE email = ? AND password = ? AND status =1";
     private static final String CHECK_EMAIL = "SELECT UserID FROM Users WHERE email = ?";
     private static final String CHECK_PHONE = "SELECT UserID FROM Users WHERE phone = ?";
-    private static final String INSERT_USER = "INSERT INTO Users(userName, roleID, email, password, phone, status) VALUES(?, ?, ?, ?, ?, ?)";
+    private static final String INSERT_USER = "INSERT INTO Users(userName, roleID, email, password, phone, status) VALUES(?, ?, ?, ?, ?, true)";
     private static final String INSERT_CUSTOMER = "INSERT INTO Customers(CustID, points, birthday, province_city, district, ward, detailAddress) VALUES(?, 0, ?, ?, ?, ?, ?)";
     private static final String GET_LAST_USER_ID = "SELECT MAX(UserID) AS LastUserID FROM Users";
 
@@ -83,7 +83,7 @@ public class UserDAO {
             }
         }
 
-        return lastUserId +1;
+        return lastUserId + 1;
     }
 
     public boolean checkEmailExists(String email) throws SQLException {
@@ -150,45 +150,43 @@ public class UserDAO {
         return check;
     }
 
-    public boolean insert(CustomerDTO customer) throws SQLException {
+    public boolean insertUser(CustomerDTO customer) throws SQLException {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptmUser = null;
         PreparedStatement ptmCustomer = null;
         try {
             conn = DbUtils.getConnection();
-            if (conn != null) {
-                ptmUser = conn.prepareStatement(INSERT_USER);
-                ptmUser.setInt(1, customer.getUserID());
-                ptmUser.setString(2, customer.getUserName());
-                ptmUser.setInt(3, customer.getRoleID());
-                ptmUser.setString(4, customer.getEmail());
-                ptmUser.setString(5, customer.getPassword());
-                ptmUser.setInt(6, customer.getPhone());
-                ptmUser.setBoolean(7, customer.getStatus());
 
-                ptmCustomer = conn.prepareStatement(INSERT_CUSTOMER);
-                ptmCustomer.setDate(1, (java.sql.Date) new Date(customer.getBirthday().getTime()));
-                ptmCustomer.setString(2, customer.getCity());
-                ptmCustomer.setString(3, customer.getDistrict());
-                ptmCustomer.setString(4, customer.getWard());
-                ptmCustomer.setString(5, customer.getAddress());
-                check = ptmUser.executeUpdate() > 0 ? true : false;
+            ptmUser = conn.prepareStatement(INSERT_USER);
+            ptmUser.setString(1, customer.getUserName());
+            ptmUser.setInt(2, customer.getRoleID());
+            ptmUser.setString(3, customer.getEmail());
+            ptmUser.setString(4, customer.getPassword());
+            ptmUser.setInt(5, customer.getPhone());
+            check = ptmUser.executeUpdate() > 0 ? true : false;
 
-            }
+            ptmCustomer = conn.prepareStatement(INSERT_CUSTOMER);
+            ptmCustomer.setInt(1, customer.getUserID());
+            ptmCustomer.setDate(2, new java.sql.Date(customer.getBirthday().getTime()));
+            ptmCustomer.setString(3, customer.getCity());
+            ptmCustomer.setString(4, customer.getDistrict());
+            ptmCustomer.setString(5, customer.getWard());
+            ptmCustomer.setString(6, customer.getAddress());
+            check = ptmCustomer.executeUpdate() > 0 ? true : false;
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             if (ptmCustomer != null) {
                 ptmCustomer.close();
             }
-            if (ptmUser!= null) {
+            if (ptmUser != null) {
                 ptmUser.close();
             }
             if (conn != null) {
                 conn.close();
             }
-
         }
         return check;
     }
