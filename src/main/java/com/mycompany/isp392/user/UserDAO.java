@@ -9,7 +9,7 @@ import utils.DbUtils;
 
 public class UserDAO {
 
-    private static final String LOGIN = "SELECT UserID, userName, roleID, phone, status FROM Users WHERE email = ? AND password = ? AND status =1";
+    private static final String LOGIN = "SELECT UserID, userName, roleID, phone, status FROM Users WHERE email = ? AND password = ? AND status = 1";
     private static final String CHECK_EMAIL = "SELECT UserID FROM Users WHERE email = ?";
     private static final String CHECK_PHONE = "SELECT UserID FROM Users WHERE phone = ?";
     private static final String INSERT_USER = "INSERT INTO Users(userName, roleID, email, password, phone, status) VALUES(?, ?, ?, ?, ?, true)";

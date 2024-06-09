@@ -6,6 +6,7 @@ package com.mycompany.isp392.controllers;
 
 import com.mycompany.isp392.user.UserDAO;
 import com.mycompany.isp392.user.UserDTO;
+import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -26,11 +27,17 @@ public class LoginController extends HttpServlet {
     private static final String US_PAGE = "user.jsp";
     private static final int AD = 1;
     private static final String AD_PAGE = "admin.jsp";
+    private String clientID;
+    public void initClientID() throws ServletException{
+        Dotenv dotenv = Dotenv.configure().directory("/home/notlongfen/code/java/ISP392/.env").load();
+        clientID = dotenv.get("GOOGLE_CLIENT_ID");
+    }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
+        initClientID();
+        request.setAttribute("CLIENT_ID", clientID);
         String url = ERROR;
         try {
             String email = request.getParameter("email");

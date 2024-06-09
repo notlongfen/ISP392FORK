@@ -20,6 +20,10 @@
         <servlet-name>EditController</servlet-name>
         <servlet-class>com.mycompany.isp392.controllers.EditProductController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>LoginGoogleServlet</servlet-name>
+        <servlet-class>stackjava.com.accessgoogle.servlet.LoginGoogleServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>MainController</servlet-name>
         <url-pattern>/MainController</url-pattern>
@@ -39,6 +43,10 @@
     <servlet-mapping>
         <servlet-name>EditController</servlet-name>
         <url-pattern>/EditController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoginGoogleServlet</servlet-name>
+        <url-pattern>/google-login</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
