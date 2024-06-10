@@ -28,6 +28,12 @@ public class MainController extends HttpServlet {
 
     private static final String REGISTER = "Sign_In";
     private static final String REGISTER_CONTROLLER = "RegisterController";
+    
+    private static final String SENDMAIL = "Send Email";
+    private static final String SEND_EMAIL_CONTROLLER = "SendMailServlet";
+    
+    private static final String SEARCH_SUPPORT = "Search support";
+    private static final String SEARCH_SUPPORT_CONTROLLER = "SearchSupportController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -41,6 +47,10 @@ public class MainController extends HttpServlet {
                 url = REGISTER_PAGE_VIEW;
             } else if (REGISTER.equals(action)) {
                 url = REGISTER_CONTROLLER;
+            }else if (SENDMAIL.equals(action)){
+                url = SEND_EMAIL_CONTROLLER;
+            }else if (ADD_PRODUCT.equals(action)){
+                url = ADD_PRODUCT_CONTROLLER;
             }
 
         } catch (Exception e) {

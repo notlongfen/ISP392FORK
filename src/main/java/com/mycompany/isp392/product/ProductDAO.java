@@ -17,8 +17,8 @@ public class ProductDAO {
     private static final String ADD_PRODUCT = "INSERT INTO Products(productName, description, NumberOfPurchasing, status, BrandID)VALUES(?,?,?,?,?)";
     private static final String EDIT_PRODUCT = "UPDATE Products SET productName=?, description=? WHERE productID=?";
     private static final String DELETE_PRODUCT = "UPDATE Products SET status = -1 WHERE productID=?";
-    private static final String SELECT_PRODUCT = "SELECT productName, description, numberOfPurchasing, brandID FROM Products WHERE productID=? and status=0";
-    private static final String SEARCH_PRODUCT = "SELECT productName, description, numberOfPurchasing, brandID FROM Products WHERE productName like ? and status=0";
+    private static final String SELECT_PRODUCT = "SELECT productName, description, numberOfPurchasing, brandID FROM Products WHERE productID=? and status= 1";
+    private static final String SEARCH_PRODUCT = "SELECT productName, description, numberOfPurchasing, brandID FROM Products WHERE productName like ? and status= 1";
     private static final String ADD_PRODUCT_DETAILS = "INSERT INTO ProductDetails (ProductID, color, size, stockQuantity, price, importDate, image, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
     public boolean addProduct(ProductDTO product) throws SQLException {
@@ -147,7 +147,7 @@ public class ProductDAO {
                     String description = rs.getString("description");
                     int numberOfPurchase = rs.getInt("numberOfPurchase");
                     int brandID = rs.getInt("brandID");
-                    product = new ProductDTO(productID, productName, description, numberOfPurchase, 0, brandID);
+                    product = new ProductDTO(productID, productName, description, numberOfPurchase, 1, brandID);
                 }
             }
         } catch (Exception e) {
@@ -183,7 +183,7 @@ public class ProductDAO {
                     String description = rs.getString("description");
                     int numberOfPurchase = rs.getInt("numberOfPurchase");
                     int brandID = rs.getInt("brandID");
-                    products.add(new ProductDTO(productID, name, description, numberOfPurchase, 0, brandID));
+                    products.add(new ProductDTO(productID, name, description, numberOfPurchase, 1, brandID));
                 }
             }
         } catch (Exception e) {

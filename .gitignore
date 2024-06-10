@@ -4,3 +4,8 @@
 *.env
 #Exlude folder target
 target/
+
+#Exclude file DbUtils.java, Constants.java, LoginController.java
+DbUtils.java
+Constants.java 
+LoginController.java

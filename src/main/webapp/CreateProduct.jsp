@@ -45,15 +45,15 @@
 
                         <div class="form-container">
                             <h2 class="text-center" style="color: #000; font-weight: bold;">Create New Product</h2>
-                            <form>
+                            <form action="MainController" method="post">
                                 <div class="form-row">
                                     <div class="form-group col-md-8">
                                         <label for="productName">Product Name</label>
-                                        <input type="text" class="form-control" id="productName" placeholder="Enter Product Name">
+                                        <input type="text" class="form-control" id="productName" name="productName" placeholder="Enter Product Name">
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label for="brand">Brand</label>
-                                        <select class="form-control" id="brand">
+                                        <select class="form-control" id="brand" name="brand">
                                             <option selected>Choose...</option>
                                             <option>Brand A</option>
                                             <option>Brand B</option>
@@ -64,29 +64,29 @@
                                 <div class="form-row">
                                     <div class="form-group col-md-4">
                                         <label for="stockQuantity">Stock Quantity</label>
-                                        <input type="number" class="form-control" id="stockQuantity" placeholder="Enter Stock Quantity">
+                                        <input type="number" class="form-control" id="stockQuantity" name="stockQuantity" placeholder="Enter Stock Quantity">
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label for="price">Price</label>
-                                        <input type="number" class="form-control" id="price" placeholder="Enter Price">
+                                        <input type="number" class="form-control" id="price" name="price" placeholder="Enter Price">
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label for="importDate">Import Date</label>
-                                        <input type="date" class="form-control" id="importDate">
+                                        <input type="date" class="form-control" id="importDate" name="importDate">
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-4">
                                         <label for="size">Size</label>
-                                        <input type="text" class="form-control" id="size" placeholder="Enter Size">
+                                        <input type="text" class="form-control" id="size" placeholder="Enter Size" name="size">
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label for="color">Color</label>
-                                        <input type="text" class="form-control" id="color" placeholder="Enter Color">
+                                        <input type="text" class="form-control" id="color" placeholder="Enter Color" name="color">
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label for="category">Category</label>
-                                        <select class="form-control" id="category">
+                                        <select class="form-control" id="category" name="category">
                                             <option selected>Choose...</option>
                                             <option>Category 1</option>
                                             <option>Category 2</option>
@@ -96,14 +96,14 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="description">Description</label>
-                                    <textarea class="form-control" id="description" rows="3" placeholder="Enter Description"></textarea>
+                                    <textarea class="form-control" id="description" rows="3" placeholder="Enter Description" name="description"></textarea>
                                 </div>
                                 <div class="form-group">
                                     <label for="uploadImage">Upload Image</label>
-                                    <input type="file" class="form-control-file" id="uploadImage">
+                                    <input type="file" class="form-control-file" id="uploadImage" name="image">
                                 </div>
                                 <div class="form-group text-center">
-                                    <button type="submit" class="btn btn-danger btn-custom">Submit</button>
+                                    <button type="submit" class="btn btn-danger btn-custom" value="Submit" name="action">Submit</button>
                                     <button type="reset" class="btn btn-secondary btn-custom">Reset</button>
                                 </div>
                             </form>
