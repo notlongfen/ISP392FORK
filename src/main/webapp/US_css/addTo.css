@@ -1,0 +1,225 @@
+body{margin: 0; padding: 0;}
+* {
+    box-sizing: border-box;
+}
+
+.wishlist-container {
+    width: 10%;
+    margin: 0 auto;
+    margin-top: 50px;
+}
+.wishlist_title {
+    text-align: left; /* Canh trái văn bản */
+    margin-left: 0;  /* Nếu cần điều chỉnh khoảng cách bên trái */
+    
+}
+.title-underline {
+    width: 100%;
+    border: 1px solid #000;
+}
+
+.wishlist-item {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+
+.image-holder {
+    overflow: hidden;
+    width: 300px; /* Adjust width as needed */
+    height: 200px; /* Adjust height as needed */
+}
+
+.image-holder img {
+    width: 100%;
+    height: 100%;
+    transition: transform 0.3s ease; /* Adding transition for scaling effect */
+}
+
+.image-holder:hover img {
+    transform: scale(1.1); /* Scaling the image to 110% on hover */
+}
+.product-info {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+}
+
+.product-info:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.product-info h2 {
+    margin-bottom: 10px;
+}
+
+.product-info p {
+    margin-bottom: 5px;
+}
+
+
+.item-details {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.right {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.left {
+    text-align: right;
+}
+
+.size-quantity {
+    display: flex;
+    align-items: center;
+}
+
+
+.quantity {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.quantity span {
+    margin-right: 10px;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+}
+
+.quantity-controls button {
+    background-color: #ddd;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.quantity-controls button:hover {
+    background-color: #111;
+    transform: scale(1.05);
+    color: white;
+}
+
+.quantity-controls input {
+    width: 40px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.quantity-controls input:focus {
+    outline: none;
+}
+
+.decrease,
+.increase {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.quantity-controls .decrease {
+    margin-right: 5px;
+}
+
+.quantity-controls .increase {
+    margin-left: 5px;
+}
+
+.size select {
+    width: 100%; /* Make the select element fill the container */
+    padding: 5px; /* Add padding for better visual */
+    border: none; /* Remove the border */
+    border-radius: 5px; /* Optionally add border-radius for a softer look */
+}
+
+
+/*Left effection*/
+
+.price {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* Align prices to the right */
+}
+
+.old-price, .new-price {
+    margin: 0; /* Remove default margins */
+}
+
+.old-price {
+    text-decoration: line-through; /* Add strikethrough to old price */
+    color: #999; /* Add a lighter color to old price */
+}
+
+.new-price {
+    font-weight: bold; /* Make new price bold */
+    color: #28a745; /* Set color for new price */
+}
+
+.left {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.price {
+    margin-bottom: 10px;
+}
+
+.cart-actions {
+    display: flex;
+    flex-direction: column;
+}
+
+.left-button {
+    margin-bottom: 5px;
+    padding: 8px 15px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.left-button.remove {
+    background-color: #dc3545;
+}
+
+/* Add media query for screens smaller than 768px (standard mobile phones) */
+@media screen and (max-width: 768px) {
+    .wishlist-container {
+        width: 90%; /* Adjust width for smaller screens */
+        margin-top: 20px; /* Adjust margin for smaller screens */
+    }
+
+    .wishlist-item {
+        flex-direction: column; /* Arrange wishlist items vertically on smaller screens */
+    }
+
+    .image-holder {
+        width: 100%; /* Make images fill the container */
+        height: auto; /* Auto height for images */
+    }
+
+    .product-info {
+        padding: 10px; /* Adjust padding for smaller screens */
+    }
+
+    .size {
+        width: 100%; /* Make size selector fill the container */
+        margin-top: 20px; /* Adjust margin for smaller screens */
+    }
+}

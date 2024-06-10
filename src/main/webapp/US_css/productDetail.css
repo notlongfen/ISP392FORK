@@ -1,0 +1,173 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+nav {
+    margin-bottom: 20px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #333;
+}
+
+nav span {
+    color: #999;
+}
+
+.product {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap; /* Enable wrapping for smaller screens */
+}
+
+.product-images {
+    flex: 1;
+    min-width: 300px; /* Ensures a minimum width */
+}
+
+.thumbnail {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.thumbnail img {
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+}
+
+.main-image img {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+}
+
+.product-details {
+    flex: 1;
+    min-width: 300px; /* Ensures a minimum width */
+}
+
+.product-details h1 {
+    font-size: 24px;
+    margin: 0 0 10px;
+}
+
+.product-details p {
+    color: #777;
+}
+
+.price {
+    font-size: 24px;
+    color: red;
+    margin: 20px 0;
+}
+
+.size-selection, .quantity, .actions {
+    margin: 20px 0;
+}
+
+.sizes {
+    display: flex;
+    gap: 10px;
+}
+
+.size {
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.size:hover {
+    background: black;
+    color: white;
+}
+
+.size.selected {
+    background-color: #000;
+    color: #fff;
+}
+
+.quantity label, .size-selection label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.quantity button {
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.actions button {
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+#addToCart {
+    background-color: #000;
+    color: #fff;
+    border: none;
+}
+
+#favorite {
+    background-color: #ccc;
+    border: none;
+    margin-left: 10px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+        padding: 10px;
+    }
+
+    .product {
+        flex-direction: column;
+    }
+
+    .product-images, .product-details {
+        min-width: 100%;
+    }
+
+    .main-image img {
+        width: 100%;
+        height: auto;
+    }
+
+    .sizes {
+        flex-wrap: wrap;
+    }
+
+    .size {
+        flex: 1 1 30%; /* Adjusts size buttons to fit better on small screens */
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .product-details h1 {
+        font-size: 20px;
+    }
+
+    .price {
+        font-size: 20px;
+    }
+
+    .size, .quantity button, .actions button {
+        padding: 5px 10px;
+        font-size: 14px;
+    }
+}

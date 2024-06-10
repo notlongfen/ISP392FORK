@@ -1,0 +1,322 @@
+/* CSS */
+/* Reset some basic elements */
+html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    /*background: #f2f2f2;*/
+}
+
+body{
+    margin: 0;
+    padding: 0;
+    /*overflow: hidden;*/
+    /*    background-image: url("https://images.pexels.com/photos/891252/pexels-photo-891252.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
+        background-position: center;
+        background-origin: content-box;
+        background-repeat: no-repeat;
+        background-size: cover;
+        min-height:100vh;
+        font-family: 'Noto Sans', sans-serif;
+        display: flex;
+        align-items: center;
+        overflow: hidden;*/
+}
+/*Header*/
+
+.header {
+    width: 100%;
+    height: 50px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Box shadow ở dưới */
+    padding: 20px; /* Khoảng cách giữa phần header và nội dung khác */
+}
+
+/* Logo styling */
+/* CSS */
+.logo h1 {
+    margin: 0;
+    font-size: 2em;
+    color: #333;
+    position: relative; /* Để định vị phần đường viền */
+}
+
+.logo h1::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px; /* Độ dày của đường viền */
+    background-color: white; /* Màu của đường viền */
+}
+
+
+.logo span {
+    color: #3498db;
+}
+/* Container for the whole page */
+
+/*.container {
+    min-height: 100vh;
+    width: 100%;
+    max-width: 400px;
+    margin: 50px auto;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.89);
+}*/
+
+.container {
+    background-image: url("https://images.pexels.com/photos/891252/pexels-photo-891252.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
+    background-position: center;
+    background-origin: content-box;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    justify-content: center; /* Canh giữa theo chiều ngang */
+    align-items: center; /* Canh giữa theo chiều dọc */
+    height: 100vh; /* Chiều cao là 100 viewport height */
+    background-color: #f2f2f2; /* Màu nền cho container */
+}
+
+.form-container {
+    max-width: 400px;
+    height: 500px;
+    margin: 0 auto;
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px; /* Thêm box shadow */
+    padding: 20px; /* Thêm padding cho khoảng cách với nội dung bên trong */
+    border-radius: 8px;
+    background: rgb(45, 46, 45)
+        ;/* Thêm bo tròn cho góc container */
+}
+
+.form-container h2{
+    color: white;
+}
+
+/* CSS */
+/* Toggle button styling */
+/* CSS */
+.form-toggle {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+
+.toggle-btn {
+    padding: 10px 20px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: white;
+    position: relative;
+    transition: color 0.3s; /* Thêm hiệu ứng màu chữ */
+    font-size: 30px;
+}
+
+
+.toggle-btn::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0%;
+    height: 2px;
+    background-color: #999; /* Màu đường viền màu đen nhạt */
+    transition: width 0.3s ease; /* Thêm hiệu ứng chiều dài của đường viền */
+}
+
+.toggle-btn.active::after {
+    width: 100%; /* Độ dài của đường viền khi nút được chọn */
+    background-color: white; /* Màu đường viền khi nút được chọn */
+}
+
+
+/* Hiệu ứng màu chữ khi hover */
+.toggle-btn:hover {
+    color: #555;
+}
+/* Form styling */
+.form-content {
+    display: none;
+}
+
+.form-content.active {
+    display: block;
+}
+
+.input-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+/* CSS */
+.input-group input:focus {
+    transform: scale(1.1); /* Scale up khi input được focus */
+    transition: transform 0.3s; /* Thêm hiệu ứng chuyển đổi */
+}
+/* CSS */
+.input-group input:hover {
+    transform: scale(1.1); /* Scale up khi di chuột vào input */
+    transition: transform 0.3s; /* Thêm hiệu ứng chuyển đổi */
+}
+
+
+input {
+    width: calc(100% - 20px); /* Khoảng cách trái và phải đều nhau */
+    padding: 10px;
+    border: none; /* Loại bỏ viền */
+    border-radius: 4px;
+    background-color: #f2f2f2; /* Màu nền cho input */
+}
+
+input:hover{
+    border: none;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    cursor: pointer;
+    color: #aaa;
+}
+
+.btn {
+    width: 100%;
+    padding: 10px;
+    background: #333; /* Màu chủ đạo là màu đen */
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn:hover {
+    background: #555; /* Màu khác khi hover */
+}
+
+.forgot-password a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+/* CSS */
+.social-login {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between; /* Canh đều giữa các phần tử */
+}
+
+.social-btn {
+    display: inline-block;
+    width: 200px; /* Đặt chiều rộng */
+    height: 50px; /* Đặt chiều cao */
+    text-align: center;
+    line-height: 50px; /* Canh giữa theo chiều dọc */
+    border-radius: 8px; /* Để làm cho hình chữ nhật có góc bo tròn */
+    transition: transform 0.3s; /* Thêm hiệu ứng khi hover */
+}
+
+.social-btn:hover {
+    transform: scale(1.1); /* Phóng to nút khi hover */
+}
+.facebook {
+    background: #3b5998; /* Màu nền của nút Facebook */
+    color: white; /* Màu chữ */
+}
+
+.google {
+    background: #db4437; /* Màu nền của nút Google */
+    color: white; /* Màu chữ */
+}
+
+.login-signup-btn.active::after {
+    width: 100%;
+}
+
+
+.social-btn:hover {
+    opacity: 0.8;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+        padding: 15px;
+    }
+
+    .toggle-btn {
+        padding: 8px 15px;
+    }
+
+    .input-group input {
+        padding: 8px;
+    }
+
+    .btn {
+        padding: 8px;
+    }
+
+    .social-btn {
+        margin: 0 5px;
+        font-size: 1.2em;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo h1 {
+        font-size: 1.5em;
+    }
+
+    .toggle-btn {
+        font-size: 0.9em;
+    }
+
+    .social-login {
+        margin-top: 15px;
+    }
+
+    .social-btn {
+        margin: 0 3px;
+        font-size: 1em;
+        width: 25px;
+        height: 25px;
+        line-height: 25px;
+    }
+}
+
+
+/* CSS */.footer {
+    background-color: #333;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.social-icons a {
+    color: #fff;
+    font-size: 24px;
+    margin: 0 10px;
+    text-decoration: none;
+}
+
+.social-icons a:hover {
+    opacity: 0.7;
+}
+
+/* Additional styles for TikTok icon */
+.fa-tiktok:before {
+    content: "\f1d8"; /* Unicode for TikTok icon */
+}

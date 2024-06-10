@@ -1,0 +1,43 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Jun 3, 2024, 4:45:53 PM
+    Author     : PC
+*/
+.myapp-footer {
+    background-color: #1c1c1e;
+    padding: 40px 0;
+    color: white;
+}
+.myapp-footer a {
+    color: #b0b0b0;
+    text-decoration: none;
+}
+.myapp-footer a:hover {
+    color: white;
+}
+.myapp-footer h5 {
+    font-weight: bold;
+}
+.myapp-footer .social-icons a {
+    color: white;
+    margin-right: 15px;
+    font-size: 20px;
+}
+.myapp-footer .copyright {
+    border-top: 1px solid #b0b0b0;
+    padding-top: 15px;
+    margin-top: 15px;
+    text-align: center;
+    color: #b0b0b0;
+}
+
+.myapp-footer li {
+    margin-bottom: 10px;
+}
+
+.myapp-footer i {
+    margin-right: 10px;
+}
