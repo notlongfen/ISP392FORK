@@ -24,6 +24,18 @@
         <servlet-name>LoginGoogleServlet</servlet-name>
         <servlet-class>stackjava.com.accessgoogle.servlet.LoginGoogleServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddBrandController</servlet-name>
+        <servlet-class>com.mycompany.isp392.controllers.AddBrandController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteBrandController</servlet-name>
+        <servlet-class>com.mycompany.isp392.controllers.DeleteBrandController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateBrandController</servlet-name>
+        <servlet-class>com.mycompany.isp392.controllers.UpdateBrandController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>MainController</servlet-name>
         <url-pattern>/MainController</url-pattern>
@@ -47,6 +59,18 @@
     <servlet-mapping>
         <servlet-name>LoginGoogleServlet</servlet-name>
         <url-pattern>/google-login</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddBrandController</servlet-name>
+        <url-pattern>/AddBrandController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteBrandController</servlet-name>
+        <url-pattern>/DeleteBrandController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateBrandController</servlet-name>
+        <url-pattern>/UpdateBrandController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
