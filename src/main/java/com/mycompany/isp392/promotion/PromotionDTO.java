@@ -1,6 +1,7 @@
 package com.mycompany.isp392.promotion;
 
 
+import java.math.BigDecimal;
 import java.sql.Date;
 
 /*
