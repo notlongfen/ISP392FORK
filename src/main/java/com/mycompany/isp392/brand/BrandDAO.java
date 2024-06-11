@@ -11,16 +11,17 @@ import utils.DbUtils;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 /**
  *
  * @author notlongfen
  */
 public class BrandDAO {
-    private static final String SEARCH_BRAND = "SELECT * FROM Brand WHERE brandName LIKE ?";
+    private static final String SEARCH_BRAND = "SELECT * FROM Brands WHERE brandName LIKE ?";
     
     public List<BrandDTO> searchForBrand(String brandName) {
-        List<BrandDTO> list = null;
+        List<BrandDTO> list = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ptm = null;
         ResultSet rs = null;
@@ -34,9 +35,6 @@ public class BrandDAO {
                     int brandID = rs.getInt("brandID");
                     int status = rs.getInt("status"); 
                     
-                    if (list == null) {
-                        list = new java.util.ArrayList<>();
-                    }
                     list.add(new BrandDTO(brandID, brandName, status));
                 }
             }
@@ -45,5 +43,6 @@ public class BrandDAO {
             // TODO: handle exception
             e.printStackTrace();
         }
+        return list;
     }
 }

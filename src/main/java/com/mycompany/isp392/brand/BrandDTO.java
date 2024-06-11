@@ -11,9 +11,9 @@ package com.mycompany.isp392.brand;
 public class BrandDTO {
     private int brandID;
     private String brandName;
-    private boolean status;
+    private int status;
 
-    public BrandDTO(int brandID, String brandName, boolean status) {
+    public BrandDTO(int brandID, String brandName, int status) {
         this.brandID = brandID;
         this.brandName = brandName;
         this.status = status;
@@ -38,11 +38,11 @@ public class BrandDTO {
         this.brandName = brandName;
     }
 
-    public boolean isStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 }

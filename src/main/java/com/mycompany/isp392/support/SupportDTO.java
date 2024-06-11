@@ -8,7 +8,7 @@ import java.util.Date;
 
 public class SupportDTO {
     private int supportID;
-    private boolean status;
+    private int status;
     private Date requestDate;
     private String requestMessage;
     private int custID;
@@ -16,7 +16,7 @@ public class SupportDTO {
     public SupportDTO() {
     }
 
-    public SupportDTO(int supportID, boolean status, Date requestDate, String requestMessage, int custID) {
+    public SupportDTO(int supportID, int status, Date requestDate, String requestMessage, int custID) {
         this.supportID = supportID;
         this.status = status;
         this.requestDate = requestDate;
@@ -32,11 +32,11 @@ public class SupportDTO {
         this.supportID = supportID;
     }
 
-    public boolean isStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 

@@ -86,7 +86,6 @@ public class SendMailServlet extends HttpServlet {
         processRequest(request, response);
         String url = ERROR;
         HttpSession sessionCur = request.getSession();
-        int custID = Integer.parseInt(request.getParameter("custID"));
         
         String toEmail = request.getParameter("toEmail");
         String subject = request.getParameter("subject");
@@ -112,6 +111,8 @@ public class SendMailServlet extends HttpServlet {
                 });
 
         try {
+            int custID = Integer.parseInt(request.getParameter("custID"));
+            
             // Create a default MimeMessage object
             Message message = new MimeMessage(session);
             
@@ -133,17 +134,15 @@ public class SendMailServlet extends HttpServlet {
 
             sessionCur.setAttribute("MAIL", "We have recieved your request. Happy shopping!");
             // Forward to a success page
-            request.getRequestDispatcher("viewCart.jsp").forward(request, response);
+            // Support status update "Done"
+            SupportDAO spdao = new SupportDAO();
+            String status = spdao.supportStatusUpdate(custID);
+            sessionCur.setAttribute("SUPPORT_STATUS", status);
+            url = SUCCESS;
+            request.getRequestDispatcher(url).forward(request, response);
 
         } catch (MessagingException e) {
             throw new RuntimeException(e);
-        }finally{
-        // Support status update "Done"
-        SupportDAO spdao = new SupportDAO();
-        String status = spdao.supportStatusUpdate(custID);
-        sessionCur.setAttribute("SUPPORT_STATUS", status);
-        url = SUCCESS;
-        request.getRequestDispatcher(url);
         }
     }
 

@@ -29,7 +29,7 @@ public class MainController extends HttpServlet {
     private static final String REGISTER = "Sign_In";
     private static final String REGISTER_CONTROLLER = "RegisterController";
     
-    private static final String SENDMAIL = "Send Email";
+    private static final String SENDMAIL = "Send_Email";
     private static final String SEND_EMAIL_CONTROLLER = "SendMailServlet";
     
     private static final String SEARCH_SUPPORT = "Search support";
@@ -51,6 +51,8 @@ public class MainController extends HttpServlet {
                 url = SEND_EMAIL_CONTROLLER;
             }else if (ADD_PRODUCT.equals(action)){
                 url = ADD_PRODUCT_CONTROLLER;
+            }else if (SEARCH_SUPPORT.equals(action)){
+                url = SEARCH_SUPPORT_CONTROLLER;
             }
 
         } catch (Exception e) {

@@ -5,6 +5,10 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.util.List" %>
+<%@page import="com.mycompany.isp392.support.SupportDTO" %>
+<%@page import="com.mycompany.isp392.support." %>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -16,6 +20,15 @@
             <input type="text" name="search" placeholder="Search for support request">
             <input type="submit"name="action" value="Search support">
         </form>
-        
+        <%
+           List<SupportDTO> spdto = (List<SupportDTO>) session.getAttribute("SUPPORT_LIST");
+        %>
+        <%
+        for(int i =0; i< spdto.size(); i++){
+                System.out.println(spdto.get(i)); %>
+                <%= spdto.get(i).getCustID()%>
+                <%
+            }
+        %>
     </body>
 </html>

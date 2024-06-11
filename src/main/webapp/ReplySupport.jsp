@@ -20,7 +20,7 @@
             <input type="text" name="subject">
             <label for="content"> Content: </label>
             <textarea name="content"></textarea>
-            <input type="submit" value="Send Email" name="action">
+            <input type="submit" value="Send_Email" name="action">
         </form>
     </body>
 </html>

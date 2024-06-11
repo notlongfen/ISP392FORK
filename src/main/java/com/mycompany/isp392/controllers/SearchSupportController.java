@@ -6,11 +6,16 @@ package com.mycompany.isp392.controllers;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+
+import com.mycompany.isp392.support.SupportDAO;
+import com.mycompany.isp392.support.SupportDTO;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  *
@@ -37,11 +42,16 @@ public class SearchSupportController extends HttpServlet {
         String url = ERROR;
         try {
             String search = request.getParameter("search");
-            
+            SupportDAO supportDAO = new SupportDAO();
+            List<SupportDTO> supportList = supportDAO.searchSupport(search);
+            if (supportList != null) {
+                request.setAttribute("SUPPORT_LIST", supportList);
+                url = SUCCESS;
+            }
         } catch (Exception e) {
-            
+            log("Error at SearchSupportController: " + e.toString());
         } finally {
-            
+            request.getRequestDispatcher(url).forward(request, response);
         }
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
