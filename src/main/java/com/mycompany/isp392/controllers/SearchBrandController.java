@@ -4,12 +4,10 @@
  */
 package com.mycompany.isp392.controllers;
 
+import com.mycompany.isp392.brand.BrandDAO;
+import com.mycompany.isp392.brand.BrandDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
-
-import com.mycompany.isp392.support.SupportDAO;
-import com.mycompany.isp392.support.SupportDTO;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -21,12 +19,10 @@ import java.util.List;
  *
  * @author notlongfen
  */
-@WebServlet(name = "SearchSupportController", urlPatterns = {"/SearchSupportController"})
-public class SearchSupportController extends HttpServlet {
-    private static final String ERROR = "errorPage.jsp";
-    private static final String SUCCESS = "support.jsp";
-    
-
+@WebServlet(name = "SearchBrandController", urlPatterns = {"/SearchBrandController"})
+public class SearchBrandController extends HttpServlet {
+    private static final String ERROR = "errorpage.jsp";
+    private static final String SUCCESS = "brand.jsp";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -42,10 +38,10 @@ public class SearchSupportController extends HttpServlet {
         String url = ERROR;
         try {
             String search = request.getParameter("search");
-            SupportDAO supportDAO = new SupportDAO();
-            List<SupportDTO> supportList = supportDAO.searchSupport(search);
-            if (supportList.size() > 0) {
-                request.setAttribute("SUPPORT_LIST", supportList);
+            BrandDAO supportDAO = new BrandDAO();
+            List<BrandDTO> brandList = supportDAO.searchForBrand(search);
+            if (brandList.size() > 0) {
+                request.setAttribute("SUPPORT_LIST", brandList);
                 url = SUCCESS;
             }
         } catch (Exception e) {
@@ -58,10 +54,10 @@ public class SearchSupportController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet SearchSupportController</title>");            
+            out.println("<title>Servlet SearchBrandController</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet SearchSupportController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet SearchBrandController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }

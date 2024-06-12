@@ -5,6 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
+
+import org.mindrot.jbcrypt.BCrypt;
+
 import utils.DbUtils;
 
 public class UserDAO {
@@ -15,7 +18,7 @@ public class UserDAO {
     private static final String INSERT_USER = "INSERT INTO Users(userName, roleID, email, password, phone, status) VALUES(?, ?, ?, ?, ?, true)";
     private static final String INSERT_CUSTOMER = "INSERT INTO Customers(CustID, points, birthday, province_city, district, ward, detailAddress) VALUES(?, 0, ?, ?, ?, ?, ?)";
     private static final String GET_LAST_USER_ID = "SELECT MAX(UserID) AS LastUserID FROM Users";
-
+    
     public UserDTO checkLogin(String email, String password) throws SQLException {
         UserDTO user = null;
         Connection conn = null;
@@ -27,17 +30,20 @@ public class UserDAO {
             if (conn != null) {
                 ptm = conn.prepareStatement(LOGIN);
                 ptm.setString(1, email);
-                ptm.setString(2, password);
                 rs = ptm.executeQuery();
                 if (rs.next()) {
-                    int UserID = rs.getInt("UserID");
-                    String userName = rs.getString("userName");
-                    int roleID = rs.getInt("roleID");
-                    int phone = rs.getInt("phone");
-                    boolean status = rs.getBoolean("status");
-                    user = new UserDTO(UserID, userName, email, password, roleID, phone, status);
+                    String hashedPassword = rs.getString("password");
+                    if (BCrypt.checkpw(password, hashedPassword)) {
+                        int UserID = rs.getInt("UserID");
+                        String userName = rs.getString("userName");
+                        int roleID = rs.getInt("roleID");
+                        int phone = rs.getInt("phone");
+                        boolean status = rs.getBoolean("status");
+                        user = new UserDTO(UserID, userName, email, password, roleID, phone, status);
+                    }
                 }
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

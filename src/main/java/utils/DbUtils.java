@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Connection;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class DbUtils {
 
@@ -25,6 +26,15 @@ public class DbUtils {
     public static void main(String[] args) {
         System.out.println(dotenv.get("DB_USERNAME"));
 //        System.out.println(Path.of("").toAbsolutePath().toString());
+        String password = "super secret";
+        String hash = BCrypt.hashpw(password, BCrypt.gensalt());
+        String secpasss = "super secret";
+        String hash1 = BCrypt.hashpw(secpasss, BCrypt.gensalt());
+        System.out.println(hash);
+        System.out.println(hash1);
+        boolean isMatched = BCrypt.checkpw(password, hash);
+        System.out.println(isMatched);
+        System.out.println(hash == secpasss);
         // Test connection
         try {
             Connection conn = DbUtils.getConnection();

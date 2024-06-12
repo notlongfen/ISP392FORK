@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.Period;
+import org.mindrot.jbcrypt.BCrypt;
 
 @WebServlet(name = "RegisterController", urlPatterns = {"/RegisterController"})
 public class RegisterController extends HttpServlet {
@@ -77,7 +78,8 @@ public class RegisterController extends HttpServlet {
             // Insert new user
             if (checkValidation) {
                 int newUserId = dao.getLastUserId();
-                CustomerDTO newCustomer = new CustomerDTO(newUserId, userName, email, password, 2, phone, true, 0, birthday, city, district, ward, address);
+                String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+                CustomerDTO newCustomer = new CustomerDTO(newUserId, userName, email, hashedPassword, 2, phone, true, 0, birthday, city, district, ward, address);
                 boolean checkInsert = dao.insertUser(newCustomer);
                 if (checkInsert) {
                     url = SUCCESS;
