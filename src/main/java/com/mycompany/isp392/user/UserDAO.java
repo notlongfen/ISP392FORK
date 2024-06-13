@@ -15,8 +15,8 @@ public class UserDAO {
     private static final String LOGIN = "SELECT UserID, userName, roleID, phone, status, password FROM Users WHERE email = ? AND status = 1";
     private static final String CHECK_EMAIL = "SELECT UserID FROM Users WHERE email = ?";
     private static final String CHECK_PHONE = "SELECT UserID FROM Users WHERE phone = ?";
-    private static final String INSERT_USER = "INSERT INTO Users(userName, roleID, email, password, phone, status) VALUES(?, ?, ?, ?, ?, true)";
-    private static final String INSERT_CUSTOMER = "INSERT INTO Customers(CustID, points, birthday, province_city, district, ward, detailAddress) VALUES(?, 0, ?, ?, ?, ?, ?)";
+    private static final String ADD_USER = "INSERT INTO Users(userName, roleID, email, password, phone, status) VALUES(?, ?, ?, ?, ?, 1)";
+    private static final String ADD_CUSTOMER = "INSERT INTO Customers(CustID, points, birthday, province_city, district, ward, detailAddress) VALUES(?, 0, ?, ?, ?, ?, ?)";
     private static final String GET_LAST_USER_ID = "SELECT MAX(UserID) AS LastUserID FROM Users";
     
     public UserDTO checkLogin(String email, String password) throws SQLException {
@@ -38,7 +38,7 @@ public class UserDAO {
                         String userName = rs.getString("userName");
                         int roleID = rs.getInt("roleID");
                         int phone = rs.getInt("phone");
-                        boolean status = rs.getBoolean("status");
+                        int status = rs.getInt("status");
                         user = new UserDTO(UserID, userName, email, password, roleID, phone, status);
                     }
                 }
@@ -156,39 +156,47 @@ public class UserDAO {
         return check;
     }
 
-    public boolean insertUser(CustomerDTO customer) throws SQLException {
+   public boolean addAccount(UserDTO user, CustomerDTO customer) throws SQLException {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptmUser = null;
         PreparedStatement ptmCustomer = null;
+        ResultSet rs = null;
+
         try {
             conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptmUser = conn.prepareStatement(ADD_USER, PreparedStatement.RETURN_GENERATED_KEYS);
+                ptmUser.setString(1, user.getUserName());
+                ptmUser.setInt(2, user.getRoleID());
+                ptmUser.setString(3, user.getEmail());
+                ptmUser.setString(4, user.getPassword());
+                ptmUser.setInt(5, user.getPhone());
+                int affectedRows = ptmUser.executeUpdate();
 
-            ptmUser = conn.prepareStatement(INSERT_USER);
-            ptmUser.setString(1, customer.getUserName());
-            ptmUser.setInt(2, customer.getRoleID());
-            ptmUser.setString(3, customer.getEmail());
-            ptmUser.setString(4, customer.getPassword());
-            ptmUser.setInt(5, customer.getPhone());
-            check = ptmUser.executeUpdate() > 0 ? true : false;
-
-            ptmCustomer = conn.prepareStatement(INSERT_CUSTOMER);
-            ptmCustomer.setInt(1, customer.getUserID());
-            ptmCustomer.setDate(2, new java.sql.Date(customer.getBirthday().getTime()));
-            ptmCustomer.setString(3, customer.getCity());
-            ptmCustomer.setString(4, customer.getDistrict());
-            ptmCustomer.setString(5, customer.getWard());
-            ptmCustomer.setString(6, customer.getAddress());
-            check = ptmCustomer.executeUpdate() > 0 ? true : false;
-
+                if (affectedRows > 0) {
+                    rs = ptmUser.getGeneratedKeys();
+                    if (rs.next()) {
+                        int userId = rs.getInt(1);
+                        ptmCustomer = conn.prepareStatement(ADD_CUSTOMER);
+                        ptmCustomer.setInt(1, userId);
+                        ptmCustomer.setDate(2, (java.sql.Date) customer.getBirthday());
+                        ptmCustomer.setString(3, customer.getCity());
+                        ptmCustomer.setString(4, customer.getDistrict());
+                        ptmCustomer.setString(5, customer.getWard());
+                        ptmCustomer.setString(6, customer.getAddress());
+                        check = ptmCustomer.executeUpdate() > 0;
+                    }
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (ptmCustomer != null) {
-                ptmCustomer.close();
-            }
             if (ptmUser != null) {
                 ptmUser.close();
+            }
+            if (ptmCustomer != null) {
+                ptmCustomer.close();
             }
             if (conn != null) {
                 conn.close();

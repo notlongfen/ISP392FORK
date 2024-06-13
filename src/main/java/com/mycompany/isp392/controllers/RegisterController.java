@@ -77,11 +77,11 @@ public class RegisterController extends HttpServlet {
 
             // Insert new user
             if (checkValidation) {
-                int newUserId = dao.getLastUserId();
-                String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-                CustomerDTO newCustomer = new CustomerDTO(newUserId, userName, email, hashedPassword, 2, phone, true, 0, birthday, city, district, ward, address);
-                boolean checkInsert = dao.insertUser(newCustomer);
-                if (checkInsert) {
+                UserDTO newUser = new UserDTO(userName, email, password, 4, phone, true);
+                CustomerDTO newCustomer = new CustomerDTO(0, birthday, city, district, ward, address);
+                boolean checkAddUserAndCustomer = dao.addAccount(newUser, newCustomer);
+
+                if (checkAddUserAndCustomer) {
                     url = SUCCESS;
                 } else {
                     userError.setError("Failed to sign up. Please try again.");

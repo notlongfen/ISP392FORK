@@ -7,13 +7,22 @@ public class UserDTO {
     private String password;
     private int roleID;
     private int phone;
-    private boolean status;
+    private int status;
 
     public UserDTO() {
     }
 
-    public UserDTO(int UserID, String userName, String email, String password, int roleID, int phone, boolean status) {
+    public UserDTO(int UserID, String userName, String email, String password, int roleID, int phone, int status) {
         this.UserID = UserID;
+        this.userName = userName;
+        this.email = email;
+        this.password = password;
+        this.roleID = roleID;
+        this.phone = phone;
+        this.status = status;
+    }
+    
+    public UserDTO(String userName, String email, String password, int roleID, int phone, int status) {
         this.userName = userName;
         this.email = email;
         this.password = password;
@@ -70,11 +79,11 @@ public class UserDTO {
         this.phone = phone;
     }
 
-    public boolean getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 
