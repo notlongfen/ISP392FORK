@@ -34,13 +34,13 @@ public class MainController extends HttpServlet {
 
     private static final String SEARCH_BRAND = "Search_Brand";
     private static final String SEARCH_BRAND_CONTROLLER = "SearchBrandController";
-    
+
     private static final String DELETE_BRAND = "Delete_Brand";
     private static final String DELETE_BRAND_CONTROLLER = "DeleteBrandController";
-    
+
     private static final String EDIT_BRAND = "Edit_Brand";
     private static final String EDIT_BRAND_CONTROLLER = "UpdateBrandController";
-    
+
     private static final String REGISTER = "Sign_In";
     private static final String REGISTER_CONTROLLER = "RegisterController";
 
@@ -57,6 +57,23 @@ public class MainController extends HttpServlet {
     private static final String EDIT_PROMOTION_CONTROLLER = "SearchPromotionController";
     private static final String EDIT_PROMOTION_PAGE = "editPromotion.jsp";
     private static final String SAVE_EDIT_PROMOTION = "SaveEditPromotion";
+
+    private static final String DELETE_PROMOTION = "DeletePromotion";
+    private static final String DELETE_PROMOTION_CONTROLLER = "DeletePromotionController";
+    
+     //temp
+    private static final String ADD_CATEGORY_PAGE = "Add_Category_View";
+    private static final String ADD_CATEGORY_PAGE_VIEW = "addCategory.jsp";
+
+    private static final String ADD_CATEGORY = "Add_Category";
+    private static final String ADD_CATEGORY_CONTROLLER = "AddCategoryController";
+
+    //temp 
+    private static final String ADD_CHILDREN_CATEGORY_PAGE = "Add_Children_Category_View";
+    private static final String ADD_CHILDREN_CATEGORY_PAGE_VIEW = "addChildrenCategory.jsp";
+
+    private static final String ADD_CHILDREN_CATEGORY = "Add_Children_Category";
+    private static final String ADD_CHILDREN_CATEGORY_CONTROLLER = "AddChildrenCategoryController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -82,11 +99,11 @@ public class MainController extends HttpServlet {
                 url = ADD_BRAND_PAGE_VIEW;
             } else if (ADD_BRAND.equals(action)) {
                 url = ADD_BRAND_CONTROLLER;
-            }else if (SEARCH_BRAND.equals(action)) {
+            } else if (SEARCH_BRAND.equals(action)) {
                 url = SEARCH_BRAND_CONTROLLER;
-            }else if (DELETE_BRAND.equals(action)) {
+            } else if (DELETE_BRAND.equals(action)) {
                 url = DELETE_BRAND_CONTROLLER;
-            }else if (EDIT_BRAND.equals(action)) {
+            } else if (EDIT_BRAND.equals(action)) {
                 url = EDIT_BRAND_CONTROLLER;
             } else if (SEARCH_PROMOTION.equals(action)) {
                 url = SEARCH_PROMOTION_CONTROLLER;
@@ -94,6 +111,16 @@ public class MainController extends HttpServlet {
                 url = EDIT_PROMOTION_PAGE;
             } else if (SAVE_EDIT_PROMOTION.equals(action)) {
                 url = EDIT_PROMOTION_CONTROLLER;
+            } else if (DELETE_PROMOTION.equals(action)) {
+                url = DELETE_PROMOTION_CONTROLLER;
+            }else if (ADD_CATEGORY_PAGE.equals(action)) {
+                url = ADD_CATEGORY_PAGE_VIEW;
+            }else if (ADD_CATEGORY.equals(action)) {
+                url = ADD_CATEGORY_CONTROLLER;
+            }else if (ADD_CHILDREN_CATEGORY_PAGE.equals(action)) {
+                url = ADD_CHILDREN_CATEGORY_PAGE_VIEW;
+            }else if (ADD_CHILDREN_CATEGORY.equals(action)) {
+                url = ADD_CHILDREN_CATEGORY_CONTROLLER;
             }
         } catch (Exception e) {
             log("error at MainController: " + e.toString());

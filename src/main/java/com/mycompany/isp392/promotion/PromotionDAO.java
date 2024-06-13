@@ -9,6 +9,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import utils.DbUtils;
@@ -19,8 +20,72 @@ import utils.DbUtils;
  */
 public class PromotionDAO {
 
+    private static final String ADD_PROMOTION = "INSERT INTO Promotions (PromotionID, promotionName, startDate, endDate, discountPer, condition) VALUES (?, ?, ?, ?, ?, ?)";
+    private static final String DELETE_PROMOTION = "DELETE FROM Promotions WHERE PromotionID = ?";
     private static final String SEARCH_PROMOTION = "SELECT promotionID, promotionName, startDate, endDate, discountPer, condition FROM Promotions WHERE promotionName LIKE ?";
     private static final String EDIT_PROMOTION = "UPDATE Promotions Set promotionName=?, startDate=?, endDate=?, discountPer=?, condition=? WHERE promotionID = ?";
+    
+     public boolean addPromotion(PromotionDTO promotion) throws SQLException {
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        Statement stm = null;
+        boolean check = false;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                stm = conn.createStatement();
+                stm.executeUpdate("SET IDENTITY_INSERT Promotions ON");
+
+                ptm = conn.prepareStatement(ADD_PROMOTION);
+                ptm.setInt(1, promotion.getPromotionID());
+                ptm.setString(2, promotion.getPromotionName());
+                ptm.setDate(3, promotion.getStartDate());
+                ptm.setDate(4, promotion.getEndDate());
+                ptm.setInt(5, promotion.getDiscountPer());
+                ptm.setInt(6, promotion.getCondition());
+                check = ptm.executeUpdate() > 0;
+
+                stm.executeUpdate("SET IDENTITY_INSERT Promotions OFF");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+
+    public boolean deletePromotion(int promotionID) throws SQLException {
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        boolean check = false;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(DELETE_PROMOTION);
+                ptm.setInt(1, promotionID);
+                check = ptm.executeUpdate() > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
 
     public List<PromotionDTO> searchPromotion(String searchText) throws SQLException {
         List<PromotionDTO> list = new ArrayList<>();

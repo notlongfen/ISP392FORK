@@ -50,6 +50,7 @@
                     <th>Discount (%)</th>
                     <th>Condition</th>
                     <th>Action</th>
+                    <th>Delete</th>
                 </tr>
             </thead>
             <tbody>
@@ -68,6 +69,9 @@
                     <td>
                         <input type="hidden" name="promotionID" value="<%= promotion.getPromotionID() %>"/>
                         <input type="submit" name="action" value="EditPromotion"/>
+                    </td>
+                    <td>
+                        <a href="MainController?action=DeletePromotion&promotionID=<%= promotion.getPromotionID()%>"> Delete</a>
                     </td>
                 </tr>
                 <%
