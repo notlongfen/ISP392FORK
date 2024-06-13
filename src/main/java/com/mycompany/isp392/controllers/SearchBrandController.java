@@ -1,105 +1,58 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package com.mycompany.isp392.controllers;
 
 import com.mycompany.isp392.brand.BrandDAO;
 import com.mycompany.isp392.brand.BrandDTO;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.List;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
- *
- * @author notlongfen
+ * Servlet implementation class SearchBrandController
  */
-@WebServlet(name = "SearchBrandController", urlPatterns = {"/SearchBrandController"})
 public class SearchBrandController extends HttpServlet {
-    private static final String ERROR = "errorpage.jsp";
-    private static final String SUCCESS = "brand.jsp";
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    private static final String ERROR = "brand.jsp";  // Assuming 'brand.jsp' handles both success and error cases
+    private static final String SUCCESS = "brand.jsp"; // Redirect here after searching
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            String search = request.getParameter("search");
-            BrandDAO supportDAO = new BrandDAO();
-            List<BrandDTO> brandList = supportDAO.searchForBrand(search);
-            if (brandList.size() > 0) {
-                request.setAttribute("SUPPORT_LIST", brandList);
+            String brandName = request.getParameter("brandName"); // Parameter for search query
+            BrandDAO brandDAO = new BrandDAO();
+            List<BrandDTO> brands = brandDAO.searchForBrand(brandName); // Search for brands
+            if (brands != null && !brands.isEmpty()) {
+                request.setAttribute("brands", brands);  // Save search results in request scope
+                request.setAttribute("MESSAGE", "Brands found!");
                 url = SUCCESS;
+            } else {
+                request.setAttribute("MESSAGE", "No brands found.");
             }
         } catch (Exception e) {
-            log("Error at SearchSupportController: " + e.toString());
+            log("Error at SearchBrandController: " + e.toString());
+            request.setAttribute("ERROR", "Database error: " + e.getMessage());
         } finally {
-            request.getRequestDispatcher(url).forward(request, response);
-        }
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet SearchBrandController</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet SearchBrandController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            request.getRequestDispatcher(url).forward(request, response); // Forward to JSP
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        processRequest(request, response); // Handle GET the same way as POST
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        processRequest(request, response); // Handle POST requests
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
+        return "Searches for brands by name and displays the results.";
+    }
 }

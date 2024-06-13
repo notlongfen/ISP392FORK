@@ -29,7 +29,7 @@ public class LoginController extends HttpServlet {
     private static final String AD_PAGE = "admin.jsp";
     private String clientID;
     public void initClientID() throws ServletException{
-        Dotenv dotenv = Dotenv.configure().directory("/home/notlongfen/code/java/ISP392/.env").load();
+        Dotenv dotenv = Dotenv.configure().directory("C://Users//tuan tran//Desktop//ISP392_Project//.env").load();
         clientID = dotenv.get("GOOGLE_CLIENT_ID");
     }
 

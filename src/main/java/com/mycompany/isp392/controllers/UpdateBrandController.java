@@ -6,7 +6,6 @@ package com.mycompany.isp392.controllers;
 
 import com.mycompany.isp392.brand.BrandDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,8 +19,8 @@ import java.sql.SQLException;
  */
 public class UpdateBrandController extends HttpServlet {
 
-    private static final String ERROR = "manageBrand.jsp";
-    private static final String SUCCESS = "manageBrand.jsp";
+    private static final String ERROR = "brand.jsp";
+    private static final String SUCCESS = "brand.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -33,6 +32,7 @@ public class UpdateBrandController extends HttpServlet {
             BrandDAO brandDAO = new BrandDAO();
             boolean check = brandDAO.updateBrand(brandName, brandID);
             if (check) {
+                request.setAttribute("MESSAGE", "Brand Updated successfully!");
                 url = SUCCESS;
             }
         } catch (SQLException e) {

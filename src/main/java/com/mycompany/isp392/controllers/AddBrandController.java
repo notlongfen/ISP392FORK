@@ -5,9 +5,7 @@
 package com.mycompany.isp392.controllers;
 
 import com.mycompany.isp392.brand.BrandDAO;
-import com.mycompany.isp392.brand.BrandDTO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,8 +19,8 @@ import java.sql.SQLException;
  */
 public class AddBrandController extends HttpServlet {
 
-    private static final String ERROR = "manageBrand.jsp";
-    private static final String SUCCESS = "manageBrand.jsp";
+    private static final String ERROR = "brand.jsp";
+    private static final String SUCCESS = "brand.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

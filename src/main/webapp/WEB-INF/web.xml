@@ -36,6 +36,10 @@
         <servlet-name>UpdateBrandController</servlet-name>
         <servlet-class>com.mycompany.isp392.controllers.UpdateBrandController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SearchBrandController</servlet-name>
+        <servlet-class>com.mycompany.isp392.controllers.SearchBrandController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>MainController</servlet-name>
         <url-pattern>/MainController</url-pattern>
@@ -71,6 +75,10 @@
     <servlet-mapping>
         <servlet-name>UpdateBrandController</servlet-name>
         <url-pattern>/UpdateBrandController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchBrandController</servlet-name>
+        <url-pattern>/SearchBrandController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

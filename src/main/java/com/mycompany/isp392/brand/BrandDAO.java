@@ -25,7 +25,6 @@ public class BrandDAO {
     private static final String INSERT_BRAND = "INSERT INTO Brands(BrandName, status) VALUES(?,1)";
     private static final String UPDATE_BRAND = "UPDATE Brands SET BrandName=? WHERE BrandID=?";
     private static final String DEACTIVATE_BRAND = "UPDATE Brands SET status = 0 WHERE BrandID=?";
-    private static final String SELECT_BRAND = "SELECT BrandID, BrandName, status FROM Brands WHERE BrandID=?";
    
     public List<BrandDTO> searchForBrand(String brandName) {
         List<BrandDTO> list = new ArrayList<>();
@@ -39,10 +38,11 @@ public class BrandDAO {
                 ptm.setString(1, "%" + brandName + "%");
                 rs = ptm.executeQuery();
                 while (rs.next()) {
+                    String Name = rs.getString("brandName");
                     int brandID = rs.getInt("brandID");
                     int status = rs.getInt("status"); 
                     
-                    list.add(new BrandDTO(brandID, brandName, status));
+                    list.add(new BrandDTO(brandID, Name, status));
                 }
             }
 

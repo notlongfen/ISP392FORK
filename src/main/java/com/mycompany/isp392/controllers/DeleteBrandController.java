@@ -20,8 +20,8 @@ import java.sql.SQLException;
  */
 public class DeleteBrandController extends HttpServlet {
 
-      private static final String ERROR = "manageBrand.jsp";
-    private static final String SUCCESS = "manageBrand.jsp";
+      private static final String ERROR = "brand.jsp";
+    private static final String SUCCESS = "brand.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
