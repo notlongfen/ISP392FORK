@@ -7,7 +7,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.List" %>
 <%@page import="com.mycompany.isp392.support.SupportDTO" %>
-<%@page import="com.mycompany.isp392.support." %>
 
 <!DOCTYPE html>
 <html>
@@ -22,13 +21,20 @@
         </form>
         <%
            List<SupportDTO> spdto = (List<SupportDTO>) session.getAttribute("SUPPORT_LIST");
+           String test = "true";
         %>
         <%
+        if(spdto.size() > 0){
         for(int i =0; i< spdto.size(); i++){
                 System.out.println(spdto.get(i)); %>
-                <%= spdto.get(i).getCustID()%>
-                <%
-            }
+        <%= spdto.get(i).getCustID()%>
+        <%
+    }
+}else{
+        %>
+<%= test%>
+        <%
+        }
         %>
     </body>
 </html>
