@@ -4,23 +4,25 @@
  */
 package com.mycompany.isp392.user;
 
-/**
- *
- * @author Oscar
- */
-public class EmployeeDTO extends UserDTO {
+public class EmployeeDTO {
+
     private String position;
+    private int EmpID;
+
+    public EmployeeDTO(String position, int EmpID) {
+        this.position = position;
+        this.EmpID = EmpID;
+    }
 
     public EmployeeDTO() {
     }
 
-    public EmployeeDTO(String position) {
-        this.position = position;
+    public int getEmpID() {
+        return EmpID;
     }
 
-    public EmployeeDTO(String position, int UserID, String userName, String email, String password, int roleID, int phone, int status) {
-        super(UserID, userName, email, password, roleID, phone, status);
-        this.position = position;
+    public void setEmpID(int EmpID) {
+        this.EmpID = EmpID;
     }
 
     public String getPosition() {
@@ -30,8 +32,6 @@ public class EmployeeDTO extends UserDTO {
     public void setPosition(String position) {
         this.position = position;
     }
-    
-    
 }
 
 

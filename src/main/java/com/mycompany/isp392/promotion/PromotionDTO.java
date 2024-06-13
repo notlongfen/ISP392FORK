@@ -19,12 +19,12 @@ public class PromotionDTO {
     private Date startDate;
     private Date endDate;
     private int discountPer;
-    private String condition;
+    private int condition;
 
     public PromotionDTO() {
     }
 
-    public PromotionDTO(int promotionID, String promotionName, Date startDate, Date endDate, int discountPer, String condition) {
+    public PromotionDTO(int promotionID, String promotionName, Date startDate, Date endDate, int discountPer, int condition) {
         this.promotionID = promotionID;
         this.promotionName = promotionName;
         this.startDate = startDate;
@@ -53,7 +53,7 @@ public class PromotionDTO {
         return discountPer;
     }
 
-    public String getCondition() {
+    public int getCondition() {
         return condition;
     }
 
@@ -77,7 +77,7 @@ public class PromotionDTO {
         this.discountPer = discountPer;
     }
 
-    public void setCondition(String condition) {
+    public void setCondition(int condition) {
         this.condition = condition;
     }
 

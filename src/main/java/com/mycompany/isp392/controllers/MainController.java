@@ -50,6 +50,14 @@ public class MainController extends HttpServlet {
     private static final String SEARCH_SUPPORT = "Search support";
     private static final String SEARCH_SUPPORT_CONTROLLER = "SearchSupportController";
 
+    private static final String SEARCH_PROMOTION = "Search promotion";
+    private static final String SEARCH_PROMOTION_CONTROLLER = "SearchPromotionController";
+
+    private static final String EDIT_PROMOTION = "EditPromotion";
+    private static final String EDIT_PROMOTION_CONTROLLER = "SearchPromotionController";
+    private static final String EDIT_PROMOTION_PAGE = "editPromotion.jsp";
+    private static final String SAVE_EDIT_PROMOTION = "SaveEditPromotion";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -80,8 +88,13 @@ public class MainController extends HttpServlet {
                 url = DELETE_BRAND_CONTROLLER;
             }else if (EDIT_BRAND.equals(action)) {
                 url = EDIT_BRAND_CONTROLLER;
+            } else if (SEARCH_PROMOTION.equals(action)) {
+                url = SEARCH_PROMOTION_CONTROLLER;
+            } else if (EDIT_PROMOTION.equals(action)) {
+                url = EDIT_PROMOTION_PAGE;
+            } else if (SAVE_EDIT_PROMOTION.equals(action)) {
+                url = EDIT_PROMOTION_CONTROLLER;
             }
-
         } catch (Exception e) {
             log("error at MainController: " + e.toString());
         } finally {

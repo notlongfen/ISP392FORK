@@ -23,13 +23,17 @@ import jakarta.servlet.http.HttpServletResponse;
 public class LoginController extends HttpServlet {
 
     private static final String ERROR = "login.jsp";
-    private static final int US = 2;
-    private static final String US_PAGE = "user.jsp";
-    private static final int AD = 1;
-    private static final String AD_PAGE = "admin.jsp";
+    private static final int CUSTOMER = 4;
+    private static final String CUSTOMER_PAGE = "customer.jsp";
+    private static final int SYSTEM_MANAGER = 1;
+    private static final int SHOP_MANAGER = 2;
+    private static final int SHOP_STAFF = 3;
+    private static final String SYSTEM_MANAGER_PAGE = "systemManager.jsp";
+    private static final String SHOP_MANAGER_PAGE = "shopManager.jsp";
+    private static final String SHOP_STAFF_PAGE = "shopStaff.jsp";
     private String clientID;
     public void initClientID() throws ServletException{
-        Dotenv dotenv = Dotenv.configure().directory("C://Users//tuan tran//Desktop//ISP392_Project//.env").load();
+        Dotenv dotenv = Dotenv.configure().directory("/home/notlongfen/code/java/ISP392/.env").load();
         clientID = dotenv.get("GOOGLE_CLIENT_ID");
     }
 
@@ -48,12 +52,22 @@ public class LoginController extends HttpServlet {
                 HttpSession session = request.getSession();
                 session.setAttribute("LOGIN_USER", loginUser);
                 int roleID = loginUser.getRoleID();
-                if (US == roleID) {
-                    url = US_PAGE;
-                } else if (AD == roleID) {
-                    url = AD_PAGE;
-                } else {
-                    request.setAttribute("ERROR", "Your role is not supported");
+                switch (roleID) {
+                    case CUSTOMER:
+                        url = CUSTOMER_PAGE;
+                        break;
+                    case SYSTEM_MANAGER:
+                        url = SYSTEM_MANAGER_PAGE;
+                        break;
+                    case SHOP_MANAGER:
+                        url = SHOP_MANAGER_PAGE;
+                        break;
+                    case SHOP_STAFF:
+                        url = SHOP_STAFF_PAGE;
+                        break;
+                    default:
+                        request.setAttribute("ERROR", "Your role is not supported");
+                        break;
                 }
             } else {
                 request.setAttribute("ERROR", "Incorrect UserID or Password");
