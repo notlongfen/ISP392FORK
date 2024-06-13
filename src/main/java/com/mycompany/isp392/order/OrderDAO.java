@@ -18,6 +18,7 @@ import utils.DbUtils;
 public class OrderDAO {
     private static final String ADD_ORDER = "INSERT INTO Orders (status, total, orderDate, CustID, promotionID, CartID) VALUES (?,?,?,?,?,?)";
     private static final String GET_LAST_ORDER_ID = "SELECT MAX(orderID) FROM Orders";
+    private static final String ADD_ORDER_DETAILS = "INSERT INTO OrderDetails (orderID, productID, quantity, price) VALUES (?,?,?,?)";
     public int getLastOrderId() throws SQLException{
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -71,6 +72,28 @@ public class OrderDAO {
         }
 
         return orderDTO;
+    }
+
+    public OrderDetailsDTO insertOrderDetails(OrderDetailsDTO orderDetails){
+        OrderDetailsDTO orderDetailsDTO = null;
+        Connection conn = null;
+        PreparedStatement pstm = null;
+
+        try {
+            conn = DbUtils.getConnection();
+            pstm = conn.prepareStatement(ADD_ORDER);
+            pstm.setInt(1, orderDetails.getOrderID());
+            pstm.setInt(2, orderDetails.getProductID());
+            pstm.setInt(3, orderDetails.getQuantity());
+            pstm.setInt(4, orderDetails.getUnitPrice());
+            int row = pstm.executeUpdate();
+            if (row > 0) {
+                orderDetailsDTO = orderDetails;
+            } 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return orderDetailsDTO;
     }
     
     

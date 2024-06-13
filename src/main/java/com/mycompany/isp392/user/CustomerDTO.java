@@ -26,14 +26,14 @@ public class CustomerDTO extends UserDTO{
         this.address = address;
     }
 
-    public CustomerDTO(int UserID, String userName, String email, String password, int roleID, int phone, boolean status, int points, Date birthday, String city, String district, String ward, String address) {
+    public CustomerDTO(int UserID, String userName, String email, String password, int roleID, int phone, int status, int points, Date birthday, String city, String district, String ward, String address) {
         super(UserID, userName, email, password, roleID, phone, status);
         this.points = points;
         this.birthday = birthday;
         this.city = city;
         this.district = district;
         this.ward = ward;
-        this.address = address;
+        this.address = address; 
     }
 
     public int getPoints() {

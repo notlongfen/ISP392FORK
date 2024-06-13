@@ -77,7 +77,8 @@ public class RegisterController extends HttpServlet {
 
             // Insert new user
             if (checkValidation) {
-                UserDTO newUser = new UserDTO(userName, email, password, 4, phone, true);
+                String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+                UserDTO newUser = new UserDTO(userName, email, hashedPassword, 4, phone, 1);
                 CustomerDTO newCustomer = new CustomerDTO(0, birthday, city, district, ward, address);
                 boolean checkAddUserAndCustomer = dao.addAccount(newUser, newCustomer);
 

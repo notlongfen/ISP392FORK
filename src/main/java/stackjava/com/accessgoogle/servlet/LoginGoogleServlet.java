@@ -50,7 +50,7 @@ private static final long serialVersionUID = 1L;
       UserDAO dao = new UserDAO();
       UserDTO dto = null;
         try {
-            dto = new UserDTO(dao.getLastUserId(),email, email, "***", 1, 0, true);
+            dto = new UserDTO(dao.getLastUserId(),email, email, "***", 1, 0, 1);
         } catch (SQLException ex) {
             Logger.getLogger(LoginGoogleServlet.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -18,7 +18,7 @@ public class EmployeeDTO extends UserDTO {
         this.position = position;
     }
 
-    public EmployeeDTO(String position, int UserID, String userName, String email, String password, int roleID, int phone, boolean status) {
+    public EmployeeDTO(String position, int UserID, String userName, String email, String password, int roleID, int phone, int status) {
         super(UserID, userName, email, password, roleID, phone, status);
         this.position = position;
     }
