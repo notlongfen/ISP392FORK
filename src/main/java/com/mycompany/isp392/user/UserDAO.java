@@ -16,9 +16,10 @@ public class UserDAO {
     private static final String CHECK_EMAIL = "SELECT UserID FROM Users WHERE email = ?";
     private static final String CHECK_PHONE = "SELECT UserID FROM Users WHERE phone = ?";
     private static final String ADD_USER = "INSERT INTO Users(userName, roleID, email, password, phone, status) VALUES(?, ?, ?, ?, ?, 1)";
+    private static final String ADD_MANAGER = "INSERT INTO Employees(EmpID, position) VALUES(?, ?)";
     private static final String ADD_CUSTOMER = "INSERT INTO Customers(CustID, points, birthday, province_city, district, ward, detailAddress) VALUES(?, 0, ?, ?, ?, ?, ?)";
     private static final String GET_LAST_USER_ID = "SELECT MAX(UserID) AS LastUserID FROM Users";
-    
+
     public UserDTO checkLogin(String email, String password) throws SQLException {
         UserDTO user = null;
         Connection conn = null;
@@ -156,7 +157,7 @@ public class UserDAO {
         return check;
     }
 
-   public boolean addAccount(UserDTO user, CustomerDTO customer) throws SQLException {
+    public boolean addAccount(UserDTO user, CustomerDTO customer) throws SQLException {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptmUser = null;
@@ -197,6 +198,50 @@ public class UserDAO {
             }
             if (ptmCustomer != null) {
                 ptmCustomer.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+
+    public boolean addManager(UserDTO user, EmployeeDTO employee) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptmUser = null;
+        PreparedStatement ptmEmployee = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptmUser = conn.prepareStatement(ADD_USER, PreparedStatement.RETURN_GENERATED_KEYS);
+                ptmUser.setString(1, user.getUserName());
+                ptmUser.setInt(2, user.getRoleID());
+                ptmUser.setString(3, user.getEmail());
+                ptmUser.setString(4, user.getPassword());
+                ptmUser.setInt(5, user.getPhone());
+                int affectedRows = ptmUser.executeUpdate();
+
+                if (affectedRows > 0) {
+                    rs = ptmUser.getGeneratedKeys();
+                    if (rs.next()) {
+                        int userId = rs.getInt(1);
+                        ptmEmployee = conn.prepareStatement(ADD_MANAGER);
+                        ptmEmployee.setInt(1, userId);
+                        ptmEmployee.setString(2, employee.getPosition());
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ptmUser != null) {
+                ptmUser.close();
+            }
+            if (ptmEmployee != null) {
+                ptmEmployee.close();
             }
             if (conn != null) {
                 conn.close();

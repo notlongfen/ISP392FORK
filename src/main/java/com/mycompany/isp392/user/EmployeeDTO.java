@@ -13,6 +13,10 @@ public class EmployeeDTO {
         this.position = position;
         this.EmpID = EmpID;
     }
+    
+    public EmployeeDTO(String position) {
+        this.position = position;
+    }
 
     public EmployeeDTO() {
     }

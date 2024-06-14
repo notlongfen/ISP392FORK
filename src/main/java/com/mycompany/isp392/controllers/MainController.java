@@ -19,6 +19,11 @@ public class MainController extends HttpServlet {
 
     private static final String REGISTER_PAGE = "Sign_Up";
     private static final String REGISTER_PAGE_VIEW = "signup.jsp";
+    
+    private static final String ADD_MANAGER_PAGE = "Add_Manager_View";
+    private static final String ADD_MANAGER_PAGE_VIEW = "addManager.jsp";
+    private static final String ADD_MANAGER_CONTROLLER = "AddManagerController";
+    private static final String ADD_MANAGER = "Add_Manager";
 
     private static final String ADD_PRODUCT_PAGE = "Add_View";
     private static final String ADD_PRODUCT_PAGE_VIEW = "product.jsp";
@@ -115,6 +120,7 @@ public class MainController extends HttpServlet {
                 url = EDIT_PROMOTION_PAGE;
             } else if (SAVE_EDIT_PROMOTION.equals(action)) {
                 url = EDIT_PROMOTION_CONTROLLER;
+<<<<<<< Updated upstream
             } else if (DELETE_PROMOTION.equals(action)) {
                 url = DELETE_PROMOTION_CONTROLLER;
             } else if (ADD_CATEGORY_PAGE.equals(action)) {
@@ -129,6 +135,12 @@ public class MainController extends HttpServlet {
                 url = SEARCH_PAGE_VIEW;
             }else if (SEARCH_CATEGORY.equals(action)) {
                 url = SEARCH_CATEGORY_CONTROLLER;
+=======
+            } else if (ADD_MANAGER.equals(action)) {
+                url = ADD_MANAGER_CONTROLLER;
+            } else if (ADD_MANAGER_PAGE.equals(action)) {
+                url = ADD_MANAGER_PAGE_VIEW;
+>>>>>>> Stashed changes
             }
         } catch (Exception e) {
             log("error at MainController: " + e.toString());
