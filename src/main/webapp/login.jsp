@@ -23,6 +23,7 @@
             <input type="submit" name="action" value="Add_Brand_View"/>
             <input type="submit" name="action" value="Add_Category_View"/>
             <input type="submit" name="action" value="Add_Children_Category_View"/>
+            <input type="submit" name="action" value="Search_Category_View"/>
         </form>
         <a class="border m-5 p-3 rounded" href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/ISP392/google-login&response_type=code
            &client_id=786115507775-obtimai0mtsb6b6fsudfv0629n9uc6oq.apps.googleusercontent.com&approval_prompt=force"><img src="https://img.icons8.com/color/16/000000/google-logo.png">Login With Google</a>

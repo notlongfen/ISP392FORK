@@ -60,8 +60,8 @@ public class MainController extends HttpServlet {
 
     private static final String DELETE_PROMOTION = "DeletePromotion";
     private static final String DELETE_PROMOTION_CONTROLLER = "DeletePromotionController";
-    
-     //temp
+
+    //temp
     private static final String ADD_CATEGORY_PAGE = "Add_Category_View";
     private static final String ADD_CATEGORY_PAGE_VIEW = "addCategory.jsp";
 
@@ -74,6 +74,10 @@ public class MainController extends HttpServlet {
 
     private static final String ADD_CHILDREN_CATEGORY = "Add_Children_Category";
     private static final String ADD_CHILDREN_CATEGORY_CONTROLLER = "AddChildrenCategoryController";
+    private static final String SEARCH_CATEGORY_PAGE = "Search_Category_View";
+    private static final String SEARCH_PAGE_VIEW = "SearchCategory.jsp";
+    private static final String SEARCH_CATEGORY = "Search_Category";
+    private static final String SEARCH_CATEGORY_CONTROLLER = "SearchCategoryController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -113,14 +117,18 @@ public class MainController extends HttpServlet {
                 url = EDIT_PROMOTION_CONTROLLER;
             } else if (DELETE_PROMOTION.equals(action)) {
                 url = DELETE_PROMOTION_CONTROLLER;
-            }else if (ADD_CATEGORY_PAGE.equals(action)) {
+            } else if (ADD_CATEGORY_PAGE.equals(action)) {
                 url = ADD_CATEGORY_PAGE_VIEW;
-            }else if (ADD_CATEGORY.equals(action)) {
+            } else if (ADD_CATEGORY.equals(action)) {
                 url = ADD_CATEGORY_CONTROLLER;
-            }else if (ADD_CHILDREN_CATEGORY_PAGE.equals(action)) {
+            } else if (ADD_CHILDREN_CATEGORY_PAGE.equals(action)) {
                 url = ADD_CHILDREN_CATEGORY_PAGE_VIEW;
-            }else if (ADD_CHILDREN_CATEGORY.equals(action)) {
+            } else if (ADD_CHILDREN_CATEGORY.equals(action)) {
                 url = ADD_CHILDREN_CATEGORY_CONTROLLER;
+            }else if (SEARCH_CATEGORY_PAGE.equals(action)) {
+                url = SEARCH_PAGE_VIEW;
+            }else if (SEARCH_CATEGORY.equals(action)) {
+                url = SEARCH_CATEGORY_CONTROLLER;
             }
         } catch (Exception e) {
             log("error at MainController: " + e.toString());

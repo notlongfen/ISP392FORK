@@ -9,23 +9,21 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-/**
- * Servlet implementation class SearchBrandController
- */
+
 public class SearchBrandController extends HttpServlet {
-    private static final String ERROR = "brand.jsp";  // Assuming 'brand.jsp' handles both success and error cases
-    private static final String SUCCESS = "brand.jsp"; // Redirect here after searching
+    private static final String ERROR = "brand.jsp";  
+    private static final String SUCCESS = "brand.jsp"; 
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            String brandName = request.getParameter("brandName"); // Parameter for search query
+            String brandName = request.getParameter("brandName"); 
             BrandDAO brandDAO = new BrandDAO();
-            List<BrandDTO> brands = brandDAO.searchForBrand(brandName); // Search for brands
+            List<BrandDTO> brands = brandDAO.searchForBrand(brandName); 
             if (brands != null && !brands.isEmpty()) {
-                request.setAttribute("brands", brands);  // Save search results in request scope
+                request.setAttribute("brands", brands);  
                 request.setAttribute("MESSAGE", "Brands found!");
                 url = SUCCESS;
             } else {
@@ -35,7 +33,7 @@ public class SearchBrandController extends HttpServlet {
             log("Error at SearchBrandController: " + e.toString());
             request.setAttribute("ERROR", "Database error: " + e.getMessage());
         } finally {
-            request.getRequestDispatcher(url).forward(request, response); // Forward to JSP
+            request.getRequestDispatcher(url).forward(request, response); 
         }
     }
 

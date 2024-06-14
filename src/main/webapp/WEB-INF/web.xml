@@ -40,6 +40,10 @@
         <servlet-name>SearchBrandController</servlet-name>
         <servlet-class>com.mycompany.isp392.controllers.SearchBrandController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SearchCategoryController</servlet-name>
+        <servlet-class>com.mycompany.isp392.controllers.SearchCategoryController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>MainController</servlet-name>
         <url-pattern>/MainController</url-pattern>
@@ -79,6 +83,10 @@
     <servlet-mapping>
         <servlet-name>SearchBrandController</servlet-name>
         <url-pattern>/SearchBrandController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchCategoryController</servlet-name>
+        <url-pattern>/SearchCategoryController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
