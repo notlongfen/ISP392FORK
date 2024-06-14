@@ -120,7 +120,6 @@ public class MainController extends HttpServlet {
                 url = EDIT_PROMOTION_PAGE;
             } else if (SAVE_EDIT_PROMOTION.equals(action)) {
                 url = EDIT_PROMOTION_CONTROLLER;
-<<<<<<< Updated upstream
             } else if (DELETE_PROMOTION.equals(action)) {
                 url = DELETE_PROMOTION_CONTROLLER;
             } else if (ADD_CATEGORY_PAGE.equals(action)) {
@@ -135,12 +134,10 @@ public class MainController extends HttpServlet {
                 url = SEARCH_PAGE_VIEW;
             }else if (SEARCH_CATEGORY.equals(action)) {
                 url = SEARCH_CATEGORY_CONTROLLER;
-=======
             } else if (ADD_MANAGER.equals(action)) {
                 url = ADD_MANAGER_CONTROLLER;
             } else if (ADD_MANAGER_PAGE.equals(action)) {
                 url = ADD_MANAGER_PAGE_VIEW;
->>>>>>> Stashed changes
             }
         } catch (Exception e) {
             log("error at MainController: " + e.toString());

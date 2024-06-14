@@ -231,7 +231,7 @@ public class UserDAO {
                         ptmEmployee = conn.prepareStatement(ADD_MANAGER);
                         ptmEmployee.setInt(1, userId);
                         ptmEmployee.setString(2, employee.getPosition());
-                        check = ptmEmployee.executeUpdate() > 0;
+                          check = ptmEmployee.executeUpdate() > 0;
                     }
                 }
             }
