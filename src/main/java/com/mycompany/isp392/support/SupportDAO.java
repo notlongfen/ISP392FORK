@@ -5,6 +5,7 @@
 package com.mycompany.isp392.support;
 
 import com.mycompany.isp392.product.ProductDTO;
+import com.mycompany.isp392.user.UserDTO;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -25,7 +26,10 @@ public class SupportDAO {
 "INNER JOIN Users u ON c.CustID = u.UserID\n" +
 "WHERE u.userName like ?";
     private static final String UPDATE_SUPPORT_STATUS = "UPDATE Supports SET status = ? WHERE supportID = ?";
-    
+    private static final String GET_USER_INFO_BASED_ON_SUPPORTID = "SELECT * FROM Supports s \n" +
+"INNER JOIN Customers c ON s.CustID = c.CustID\n" +
+"INNER JOIN Users u ON c.CustID = u.UserID\n" +
+"WHERE s.supportID = ?";    
     
     public int getLastSupportId() throws SQLException {
         int lastSupportId = 0;
@@ -146,5 +150,45 @@ public class SupportDAO {
             }
         }
         return supports;
+    }
+    
+    public UserDTO getUserInfo(int supportID){
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        UserDTO user = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_USER_INFO_BASED_ON_SUPPORTID);
+                ptm.setInt(1, supportID);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    int userID = rs.getInt("UserID");
+                    String userName = rs.getString("userName");
+                    String email = rs.getString("email");
+                    int phone = rs.getInt("phone");
+                    user = new UserDTO(userID, userName, email, phone);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ptm != null) {
+                    ptm.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return user;
     }
 }

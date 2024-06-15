@@ -31,6 +31,14 @@ public class UserDTO {
         this.status = status;
     }
 
+    //Get User Basic Info For Support
+    public UserDTO(int UserID, String userName, String email, int phone) {
+        this.UserID = UserID;
+        this.userName = userName;
+        this.email = email;
+        this.phone = phone;
+    }
+
     public int getUserID() {
         return UserID;
     }
