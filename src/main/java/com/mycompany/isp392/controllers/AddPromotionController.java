@@ -4,8 +4,6 @@
  */
 package com.mycompany.isp392.controllers;
 
-import com.mycompany.isp392.promotion.*;
-import com.mycompany.isp392.user.UserDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,45 +11,73 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import com.mycompany.isp392.promotion.*;
 
 /**
  *
- * @author Oscar
+ * @author TTNHAT
  */
-@WebServlet(name = "EditPromotionController", urlPatterns = {"/EditPromotionController"})
-public class EditPromotionController extends HttpServlet {
+@WebServlet(name = "AddPromotionController", urlPatterns = {"/AddPromotionController"})
+public class AddPromotionController extends HttpServlet {
 
-    private static final String ERROR = "editPromotion.jsp";
-    private static final String SUCCESS = "shopManager.jsp";
+    //temp
+    private static final String ERROR = "addPromotion.jsp";
+    private static final String SUCCESS = "login.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
-        PromotionError promotionError = new PromotionError();
+        PromotionDAO dao = new PromotionDAO();
+        boolean checkValidation = true;
+        PromotionError error = new PromotionError();
         try {
-            int promotionID = Integer.parseInt(request.getParameter("promotionID"));
             String promotionName = request.getParameter("promotionName");
-            Date startDate = Date.valueOf(request.getParameter("startDate"));
-            Date endDate = Date.valueOf(request.getParameter("endDate"));
+            Date startDate = Date.valueOf(LocalDate.parse(request.getParameter("startDate"), DateTimeFormatter.ISO_DATE));
+            Date endDate = Date.valueOf(LocalDate.parse(request.getParameter("endDate"), DateTimeFormatter.ISO_DATE));
             int discountPer = Integer.parseInt(request.getParameter("discountPer"));
             int condition = Integer.parseInt(request.getParameter("condition"));
-            int status = Integer.parseInt(request.getParameter("status"));
-            PromotionDAO dao = new PromotionDAO();
-            PromotionDTO promotion = new PromotionDTO(promotionID, promotionName, startDate, endDate, discountPer, condition, status);
-            boolean check = dao.editPromotion(promotion);
-            HttpSession session = request.getSession();
-            UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
-            if (check) {
-                url = SUCCESS;
-            }else{
-                promotionError.setError("Failed to edit promotion. Please try again.");
-                    request.setAttribute("PROMOTION_ERROR", promotionError);
+
+            if (promotionName.length() > 20) {
+                error.setPromotionNameError("Promotion name cannot be over 20 characters");
+                checkValidation = false;
             }
+            if(dao.checkPromotionDuplicate(promotionName)){
+                error.setPromotionNameError("This promotion already exists");
+                checkValidation=false;
+            }
+            if(promotionName.contains(" ")){
+                error.setPromotionNameError("Promotion name cannot contain any spaces");
+                checkValidation=false;
+            }
+            if (endDate.before(startDate)) {
+                error.setEndDateError("End date must be after start date");
+                checkValidation = false;
+            }
+            if (condition < 0) {
+                error.setConditionError("Condition cannot be under 0");
+                checkValidation = false;
+            }
+
+            if (checkValidation) {
+                int promotionID = dao.getLatestPromotionID() + 1;
+                PromotionDTO promotion = new PromotionDTO(promotionID, promotionName, startDate, endDate, discountPer, condition, 1);
+                boolean checkPromotion = dao.addPromotion(promotion);
+                if (checkPromotion) {
+                    url = SUCCESS;
+                } else {
+                    error.setError("Unable to add promotion to database");
+                    request.setAttribute("PROMOTION_ERROR", error);
+                }
+            } else {
+                request.setAttribute("PROMOTION_ERROR", error);
+            }
+            
         } catch (Exception e) {
-            log("Error at EditPromotionController: " + e.toString());
+            log("Error at AddPromotionController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

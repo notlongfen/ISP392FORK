@@ -49,6 +49,7 @@
                     <th>End Date</th>
                     <th>Discount (%)</th>
                     <th>Condition</th>
+                    <th>Status</th>
                     <th>Action</th>
                     <th>Delete</th>
                 </tr>
@@ -66,6 +67,7 @@
                     <td><input type="text" name="endDate" value="<%= promotion.getEndDate() %>" readonly=""/></td>
                     <td><input type="text" name="discountPer" value="<%= promotion.getDiscountPer() %>" readonly=""/></td>
                     <td><input type="text" name="condition" value="Points >= <%= promotion.getCondition() %>" readonly=""/></td>
+                    <td><input type="text" name="status" value="<%= promotion.getStatus()%>" readonly=""/></td>
                     <td>
                         <input type="hidden" name="promotionID" value="<%= promotion.getPromotionID() %>"/>
                         <input type="submit" name="action" value="EditPromotion"/>

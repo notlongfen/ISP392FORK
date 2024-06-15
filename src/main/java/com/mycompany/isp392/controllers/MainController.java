@@ -83,6 +83,13 @@ public class MainController extends HttpServlet {
     private static final String SEARCH_PAGE_VIEW = "SearchCategory.jsp";
     private static final String SEARCH_CATEGORY = "Search_Category";
     private static final String SEARCH_CATEGORY_CONTROLLER = "SearchCategoryController";
+    
+    private static final String ADD_PROMOTION_PAGE = "Add_Promo_View";
+    private static final String ADD_PROMOTION_PAGE_VIEW = "addPromotion.jsp";
+
+    private static final String ADD_PROMOTION = "Add_Promotion";
+    private static final String ADD_PROMOTION_CONTROLLER = "AddPromotionController";
+
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -114,6 +121,10 @@ public class MainController extends HttpServlet {
                 url = DELETE_BRAND_CONTROLLER;
             } else if (EDIT_BRAND.equals(action)) {
                 url = EDIT_BRAND_CONTROLLER;
+            } else if (ADD_PROMOTION_PAGE.equals(action)) {
+                url = ADD_PROMOTION_PAGE_VIEW;
+            } else if (ADD_PROMOTION.equals(action)) {
+                url = ADD_PROMOTION_CONTROLLER;
             } else if (SEARCH_PROMOTION.equals(action)) {
                 url = SEARCH_PROMOTION_CONTROLLER;
             } else if (EDIT_PROMOTION.equals(action)) {

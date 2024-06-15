@@ -16,6 +16,7 @@ public class PromotionError {
     private String endDateError;
     private String discountPerError;
     private String conditionError;
+    private String statusError;
     private String error;
 
     public PromotionError() {
@@ -25,16 +26,18 @@ public class PromotionError {
         this.endDateError = "";
         this.discountPerError = "";
         this.conditionError = "";
+        this.statusError = "";
         this.error = error;
     }
 
-    public PromotionError(String promotionIDError, String promotionNameError, String startDateError, String endDateError, String discountPerError, String conditionError, String error) {
+    public PromotionError(String promotionIDError, String promotionNameError, String startDateError, String endDateError, String discountPerError, String conditionError, String statusError, String error) {
         this.promotionIDError = promotionIDError;
         this.promotionNameError = promotionNameError;
         this.startDateError = startDateError;
         this.endDateError = endDateError;
         this.discountPerError = discountPerError;
         this.conditionError = conditionError;
+        this.statusError = statusError;
         this.error = error;
     }
 
@@ -66,6 +69,10 @@ public class PromotionError {
         return error;
     }
 
+    public String getStatusError() {
+        return statusError;
+    }
+    
     public void setPromotionIDError(String promotionIDError) {
         this.promotionIDError = promotionIDError;
     }
@@ -93,6 +100,8 @@ public class PromotionError {
     public void setError(String error) {
         this.error = error;
     }
-    
-    
+
+    public void setStatusError(String statusError) {
+        this.statusError = statusError;
+    }
 }

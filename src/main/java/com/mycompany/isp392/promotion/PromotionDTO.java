@@ -1,7 +1,6 @@
 package com.mycompany.isp392.promotion;
 
 
-import java.math.BigDecimal;
 import java.sql.Date;
 
 /*
@@ -20,17 +19,19 @@ public class PromotionDTO {
     private Date endDate;
     private int discountPer;
     private int condition;
+    private int status;
 
     public PromotionDTO() {
     }
 
-    public PromotionDTO(int promotionID, String promotionName, Date startDate, Date endDate, int discountPer, int condition) {
+    public PromotionDTO(int promotionID, String promotionName, Date startDate, Date endDate, int discountPer, int condition, int status) {
         this.promotionID = promotionID;
         this.promotionName = promotionName;
         this.startDate = startDate;
         this.endDate = endDate;
         this.discountPer = discountPer;
         this.condition = condition;
+        this.status=status;
     }
 
     public int getPromotionID() {
@@ -57,6 +58,10 @@ public class PromotionDTO {
         return condition;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
     public void setPromotionID(int promotionID) {
         this.promotionID = promotionID;
     }
@@ -81,8 +86,12 @@ public class PromotionDTO {
         this.condition = condition;
     }
 
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
-        return "PromotionDTO{" + "promotionID=" + promotionID + ", promotionName=" + promotionName + ", startDate=" + startDate + ", endDate=" + endDate + ", discountPer=" + discountPer + ", condition=" + condition + '}';
+        return "PromotionDTO{" + "promotionID=" + promotionID + ", promotionName=" + promotionName + ", startDate=" + startDate + ", endDate=" + endDate + ", discountPer=" + discountPer + ", condition=" + condition + ", status=" + status + '}';
     }
  }
