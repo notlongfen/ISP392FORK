@@ -1,25 +1,15 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
+
 package com.mycompany.isp392.controllers;
 
 import com.mycompany.isp392.promotion.*;
-import com.mycompany.isp392.user.UserDTO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.sql.Date;
 
-/**
- *
- * @author Oscar
- */
 @WebServlet(name = "EditPromotionController", urlPatterns = {"/EditPromotionController"})
 public class EditPromotionController extends HttpServlet {
 

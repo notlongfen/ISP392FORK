@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
+
 package com.mycompany.isp392.controllers;
 
 import com.mycompany.isp392.product.ProductDAO;
@@ -14,10 +11,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
 import java.util.List;
 
-/**
- *
- * @author tuan tran
- */
 public class SearchProductController extends HttpServlet {
 
     private static final String ERROR = "errorPage.jsp";

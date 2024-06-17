@@ -1,11 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
+
 package com.mycompany.isp392.controllers;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -16,10 +12,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import com.mycompany.isp392.promotion.*;
 
-/**
- *
- * @author TTNHAT
- */
 @WebServlet(name = "AddPromotionController", urlPatterns = {"/AddPromotionController"})
 public class AddPromotionController extends HttpServlet {
 

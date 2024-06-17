@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
+
 package com.mycompany.isp392.controllers;
 
 import com.mycompany.isp392.product.ProductDAO;
@@ -12,10 +9,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
 
-/**
- *
- * @author tuan tran
- */
 public class DeleteProductController extends HttpServlet {
     private static final String ERROR = "manageProduct.jsp";
     private static final String SUCCESS = "manageProduct.jsp";

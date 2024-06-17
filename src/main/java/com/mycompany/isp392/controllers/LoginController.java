@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
+
 package com.mycompany.isp392.controllers;
 
 import com.mycompany.isp392.user.UserDAO;
@@ -15,10 +12,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author Oscar
- */
 @WebServlet(name = "LoginController", urlPatterns = {"/LoginController"})
 public class LoginController extends HttpServlet {
 
@@ -33,7 +26,7 @@ public class LoginController extends HttpServlet {
     private static final String SHOP_STAFF_PAGE = "shopStaff.jsp";
     private String clientID;
     public void initClientID() throws ServletException{
-        Dotenv dotenv = Dotenv.configure().directory("/home/notlongfen/code/java/ISP392/.env").load();
+        Dotenv dotenv = Dotenv.configure().directory("C:\\Users\\tuan tran\\Desktop\\ISP392_Project\\.env").load();
         clientID = dotenv.get("GOOGLE_CLIENT_ID");
     }
 

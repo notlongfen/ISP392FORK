@@ -10,7 +10,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 public class DbUtils {
 
-    private static Dotenv dotenv = Dotenv.configure().directory("/home/notlongfen/code/java/ISP392/.env").load();
+    private static Dotenv dotenv = Dotenv.configure().directory("C:\\Users\\tuan tran\\Desktop\\ISP392_Project\\.env").load();
 //    private static final String DB_NAME = "ISP392";
 //    private static final String DB_USERNAME = "sa";
 //    private static final String DB_PASS = "12345";
