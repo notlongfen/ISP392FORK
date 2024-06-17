@@ -31,6 +31,9 @@ public class EditPromotionController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         PromotionError promotionError = new PromotionError();
+        boolean checkValidation = true;
+        PromotionError error = new PromotionError();
+
         try {
             int promotionID = Integer.parseInt(request.getParameter("promotionID"));
             String promotionName = request.getParameter("promotionName");
@@ -41,14 +44,31 @@ public class EditPromotionController extends HttpServlet {
             int status = Integer.parseInt(request.getParameter("status"));
             PromotionDAO dao = new PromotionDAO();
             PromotionDTO promotion = new PromotionDTO(promotionID, promotionName, startDate, endDate, discountPer, condition, status);
-            boolean check = dao.editPromotion(promotion);
-            HttpSession session = request.getSession();
-            UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
-            if (check) {
-                url = SUCCESS;
-            }else{
-                promotionError.setError("Failed to edit promotion. Please try again.");
+            if (dao.checkPromotionDuplicate(promotionName)) {
+                error.setPromotionNameError("This promotion already exists");
+                checkValidation = false;
+            }
+            if (promotionName.contains(" ")) {
+                error.setPromotionNameError("Promotion name cannot contain any spaces");
+                checkValidation = false;
+            }
+            if (endDate.before(startDate)) {
+                error.setEndDateError("End date must be after start date");
+                checkValidation = false;
+            }
+            if (condition < 0) {
+                error.setConditionError("Condition cannot be under 0");
+                checkValidation = false;
+            }
+
+            if (checkValidation) {
+                boolean check = dao.editPromotion(promotion);
+                if (check) {
+                    url = SUCCESS;
+                } else {
+                    promotionError.setError("Failed to edit promotion. Please try again.");
                     request.setAttribute("PROMOTION_ERROR", promotionError);
+                }
             }
         } catch (Exception e) {
             log("Error at EditPromotionController: " + e.toString());

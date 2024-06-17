@@ -34,6 +34,10 @@ public class PromotionDTO {
         this.status=status;
     }
 
+    PromotionDTO(int promotionID, String promotionName, Date startDate, Date endDate, int discountPer, int condition) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
     public int getPromotionID() {
         return promotionID;
     }

@@ -19,7 +19,7 @@ public class MainController extends HttpServlet {
 
     private static final String REGISTER_PAGE = "Sign_Up";
     private static final String REGISTER_PAGE_VIEW = "signup.jsp";
-    
+
     private static final String ADD_MANAGER_PAGE = "Add_Manager_View";
     private static final String ADD_MANAGER_PAGE_VIEW = "addManager.jsp";
     private static final String ADD_MANAGER_CONTROLLER = "AddManagerController";
@@ -59,9 +59,9 @@ public class MainController extends HttpServlet {
     private static final String SEARCH_PROMOTION_CONTROLLER = "SearchPromotionController";
 
     private static final String EDIT_PROMOTION = "EditPromotion";
-    private static final String EDIT_PROMOTION_CONTROLLER = "SearchPromotionController";
-    private static final String EDIT_PROMOTION_PAGE = "editPromotion.jsp";
+    private static final String EDIT_PROMOTION_PAGE = "CopyPromotionController";
     private static final String SAVE_EDIT_PROMOTION = "SaveEditPromotion";
+    private static final String EDIT_PROMOTION_CONTROLLER = "EditPromotionController";
 
     private static final String DELETE_PROMOTION = "DeletePromotion";
     private static final String DELETE_PROMOTION_CONTROLLER = "DeletePromotionController";
@@ -69,7 +69,6 @@ public class MainController extends HttpServlet {
     //temp
     private static final String ADD_CATEGORY_PAGE = "Add_Category_View";
     private static final String ADD_CATEGORY_PAGE_VIEW = "addCategory.jsp";
-
     private static final String ADD_CATEGORY = "Add_Category";
     private static final String ADD_CATEGORY_CONTROLLER = "AddCategoryController";
 
@@ -83,13 +82,12 @@ public class MainController extends HttpServlet {
     private static final String SEARCH_PAGE_VIEW = "SearchCategory.jsp";
     private static final String SEARCH_CATEGORY = "Search_Category";
     private static final String SEARCH_CATEGORY_CONTROLLER = "SearchCategoryController";
-    
+
     private static final String ADD_PROMOTION_PAGE = "Add_Promo_View";
     private static final String ADD_PROMOTION_PAGE_VIEW = "addPromotion.jsp";
 
     private static final String ADD_PROMOTION = "Add_Promotion";
     private static final String ADD_PROMOTION_CONTROLLER = "AddPromotionController";
-
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -141,9 +139,9 @@ public class MainController extends HttpServlet {
                 url = ADD_CHILDREN_CATEGORY_PAGE_VIEW;
             } else if (ADD_CHILDREN_CATEGORY.equals(action)) {
                 url = ADD_CHILDREN_CATEGORY_CONTROLLER;
-            }else if (SEARCH_CATEGORY_PAGE.equals(action)) {
+            } else if (SEARCH_CATEGORY_PAGE.equals(action)) {
                 url = SEARCH_PAGE_VIEW;
-            }else if (SEARCH_CATEGORY.equals(action)) {
+            } else if (SEARCH_CATEGORY.equals(action)) {
                 url = SEARCH_CATEGORY_CONTROLLER;
             } else if (ADD_MANAGER.equals(action)) {
                 url = ADD_MANAGER_CONTROLLER;
