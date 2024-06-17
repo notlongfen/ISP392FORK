@@ -23,10 +23,10 @@ public class PromotionDAO {
     private static final String ADD_PROMOTION = "INSERT INTO Promotions (PromotionID, promotionName, startDate, endDate, discountPer, condition, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
     private static final String DELETE_PROMOTION = "UPDATE Promotions SET status = 0 WHERE status = 1 AND promotionID LIKE ?";
     private static final String SEARCH_PROMOTION = "SELECT promotionID, promotionName, startDate, endDate, discountPer, condition, status FROM Promotions WHERE promotionName LIKE ?";
-    private static final String EDIT_PROMOTION = "UPDATE Promotions Set promotionName=?, startDate=?, endDate=?, discountPer=?, condition=? status=? WHERE promotionID = ?";
+    private static final String EDIT_PROMOTION = "UPDATE Promotions Set promotionName=?, startDate=?, endDate=?, discountPer=?, condition=?, status=? WHERE promotionID = ?";
     private static final String GET_LATEST_PROMOTION_ID = "SELECT MAX(PromotionID) AS PromotionID FROM Promotions";
     private final static String CHECK_PROMOTION_DUPLICATE = "SELECT * FROM Promotions WHERE promotionName LIKE ?";
-    private static final String GET_PROMOTION_BY_ID = "SELECT promotionID, promotionName, startDate, endDate, discountPer, condition FROM Promotions WHERE promotionID = ?";
+    private static final String GET_PROMOTION_BY_ID = "SELECT promotionID, promotionName, startDate, endDate, discountPer, condition, status FROM Promotions WHERE promotionID = ?";
 
     public boolean addPromotion(PromotionDTO promotion) throws SQLException {
         Connection conn = null;
@@ -144,6 +144,8 @@ public class PromotionDAO {
                 ptm.setInt(4, promotion.getDiscountPer());
                 ptm.setInt(5, promotion.getCondition());
                 ptm.setInt(6, promotion.getStatus());
+                ptm.setInt(7, promotion.getPromotionID());
+                
                 check = ptm.executeUpdate() > 0 ? true : false;
             }
         } catch (Exception e) {
@@ -237,7 +239,8 @@ public class PromotionDAO {
                     Date endDate = rs.getDate("endDate");
                     int discountPer = rs.getInt("discountPer");
                     int condition = rs.getInt("condition");
-                    promotion = new PromotionDTO(promotionID, promotionName, startDate, endDate, discountPer, condition);
+                    int status = rs.getInt("status");
+                    promotion = new PromotionDTO(promotionID, promotionName, startDate, endDate, discountPer, condition, status);
                 }
             }
         } catch (Exception e) {

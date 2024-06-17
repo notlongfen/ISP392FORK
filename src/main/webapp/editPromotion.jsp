@@ -21,7 +21,7 @@
             }
         %>
         <h1>Edit Promotion</h1>
-        <form action="EditPromotionController" method="post">
+        <form action="MainController" method="post">
             Promotion ID:
             <input type="hidden" name="promotionID" value="<%= promotion.getPromotionID() %>" readonly=""/>
             Promotion Name:
@@ -35,8 +35,9 @@
             Condition:
             <input type="number" name="condition" value="<%= promotion.getCondition() %>" required=""/><br/>
             Status: 
-            <input type="number" name="status" value="<%= promotion.getStatus() %>" readonly=""/><br/>
-            <input type="submit" value="SaveEditPromotion"/>
+            <input type="number" name="status" value="<%= promotion.getStatus() %>" required=""/><br/>
+            <input type="submit" name="action" value="SaveEditPromotion"/>
+
         </form>
     </body>
 </html>

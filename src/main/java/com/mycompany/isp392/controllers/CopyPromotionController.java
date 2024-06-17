@@ -30,7 +30,7 @@ public class CopyPromotionController extends HttpServlet {
             int promotionID = Integer.parseInt(request.getParameter("promotionID"));
             PromotionDAO dao = new PromotionDAO();
             PromotionDTO promotion = dao.getPromotionByID(promotionID);
-            if(dao !=null){
+            if(promotion !=null){
             request.setAttribute("PROMOTION", promotion);
             url = SUCCESS;
             }

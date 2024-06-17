@@ -44,10 +44,6 @@ public class EditPromotionController extends HttpServlet {
             int status = Integer.parseInt(request.getParameter("status"));
             PromotionDAO dao = new PromotionDAO();
             PromotionDTO promotion = new PromotionDTO(promotionID, promotionName, startDate, endDate, discountPer, condition, status);
-            if (dao.checkPromotionDuplicate(promotionName)) {
-                error.setPromotionNameError("This promotion already exists");
-                checkValidation = false;
-            }
             if (promotionName.contains(" ")) {
                 error.setPromotionNameError("Promotion name cannot contain any spaces");
                 checkValidation = false;

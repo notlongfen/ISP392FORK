@@ -33,59 +33,59 @@
         <form action="MainController">
             Search: <input type="text" name="search" value="<%= search%>"/>
             <input type="submit" name="action" value="Search promotion"/>
-        </form>
-        <%
-            List<PromotionDTO> promotionList = (List<PromotionDTO>) request.getAttribute("LIST_PROMOTION");
-            if (promotionList != null) {
-                if (promotionList.size() > 0) {
-        %>
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>NO</th>
-                    <th>Promotion ID</th>
-                    <th>Promotion Name</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Discount (%)</th>
-                    <th>Condition</th>
-                    <th>Action</th>
-                    <th>Delete</th>
-                </tr>
-            </thead>
-            <tbody>
-                <%
-                    int count = 1;
-                    for (PromotionDTO promotion : promotionList) {
-                %>
-                <tr>
-                    <td><%= count++ %></td>
-                    <td><input type="text" name="promotionID" value="<%= promotion.getPromotionID() %>" readonly="" /></td>
-                    <td><input type="text" name="promotionName" value="<%= promotion.getPromotionName() %>" readonly=""/></td>
-                    <td><input type="text" name="startDate" value="<%= promotion.getStartDate() %>" readonly=""/></td>
-                    <td><input type="text" name="endDate" value="<%= promotion.getEndDate() %>" readonly=""/></td>
-                    <td><input type="text" name="discountPer" value="<%= promotion.getDiscountPer() %>" readonly=""/></td>
-                    <td><input type="text" name="condition" value="Points >= <%= promotion.getCondition() %>" readonly=""/></td>
-                    <td><input type="text" name="status" value="<%= promotion.getStatus()%>" readonly=""/></td>
-                    <td>
-                        
+
+            <%
+                List<PromotionDTO> promotionList = (List<PromotionDTO>) request.getAttribute("LIST_PROMOTION");
+                if (promotionList != null) {
+                    if (promotionList.size() > 0) {
+            %>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>NO</th>
+                        <th>Promotion ID</th>
+                        <th>Promotion Name</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Discount (%)</th>
+                        <th>Condition</th>
+                        <th>Action</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%
+                        int count = 1;
+                        for (PromotionDTO promotion : promotionList) {
+                    %>
+                    <tr>
+                        <td><%= count++ %></td>
+                        <td><input type="text" name="promotionID" value="<%= promotion.getPromotionID() %>" readonly="" /></td>
+                        <td><input type="text" name="promotionName" value="<%= promotion.getPromotionName() %>" readonly=""/></td>
+                        <td><input type="text" name="startDate" value="<%= promotion.getStartDate() %>" readonly=""/></td>
+                        <td><input type="text" name="endDate" value="<%= promotion.getEndDate() %>" readonly=""/></td>
+                        <td><input type="text" name="discountPer" value="<%= promotion.getDiscountPer() %>" readonly=""/></td>
+                        <td><input type="text" name="condition" value="Points >= <%= promotion.getCondition() %>" readonly=""/></td>
+                        <td><input type="text" name="status" value="<%= promotion.getStatus()%>" readonly=""/></td>
+                        <td>
+
                             <input type="hidden" name="promotionID" value="<%= promotion.getPromotionID() %>"/>
                             <input type="submit" name="action" value="EditPromotion"/>
-                    
-                    </td>
-                    <td>
-                        <a href="MainController?action=DeletePromotion&promotionID=<%= promotion.getPromotionID()%>"> Delete</a>
-                    </td>
-                </tr>
-                <%
-                    }
-                %>
-            </tbody>
-        </table>
-        <%
-                }
-            }
-        %>
 
+                        </td>
+                        <td>
+                            <a href="MainController?action=DeletePromotion&promotionID=<%= promotion.getPromotionID()%>"> Delete</a>
+                        </td>
+                    </tr>
+                    <%
+                        }
+                    %>
+                </tbody>
+            </table>
+            <%
+                    }
+                }
+            %>
+        </form>
     </body>
 </html>
