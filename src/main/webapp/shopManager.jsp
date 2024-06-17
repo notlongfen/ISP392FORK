@@ -49,8 +49,7 @@
                         <th>End Date</th>
                         <th>Discount (%)</th>
                         <th>Condition</th>
-                        <th>Action</th>
-                        <th>Delete</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>

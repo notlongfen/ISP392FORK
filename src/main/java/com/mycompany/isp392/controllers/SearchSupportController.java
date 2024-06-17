@@ -5,7 +5,7 @@ import java.io.PrintWriter;
 
 import com.mycompany.isp392.support.SupportDAO;
 import com.mycompany.isp392.support.SupportDTO;
-
+import com.mycompany.isp392.user.UserDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -28,6 +28,10 @@ public class SearchSupportController extends HttpServlet {
             SupportDAO supportDAO = new SupportDAO();
             List<SupportDTO> supportList = supportDAO.searchSupport(search);
             if (supportList.size() > 0) {
+                for (SupportDTO support : supportList) {
+                    UserDTO user = supportDAO.getUserInfo(support.getCustID());
+                    request.setAttribute("user_" + support.getSupportID(), user);
+                }
                 request.setAttribute("SUPPORT_LIST", supportList);
                 url = SUCCESS;
             }

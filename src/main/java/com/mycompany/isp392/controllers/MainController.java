@@ -48,7 +48,9 @@ public class MainController extends HttpServlet {
     private static final String SENDMAIL = "Send_Email";
     private static final String SEND_EMAIL_CONTROLLER = "SendMailServlet";
 
-    private static final String SEARCH_SUPPORT = "Search support";
+    private static final String SEARCH_SUPPORT_PAGE = "View_Support";
+    private static final String SEARCH_SUPPORT_PAGE_VIEW = "support.jsp";
+    private static final String SEARCH_SUPPORT= "Search support";
     private static final String SEARCH_SUPPORT_CONTROLLER = "SearchSupportController";
 
     private static final String SEARCH_PROMOTION = "Search promotion";
@@ -113,6 +115,8 @@ public class MainController extends HttpServlet {
                 url = SEND_EMAIL_CONTROLLER;
             } else if (ADD_PRODUCT.equals(action)) {
                 url = ADD_PRODUCT_CONTROLLER;
+            } else if (SEARCH_SUPPORT_PAGE.equals(action)) {
+                url = SEARCH_SUPPORT_PAGE_VIEW;
             } else if (SEARCH_SUPPORT.equals(action)) {
                 url = SEARCH_SUPPORT_CONTROLLER;
             } else if (ADD_PRODUCT_PAGE.equals(action)) {
