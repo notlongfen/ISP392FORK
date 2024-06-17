@@ -29,6 +29,8 @@ public class CategoryDAO {
     public static String GET_LIST_CATEGORY = "SELECT * FROM Categories";
     private static final String SEARCH_CATEGORIES = "SELECT * FROM Categories WHERE CategoriesName LIKE ? OR description LIKE ?";
     private static final String SEARCH_CHILDREN_CATEGORIES = "SELECT * FROM ChildrenCategories WHERE parentID = ?";
+    private static final String UPDATE_CATEGORY = "UPDATE Categories SET CategoriesName = ?, Description = ? WHERE CategoryID = ?";
+    private static final String UPDATE_CHILDREN_CATEGORY = "UPDATE ChildrenCategories SET CategoriesName = ? WHERE CDCategoryID = ?";
 
     public boolean addCategory(CategoryDTO category) throws SQLException {
         Connection conn = null;
@@ -242,6 +244,7 @@ public class CategoryDAO {
         }
         return list;
     }
+
     public List<CategoryDTO> searchCategories(String searchText) throws SQLException, ClassNotFoundException {
         List<CategoryDTO> categories = new ArrayList<>();
         Connection conn = null;
@@ -279,6 +282,7 @@ public class CategoryDAO {
         }
         return categories;
     }
+
     public List<ChildrenCategoryDTO> searchChildrenCategories(int parentID) throws SQLException, ClassNotFoundException {
         List<ChildrenCategoryDTO> childrenCategories = new ArrayList<>();
         Connection conn = null;
@@ -313,5 +317,57 @@ public class CategoryDAO {
             }
         }
         return childrenCategories;
+    }
+    public boolean updateCategory(int categoryID, String newName, String newDescription) throws SQLException, ClassNotFoundException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(UPDATE_CATEGORY);
+                ptm.setString(1, newName);
+                ptm.setString(2, newDescription);
+                ptm.setInt(3, categoryID);
+                check = ptm.executeUpdate() > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e; // It's a good practice to rethrow the exception after logging it.
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+
+    public boolean updateChildrenCategory(int cdCategoryID, String newName) throws SQLException, ClassNotFoundException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(UPDATE_CHILDREN_CATEGORY);
+                ptm.setString(1, newName);
+                ptm.setInt(2, cdCategoryID);
+                check = ptm.executeUpdate() > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e; // It's a good practice to rethrow the exception after logging it.
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
     }
 }

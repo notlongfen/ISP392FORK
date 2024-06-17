@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package com.mycompany.isp392.controllers;
 
 import java.io.IOException;
@@ -78,10 +74,17 @@ public class MainController extends HttpServlet {
 
     private static final String ADD_CHILDREN_CATEGORY = "Add_Children_Category";
     private static final String ADD_CHILDREN_CATEGORY_CONTROLLER = "AddChildrenCategoryController";
+
     private static final String SEARCH_CATEGORY_PAGE = "Search_Category_View";
     private static final String SEARCH_PAGE_VIEW = "SearchCategory.jsp";
     private static final String SEARCH_CATEGORY = "Search_Category";
     private static final String SEARCH_CATEGORY_CONTROLLER = "SearchCategoryController";
+
+    private static final String EDIT_CATEGORY = "Edit_Category";
+    private static final String EDIT_CATEGORY_CONTROLLER = "EditCategoryController";
+
+    private static final String EDIT_CHILDRENCATEGORY = "Edit_ChildrenCategory";
+    private static final String EDIT_CHILDRENCATEGORY_CONTROLLER = "EditChildrenCategoryController";
 
     private static final String ADD_PROMOTION_PAGE = "Add_Promo_View";
     private static final String ADD_PROMOTION_PAGE_VIEW = "addPromotion.jsp";
@@ -147,6 +150,10 @@ public class MainController extends HttpServlet {
                 url = ADD_MANAGER_CONTROLLER;
             } else if (ADD_MANAGER_PAGE.equals(action)) {
                 url = ADD_MANAGER_PAGE_VIEW;
+            }else if (EDIT_CHILDRENCATEGORY.equals(action)) {
+                url = EDIT_CHILDRENCATEGORY_CONTROLLER;
+            }else if (EDIT_CATEGORY.equals(action)) {
+                url = EDIT_CATEGORY_CONTROLLER;
             }
         } catch (Exception e) {
             log("error at MainController: " + e.toString());

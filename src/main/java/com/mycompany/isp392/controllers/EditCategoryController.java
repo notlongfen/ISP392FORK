@@ -1,10 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package com.mycompany.isp392.controllers;
 
-import com.mycompany.isp392.brand.BrandDAO;
+import com.mycompany.isp392.category.CategoryDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -12,35 +8,36 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
 
+public class EditCategoryController extends HttpServlet {
 
-/**
- *
- * @author tuan tran
- */
-public class UpdateBrandController extends HttpServlet {
-
-    private static final String ERROR = "brand.jsp";
-    private static final String SUCCESS = "brand.jsp";
+    private static final String ERROR = "SearchCategory.jsp";
+    private static final String SUCCESS = "SearchCategory.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            int brandID = Integer.parseInt(request.getParameter("brandID"));
-            String brandName = request.getParameter("brandName");
-            BrandDAO brandDAO = new BrandDAO();
-            boolean check = brandDAO.updateBrand(brandName, brandID);
+            int categoryID = Integer.parseInt(request.getParameter("categoryID"));
+            String newName = request.getParameter("categoryName");
+            String newDescription = request.getParameter("description");
+
+            CategoryDAO categoryDAO = new CategoryDAO();
+            boolean check = categoryDAO.updateCategory(categoryID, newName, newDescription);
             if (check) {
-                request.setAttribute("MESSAGE", "Brand Updated successfully!");
+                request.setAttribute("MESSAGE", "Category updated successfully!");
                 url = SUCCESS;
+            } else {
+                request.setAttribute("MESSAGE", "Failed to update category.");
             }
-        } catch (SQLException e) {
-            log("Error at UpdateBrandController: " + e.toString());
+        } catch (Exception e) {
+            log("Error at UpdateCategoryController: " + e.toString());
+            request.setAttribute("ERROR", "Error updating category: " + e.getMessage());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
     }
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -79,5 +76,5 @@ public class UpdateBrandController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
+    
 }

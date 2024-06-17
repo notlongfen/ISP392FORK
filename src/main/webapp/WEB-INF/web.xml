@@ -34,7 +34,7 @@
     </servlet>
     <servlet>
         <servlet-name>UpdateBrandController</servlet-name>
-        <servlet-class>com.mycompany.isp392.controllers.UpdateBrandController</servlet-class>
+        <servlet-class>com.mycompany.isp392.controllers.EditBrandController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>SearchBrandController</servlet-name>
@@ -43,6 +43,14 @@
     <servlet>
         <servlet-name>SearchCategoryController</servlet-name>
         <servlet-class>com.mycompany.isp392.controllers.SearchCategoryController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditCategoryController</servlet-name>
+        <servlet-class>com.mycompany.isp392.controllers.EditCategoryController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditChildrenCategoryController</servlet-name>
+        <servlet-class>com.mycompany.isp392.controllers.EditChildrenCategoryController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>MainController</servlet-name>
@@ -87,6 +95,14 @@
     <servlet-mapping>
         <servlet-name>SearchCategoryController</servlet-name>
         <url-pattern>/SearchCategoryController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditCategoryController</servlet-name>
+        <url-pattern>/EditCategoryController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditChildrenCategoryController</servlet-name>
+        <url-pattern>/EditChildrenCategoryController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
