@@ -7,8 +7,10 @@ package com.mycompany.isp392.order;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-
-import jakarta.resource.cci.ResultSet;
+import java.sql.ResultSet;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 import utils.DbUtils;
 
 /**
@@ -16,11 +18,14 @@ import utils.DbUtils;
  * @author notlongfen
  */
 public class OrderDAO {
+
     private static final String ADD_ORDER = "INSERT INTO Orders (status, total, orderDate, CustID, promotionID, CartID) VALUES (?,?,?,?,?,?)";
     private static final String GET_LAST_ORDER_ID = "SELECT MAX(orderID) FROM Orders";
     private static final String ADD_ORDER_DETAILS = "INSERT INTO OrderDetails (orderID, productID, quantity, unitPrice) VALUES (?,?,?,?)";
     private static final String DELETE_ORDER = "";
-    public int getLastOrderId() throws SQLException{
+    private static final String SEARCH_ORDERS = "SELECT * FROM Orders WHERE orderID LIKE ? OR orderDate LIKE ? OR total LIKE ? OR CustID LIKE ? OR CartID LIKE ?";
+
+    public int getLastOrderId() throws SQLException {
         Connection conn = null;
         PreparedStatement ptm = null;
         ResultSet rs = null;
@@ -29,13 +34,13 @@ public class OrderDAO {
             conn = DbUtils.getConnection();
             ptm = conn.prepareStatement(GET_LAST_ORDER_ID);
             rs = (ResultSet) ptm.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 lastOrderId = rs.getInt(1);
             }
         } catch (Exception e) {
             e.printStackTrace();
 
-        }finally{
+        } finally {
             if (rs != null) {
                 rs.close();
             }
@@ -45,11 +50,11 @@ public class OrderDAO {
             if (conn != null) {
                 conn.close();
             }
-        } 
+        }
         return lastOrderId + 1;
     }
-    
-    public OrderDTO insertOrder(OrderDTO order, int total, int custId, int promotionId, int cartId){
+
+    public OrderDTO insertOrder(OrderDTO order, int total, int custId, int promotionId, int cartId) {
         OrderDTO orderDTO = null;
         Connection conn = null;
         PreparedStatement pstm = null;
@@ -66,7 +71,7 @@ public class OrderDAO {
             int row = pstm.executeUpdate();
             if (row > 0) {
                 orderDTO = order;
-            } 
+            }
         } catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();
@@ -75,7 +80,7 @@ public class OrderDAO {
         return orderDTO;
     }
 
-    public OrderDetailsDTO insertOrderDetails(OrderDetailsDTO orderDetails){
+    public OrderDetailsDTO insertOrderDetails(OrderDetailsDTO orderDetails) {
         OrderDetailsDTO orderDetailsDTO = null;
         Connection conn = null;
         PreparedStatement pstm = null;
@@ -90,12 +95,53 @@ public class OrderDAO {
             int row = pstm.executeUpdate();
             if (row > 0) {
                 orderDetailsDTO = orderDetails;
-            } 
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return orderDetailsDTO;
     }
-    
-    
+
+   public List<OrderDTO> searchOrders(String searchText) throws SQLException, ClassNotFoundException {
+        List<OrderDTO> orders = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(SEARCH_ORDERS);
+                ptm.setString(1, "%" + searchText + "%");
+                ptm.setString(2, "%" + searchText + "%");
+                ptm.setString(3, "%" + searchText + "%");
+                ptm.setString(4, "%" + searchText + "%");
+                ptm.setString(5, "%" + searchText + "%");
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    int orderID = rs.getInt("orderID");
+                    int status = rs.getInt("status");
+                    int total = rs.getInt("total");
+                    Date orderDate = rs.getDate("orderDate");
+                    int custID = rs.getInt("CustID");
+                    int promotionID = rs.getInt("promotionID");
+                    int cartID = rs.getInt("CartID");
+                    orders.add(new OrderDTO(orderID, status, total, orderDate, custID, promotionID, cartID));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e; // Rethrow the exception after logging it
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return orders;
+    }
 }

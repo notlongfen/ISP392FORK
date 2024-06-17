@@ -92,6 +92,11 @@ public class MainController extends HttpServlet {
     private static final String ADD_PROMOTION = "Add_Promotion";
     private static final String ADD_PROMOTION_CONTROLLER = "AddPromotionController";
 
+    private static final String SEARCH_ORDER_PAGE = "Search_Order_View";
+    private static final String SEARCH_ORDER_VIEW = "order.jsp";
+    private static final String SEARCH_ORDER = "Search_Order";
+    private static final String SEARCH_ORDER_CONTROLLER = "SearchOrderController";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -150,10 +155,14 @@ public class MainController extends HttpServlet {
                 url = ADD_MANAGER_CONTROLLER;
             } else if (ADD_MANAGER_PAGE.equals(action)) {
                 url = ADD_MANAGER_PAGE_VIEW;
-            }else if (EDIT_CHILDRENCATEGORY.equals(action)) {
+            } else if (EDIT_CHILDRENCATEGORY.equals(action)) {
                 url = EDIT_CHILDRENCATEGORY_CONTROLLER;
-            }else if (EDIT_CATEGORY.equals(action)) {
+            } else if (EDIT_CATEGORY.equals(action)) {
                 url = EDIT_CATEGORY_CONTROLLER;
+            } else if (SEARCH_ORDER_PAGE.equals(action)) {
+                url = SEARCH_ORDER_VIEW;
+            } else if (SEARCH_ORDER.equals(action)) {
+                url = SEARCH_ORDER_CONTROLLER;
             }
         } catch (Exception e) {
             log("error at MainController: " + e.toString());
