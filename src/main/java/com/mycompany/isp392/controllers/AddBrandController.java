@@ -1,7 +1,6 @@
-
 package com.mycompany.isp392.controllers;
 
-import com.mycompany.isp392.brand.BrandDAO;
+import com.mycompany.isp392.brand.*;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -18,13 +17,24 @@ public class AddBrandController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
+        BrandError brandError = new BrandError();
+        boolean checkValidation = true;
+
         try {
             String brandName = request.getParameter("brandName");
             BrandDAO brandDAO = new BrandDAO();
-            boolean check = brandDAO.addBrand(brandName);
-            if (check) {
-                request.setAttribute("MESSAGE", "Brand added successfully!");
-                url = SUCCESS;
+            if (brandDAO.checkBrandExists(brandName)) {
+                brandError.setBrandNameError("Brand Name already exists.");
+                checkValidation = false;
+            }
+            if (checkValidation) {
+                boolean check = brandDAO.addBrand(brandName);
+                if (check) {
+                    request.setAttribute("MESSAGE", "Brand added successfully!");
+                    url = SUCCESS;
+                }
+            } else {
+                request.setAttribute("BRAND_ERROR", brandError);
             }
         } catch (SQLException e) {
             log("Error at AddBrandController: " + e.toString());
@@ -32,6 +42,7 @@ public class AddBrandController extends HttpServlet {
             request.getRequestDispatcher(url).forward(request, response);
         }
     }
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

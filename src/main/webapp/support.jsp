@@ -46,7 +46,7 @@
                 <td><%= user.getEmail() %></td>
                 <td><%= user.getPhone() %></td>
                 <td><%= support.getRequestDate() %></td>
-                <td><%= support.getStatus() == 1 ? "View" : "Reply" %></td>
+                <td><%= support.getStatus() %></td>
                 <td>
                     <% if (support.getStatus() == 1) { %>
                         <form action="ViewSupportDetailsController" method="GET">

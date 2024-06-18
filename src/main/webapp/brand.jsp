@@ -1,4 +1,5 @@
 <%@ page import="com.mycompany.isp392.brand.BrandDTO" %>
+<%@ page import="com.mycompany.isp392.brand.BrandError" %>
 <%@ page import="java.util.List" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
@@ -19,12 +20,13 @@
                     <label for="brandName">Brand Name:</label>
                     <input type="text" class="form-control" name="brandName" required>
                     <button type="submit" class="btn btn-info mt-2" name="action" value="Add_Brand">Add</button>
+
                     <% if (request.getAttribute("MESSAGE") != null) { %>
-                        <div class="alert alert-info"><%= request.getAttribute("MESSAGE") %></div>
+                    <div class="alert alert-info"><%= request.getAttribute("MESSAGE") %></div>
                     <% } %>
                 </div>
             </form>
-            
+
             <!-- Search Brands -->
             <h2>Search Brands</h2>
             <form action="MainController" method="GET">
@@ -51,41 +53,51 @@
                     if (brands != null) {
                         for (BrandDTO brand : brands) {
                     %>
-                        <tr>
-                            <form action="MainController" method="POST">
-                            <td><%= brand.getBrandID() %></td>
-                            <td><input type="text" name="brandName" value="<%= brand.getBrandName() %>"></td>
-                            <td><%= brand.getStatus() == 1 ? "Available" : "Deleted" %></td>
-                            <td>                               
-                                    <input type="hidden" name="brandID" value="<%= brand.getBrandID() %>">
-                                    <input type="hidden" name="action" value="Edit_Brand">
-                                    <button type="submit" class="btn btn-primary">Edit</button>
-                                </form>
-                            </td>
-                            <td>
-                                <% if (brand.getStatus() == 1) { %>
-                                    <form action="MainController" method="POST">
-                                        <input type="hidden" name="brandID" value="<%= brand.getBrandID() %>">
-                                        <input type="hidden" name="action" value="Delete_Brand">
-                                        <button type="submit" class="btn btn-danger">Delete</button>
-                                    </form>
-                                <% } else { %>
-                                    <button class="btn btn-secondary disabled">Not Available</button>
-                                <% } %>
-                            </td>
-                        </tr>
-                    <% 
-                        }
-                    } else {
-                    %>
-                        <tr>
-                            <td colspan="5" class="text-center">No brands found</td>
-                        </tr>
-                    <% 
+                    <tr>
+                <form action="MainController" method="POST">
+                    <td><%= brand.getBrandID() %></td>
+                    <td><input type="text" name="brandName" value="<%= brand.getBrandName() %>"></td>
+                    <td><%= brand.getStatus() == 1 ? "Available" : "Deleted" %></td>
+                    <td>                               
+                        <input type="hidden" name="brandID" value="<%= brand.getBrandID() %>">
+                        <input type="hidden" name="action" value="Edit_Brand">
+                        <button type="submit" class="btn btn-primary">Edit</button>
+                </form>
+                </td>
+                <td>
+                    <% if (brand.getStatus() == 1) { %>
+                    <form action="MainController" method="POST">
+                        <input type="hidden" name="brandID" value="<%= brand.getBrandID() %>">
+                        <input type="hidden" name="action" value="Delete_Brand">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                    <% } else { %>
+                    <button class="btn btn-secondary disabled">Not Available</button>
+                    <% } %>
+                </td>
+                </tr>
+                <% 
                     }
-                    %>
+                } else {
+                %>
+                <tr>
+                    <td colspan="5" class="text-center">No brands found</td>
+                </tr>
+                <% 
+                }
+                %>
                 </tbody>
             </table>
+            <%
+                    BrandError brandError = (BrandError) request.getAttribute("BRAND_ERROR");
+                    if (brandError != null) {
+            %>
+            <div style="color: red;">
+                <p><%= brandError.getBrandNameError() %></p>
+            </div>
+            <%
+                }
+            %>
         </div>
     </body>
 </html>

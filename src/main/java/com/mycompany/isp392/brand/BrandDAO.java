@@ -21,11 +21,13 @@ import java.util.logging.Logger;
  * @author notlongfen
  */
 public class BrandDAO {
+
     private static final String SEARCH_BRAND = "SELECT * FROM Brands WHERE brandName LIKE ?";
     private static final String INSERT_BRAND = "INSERT INTO Brands(BrandName, status) VALUES(?,1)";
     private static final String UPDATE_BRAND = "UPDATE Brands SET BrandName=? WHERE BrandID=?";
     private static final String DEACTIVATE_BRAND = "UPDATE Brands SET status = 0 WHERE BrandID=?";
-   
+    private static final String CHECK_BRAND = "SELECT BrandID FROM Brands WHERE brandName LIKE ?";
+
     public List<BrandDTO> searchForBrand(String brandName) {
         List<BrandDTO> list = new ArrayList<>();
         Connection conn = null;
@@ -40,8 +42,8 @@ public class BrandDAO {
                 while (rs.next()) {
                     String Name = rs.getString("brandName");
                     int brandID = rs.getInt("brandID");
-                    int status = rs.getInt("status"); 
-                    
+                    int status = rs.getInt("status");
+
                     list.add(new BrandDTO(brandID, Name, status));
                 }
             }
@@ -52,7 +54,8 @@ public class BrandDAO {
         }
         return list;
     }
-      public boolean addBrand(String brandName) throws SQLException {
+
+    public boolean addBrand(String brandName) throws SQLException {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -121,6 +124,38 @@ public class BrandDAO {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(BrandDAO.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+
+    public boolean checkBrandExists(String brandName) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(CHECK_BRAND);
+                ptm.setString(1, brandName);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    check = true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
             if (ptm != null) {
                 ptm.close();
             }

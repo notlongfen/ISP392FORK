@@ -29,7 +29,7 @@ public class SearchSupportController extends HttpServlet {
             List<SupportDTO> supportList = supportDAO.searchSupport(search);
             if (supportList.size() > 0) {
                 for (SupportDTO support : supportList) {
-                    UserDTO user = supportDAO.getUserInfo(support.getCustID());
+                    UserDTO user = supportDAO.getUserInfo(support.getSupportID());
                     request.setAttribute("user_" + support.getSupportID(), user);
                 }
                 request.setAttribute("SUPPORT_LIST", supportList);
