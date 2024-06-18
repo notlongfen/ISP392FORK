@@ -22,8 +22,8 @@ public class CategoryDAO {
 
     private static final String ADD_CATEGORY = "INSERT INTO Categories (CategoryID, CategoriesName, Description, status) VALUES (?, ?, ?, ?)";
     private static final String ADD_CHILDREN_CATEGORY = "INSERT INTO ChildrenCategories (CDCategoryID, CategoriesName, ParentID, status) VALUES (?,?,?,?)";
-    private static final String DELETE_CATEGORY = "DELETE FROM Categories WHERE CategoryID = ?";
-    private static final String DELETE_CHILDREN_CATEGORY = "DELETE FROM ChildrenCategories WHERE CDCategoryID = ?";
+    private static final String DELETE_CATEGORY = "UPDATE Categories SET status = 0 WHERE status = 1 AND CategoryID LIKE ?";
+    private static final String DELETE_CHILDREN_CATEGORY = "UPDATE ChildrenCategories SET status = 0 WHERE status = 1 AND CDCategoryID LIKE ?";
     private static final String GET_LATEST_CATEGORY_ID = "SELECT MAX(CategoryID) AS CategoryID FROM Categories";
     private static final String GET_LATEST_CHILDREN_CATEGORY_ID = "SELECT MAX(CDCategoryID) AS CDCategoryID FROM ChildrenCategories";
     private static final String GET_LIST_CATEGORY = "SELECT * FROM Categories";
@@ -32,10 +32,11 @@ public class CategoryDAO {
     private static final String SEARCH_CHILDREN_CATEGORIES = "SELECT * FROM ChildrenCategories WHERE parentID = ?";
     private static final String UPDATE_CATEGORY = "UPDATE Categories SET CategoriesName = ?, Description = ? WHERE CategoryID = ?";
     private static final String UPDATE_CHILDREN_CATEGORY = "UPDATE ChildrenCategories SET CategoriesName = ? WHERE CDCategoryID = ?";
-    private static final String CHECK_CATEGORY_DUPLICATE = "SELECT * FROM Categories WHERE CategoriesName LIKE ?";     
+    private static final String CHECK_CATEGORY_DUPLICATE = "SELECT * FROM Categories WHERE CategoriesName LIKE ?";
     private static final String CHECK_CHILDREN_CATEGORY_DUPLICATE = "SELECT * FROM ChildrenCategories WHERE CategoriesName LIKE ? AND ParentID LIKE ?";
     private static final String CHECK_PARENT_ID = "SELECT * FROM  Categories WHERE CategoryID LIKE ? AND status = 1";
-    
+    private static final String GET_CHILDREN_CATEGORIES = "SELECT * FROM ChildrenCategories WHERE status = 1 AND ParentID LIKE ?";
+
     public boolean addCategory(CategoryDTO category) throws SQLException {
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -282,7 +283,7 @@ public class CategoryDAO {
         }
         return list;
     }
-    
+
     public List<CategoryDTO> searchCategories(String searchText) throws SQLException, ClassNotFoundException {
         List<CategoryDTO> categories = new ArrayList<>();
         Connection conn = null;
@@ -440,7 +441,7 @@ public class CategoryDAO {
         }
         return check;
     }
-    
+
     public boolean checkChildrenCategoryDuplicate(String categoryName, int parentID) throws SQLException {
         boolean check = false;
         Connection conn = null;
@@ -472,7 +473,7 @@ public class CategoryDAO {
         }
         return check;
     }
-    
+
     public boolean checkParentID(int parentID) throws SQLException {
         boolean check = false;
         Connection conn = null;
@@ -502,5 +503,38 @@ public class CategoryDAO {
             }
         }
         return check;
+    }
+
+    public List<ChildrenCategoryDTO> getChildrenCategories(int parentID) throws SQLException {
+        List<ChildrenCategoryDTO> list = new ArrayList<ChildrenCategoryDTO>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_CHILDREN_CATEGORIES);
+                ptm.setInt(1, parentID);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    int cdCategoryID = rs.getInt("CDCategoryID");
+                    String categoryName = rs.getString("CategoriesName");
+                    list.add(new ChildrenCategoryDTO(cdCategoryID, categoryName, parentID, 1));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return list;
     }
 }

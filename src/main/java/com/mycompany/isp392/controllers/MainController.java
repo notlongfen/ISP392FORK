@@ -50,7 +50,7 @@ public class MainController extends HttpServlet {
 
     private static final String SEARCH_SUPPORT_PAGE = "View_Support";
     private static final String SEARCH_SUPPORT_PAGE_VIEW = "support.jsp";
-    private static final String SEARCH_SUPPORT= "Search support";
+    private static final String SEARCH_SUPPORT = "Search support";
     private static final String SEARCH_SUPPORT_CONTROLLER = "SearchSupportController";
 
     private static final String SEARCH_PROMOTION = "Search promotion";
@@ -87,6 +87,12 @@ public class MainController extends HttpServlet {
 
     private static final String EDIT_CHILDRENCATEGORY = "Edit_ChildrenCategory";
     private static final String EDIT_CHILDRENCATEGORY_CONTROLLER = "EditChildrenCategoryController";
+
+    private static final String DELETE_CATEGORY = "Delete_Category";
+    private static final String DELETE_CATEGORY_CONTROLLER = "DeleteCategoryController";
+
+    private static final String DELETE_CHILDREN_CATEGORY = "Delete_ChildrenCategory";
+    private static final String DELETE_CHILDREN_CATEGORY_CONTROLLER = "DeleteChildrenCategoryController";
 
     private static final String ADD_PROMOTION_PAGE = "Add_Promo_View";
     private static final String ADD_PROMOTION_PAGE_VIEW = "addPromotion.jsp";
@@ -167,6 +173,10 @@ public class MainController extends HttpServlet {
                 url = SEARCH_ORDER_VIEW;
             } else if (SEARCH_ORDER.equals(action)) {
                 url = SEARCH_ORDER_CONTROLLER;
+            } else if (DELETE_CATEGORY.equals(action)) {
+                url = DELETE_CATEGORY_CONTROLLER;
+            } else if (DELETE_CHILDREN_CATEGORY.equals(action)) {
+                url = DELETE_CHILDREN_CATEGORY_CONTROLLER;
             }
         } catch (Exception e) {
             log("error at MainController: " + e.toString());

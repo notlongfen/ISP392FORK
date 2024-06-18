@@ -51,18 +51,18 @@
                                 <input type="hidden" name="action" value="Edit_Category">
                                 <button type="submit" class="btn btn-primary">Edit</button>
                             </td>
+                        </form>
                             <td>
-                                <% if (category.getStatus() == 1) { %>
-                                    <form action="MainController" method="POST">
+                               <% if (category.getStatus() == 1) { %>  
+                                    <form action="MainController" method="POST"> 
                                         <input type="hidden" name="categoryID" value="<%= category.getCategoryID() %>">
                                         <input type="hidden" name="action" value="Delete_Category">
                                         <button type="submit" class="btn btn-danger">Delete</button>
                                     </form>
                                 <% } else { %>
                                     <button class="btn btn-secondary disabled">Not Available</button>
-                                <% } %>
+                                <% } %> 
                             </td>
-                        </form>
                         <td>
                             <% for (ChildrenCategoryDTO child : children) { %>
                                 <div>
@@ -71,7 +71,10 @@
                                         <input type="text" name="categoryName" value="<%= child.getCategoryName() %>">
                                         <input type="hidden" name="action" value="Edit_ChildrenCategory">
                                         <button type="submit" class="btn btn-primary">Edit</button>
+                                    </form>
+                                    <form action="MainController" method="POST">
                                         <% if (child.getStatus() == 1) { %>
+                                            <input type="hidden" name="cdCategoryID" value="<%= child.getCdCategoryID()%>">
                                             <input type="hidden" name="action" value="Delete_ChildrenCategory">
                                             <button type="submit" class="btn btn-danger">Delete</button>
                                         <% } else { %>
