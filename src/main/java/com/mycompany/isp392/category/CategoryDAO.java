@@ -20,18 +20,22 @@ import utils.DbUtils;
  */
 public class CategoryDAO {
 
-    public static String ADD_CATEGORY = "INSERT INTO Categories (CategoryID, CategoriesName, Description, status) VALUES (?, ?, ?, ?)";
-    public static String ADD_CHILDREN_CATEGORY = "INSERT INTO ChildrenCategories (CDCategoryID, CategoriesName, ParentID, status) VALUES (?,?,?,?)";
-    public static String DELETE_CATEGORY = "DELETE FROM Categories WHERE CategoryID = ?";
-    public static String DELETE_CHILDREN_CATEGORY = "DELETE FROM ChildrenCategories WHERE CDCategoryID = ?";
-    public static String GET_LATEST_CATEGORY_ID = "SELECT MAX(CategoryID) AS CategoryID FROM Categories";
-    public static String GET_LATEST_CHILDREN_CATEGORY_ID = "SELECT MAX(CDCategoryID) AS CDCategoryID FROM ChildrenCategories";
-    public static String GET_LIST_CATEGORY = "SELECT * FROM Categories";
+    private static final String ADD_CATEGORY = "INSERT INTO Categories (CategoryID, CategoriesName, Description, status) VALUES (?, ?, ?, ?)";
+    private static final String ADD_CHILDREN_CATEGORY = "INSERT INTO ChildrenCategories (CDCategoryID, CategoriesName, ParentID, status) VALUES (?,?,?,?)";
+    private static final String DELETE_CATEGORY = "DELETE FROM Categories WHERE CategoryID = ?";
+    private static final String DELETE_CHILDREN_CATEGORY = "DELETE FROM ChildrenCategories WHERE CDCategoryID = ?";
+    private static final String GET_LATEST_CATEGORY_ID = "SELECT MAX(CategoryID) AS CategoryID FROM Categories";
+    private static final String GET_LATEST_CHILDREN_CATEGORY_ID = "SELECT MAX(CDCategoryID) AS CDCategoryID FROM ChildrenCategories";
+    private static final String GET_LIST_CATEGORY = "SELECT * FROM Categories";
+    private static final String GET_ACTIVE_CATEGORY = "SELECT * FROM Categories WHERE status = 1";
     private static final String SEARCH_CATEGORIES = "SELECT * FROM Categories WHERE CategoriesName LIKE ? OR description LIKE ?";
     private static final String SEARCH_CHILDREN_CATEGORIES = "SELECT * FROM ChildrenCategories WHERE parentID = ?";
     private static final String UPDATE_CATEGORY = "UPDATE Categories SET CategoriesName = ?, Description = ? WHERE CategoryID = ?";
     private static final String UPDATE_CHILDREN_CATEGORY = "UPDATE ChildrenCategories SET CategoriesName = ? WHERE CDCategoryID = ?";
-
+    private static final String CHECK_CATEGORY_DUPLICATE = "SELECT * FROM Categories WHERE CategoriesName LIKE ?";     
+    private static final String CHECK_CHILDREN_CATEGORY_DUPLICATE = "SELECT * FROM ChildrenCategories WHERE CategoriesName LIKE ? AND ParentID LIKE ?";
+    private static final String CHECK_PARENT_ID = "SELECT * FROM  Categories WHERE CategoryID LIKE ? AND status = 1";
+    
     public boolean addCategory(CategoryDTO category) throws SQLException {
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -245,6 +249,40 @@ public class CategoryDAO {
         return list;
     }
 
+    public List<CategoryDTO> getActiveCategory() throws Exception {
+        List<CategoryDTO> list = new ArrayList<CategoryDTO>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_ACTIVE_CATEGORY);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    int categoryID = rs.getInt("CategoryID");
+                    String categoryName = rs.getString("CategoriesName");
+                    String description = rs.getString("Description");
+                    int status = rs.getInt("status");
+                    list.add(new CategoryDTO(categoryID, categoryName, description, status));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return list;
+    }
+    
     public List<CategoryDTO> searchCategories(String searchText) throws SQLException, ClassNotFoundException {
         List<CategoryDTO> categories = new ArrayList<>();
         Connection conn = null;
@@ -318,6 +356,7 @@ public class CategoryDAO {
         }
         return childrenCategories;
     }
+
     public boolean updateCategory(int categoryID, String newName, String newDescription) throws SQLException, ClassNotFoundException {
         boolean check = false;
         Connection conn = null;
@@ -361,6 +400,100 @@ public class CategoryDAO {
             e.printStackTrace();
             throw e; // It's a good practice to rethrow the exception after logging it.
         } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+
+    public boolean checkCategoryDuplicate(String categoryName) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(CHECK_CATEGORY_DUPLICATE);
+                ptm.setString(1, categoryName);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    check = true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+    
+    public boolean checkChildrenCategoryDuplicate(String categoryName, int parentID) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(CHECK_CHILDREN_CATEGORY_DUPLICATE);
+                ptm.setString(1, categoryName);
+                ptm.setInt(2, parentID);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    check = true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+    
+    public boolean checkParentID(int parentID) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(CHECK_PARENT_ID);
+                ptm.setInt(1, parentID);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    check = true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
             if (ptm != null) {
                 ptm.close();
             }

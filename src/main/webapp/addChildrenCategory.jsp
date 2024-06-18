@@ -25,7 +25,7 @@
             Parent Category: <select name="parentID" required=""> <%= cdCategoryError.getParentIDError()%>
                 <%
                     CategoryDAO dao = new CategoryDAO();
-                    List<CategoryDTO> list = (List<CategoryDTO>) dao.getListCategory();
+                    List<CategoryDTO> list = (List<CategoryDTO>) dao.getActiveCategory();
                     if (list != null) {
                         if (list.size() > 0) {
                             for (CategoryDTO category : list) {

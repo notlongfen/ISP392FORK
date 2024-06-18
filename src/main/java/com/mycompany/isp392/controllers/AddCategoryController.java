@@ -19,7 +19,7 @@ public class AddCategoryController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-         String url = ERROR;
+        String url = ERROR;
         CategoryDAO dao = new CategoryDAO();
         boolean checkValidation = true;
         CategoryError error = new CategoryError();
@@ -30,6 +30,10 @@ public class AddCategoryController extends HttpServlet {
             //checkValidation
             if(categoryName.length()>20){
                 error.setCategoryNameError("Category cannot be over 20 characters");
+                checkValidation = false;
+            }
+            if(dao.checkCategoryDuplicate(categoryName)){
+                error.setCategoryNameError("This category already exists");
                 checkValidation = false;
             }
             if(description.length()>100){

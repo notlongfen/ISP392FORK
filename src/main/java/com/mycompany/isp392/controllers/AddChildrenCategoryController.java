@@ -31,6 +31,15 @@ public class AddChildrenCategoryController extends HttpServlet {
                 error.setCdCategoryNameError("Category cannot be over 20 characters");
                 checkValidation = false;
             }
+            if(dao.checkChildrenCategoryDuplicate(cdCategoryName,parentID)){
+                error.setCdCategoryNameError("This child category already exists");
+                checkValidation = false;
+            }
+            boolean checkParentID = dao.checkParentID(parentID);
+            if(!checkParentID){
+                error.setParentIDError("Unable to find this parent category");
+                checkValidation=false;
+            }
             
             if(checkValidation){
                 int categoryID = dao.getLatestCdCategoryID() + 1; 
