@@ -38,7 +38,7 @@ public class AddManagerController extends HttpServlet {
             String position = request.getParameter("position");
 
             // Check email exists
-            if (dao.checkEmailExists(email)) {
+            if (dao.checkEmailExists(email) == -1) {
                 userError.setEmailError("Email already exists.");
                 checkValidation = false;
             }

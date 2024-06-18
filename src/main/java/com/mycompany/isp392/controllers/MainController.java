@@ -105,6 +105,9 @@ public class MainController extends HttpServlet {
     private static final String SEARCH_ORDER = "Search_Order";
     private static final String SEARCH_ORDER_CONTROLLER = "SearchOrderController";
 
+    private static final String FORGOT_PASSWORD_CONTROLLER = "ForgotPasswordController";
+    private static final String FORGOT_PASSWORD_PAGE = "Forgot_Password";
+
     private static final String EDIT_ORDER = "Edit_Order";
     private static final String EDIT_ORDER_CONTROLLER = "UpdateOrderController";
 
@@ -176,14 +179,14 @@ public class MainController extends HttpServlet {
                 url = SEARCH_ORDER_VIEW;
             } else if (SEARCH_ORDER.equals(action)) {
                 url = SEARCH_ORDER_CONTROLLER;
-
             } else if (DELETE_CATEGORY.equals(action)) {
                 url = DELETE_CATEGORY_CONTROLLER;
             } else if (DELETE_CHILDREN_CATEGORY.equals(action)) {
                 url = DELETE_CHILDREN_CATEGORY_CONTROLLER;
-
             } else if (EDIT_ORDER.equals(action)) {
                 url = EDIT_ORDER_CONTROLLER;
+            } else if (FORGOT_PASSWORD_PAGE.equals(action)) {
+                url = FORGOT_PASSWORD_CONTROLLER;
             }
         } catch (Exception e) {
             log("error at MainController: " + e.toString());

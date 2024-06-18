@@ -19,6 +19,8 @@ public class UserDAO {
     private static final String ADD_MANAGER = "INSERT INTO Employees(EmpID, position) VALUES(?, ?)";
     private static final String ADD_CUSTOMER = "INSERT INTO Customers(CustID, points, birthday, province_city, district, ward, detailAddress) VALUES(?, 0, ?, ?, ?, ?, ?)";
     private static final String GET_LAST_USER_ID = "SELECT MAX(UserID) AS LastUserID FROM Users";
+    private static final String UPDATE_USER_PASSWORD = "UPDATE Users SET password = ? WHERE email = ?";
+    private static final String GET_USER_INFO_BY_USERID = "SELECT * FROM Users WHERE UserID = ?";
 
     public UserDTO checkLogin(String email, String password) throws SQLException {
         UserDTO user = null;
@@ -93,8 +95,8 @@ public class UserDAO {
         return lastUserId + 1;
     }
 
-    public boolean checkEmailExists(String email) throws SQLException {
-        boolean check = false;
+    public int checkEmailExists(String email) throws SQLException {
+        int check = -1;
         Connection conn = null;
         PreparedStatement ptm = null;
         ResultSet rs = null;
@@ -106,7 +108,7 @@ public class UserDAO {
                 ptm.setString(1, email);
                 rs = ptm.executeQuery();
                 if (rs.next()) {
-                    check = true;
+                    check = rs.getInt("userID");
                 }
             }
         } catch (Exception e) {
@@ -231,7 +233,7 @@ public class UserDAO {
                         ptmEmployee = conn.prepareStatement(ADD_MANAGER);
                         ptmEmployee.setInt(1, userId);
                         ptmEmployee.setString(2, employee.getPosition());
-                          check = ptmEmployee.executeUpdate() > 0;
+                        check = ptmEmployee.executeUpdate() > 0;
                     }
                 }
             }
@@ -249,5 +251,74 @@ public class UserDAO {
             }
         }
         return check;
+    }
+
+    public boolean resetPassword(String email, String newPassword) {
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        boolean result = false;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(UPDATE_USER_PASSWORD);
+                ptm.setString(1, newPassword);
+                ptm.setString(2, email);
+                result = ptm.executeUpdate() > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ptm != null) {
+                    ptm.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    public UserDTO getUserInfoByUserID(int userID) {
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        UserDTO user = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_USER_INFO_BY_USERID);
+                ptm.setInt(1, userID);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    String userName = rs.getString("userName");
+                    String email = rs.getString("email");
+                    int phone = rs.getInt("phone");
+                    int roleID = rs.getInt("roleID");
+                    int status = rs.getInt("status");
+                    user = new UserDTO(userName, email, phone, roleID, status);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ptm != null) {
+                    ptm.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return user;
     }
 }

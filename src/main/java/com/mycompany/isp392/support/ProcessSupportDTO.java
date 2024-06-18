@@ -4,7 +4,7 @@
  */
 package com.mycompany.isp392.support;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class ProcessSupportDTO {
     private int empID;

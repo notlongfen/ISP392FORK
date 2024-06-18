@@ -22,15 +22,16 @@ import utils.DbUtils;
 public class SupportDAO {
     private static final String GET_LAST_SUPPORTID = "SELECT * FROM Supports";
     private static final String SEARCH_SUPPORT = "SELECT *  FROM Supports s \n" +
-"INNER JOIN Customers c ON s.CustID = c.CustID\n" +
-"INNER JOIN Users u ON c.CustID = u.UserID\n" +
-"WHERE u.userName like ?";
+            "INNER JOIN Customers c ON s.CustID = c.CustID\n" +
+            "INNER JOIN Users u ON c.CustID = u.UserID\n" +
+            "WHERE u.userName like ?";
     private static final String UPDATE_SUPPORT_STATUS = "UPDATE Supports SET status = ? WHERE supportID = ?";
     private static final String GET_USER_INFO_BASED_ON_SUPPORTID = "SELECT * FROM Supports s \n" +
-"INNER JOIN Customers c ON s.CustID = c.CustID\n" +
-"INNER JOIN Users u ON c.CustID = u.UserID\n" +
-"WHERE s.supportID = ?";    
-    
+            "INNER JOIN Customers c ON s.CustID = c.CustID\n" +
+            "INNER JOIN Users u ON c.CustID = u.UserID\n" +
+            "WHERE s.SupportID = ?";
+    private static final String ADD_SUPPORT_HISTORY = "INSERT INTO  ProcessSupports (EmpID, SupportID, responseMessage, responseDate) VALUES (?, ?, ?, ?, GETDATE());";
+
     public int getLastSupportId() throws SQLException {
         int lastSupportId = 0;
         Connection conn = null;
@@ -62,8 +63,8 @@ public class SupportDAO {
 
         return lastSupportId + 1;
     }
-    
-    public String supportStatusUpdate(int custID){
+
+    public String supportStatusUpdate(int custID) {
         Connection conn = null;
         PreparedStatement ptm = null;
         String supportID = "";
@@ -80,42 +81,44 @@ public class SupportDAO {
         }
         return supportID;
     }
-    
-//    public List<SupportDTO> searchSupport(String searchText) throws SQLException {
-//        List<SupportDTO> supports = new ArrayList<>();
-//        Connection conn = null;
-//        PreparedStatement ptm = null;
-//        ResultSet rs = null;
-//        try {
-//            conn = DbUtils.getConnection();
-//            if (conn != null) {
-//                ptm = conn.prepareStatement(SEARCH_SUPPORT);
-//                ptm.setString(1, "%" + searchText + "%");
-//                rs = ptm.executeQuery();
-//                while (rs.next()) {
-//                    int supportID = rs.getInt("supportID");
-//                    int status = rs.getInt("status");
-//                    Date requestDate = rs.getDate("requestDate");
-//                    String requestMessage = rs.getString("requestMessage");
-//                    int custID = rs.getInt("custID");
-//                    supports.add(new SupportDTO(supportID, status, requestDate, requestMessage, custID));
-//                }
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        } finally {
-//            if (rs != null) {
-//                rs.close();
-//            }
-//            if (ptm != null) {
-//                ptm.close();
-//            }
-//            if (conn != null) {
-//                conn.close();
-//            }
-//        }
-//        return supports;
-//    }
+
+    // public List<SupportDTO> searchSupport(String searchText) throws SQLException
+    // {
+    // List<SupportDTO> supports = new ArrayList<>();
+    // Connection conn = null;
+    // PreparedStatement ptm = null;
+    // ResultSet rs = null;
+    // try {
+    // conn = DbUtils.getConnection();
+    // if (conn != null) {
+    // ptm = conn.prepareStatement(SEARCH_SUPPORT);
+    // ptm.setString(1, "%" + searchText + "%");
+    // rs = ptm.executeQuery();
+    // while (rs.next()) {
+    // int supportID = rs.getInt("supportID");
+    // int status = rs.getInt("status");
+    // Date requestDate = rs.getDate("requestDate");
+    // String requestMessage = rs.getString("requestMessage");
+    // int custID = rs.getInt("custID");
+    // supports.add(new SupportDTO(supportID, status, requestDate, requestMessage,
+    // custID));
+    // }
+    // }
+    // } catch (Exception e) {
+    // e.printStackTrace();
+    // } finally {
+    // if (rs != null) {
+    // rs.close();
+    // }
+    // if (ptm != null) {
+    // ptm.close();
+    // }
+    // if (conn != null) {
+    // conn.close();
+    // }
+    // }
+    // return supports;
+    // }
     public List<SupportDTO> searchSupport(String searchText) throws SQLException {
         List<SupportDTO> supports = new ArrayList<>();
         Connection conn = null;
@@ -151,8 +154,8 @@ public class SupportDAO {
         }
         return supports;
     }
-    
-    public UserDTO getUserInfo(int supportID){
+
+    public UserDTO getUserInfo(int supportID) {
         Connection conn = null;
         PreparedStatement ptm = null;
         ResultSet rs = null;
@@ -190,5 +193,32 @@ public class SupportDAO {
             }
         }
         return user;
+    }
+
+    public ProcessSupportDTO addReplyHistory(ProcessSupportDTO psp) throws SQLException {
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(ADD_SUPPORT_HISTORY);
+                ptm.setInt(1, psp.getEmpID());
+                ptm.setInt(2, psp.getSupportID());
+                ptm.setString(3, psp.getResponseMessage());
+                ptm.executeUpdate();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+
+        }
+        return psp;
     }
 }

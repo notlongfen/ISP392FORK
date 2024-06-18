@@ -40,7 +40,7 @@ public class RegisterController extends HttpServlet {
             Date birthday = Date.valueOf(request.getParameter("birthday"));
 
             // Check email exists
-            if (dao.checkEmailExists(email)) {
+            if (dao.checkEmailExists(email) != -1) {
                 userError.setEmailError("Email already exists.");
                 checkValidation = false;
             }

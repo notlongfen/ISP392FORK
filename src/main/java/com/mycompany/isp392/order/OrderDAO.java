@@ -22,6 +22,7 @@ public class OrderDAO {
     private static final String ADD_ORDER = "INSERT INTO Orders (status, total, orderDate, CustID, promotionID, CartID) VALUES (?,?,?,?,?,?)";
     private static final String GET_LAST_ORDER_ID = "SELECT MAX(orderID) FROM Orders";
     private static final String ADD_ORDER_DETAILS = "INSERT INTO OrderDetails (orderID, productID, quantity, unitPrice) VALUES (?,?,?,?)";
+    private static final String SET_ORDER_ORDER = "Update Orders SET status = ? WHERE OrderID = ?";
     private static final String DELETE_ORDER = "";
     private static final String SEARCH_ORDERS = "SELECT * FROM Orders WHERE orderID LIKE ? OR orderDate LIKE ? OR total LIKE ? OR CustID LIKE ? OR CartID LIKE ?";
     private static final String UPDATE_ORDER_STATUS = "UPDATE Orders SET status = ? WHERE orderID = ?";
@@ -75,6 +76,17 @@ public class OrderDAO {
         } catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();
+        } finally{
+            try {
+                if (pstm != null) {
+                    pstm.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         return orderDTO;
@@ -98,9 +110,52 @@ public class OrderDAO {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }finally{
+            try {
+                if (pstm != null) {
+                    pstm.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return orderDetailsDTO;
     }
+    
+    public boolean updateOrderStatus(int orderID,int status){
+        Connection conn = null;
+        PreparedStatement pstm = null;
+        boolean check = false;
+        try {
+            conn = DbUtils.getConnection();
+            pstm = conn.prepareStatement(SET_ORDER_ORDER);
+            pstm.setInt(1, status);
+            pstm.setInt(2, orderID);
+            int row = pstm.executeUpdate();
+            if (row > 0) {
+                check = true;
+            } 
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally{
+            try {
+                if (pstm != null) {
+                    pstm.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return check;
+    }
+    
+    
 
    public List<OrderDTO> searchOrders(String searchText) throws SQLException, ClassNotFoundException {
         List<OrderDTO> orders = new ArrayList<>();

@@ -1,7 +1,11 @@
 
 package com.mycompany.isp392.controllers;
 
+import com.mycompany.isp392.support.ProcessSupportDTO;
 import com.mycompany.isp392.support.SupportDAO;
+import com.mycompany.isp392.support.SupportDTO;
+import com.mycompany.isp392.user.EmployeeDTO;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Properties;
@@ -20,8 +24,7 @@ import jakarta.mail.PasswordAuthentication;
 import jakarta.mail.Session;
 import jakarta.servlet.http.HttpSession;
 
-
-@WebServlet(name = "SendMailServlet", urlPatterns = {"/SendMailServlet"})
+@WebServlet(name = "SendMailServlet", urlPatterns = { "/SendMailServlet" })
 public class SendMailServlet extends HttpServlet {
     private static final String ERROR = "ReplySupport.jsp";
     private static final String SUCCESS = "support.jsp";
@@ -34,7 +37,7 @@ public class SendMailServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet SendMailServlet</title>");            
+            out.println("<title>Servlet SendMailServlet</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet SendMailServlet at " + request.getContextPath() + "</h1>");
@@ -43,14 +46,15 @@ public class SendMailServlet extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the
+    // + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -61,10 +65,10 @@ public class SendMailServlet extends HttpServlet {
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -72,7 +76,7 @@ public class SendMailServlet extends HttpServlet {
         processRequest(request, response);
         String url = ERROR;
         HttpSession sessionCur = request.getSession();
-        
+
         String toEmail = request.getParameter("toEmail");
         String subject = request.getParameter("subject");
         String messageBody = request.getParameter("content");
@@ -98,10 +102,11 @@ public class SendMailServlet extends HttpServlet {
 
         try {
             int custID = Integer.parseInt(request.getParameter("custID"));
-            
+            EmployeeDTO edto = (EmployeeDTO) sessionCur.getAttribute("EMPLOYEE");
+            int supportID = Integer.parseInt(request.getParameter("supportID"));
             // Create a default MimeMessage object
             Message message = new MimeMessage(session);
-            
+
             // Set From: header field of the header
             message.setFrom(new InternetAddress(fromEmail));
 
@@ -122,13 +127,20 @@ public class SendMailServlet extends HttpServlet {
             // Forward to a success page
             // Support status update "Done"
             SupportDAO spdao = new SupportDAO();
+            ProcessSupportDTO spdto = new ProcessSupportDTO(edto.getEmpID(), supportID, messageBody,
+                    (java.sql.Date) new java.util.Date());
             String status = spdao.supportStatusUpdate(custID);
-            sessionCur.setAttribute("SUPPORT_STATUS", status);
+            ProcessSupportDTO spdtos = spdao.addReplyHistory(spdto);
             url = SUCCESS;
+            
+            sessionCur.setAttribute("SUPPORT_STATUS", status);
+            sessionCur.setAttribute("PROCESS_SUPPORT", spdtos);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
             request.getRequestDispatcher(url).forward(request, response);
 
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
         }
     }
 
