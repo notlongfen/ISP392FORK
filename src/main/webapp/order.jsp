@@ -11,7 +11,6 @@
 <body>
 <div class="container">
     <h1 class="mt-5">Order Management</h1>
-    
     <h2>Search Orders</h2>
     <form action="MainController" method="GET">
         <div class="form-group">
@@ -19,10 +18,6 @@
             <button type="submit" class="btn btn-info mt-2" name="action" value="Search_Order">Search</button>
         </div>
     </form>
-
-    <% if (request.getAttribute("MESSAGE") != null) { %>
-        <div class="alert alert-info"><%= request.getAttribute("MESSAGE") %></div>
-    <% } %>
 
     <!-- Orders Table -->
     <table class="table table-bordered mt-3">
@@ -35,8 +30,7 @@
                 <th>Customer ID</th>
                 <th>Promotion ID</th>
                 <th>Cart ID</th>
-                <th>Edit</th>
-                <th>Delete</th>
+                <th>Update Status</th>
             </tr>
         </thead>
         <tbody>
@@ -47,37 +41,33 @@
             %>
                     <tr>
                         <form action="MainController" method="POST">
-                            <td><%= order.getOrderID() %></td>
-                            <td><%= order.getStatus() == 1 ? "Active" : "Inactive" %></td>
-                            <td><%= order.getTotal() %></td>
-                            <td><%= order.getOrderDate() %></td>
-                            <td><%= order.getCustID() %></td>
-                            <td><%= order.getPromotionID() %></td>
-                            <td><%= order.getCartID() %></td>
-                            <td>
-                                <input type="hidden" name="orderID" value="<%= order.getOrderID() %>">
-                                <input type="hidden" name="action" value="Edit_Order">
-                                <button type="submit" class="btn btn-primary">Edit</button>
-                            </td>
-                            <td>
-                                <% if (order.getStatus() == 1) { %>
-                                    <form action="MainController" method="POST">
-                                        <input type="hidden" name="orderID" value="<%= order.getOrderID() %>">
-                                        <input type="hidden" name="action" value="Delete_Order">
-                                        <button type="submit" class="btn btn-danger">Delete</button>
-                                    </form>
-                                <% } else { %>
-                                    <button class="btn btn-secondary disabled">Not Available</button>
-                                <% } %>
-                            </td>
+                        <td><%= order.getOrderID() %></td>
+                        <td>
+                            <select name="status" class="form-control">
+                                <option value="0" <%= (order.getStatus() == 0) ? "selected" : "" %>>Cancelled</option>
+                                <option value="1" <%= (order.getStatus() == 1) ? "selected" : "" %>>Confirming</option>
+                                <option value="2" <%= (order.getStatus() == 2) ? "selected" : "" %>>Delivering</option>
+                                <option value="3" <%= (order.getStatus() == 3) ? "selected" : "" %>>Completed</option>
+                            </select>
+                        </td>
+                        <td><%= order.getTotal() %></td>
+                        <td><%= order.getOrderDate() %></td>
+                        <td><%= order.getCustID() %></td>
+                        <td><%= order.getPromotionID() %></td>
+                        <td><%= order.getCartID() %></td>
+                        <td>
+                            <input type="hidden" name="orderID" value="<%= order.getOrderID() %>">
+                            <input type="hidden" name="action" value="Edit_Order">
+                            <button type="submit" class="btn btn-primary">Update</button>
                         </form>
+                        </td>
                     </tr>
             <% 
                 }
             } else {
             %>
                 <tr>
-                    <td colspan="9" class="text-center">No orders found</td>
+                    <td colspan="8" class="text-center">No orders found</td>
                 </tr>
             <% 
             }

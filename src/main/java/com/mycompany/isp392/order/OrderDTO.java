@@ -1,20 +1,17 @@
 package com.mycompany.isp392.order;
 
-
-
-
 import java.sql.Date;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 /**
  *
  * @author TTNHAT
  */
 public class OrderDTO {
+
     private int orderID;
     private int status;
     private int total;
@@ -22,7 +19,7 @@ public class OrderDTO {
     private int custID;
     private int promotionID;
     private int cartID;
-   
+
     public OrderDTO() {
     }
 
@@ -90,6 +87,21 @@ public class OrderDTO {
 
     public void setCartID(int cartID) {
         this.cartID = cartID;
+    }
+
+    public String getStatusDescription() {
+        switch (this.status) {
+            case 0:
+                return "Cancelled";
+            case 1:
+                return "Confirming";
+            case 2:
+                return "Delivering";
+            case 3:
+                return "Completed";
+            default:
+                return "Unknown";
+        }
     }
 
     @Override
