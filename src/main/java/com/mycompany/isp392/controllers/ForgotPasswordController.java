@@ -101,7 +101,7 @@ public class ForgotPasswordController extends HttpServlet {
                 if (check) {
                     ForgetPasswordDTO dto = fpdao.getAllInfoByUserID(userID);
                     String subject = "Reset Password";
-                    String messageBody = "Click the link below to reset your password: http://localhost:8080/ISP392/verifyForgetPassword.jsp/token="
+                    String messageBody = "Click the link below to reset your password: http://localhost:8080/ISP392/verifyForgetPassword.jsp?token="
                             + dto.getToken();
                     // Sender's email and password
                     final String fromEmail = "micomicomun@gmail.com";

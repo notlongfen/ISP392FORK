@@ -199,29 +199,5 @@ public class OrderDAO {
         }
         return orders;
     }
-     public boolean updateOrderStatus(int orderID, int status) throws SQLException, ClassNotFoundException {
-        Connection conn = null;
-        PreparedStatement ptm = null;
-        boolean updated = false;
-        try {
-            conn = DbUtils.getConnection();
-            if (conn != null) {
-                ptm = conn.prepareStatement(UPDATE_ORDER_STATUS);
-                ptm.setInt(1, status);
-                ptm.setInt(2, orderID);
-                updated = ptm.executeUpdate() > 0;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw e; // Rethrow the exception after logging it
-        } finally {
-            if (ptm != null) {
-                ptm.close();
-            }
-            if (conn != null) {
-                conn.close();
-            }
-        }
-        return updated;
-    }
+     
 }

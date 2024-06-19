@@ -18,7 +18,7 @@ import utils.DbUtils;
 public class ForgetPasswordDAO {
     private static final String CREATE_TOKEN = "INSERT INTO ForgetPassword (userID, token, expiredDate, tokenStatus) VALUES (?, ?, GETDATE() +1, 1)";
     private static final String CHECK_TOKEN = "SELECT * FROM ForgetPassword WHERE token = ? AND expiredDate > GETDATE() AND tokenStatus = 1";
-    private static final String GET_ALL_INFO = "SELECT * FROM ForgetPassword WHERE userID = ?";
+    private static final String GET_ALL_INFO = "SELECT TOP 1 * FROM ForgetPassword WHERE userID = ? AND tokenStatus = 1 ORDER BY ResetID DESC";
     private static final String INVALIDATE_TOKEN = "UPDATE ForgetPassword SET tokenStatus = 0 WHERE token = ?";
 
     public String createToken() {

@@ -111,6 +111,9 @@ public class MainController extends HttpServlet {
     private static final String EDIT_ORDER = "Edit_Order";
     private static final String EDIT_ORDER_CONTROLLER = "UpdateOrderController";
 
+    private static final String VERIFY_TOKEN = "Verify_Token";
+    private static final String VERIFY_TOKEN_CONTROLLER = "VerifyToken";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -187,6 +190,8 @@ public class MainController extends HttpServlet {
                 url = EDIT_ORDER_CONTROLLER;
             } else if (FORGOT_PASSWORD_PAGE.equals(action)) {
                 url = FORGOT_PASSWORD_CONTROLLER;
+            } else if (VERIFY_TOKEN.equals(action)) {
+                url = VERIFY_TOKEN_CONTROLLER;
             }
         } catch (Exception e) {
             log("error at MainController: " + e.toString());
