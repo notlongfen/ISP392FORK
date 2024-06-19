@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -21,7 +23,8 @@ public class UserDAO {
     private static final String GET_LAST_USER_ID = "SELECT MAX(UserID) AS LastUserID FROM Users";
     private static final String UPDATE_USER_PASSWORD = "UPDATE Users SET password = ? WHERE email = ?";
     private static final String GET_USER_INFO_BY_USERID = "SELECT * FROM Users WHERE UserID = ?";
-
+    private static final String SEARCH_USER = "SELECT * FROM Users WHERE userName LIKE ?";
+    
     public UserDTO checkLogin(String email, String password) throws SQLException {
         UserDTO user = null;
         Connection conn = null;
@@ -320,5 +323,43 @@ public class UserDAO {
             }
         }
         return user;
+    }
+    
+    public List<UserDTO> searchListUser(String search) throws SQLException {
+        List<UserDTO> list = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(SEARCH_USER);
+                ptm.setString(1, "%" + search + "%");
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    int userID = rs.getInt("UserID");
+                    String userName = rs.getString("userName");
+                    String email = rs.getString("email");
+                    String password = "*******";
+                    int roleID = rs.getInt("roleID");
+                    int phone = rs.getInt("phone");
+                    int status = rs.getInt("status");
+                    list.add(new UserDTO(userID, userName, email, password, roleID, phone, status));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return list;
     }
 }

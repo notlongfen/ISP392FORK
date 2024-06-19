@@ -114,6 +114,9 @@ public class MainController extends HttpServlet {
     private static final String VERIFY_TOKEN = "Verify_Token";
     private static final String VERIFY_TOKEN_CONTROLLER = "VerifyToken";
 
+    private static final String SEARCH_USER = "SearchUser";
+    private static final String SEARCH_USER_CONTROLLER = "SearchUserController";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -192,6 +195,8 @@ public class MainController extends HttpServlet {
                 url = FORGOT_PASSWORD_CONTROLLER;
             } else if (VERIFY_TOKEN.equals(action)) {
                 url = VERIFY_TOKEN_CONTROLLER;
+            } else if (SEARCH_USER.equals(action)) {
+                url = SEARCH_USER_CONTROLLER;
             }
         } catch (Exception e) {
             log("error at MainController: " + e.toString());
