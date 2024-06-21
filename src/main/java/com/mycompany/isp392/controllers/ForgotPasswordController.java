@@ -21,7 +21,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "ForgotPasswordController", urlPatterns = {"/ForgotPasswordController"})
+@WebServlet(name = "ForgotPasswordController", urlPatterns = { "/ForgotPasswordController" })
 public class ForgotPasswordController extends HttpServlet {
     private static final String ERROR = "forgotPassword.jsp";
     private static final String SUCCESS = "verifyForgetPassword.jsp";
@@ -29,6 +29,19 @@ public class ForgotPasswordController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
         String url = ERROR;
         ForgetPasswordErrors error = new ForgetPasswordErrors();
         try {
@@ -44,7 +57,7 @@ public class ForgotPasswordController extends HttpServlet {
                     String subject = "Reset Password";
                     String messageBody = "Click the link below to reset your password: http://localhost:8080/ISP392/verifyForgetPassword.jsp?token="
                             + dto.getToken();
-                    
+
                     final String fromEmail = "micomicomun@gmail.com";
                     final String password = "ezox gkgv joqr mbwx";
 
@@ -77,11 +90,11 @@ public class ForgotPasswordController extends HttpServlet {
                     }
 
                     url = SUCCESS;
-                }else{
+                } else {
                     error.setError("Insert token failed.");
                     request.setAttribute("ERROR", error);
                 }
-            }else{
+            } else {
                 error.setError("Email does not exist.");
                 request.setAttribute("ERROR", error);
             }
@@ -92,18 +105,6 @@ public class ForgotPasswordController extends HttpServlet {
         } finally {
             response.sendRedirect(url);
         }
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
     }
 
     @Override
