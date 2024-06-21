@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 
 import com.mycompany.isp392.forgetpassword.ForgetPasswordDAO;
 import com.mycompany.isp392.forgetpassword.ForgetPasswordDTO;
+import com.mycompany.isp392.forgetpassword.ForgetPasswordErrors;
 import com.mycompany.isp392.user.UserDAO;
 
 import jakarta.servlet.ServletException;
@@ -79,6 +80,7 @@ public class VerifyToken extends HttpServlet {
             throws ServletException, IOException {
         processRequest(request, response);
         String url = ERROR;
+        ForgetPasswordErrors error = new ForgetPasswordErrors();
         try {
             String token = request.getParameter("token");
             String newPassword = request.getParameter("newPassword");
@@ -90,7 +92,13 @@ public class VerifyToken extends HttpServlet {
                 if(userDAO.resetPassword(userDAO.getUserInfoByUserID(dto.getUserID()).getEmail(), newPassword)){
                     dao.invalidateToken(token);
                     url = SUCCESS;
+                }else{
+                    error.setError("Reset password failed");
+                    request.setAttribute("ERROR", error);
                 }
+            }else{
+                error.setError("Token is invalid");
+                request.setAttribute("ERROR", error);
             }
             
         } catch (Exception e) {
