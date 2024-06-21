@@ -95,6 +95,7 @@ public class VerifyToken extends HttpServlet {
             
         } catch (Exception e) {
             // TODO: handle exception
+            e.printStackTrace();
         }finally{
             response.sendRedirect(url);
         }
