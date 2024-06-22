@@ -117,6 +117,18 @@ public class MainController extends HttpServlet {
     private static final String SEARCH_USER = "SearchUser";
     private static final String SEARCH_USER_CONTROLLER = "SearchUserController";
 
+    private static final String EDIT_CUSTOMER_PAGE = "EditCustomerPage";
+    private static final String EDIT_CUSTOMER_PAGE_VIEW = "editCustomer.jsp";
+
+    private static final String EDIT_CUSTOMER = "EditCustomer";
+    private static final String EDIT_CUSTOMER_CONTROLLER = "EditCustomerController";
+
+    private static final String EDIT_EMPLOYEE_PAGE = "EditEmployeePage";
+    private static final String EDIT_EMPLOYEE_PAGE_VIEW = "editEmployee.jsp";
+
+    private static final String EDIT_EMPLOYEE = "EditEmployee";
+    private static final String EDIT_EMPLOYEE_CONTROLLER = "EditEmployeeController";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -197,6 +209,14 @@ public class MainController extends HttpServlet {
                 url = VERIFY_TOKEN_CONTROLLER;
             } else if (SEARCH_USER.equals(action)) {
                 url = SEARCH_USER_CONTROLLER;
+            } else if (EDIT_CUSTOMER_PAGE.equals(action)) {
+                url = EDIT_CUSTOMER_PAGE_VIEW;
+            } else if (EDIT_CUSTOMER.equals(action)) {
+                url = EDIT_CUSTOMER_CONTROLLER;
+            } else if (EDIT_EMPLOYEE_PAGE.equals(action)) {
+                url = EDIT_EMPLOYEE_PAGE_VIEW;
+            } else if (EDIT_EMPLOYEE.equals(action)) {
+                url = EDIT_EMPLOYEE_CONTROLLER;
             }
         } catch (Exception e) {
             log("error at MainController: " + e.toString());

@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 import org.mindrot.jbcrypt.BCrypt;
@@ -24,6 +24,13 @@ public class UserDAO {
     private static final String UPDATE_USER_PASSWORD = "UPDATE Users SET password = ? WHERE email = ?";
     private static final String GET_USER_INFO_BY_USERID = "SELECT * FROM Users WHERE UserID = ?";
     private static final String SEARCH_USER = "SELECT * FROM Users WHERE userName LIKE ?";
+    private static final String EDIT_USER = "UPDATE Users SET userName = ?, roleID = ?, email = ?, password = ?, phone = ?, status = ? WHERE UserID = ?";
+    private static final String EDIT_USER_NO_PASS = "UPDATE Users SET userName = ?, roleID = ?, email = ?, phone = ?, status = ? WHERE UserID = ?";
+    private static final String EDIT_CUSTOMER = "UPDATE Customers SET points = ?, birthday = ?, province_city = ?, district = ?, ward = ?, detailAddress = ? WHERE CustID = ?";
+    private static final String EDIT_EMPLOYEE = "UPDATE Employees SET position = ? WHERE EmpID = ?";
+    private static final String GET_USER_BY_ID = "SELECT * FROM Users WHERE UserID = ?";
+    private static final String GET_CUSTOMER_BY_ID = "SELECT * FROM Customers WHERE CustID = ?";
+    private static final String GET_EMPLOYEE_BY_ID = "SELECT * FROM Employees WHERE EmpID = ?";
     
     public UserDTO checkLogin(String email, String password) throws SQLException {
         UserDTO user = null;
@@ -361,5 +368,224 @@ public class UserDAO {
             }
         }
         return list;
+    }
+    
+     public boolean editUserAndCustomer(UserDTO user, CustomerDTO customer) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptmUser = null;
+        PreparedStatement ptmCustomer = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                // Disable auto-commit mode
+                conn.setAutoCommit(false);
+
+                // Update User
+                ptmUser = conn.prepareStatement(EDIT_USER_NO_PASS);
+                ptmUser.setString(1, user.getUserName());
+                ptmUser.setInt(2, user.getRoleID());
+                ptmUser.setString(3, user.getEmail());
+                ptmUser.setInt(4, user.getPhone());
+                ptmUser.setInt(5, user.getStatus());
+                ptmUser.setInt(6, user.getUserID());
+                boolean userUpdated = ptmUser.executeUpdate() > 0;
+
+                // Update Customer
+                ptmCustomer = conn.prepareStatement(EDIT_CUSTOMER);
+                ptmCustomer.setInt(1, customer.getPoints());
+                ptmCustomer.setDate(2, (Date) customer.getBirthday());
+                ptmCustomer.setString(3, customer.getCity());
+                ptmCustomer.setString(4, customer.getDistrict());
+                ptmCustomer.setString(5, customer.getWard());
+                ptmCustomer.setString(6, customer.getAddress());
+                ptmCustomer.setInt(7, customer.getCustID());
+                boolean customerUpdated = ptmCustomer.executeUpdate() > 0;
+
+                // Check both updates
+                if (userUpdated && customerUpdated) {
+                    // Commit the transaction if both updates are successful
+                    conn.commit();
+                    check = true;
+                } else {
+                    // Rollback the transaction if any update fails
+                    conn.rollback();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ptmUser != null) {
+                ptmUser.close();
+            }
+            if (ptmCustomer != null) {
+                ptmCustomer.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+    
+    public boolean editUserAndEmployee(UserDTO user, EmployeeDTO employee) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptmUser = null;
+        PreparedStatement ptmEmployee = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                // Disable auto-commit mode
+                conn.setAutoCommit(false);
+
+                // Update User
+                ptmUser = conn.prepareStatement(EDIT_USER);
+                ptmUser.setString(1, user.getUserName());
+                ptmUser.setInt(2, user.getRoleID());
+                ptmUser.setString(3, user.getEmail());
+                ptmUser.setString(4, user.getPassword());
+                ptmUser.setInt(5, user.getPhone());
+                ptmUser.setInt(6, user.getStatus());
+                ptmUser.setInt(7, user.getUserID());
+                boolean userUpdated = ptmUser.executeUpdate() > 0;
+
+                // Update Employee
+                ptmEmployee = conn.prepareStatement(EDIT_EMPLOYEE);
+                ptmEmployee.setString(1, employee.getPosition());
+                ptmEmployee.setInt(2, employee.getEmpID());
+                boolean employeeUpdated = ptmEmployee.executeUpdate() > 0;
+
+                // Check both updates
+                if (userUpdated && employeeUpdated) {
+                    // Commit the transaction if both updates are successful
+                    conn.commit();
+                    check = true;
+                } else {
+                    // Rollback the transaction if any update fails
+                    conn.rollback();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ptmUser != null) {
+                ptmUser.close();
+            }
+            if (ptmEmployee != null) {
+                ptmEmployee.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+    
+
+    public UserDTO getUserByID(int UserID) throws SQLException {
+        UserDTO user = null;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_USER_BY_ID);
+                ptm.setInt(1, UserID);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    String userName = rs.getString("userName");
+                    String email = rs.getString("email");
+                    String password = rs.getString("password"); 
+                    int roleID = rs.getInt("roleID");
+                    int phone = rs.getInt("phone");
+                    int status = rs.getInt("status");
+                    user = new UserDTO(UserID, userName, email, password, roleID, phone, status);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return user;
+    }
+
+    public CustomerDTO getCustomerByID(int CustID) throws SQLException {
+        CustomerDTO customer = null;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_CUSTOMER_BY_ID);
+                ptm.setInt(1, CustID);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    int points = rs.getInt("points");
+                    Date birthday = rs.getDate("birthday");
+                    String city = rs.getString("province_city");
+                    String district = rs.getString("district");
+                    String ward = rs.getString("ward");
+                    String address = rs.getString("detailAddress");
+                    customer = new CustomerDTO(CustID, points, birthday, city, district, ward, address);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return customer;
+    }
+
+    public EmployeeDTO getEmployeeByID(int EmpID) throws SQLException {
+        EmployeeDTO employee = null;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_EMPLOYEE_BY_ID);
+                ptm.setInt(1, EmpID);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    String position = rs.getString("position");
+                    employee = new EmployeeDTO(position, EmpID);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return employee;
     }
 }

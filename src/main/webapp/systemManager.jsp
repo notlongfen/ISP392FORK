@@ -46,6 +46,7 @@
                     <th>Role</th>
                     <th>Phone Number</th>
                     <th>Status</th>
+                    <th>Edit</th>
                 </tr>
             </thead>
             <tbody>
@@ -84,6 +85,25 @@
                     </td>
                     <td><%= user.getPhone()%></td>
                     <td><%= (user.getStatus() == 1) ? "Active" : "Inactive"%></td>
+                    <td>
+                        <form action="MainController" method="POST">
+                            <%
+                                if(roleID==4){
+                            %>
+                            <input type="hidden" name="userID" value="<%= user.getUserID()%>">
+                            <input type="hidden" name="action" value="EditCustomerPage">
+                            <button type="submit" class="btn btn-danger">Edit</button>
+                            <%
+                                }else{
+                            %>
+                            <input type="hidden" name="userID" value="<%= user.getUserID()%>">
+                            <input type="hidden" name="action" value="EditEmployeePage">
+                            <button type="submit" class="btn btn-danger">Edit</button>
+                            <%
+                                }
+                            %>
+                        </form>
+                    </td>
                 </tr>
             <%
                 }
