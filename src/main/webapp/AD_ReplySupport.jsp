@@ -54,9 +54,8 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="brandName" class="form-label">Content</label>
-                                        <textarea class="form-control" id="textDescriptipn" rows="5">
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                        </textarea>
+                                        <textarea class="form-control" id="textDescription" rows="5" placeholder="Enter"></textarea>
+
                                     </div>
 
                                     <div class="form-group text-center">
