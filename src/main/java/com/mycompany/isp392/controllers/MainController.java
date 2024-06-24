@@ -21,12 +21,6 @@ public class MainController extends HttpServlet {
     private static final String ADD_MANAGER_CONTROLLER = "AddManagerController";
     private static final String ADD_MANAGER = "Add_Manager";
 
-    private static final String ADD_PRODUCT_PAGE = "Add_View";
-    private static final String ADD_PRODUCT_PAGE_VIEW = "product.jsp";
-
-    private static final String ADD_PRODUCT = "Ađd_Product";
-    private static final String ADD_PRODUCT_CONTROLLER = "AddProductController";
-
     private static final String ADD_BRAND_PAGE = "Add_Brand_View";
     private static final String ADD_BRAND_PAGE_VIEW = "brand.jsp";
 
@@ -129,6 +123,36 @@ public class MainController extends HttpServlet {
     private static final String EDIT_EMPLOYEE = "EditEmployee";
     private static final String EDIT_EMPLOYEE_CONTROLLER = "EditEmployeeController";
 
+    private static final String ADD_PRODUCT_PAGE = "Add_View";
+    private static final String ADD_PRODUCT_PAGE_VIEW = "AddProductPageController";
+    
+    private static final String GET_PRODUCT_PAGE = "Add_Product_Details_Page";
+    private static final String GET_PRODUCT_PAGE_VIEW = "GetProductsController";
+    
+    private static final String ADD_PRODUCT = "Add_Product";
+    private static final String ADD_PRODUCT_CONTROLLER = "AddProductController";
+    
+    private static final String SEARCH_PRODUCT_PAGE = "Search_Product_Page";
+    private static final String SEARCH_PRODUCT_PAGE_VIEW = "product.jsp";
+    
+    private static final String ADD_PRODUCT_DETAILS = "Add_Product_Details";
+    private static final String ADD_PRODUCT_DETAILS_CONTROLLER = "AddProductDetailsController";
+    
+    private static final String SEARCH_PRODUCT = "Search_Product";
+    private static final String SEARCH_PRODUCT_CONTROLLER = "SearchProductController";
+    
+    private static final String EDIT_PRODUCT = "Edit_Product";
+    private static final String EDIT_PRODUCT_CONTROLLER = "EditProductController";
+    
+        private static final String EDIT_PRODUCT_DETAILS = "Edit_Product_Details";
+    private static final String EDIT_PRODUCT_DETAILS_CONTROLLER = "EditProductDetailsController";
+    
+    private static final String DELETE_PRODUCT = "Delete_Product";
+    private static final String DELETE_PRODUCT_CONTROLLER = "DeleteProductController";
+    
+    private static final String DELETE_DETAILS = "Delete_Detail";
+    private static final String DELETE_DETAILS_CONTROLLER = "DeleteProductDetailsController";
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -217,6 +241,22 @@ public class MainController extends HttpServlet {
                 url = EDIT_EMPLOYEE_PAGE_VIEW;
             } else if (EDIT_EMPLOYEE.equals(action)) {
                 url = EDIT_EMPLOYEE_CONTROLLER;
+            } else if (GET_PRODUCT_PAGE.equals(action)) {
+                url = GET_PRODUCT_PAGE_VIEW;
+            } else if (SEARCH_PRODUCT.equals(action)) {
+                url = SEARCH_PRODUCT_CONTROLLER;
+            } else if (DELETE_PRODUCT.equals(action)) {
+                url = DELETE_PRODUCT_CONTROLLER;
+            } else if (EDIT_PRODUCT.equals(action)) {
+                url = EDIT_PRODUCT_CONTROLLER;
+            } else if (ADD_PRODUCT_DETAILS.equals(action)) {
+                url = ADD_PRODUCT_DETAILS_CONTROLLER;
+            }else if (SEARCH_PRODUCT_PAGE.equals(action)) {
+                url = SEARCH_PRODUCT_PAGE_VIEW;
+            }else if (DELETE_DETAILS.equals(action)) {
+                url = DELETE_DETAILS_CONTROLLER;
+            }else if (EDIT_PRODUCT_DETAILS.equals(action)) {
+                url = EDIT_PRODUCT_DETAILS_CONTROLLER;
             }
         } catch (Exception e) {
             log("error at MainController: " + e.toString());

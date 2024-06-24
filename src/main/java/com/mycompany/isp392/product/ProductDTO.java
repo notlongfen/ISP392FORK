@@ -4,6 +4,8 @@
  */
 package com.mycompany.isp392.product;
 
+import java.util.Objects;
+
 /**
  *
  * @author TTNHAT
@@ -15,7 +17,7 @@ public class ProductDTO {
     private int numberOfPurchase;
     private int status;
     private int brandID;
-
+    private ProductDetailsDTO productDetails;
     public ProductDTO() {
     }
     
@@ -83,8 +85,27 @@ public class ProductDTO {
         this.brandID = brandID;
     }
 
+      public ProductDetailsDTO getProductDetails() {
+        return productDetails;
+    }
+
+    public void setProductDetails(ProductDetailsDTO productDetails) {
+        this.productDetails = productDetails;
+    }
     @Override
     public String toString() {
         return "ProductDTO{" + "productID=" + productID + ", productName=" + productName + ", description=" + description + ", numberOfPurchase=" + numberOfPurchase + ", status=" + status + ", brandID=" + brandID + '}';
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductDTO that = (ProductDTO) o;
+        return productID == that.productID;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(productID);
     }
 }

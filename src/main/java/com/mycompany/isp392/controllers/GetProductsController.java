@@ -4,38 +4,27 @@ import com.mycompany.isp392.product.ProductDAO;
 import com.mycompany.isp392.product.ProductDTO;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-public class AddProductController extends HttpServlet {
+public class GetProductsController extends HttpServlet {
 
     private static final String ERROR = "login.jsp";
-    private static final String SUCCESS = "AddProduct.jsp";
+    private static final String ADD_PRODUCT_DETAILS_PAGE = "AddProductDetails.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            String productName = request.getParameter("productName");
-            String description = request.getParameter("description");
-            int numberOfPurchase = 0; // Default value for a new product
-            int status = 1; // Default status
-            int brandID = Integer.parseInt(request.getParameter("brandID"));
-
-            ProductDTO product = new ProductDTO(0, productName, description, numberOfPurchase, status, brandID);
             ProductDAO productDAO = new ProductDAO();
-            boolean check = productDAO.addProduct(product);
-            if (check) {
-                int productID = productDAO.getLatestProductID();
-                request.setAttribute("MESSAGE", "Product added successfully!");
-                request.setAttribute("PRODUCT_ID", productID);
-                url = SUCCESS;
-            }
-        } catch (NumberFormatException | SQLException e) {
-            log("Error at AddProductController: " + e.toString());
+            List<ProductDTO> productList = productDAO.getAllProducts();
+            request.setAttribute("PRODUCT_LIST", productList);
+            url = ADD_PRODUCT_DETAILS_PAGE;
+        } catch (SQLException e) {
+            log("Error at GetProductsController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
@@ -55,6 +44,6 @@ public class AddProductController extends HttpServlet {
 
     @Override
     public String getServletInfo() {
-        return "AddProductController";
+        return "Short description";
     }
 }
