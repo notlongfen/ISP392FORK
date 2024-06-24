@@ -25,8 +25,10 @@ public class BrandDAO {
     private static final String SEARCH_BRAND = "SELECT * FROM Brands WHERE brandName LIKE ?";
     private static final String INSERT_BRAND = "INSERT INTO Brands(BrandName, status) VALUES(?,1)";
     private static final String UPDATE_BRAND = "UPDATE Brands SET BrandName=? WHERE BrandID=?";
-    private static final String DEACTIVATE_BRAND = "UPDATE Brands SET status = 0 WHERE BrandID=?";
+    private static final String DELETE_BRAND = "UPDATE Brands SET status = 0 WHERE BrandID=?";
     private static final String CHECK_BRAND = "SELECT BrandID FROM Brands WHERE brandName LIKE ?";
+    private static final String GET_ALL_BRANDS = "SELECT * FROM Brands";
+    private static final String GET_BRAND = "SELECT * FROM Brands WHERE BrandID=?";
 
     public List<BrandDTO> searchForBrand(String brandName) {
         List<BrandDTO> list = new ArrayList<>();
@@ -115,7 +117,7 @@ public class BrandDAO {
         try {
             conn = DbUtils.getConnection();
             if (conn != null) {
-                ptm = conn.prepareStatement(DEACTIVATE_BRAND);
+                ptm = conn.prepareStatement(DELETE_BRAND);
                 ptm.setInt(1, brandID);
                 check = ptm.executeUpdate() > 0;
             }
@@ -164,5 +166,73 @@ public class BrandDAO {
             }
         }
         return check;
+    }
+
+    public List<BrandDTO> getAllBrands() throws SQLException {
+        List<BrandDTO> brands = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_ALL_BRANDS);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    int brandID = rs.getInt("brandID");
+                    String brandName = rs.getString("brandName");
+                    int status = rs.getInt("status");
+                    brands.add(new BrandDTO(brandID, brandName, status));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return brands;
+    }
+
+    public BrandDTO getSpecificBrand(String brandID) throws SQLException {
+        BrandDTO brand = null;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_BRAND);
+                ptm.setString(1, brandID);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    String brandName = rs.getString("brandName");
+                    int status = rs.getInt("status");
+                    brand = new BrandDTO(Integer.parseInt(brandID), brandName, status);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return brand;
     }
 }

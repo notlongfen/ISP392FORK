@@ -26,7 +26,13 @@ public class MainController extends HttpServlet {
 
     private static final String ADD_BRAND = "Add_Brand";
     private static final String ADD_BRAND_CONTROLLER = "AddBrandController";
-
+    
+    private static final String GET_BRANDS_PAGE = "Manage_Brands_Page";
+    private static final String GET_BRANDS_PAGE_VIEW = "GetBrandsController";
+    
+    private static final String EDIT_BRAND_PAGE = "Edit_Brand_Page";
+    private static final String EDIT_BRAND_PAGE_VIEW = "GetSpecificBrandController";
+    
     private static final String SEARCH_BRAND = "Search_Brand";
     private static final String SEARCH_BRAND_CONTROLLER = "SearchBrandController";
 
@@ -257,6 +263,10 @@ public class MainController extends HttpServlet {
                 url = DELETE_DETAILS_CONTROLLER;
             }else if (EDIT_PRODUCT_DETAILS.equals(action)) {
                 url = EDIT_PRODUCT_DETAILS_CONTROLLER;
+            }else if (GET_BRANDS_PAGE.equals(action)) {
+                url = GET_BRANDS_PAGE_VIEW;
+            }else if (EDIT_BRAND_PAGE.equals(action)) {
+                url = EDIT_BRAND_PAGE_VIEW;
             }
         } catch (Exception e) {
             log("error at MainController: " + e.toString());

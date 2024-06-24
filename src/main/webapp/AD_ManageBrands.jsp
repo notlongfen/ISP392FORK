@@ -1,9 +1,5 @@
-<%-- 
-    Document   : ManageCate
-    Created on : Jun 2, 2024, 4:31:06 PM
-    Author     : jojo
---%>
-
+<%@ page import="com.mycompany.isp392.brand.BrandDTO" %>
+<%@ page import="java.util.List" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,7 +16,6 @@
         <style>
             .pagination .page-link {
                 border-radius: 20px;
-
             }
 
             .pagination .page-item.active .page-link {
@@ -44,21 +39,16 @@
                 border-bottom-right-radius: 15px;
             }
         </style>
-
     </head>
 
     <body id="page-top">
-
         <div id="wrapper">
             <!-- Sidebar -->
             <%@include file="AD_sidebar.jsp" %>
-
             <!-- Sidebar -->
             <div id="content-wrapper" class="d-flex flex-column">
-
                 <div id="content">
                     <!---Header --->
-
                     <!-- Container Fluid-->
                     <%@include file="AD_header.jsp" %>
 
@@ -67,125 +57,93 @@
                             <h1 class="h3 mb-0 text-gray-900" style="font-weight: bold">Brands</h1>
                         </div>
                         <div class="d-flex justify-content-end mb-4">
-                             <a href="AD_AddBrands.jsp" class="btn btn-danger" style="background: #C43337;">Add new brands</a>
-<!--                            <a href="AD_ProductDetail.jsp" class="btn btn-danger" style="margin-left: 20px; background: #C43337; ">View products detail</a>-->
+                            <a href="AD_AddBrands.jsp" class="btn btn-danger" style="background: #C43337;">Add new brands</a>
                         </div>
                         <div class="row mb-3" style="margin-left: 150px">
                             <!-- Invoice Example -->
                             <div class="col-lg-10 mb-4">
                                 <div class="card">
                                     <div class=" py-3 d-flex flex-row align-items-center justify-content-between">
-                                        <!--<h6 class="m-0 font-weight-bold text-primary">Invoice</h6>-->
                                     </div>
-                                    <div class="table-responsive">
-                                        <form>
-                                            <div class="row mb-4 mx-5 justify-content-md-start">
-                                                <div class="col-md-3">
-                                                    <div class="input-group">
-                                                        <select id="brandSelect" class="custom-select">
-                                                            <option value="Select Brand">Select Brand</option>
-                                                            <option value="Nike">Nike</option>
-                                                            <option value="Adidas">Adidas</option>
-                                                            <option value="Sketchers">Sketchers</option>
-                                                            <option value="Vans">Vans</option>
-                                                            <option value="Reebok">Reebok</option>
-                                                            <option value="New Balance">New Balance</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <select id="statusSelect" class="custom-select">
-                                                        <option value="Select Status">Select Status</option>
-                                                        <option value="True">True</option>
-                                                        <option value="False">False</option>
+                                    <div class="table-responsive">                                
+                                        <div class="row mb-4 mx-5 justify-content-md-start">
+                                            <div class="col-md-3">
+                                                <div class="input-group">
+                                                    <select id="brandSelect" class="custom-select">
+                                                        <option value="Select Brand">Select Brand</option>
+                                                        <% 
+                                                        List<BrandDTO> brands = (List<BrandDTO>) request.getAttribute("BRAND_LIST");
+                                                        if (brands != null) {
+                                                            for (BrandDTO brand : brands) {
+                                                        %>
+                                                        <option value="<%= brand.getBrandName() %>"><%= brand.getBrandName() %></option>
+                                                        <% 
+                                                            }
+                                                        }
+                                                        %>
                                                     </select>
                                                 </div>
-                                                <div class="col-md-3">
-                                                    <form>
-                                                        <div class="input-group" style="width:250px">
-                                                            <input type="text" class="form-control" placeholder="Search...">
-                                                            <div class="input-group-append">
-                                                                <button class="btn btn-outline-secondary" type="button">Search</button>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
                                             </div>
-                                        </form>
-
+                                            <div class="col-md-3">
+                                                <select id="statusSelect" class="custom-select">
+                                                    <option value="Select Status">Select Status</option>
+                                                    <option value="Available">Available</option>
+                                                    <option value="Deleted">Deleted</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <form action="MainController" method="post">
+                                                    <div class="input-group" style="width:250px">
+                                                        <input type="text" name="searchText" class="form-control" placeholder="Search...">
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-outline-secondary" type="submit" name="action" value="Search_Brand">Search</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
                                         <table class="table align-items-center table-flush">
                                             <thead class="thead-light">
                                                 <tr>
-                                                    <th>ID</th>
-                                                    <th>
+                                                    <th class="text-center">ID</th>
+                                                    <th class="text-center">
                                                         <button class="btn p-0" onclick="sortTable()">Brand Name <span id="sortIconProduct">▲</span></button>
                                                     </th>
-                                                    <th>Status</th>
-                                                    <th>Action</th>
+                                                    <th class="text-center">Status</th>
+                                                    <th class="text-center">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="tableBody">
+                                                <% 
+                                                if (brands != null) {
+                                                    for (BrandDTO brand : brands) {
+                                                %>
                                                 <tr>
-                                                    <td>B1</td>
-                                                    <td>Nike</td>
-                                                    <td><span class="badge badge-success">True</span></td>
-                                                    <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <a href="AD_EditBrands.jsp" class="btn btn-sm btn-dark">Edit</a>
+                                                    <td class="text-center"><%= brand.getBrandID() %></td>
+                                                    <td class="text-center"><%= brand.getBrandName() %></td>
+                                                    <td class="text-center"><span class="badge <%= brand.getStatus() == 1 ? "badge-success" : "badge-warning" %>"><%= brand.getStatus() == 1 ? "Available" : "Deleted" %></span></td>
+                                                    <td class="text-center action-buttons">
+                                                        <form action="MainController" method="post" style="display:inline;">
+                                                            <input type="hidden" name="brandID" value="<%= brand.getBrandID() %>">
+                                                            <button type="submit" class="btn btn-sm btn-danger" name="action" value="Delete_Brand">Delete</button>
+                                                            <input type="hidden" name="brandID" value="<%= brand.getBrandID() %>">
+                                                            <button type="submit" class="btn btn-sm btn-dark" name="action" value="Edit_Brand_Page">Edit</button>
+                                                        </form>
                                                     </td>
                                                 </tr>
+                                                <% 
+                                                    }
+                                                } else {
+                                                %>
                                                 <tr>
-                                                    <td>B2</td>
-                                                    <td>Adidas</td>
-                                                    <td><span class="badge badge-success">True</span></td>
-                                                    <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <a href="AD_EditBrands.jsp" class="btn btn-sm btn-dark">Edit</a>
-                                                    </td>
+                                                    <td colspan="4" class="text-center">No brands found</td>
                                                 </tr>
-                                                <tr>
-                                                    <td>B3</td>
-                                                    <td>Sketchers</td>
-                                                    <td><span class="badge badge-success">True</span></td>
-                                                    <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <a href="AD_EditBrands.jsp" class="btn btn-sm btn-dark">Edit</a>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>B4</td>
-                                                    <td>Puma</td>
-                                                    <td><span class="badge badge-warning">False</span></td>
-                                                    <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <a href="AD_EditBrands.jsp" class="btn btn-sm btn-dark">Edit</a>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>B5</td>
-                                                    <td>Reebok</td>
-                                                    <td><span class="badge badge-warning">False</span></td>
-                                                    <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <a href="AD_EditBrands.jsp" class="btn btn-sm btn-dark">Edit</a>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>B6</td>
-                                                    <td>New Balance</td>
-                                                    <td><span class="badge badge-success">True</span></td>
-                                                    <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <a href="AD_EditBrands.jsp" class="btn btn-sm btn-dark">Edit</a>
-                                                    </td>
-                                                </tr>
+                                                <% 
+                                                }
+                                                %>
                                             </tbody>
                                         </table>
                                         <hr>
-                                        
                                         <!-- Pagination -->
                                         <nav aria-label="Page navigation">
                                             <ul class="pagination justify-content-center mt-3">
@@ -197,7 +155,7 @@
                                                 <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">1</a></li>
                                                 <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">2</a></li>
                                                 <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">3</a></li>
-                                                <li class="page-item" >
+                                                <li class="page-item">
                                                     <a class="page-link" href="#" aria-label="Next" style="color: #C43337">
                                                         <span aria-hidden="true">&raquo;</span>
                                                     </a>
@@ -211,7 +169,6 @@
                             </div>
                         </div>
                         <!--Row-->
-
                         <!-- Modal Logout -->
                         <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout" aria-hidden="true">
                             <div class="modal-dialog" role="document">
@@ -232,7 +189,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <!---Mode up delete item in voice -->
                         <!-- Modal Xác nhận Xóa -->
                         <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
@@ -240,20 +196,17 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="confirmDeleteModalLabel">Xác nhận Xóa</h5>
-<!--                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>-->
                                     </div>
                                     <div class="modal-body">
                                         Bạn có chắc chắn muốn xóa mục này không?
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
                                         <button type="button" class="btn btn-danger" id="confirmDeleteButton">Xóa</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
                     <!---Container Fluid-->
                 </div>
@@ -261,12 +214,10 @@
                 <!-- Footer -->
             </div>
         </div>
-
         <!-- Scroll to top -->
         <a class="scroll-to-top rounded" href="#page-top">
             <i class="fas fa-angle-up"></i>
         </a>
-
         <script>
             let ascending = true;
 
@@ -291,28 +242,6 @@
                 document.getElementById('sortIconProduct').textContent = ascending ? '▲' : '▼';
             }
 
-            function sortBrandTable() {
-                const tableBody = document.getElementById('tableBody');
-                const rows = Array.from(tableBody.querySelectorAll('tr'));
-
-                rows.sort((a, b) => {
-                    const cellA = a.querySelectorAll('td')[2].textContent.trim();
-                    const cellB = b.querySelectorAll('td')[2].textContent.trim();
-
-                    if (ascending) {
-                        return cellA.localeCompare(cellB);
-                    } else {
-                        return cellB.localeCompare(cellA);
-                    }
-                });
-
-                rows.forEach(row => tableBody.appendChild(row));
-
-                ascending = !ascending;
-                document.getElementById('sortIconProduct').textContent = ascending ? '▲' : '▼';
-            }
-
-//Select theo brand
             document.getElementById('brandSelect').addEventListener('change', function () {
                 const name = this.value;
                 const tableBody = document.getElementById('tableBody');
@@ -330,7 +259,6 @@
                 });
             });
 
-//Select theo status
             document.getElementById('statusSelect').addEventListener('change', function () {
                 const status = this.value;
                 const tableBody = document.getElementById('tableBody');
@@ -347,46 +275,29 @@
                     }
                 });
             });
-            // Thêm sự kiện click vào nút xóa trong mỗi dòng
+
             document.querySelectorAll('.btn-danger').forEach(btn => {
                 btn.addEventListener('click', function () {
-                    // Hiển thị modal xác nhận xóa
                     $('#confirmDeleteModal').modal('show');
-
-                    // Lưu trữ thông tin dòng cần xóa vào một thuộc tính data để sử dụng sau này
                     const rowToDelete = this.closest('tr');
                     $('#confirmDeleteButton').data('rowToDelete', rowToDelete);
                 });
             });
 
-// Thêm sự kiện click vào nút xác nhận xóa trong modal
             document.getElementById('confirmDeleteButton').addEventListener('click', function () {
-                // Ẩn modal xác nhận xóa
                 $('#confirmDeleteModal').modal('hide');
-
-                // Lấy thông tin dòng cần xóa từ thuộc tính data đã lưu trữ
                 const rowToDelete = $('#confirmDeleteButton').data('rowToDelete');
-
-                // Xóa dòng
                 rowToDelete.remove();
             });
-
         </script>
         <script src="vendor/jquery/jquery.min.js"></script>
         <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
         <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
         <script src="AD_js/ruang-admin.min.js"></script>
         <script src="vendor/chart.js/Chart.min.js"></script>
-        <script src="AD_js/demo/chart-area-demo.js"></script>  
+        <script src="AD_js/demo/chart-area-demo.js"></script>
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDzwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    
-                     <!-- Bootstrap CSS -->
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-
-<!-- Bootstrap JS -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>                  
     </body>
-    
 </html>
