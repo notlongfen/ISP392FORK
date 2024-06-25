@@ -23,22 +23,24 @@ public class DeleteChildrenCategoryController extends HttpServlet {
     //fill out
     private static final String ERROR = "SearchCategory.jsp";
     private static final String SUCCESS = "SearchCategory.jsp";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         CategoryDAO dao = new CategoryDAO();
         CategoryError error = new CategoryError();
-        try{
+        try {
             int cdCategoryID = Integer.parseInt(request.getParameter("cdCategoryID"));
             boolean checkDelete = dao.deleteChildrenCategory(cdCategoryID);
-            if(checkDelete){
-                url=SUCCESS;
-            }else{
-                error.setError("Unable to delete child category from database");
+            if (checkDelete) {
+                request.setAttribute("MESSAGE", "CHILDREN CATEGORY DELETED SUCCESSFULLY !");
+                url = SUCCESS;
+            } else {
+                error.setError("UNABLE TO DELETE CHILDREN CATEGORY !");
                 request.setAttribute("CHILDREN_CATEGORY_ERROR", error);
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             log("Error at DeleteChildrenCategoryController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);

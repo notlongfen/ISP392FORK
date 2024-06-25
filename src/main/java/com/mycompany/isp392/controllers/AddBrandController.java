@@ -30,8 +30,11 @@ public class AddBrandController extends HttpServlet {
             if (checkValidation) {
                 boolean check = brandDAO.addBrand(brandName);
                 if (check) {
-                    request.setAttribute("MESSAGE", "Brand added successfully!");
+                    request.setAttribute("MESSAGE", "BRAND ADDED SUCCESSFULLY !");
                     url = SUCCESS;
+                } else {
+                    brandError.setError("UNABLE TO ADD BRAND TO DATABASE !");
+                    request.setAttribute("BRAND_ERROR", brandError);
                 }
             } else {
                 request.setAttribute("BRAND_ERROR", brandError);

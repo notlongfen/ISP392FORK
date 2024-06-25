@@ -31,7 +31,6 @@ public class UserDTO {
         this.status = status;
     }
 
-    //Get User Basic Info For Support
     public UserDTO(int UserID, String userName, String email, int phone) {
         this.UserID = UserID;
         this.userName = userName;
@@ -87,7 +86,7 @@ public class UserDTO {
     public void setRoleID(int roleID) {
         this.roleID = roleID;
     }
-
+                                                                 
     public int getPhone() {
         return phone;
     }

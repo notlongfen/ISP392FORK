@@ -1,6 +1,6 @@
 package com.mycompany.isp392.controllers;
 
-import com.mycompany.isp392.category.CategoryDAO;
+import com.mycompany.isp392.category.*;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -17,21 +17,23 @@ public class EditCategoryController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
+        CategoryDAO categoryDAO = new CategoryDAO();
+        CategoryError categoryError = new CategoryError();
         try {
             int categoryID = Integer.parseInt(request.getParameter("categoryID"));
             String newName = request.getParameter("categoryName");
             String newDescription = request.getParameter("description");
 
-            CategoryDAO categoryDAO = new CategoryDAO();
             boolean check = categoryDAO.updateCategory(categoryID, newName, newDescription);
             if (check) {
-                request.setAttribute("MESSAGE", "Category updated successfully!");
+                request.setAttribute("MESSAGE", "INFORMATION UPDATED SUCCESSFULLY !");
                 url = SUCCESS;
             } else {
-                request.setAttribute("MESSAGE", "Failed to update category.");
+                categoryError.setError("UNABLE TO UPDATE INFORMATION !");
+                request.setAttribute("CATEGORY_ERROR", categoryError);
             }
         } catch (Exception e) {
-            log("Error at UpdateCategoryController: " + e.toString());
+            log("Error at EditCategoryController: " + e.toString());
             request.setAttribute("ERROR", "Error updating category: " + e.getMessage());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
@@ -76,5 +78,5 @@ public class EditCategoryController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-    
+
 }

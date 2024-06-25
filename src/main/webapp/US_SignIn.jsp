@@ -15,7 +15,7 @@
         <style>
             a {
                 color: black;
-                text-decoration: none; /* Bỏ gạch chân của liên kết nếu muốn */
+                text-decoration: none;
             }
             a:active {
                 color: black;
@@ -34,7 +34,7 @@
                 display: flex;
                 align-items: center;
 
-                gap: 8px; 
+                gap: 8px;
             }
             .mb-3.mb-3 text-end{
                 text-decoration: none;
@@ -44,8 +44,8 @@
             }
 
             .social-login-buttons {
-                flex: 1;  
-                /*Ensure buttons take up equal space*/ 
+                flex: 1;
+                /*Ensure buttons take up equal space*/
                 text-align: center; /* Center the buttons */
             }
             .header {
@@ -123,30 +123,29 @@
                         </ul>
                     </div>
 
-                    <form>
+                    <form action="MainController" method="POST">
                         <p style="font-weight: bold; font-size: medium">Log in</p>
                         <div class="mb-3">
-                            <input type="email" class="form-control" style="border-radius: 0" id="email" placeholder="Email Address">
+                            <input type="email" class="form-control" style="border-radius: 0" id="email" placeholder="Email Address" name="email" required="">
                         </div>
                         <div class="mb-3">
-                            <input type="password" class="form-control" id="password" style="border-radius: 0" placeholder="Password">
+                            <input type="password" class="form-control" id="password" style="border-radius: 0" placeholder="Password" name="password" required="">
                         </div>
                         <div class="mb-3 text-end">
                             <a href="#" style="text-decoration: none">Forgot Password?</a>
                         </div>
-                        <button type="submit" class="btn btn-dark w-100" style="border-radius: 0;">Log in</button>
-                        <div class="row d-flex justify-content-between">
-                            <div class="social-login-buttons mt-3">
-                                <button type="button" class="btn btn-light border mb-2" style="">
-                                    <img src="https://img.icons8.com/color/16/000000/google-logo.png" alt="Google Logo"/> Google
-                                </button>
+                        <button type="submit" class="btn btn-dark w-100" style="border-radius: 0;" name="action" value="Login">Log in</button>
+                            <div class="row d-flex justify-content-center">
+                                <div class="social-login-buttons mt-3">
+                                    <button type="button" class="btn btn-light border mb-2" style="" 
+                                            href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/ISP392/google-login&response_type=code
+                                            &client_id=786115507775-obtimai0mtsb6b6fsudfv0629n9uc6oq.apps.googleusercontent.com&approval_prompt=force">
+                                        <div style="text-align: center">
+                                            <img src="https://img.icons8.com/color/16/000000/google-logo.png" alt="Google Logo" /> Google
+                                        </div>
+                                    </button>
+                                </div>
                             </div>
-                            <div class="social-login-buttons mt-3">
-                                <button type="button" class="btn btn-light border">
-                                    <img src="https://img.icons8.com/color/16/000000/facebook.png" alt="Facebook Logo"/> Facebook
-                                </button>
-                            </div>
-                        </div>
                     </form>
                 </div>
             </div>
@@ -156,5 +155,5 @@
         <link rel="stylesheet" href="styles.css">
         <jsp:include page="US_footer.jsp" />
     </body>
-    
+
 </html>

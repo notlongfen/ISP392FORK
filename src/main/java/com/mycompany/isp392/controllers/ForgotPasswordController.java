@@ -100,7 +100,7 @@ public class ForgotPasswordController extends HttpServlet {
             }
 
         } catch (Exception e) {
-            error.setError("Failed to send email");
+            error.setError("FAIL TO SEND MAIL.");
             e.printStackTrace();
         } finally {
             response.sendRedirect(url);

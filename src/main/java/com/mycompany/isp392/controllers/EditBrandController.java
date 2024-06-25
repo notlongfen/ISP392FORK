@@ -10,8 +10,8 @@ import java.sql.SQLException;
 
 public class EditBrandController extends HttpServlet {
 
-    private static final String ERROR = "brand.jsp";
-    private static final String SUCCESS = "brand.jsp";
+    private static final String ERROR = "GetSpecificBrandController";
+    private static final String SUCCESS = "GetBrandsController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -30,10 +30,11 @@ public class EditBrandController extends HttpServlet {
             if (checkValidation) {
                 boolean check = brandDAO.updateBrand(brandName, brandID);
                 if (check) {
-                    request.setAttribute("MESSAGE", "Brand Updated successfully!");
+                    request.setAttribute("MESSAGE", "INFORMATION UPDATED SUCCESSFULLY !");
                     url = SUCCESS;
                 }
             } else {
+                brandError.setError("UNABLE TO UPDATE INFORMATION !");
                 request.setAttribute("BRAND_ERROR", brandError);
             }
         } catch (SQLException e) {

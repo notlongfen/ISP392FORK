@@ -1,45 +1,43 @@
 package com.mycompany.isp392.controllers;
 
-import com.mycompany.isp392.category.*;
+import com.mycompany.isp392.product.ProductDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
+@WebServlet(name = "DeleteProductDetailsController", urlPatterns = {"/DeleteProductDetailsController"})
 
-public class EditChildrenCategoryController extends HttpServlet {
+public class DeleteProductDetailsController extends HttpServlet {
 
-    private static final String ERROR = "SearchCategory.jsp";
-    private static final String SUCCESS = "SearchCategory.jsp";
+    private static final String ERROR = "product.jsp";
+    private static final String SUCCESS = "product.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
-        CategoryError categoryError = new CategoryError();
-
         try {
-            int cdCategoryID = Integer.parseInt(request.getParameter("cdCategoryID"));
-            String newName = request.getParameter("categoryName");
+            int productID = Integer.parseInt(request.getParameter("productID"));
+            String color = request.getParameter("color");
+            String size = request.getParameter("size");
 
-            CategoryDAO categoryDAO = new CategoryDAO();
-            boolean check = categoryDAO.updateChildrenCategory(cdCategoryID, newName);
+            ProductDAO productDAO = new ProductDAO();
+            boolean check = productDAO.deleteProductDetail(productID, color, size);
             if (check) {
-                request.setAttribute("MESSAGE", "INFORMATION UPDATED SUCCESSFULLY !");
+                request.setAttribute("MESSAGE", "Product deactivated successfully!");
                 url = SUCCESS;
-            } else {
-                categoryError.setError("UNABLE TO UPDATE INFORMATION !");
-                request.setAttribute("CATEGORY_ERROR", categoryError);
             }
-        } catch (Exception e) {
-            log("Error at EditChildrenCategoryController: " + e.toString());
-            request.setAttribute("ERROR", "Error updating child category: " + e.getMessage());
+        } catch (SQLException e) {
+            log("Error at DeleteCloseOperation: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
     }
 
-// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *

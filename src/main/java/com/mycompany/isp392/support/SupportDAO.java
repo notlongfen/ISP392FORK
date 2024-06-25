@@ -20,6 +20,7 @@ import utils.DbUtils;
  * @author notlongfen
  */
 public class SupportDAO {
+
     private static final String GET_LAST_SUPPORTID = "SELECT * FROM Supports";
     private static final String SEARCH_SUPPORT = "SELECT *  FROM Supports s \n" +
             "INNER JOIN Customers c ON s.CustID = c.CustID\n" +
@@ -31,6 +32,7 @@ public class SupportDAO {
             "INNER JOIN Users u ON c.CustID = u.UserID\n" +
             "WHERE s.SupportID = ?";
     private static final String ADD_SUPPORT_HISTORY = "INSERT INTO  ProcessSupports (EmpID, SupportID, responseMessage, responseDate) VALUES (?, ?, ?, ?, GETDATE());";
+
 
     public int getLastSupportId() throws SQLException {
         int lastSupportId = 0;
@@ -83,43 +85,7 @@ public class SupportDAO {
         return supportID;
     }
 
-    // public List<SupportDTO> searchSupport(String searchText) throws SQLException
-    // {
-    // List<SupportDTO> supports = new ArrayList<>();
-    // Connection conn = null;
-    // PreparedStatement ptm = null;
-    // ResultSet rs = null;
-    // try {
-    // conn = DbUtils.getConnection();
-    // if (conn != null) {
-    // ptm = conn.prepareStatement(SEARCH_SUPPORT);
-    // ptm.setString(1, "%" + searchText + "%");
-    // rs = ptm.executeQuery();
-    // while (rs.next()) {
-    // int supportID = rs.getInt("supportID");
-    // int status = rs.getInt("status");
-    // Date requestDate = rs.getDate("requestDate");
-    // String requestMessage = rs.getString("requestMessage");
-    // int custID = rs.getInt("custID");
-    // supports.add(new SupportDTO(supportID, status, requestDate, requestMessage,
-    // custID));
-    // }
-    // }
-    // } catch (Exception e) {
-    // e.printStackTrace();
-    // } finally {
-    // if (rs != null) {
-    // rs.close();
-    // }
-    // if (ptm != null) {
-    // ptm.close();
-    // }
-    // if (conn != null) {
-    // conn.close();
-    // }
-    // }
-    // return supports;
-    // }
+
     public List<SupportDTO> searchSupport(String searchText) throws SQLException {
         List<SupportDTO> supports = new ArrayList<>();
         Connection conn = null;
@@ -166,6 +132,7 @@ public class SupportDAO {
             if (conn != null) {
                 ptm = conn.prepareStatement(GET_USER_INFO_BASED_ON_SUPPORTID);
                 ptm.setInt(1, supportID);
+                int id = supportID;
                 rs = ptm.executeQuery();
                 if (rs.next()) {
                     int userID = rs.getInt("UserID");

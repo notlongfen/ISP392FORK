@@ -22,23 +22,14 @@ public class AddCategoryController extends HttpServlet {
         String url = ERROR;
         CategoryDAO dao = new CategoryDAO();
         boolean checkValidation = true;
-        CategoryError error = new CategoryError();
+        CategoryError categoryError = new CategoryError();
         try {
             String categoryName = request.getParameter("categoryName");
             String description = request.getParameter("description");
             
-            //checkValidation
-            if(categoryName.length()>20){
-                error.setCategoryNameError("Category cannot be over 20 characters");
-                checkValidation = false;
-            }
             if(dao.checkCategoryDuplicate(categoryName)){
-                error.setCategoryNameError("This category already exists");
+                categoryError.setCategoryNameError("This category already exists.");
                 checkValidation = false;
-            }
-            if(description.length()>100){
-                error.setDescriptionError("Description cannot be over 100 characters");
-                checkValidation=false;
             }
             
             if(checkValidation){
@@ -46,13 +37,14 @@ public class AddCategoryController extends HttpServlet {
                 CategoryDTO category = new CategoryDTO(categoryID, categoryName, description, 1);
                 boolean checkCategory = dao.addCategory(category);
                 if(checkCategory){
-                    url=SUCCESS;
+                   request.setAttribute("MESSAGE", "BRAND ADDED SUCCESSFULLY !");
+                    url = SUCCESS;
                 }else {
-                    error.setError("Unable to add category to database");
-                    request.setAttribute("CATEGORY_ERROR", error);
+                    categoryError.setError("UNABLE TO ADD CATEGORY TO DATABASE !");
+                    request.setAttribute("CATEGORY_ERROR", categoryError);
                 }
             }else{
-                request.setAttribute("CATEGORY_ERROR",error);
+                request.setAttribute("CATEGORY_ERROR",categoryError);
             }
             
         } catch (Exception e) {

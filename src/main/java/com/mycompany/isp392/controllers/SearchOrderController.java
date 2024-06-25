@@ -24,9 +24,10 @@ public class SearchOrderController extends HttpServlet {
             List<OrderDTO> orders = orderDAO.searchOrders(searchText);
             if (orders != null && !orders.isEmpty()) {
                 request.setAttribute("orders", orders);
+                request.setAttribute("MESSAGE", "ORDER FOUND !");
                 url = SUCCESS;
             } else {
-                request.setAttribute("MESSAGE", "No orders found.");
+                request.setAttribute("MESSAGE", "NO ORDER FOUND !");
             }
         } catch (Exception e) {
             log("Error at SearchOrderController: " + e.toString());

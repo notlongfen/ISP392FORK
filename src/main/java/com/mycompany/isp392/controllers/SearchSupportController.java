@@ -33,7 +33,10 @@ public class SearchSupportController extends HttpServlet {
                     request.setAttribute("user_" + support.getSupportID(), user);
                 }
                 request.setAttribute("SUPPORT_LIST", supportList);
+                request.setAttribute("MESSAGE", "SUPPORT FOUND !");
                 url = SUCCESS;
+            } else {
+                request.setAttribute("MESSAGE", "NO SUPPORT FOUND !");
             }
         } catch (Exception e) {
             log("Error at SearchSupportController: " + e.toString());

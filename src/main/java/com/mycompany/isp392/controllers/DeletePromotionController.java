@@ -1,4 +1,3 @@
-
 package com.mycompany.isp392.controllers;
 
 import com.mycompany.isp392.promotion.*;
@@ -15,23 +14,24 @@ public class DeletePromotionController extends HttpServlet {
     //temporary 
     private static final String ERROR = "shopManager.jsp";
     private static final String SUCCESS = "shopManager.jsp";
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         PromotionDAO dao = new PromotionDAO();
         PromotionError error = new PromotionError();
-        try{
+        try {
             int promotionID = Integer.parseInt(request.getParameter("promotionID"));
             boolean checkDelete = dao.deletePromotion(promotionID);
-            if(checkDelete){
-                url=SUCCESS;
-            }else{
-                error.setError("Unable to delete promotion from database");
+            if (checkDelete) {
+                request.setAttribute("MESSAGE", "PROMOTION DELETED SUCCESSFULLY !");
+                url = SUCCESS;
+            } else {
+                error.setError("UNABLE TO DELETE PROMOTION !");
                 request.setAttribute("PROMOTION_ERROR", error);
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             log("Error at DeletePromotionController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);

@@ -48,18 +48,20 @@ public class DeleteCategoryController extends HttpServlet {
                 if (allChildrenDeleted) {
                     boolean checkDelete = dao.deleteCategory(categoryID);
                     if (checkDelete) {
+                        request.setAttribute("MESSAGE", "CATEGORY DELETED SUCCESSFULLY !");
                         url = SUCCESS;
                     } else {
-                        error.setError("Unable to delete category from database");
+                        error.setError("UNABLE TO DELETE CATEGORY !");
                         request.setAttribute("CATEGORY_ERROR", error);
                     }
                 }
             } else {
                 boolean checkDelete = dao.deleteCategory(categoryID);
                 if (checkDelete) {
+                    request.setAttribute("MESSAGE", "CATEGORY DELETED SUCCESSFULLY !");
                     url = SUCCESS;
                 } else {
-                    error.setError("Unable to delete category from database");
+                    error.setError("UNABLE TO DELETE CATEGORY !");
                     request.setAttribute("CATEGORY_ERROR", error);
                 }
             }

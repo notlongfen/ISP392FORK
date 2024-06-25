@@ -13,10 +13,6 @@
         <servlet-class>com.mycompany.isp392.controllers.SearchProductController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>DeleteController</servlet-name>
-        <servlet-class>com.mycompany.isp392.controllers.DeleteProductController</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>EditController</servlet-name>
         <servlet-class>com.mycompany.isp392.controllers.EditProductController</servlet-class>
     </servlet>
@@ -60,6 +56,38 @@
         <servlet-name>UpdateOrderController</servlet-name>
         <servlet-class>com.mycompany.isp392.controllers.UpdateOrderController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddProductDetailsController</servlet-name>
+        <servlet-class>com.mycompany.isp392.controllers.AddProductDetailsController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddProductPageController</servlet-name>
+        <servlet-class>com.mycompany.isp392.controllers.AddProductPageController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GetProductsController</servlet-name>
+        <servlet-class>com.mycompany.isp392.controllers.GetProductsController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteProductDetailsController</servlet-name>
+        <servlet-class>com.mycompany.isp392.controllers.DeleteProductDetailsController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteProductController</servlet-name>
+        <servlet-class>com.mycompany.isp392.controllers.DeleteProductController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditProductDetailsController</servlet-name>
+        <servlet-class>com.mycompany.isp392.controllers.EditProductDetailsController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GetBrandsController</servlet-name>
+        <servlet-class>com.mycompany.isp392.controllers.GetBrandsController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GetSpecificBrandController</servlet-name>
+        <servlet-class>com.mycompany.isp392.controllers.GetSpecificBrandController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>MainController</servlet-name>
         <url-pattern>/MainController</url-pattern>
@@ -71,10 +99,6 @@
     <servlet-mapping>
         <servlet-name>SearchProductController</servlet-name>
         <url-pattern>/SearchProductController</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>DeleteController</servlet-name>
-        <url-pattern>/DeleteController</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>EditController</servlet-name>
@@ -119,6 +143,38 @@
     <servlet-mapping>
         <servlet-name>UpdateOrderController</servlet-name>
         <url-pattern>/UpdateOrderController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddProductDetailsController</servlet-name>
+        <url-pattern>/AddProductDetailsController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddProductPageController</servlet-name>
+        <url-pattern>/AddProductPageController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetProductsController</servlet-name>
+        <url-pattern>/GetProductsController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteProductDetailsController</servlet-name>
+        <url-pattern>/DeleteProductDetailsController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteProductController</servlet-name>
+        <url-pattern>/DeleteProductController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditProductDetailsController</servlet-name>
+        <url-pattern>/EditProductDetailsController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetBrandsController</servlet-name>
+        <url-pattern>/GetBrandsController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetSpecificBrandController</servlet-name>
+        <url-pattern>/GetSpecificBrandController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

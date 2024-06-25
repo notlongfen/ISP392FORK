@@ -25,7 +25,7 @@ public class PromotionDAO {
     private static final String SEARCH_PROMOTION = "SELECT promotionID, promotionName, startDate, endDate, discountPer, condition, status FROM Promotions WHERE promotionName LIKE ?";
     private static final String EDIT_PROMOTION = "UPDATE Promotions Set promotionName=?, startDate=?, endDate=?, discountPer=?, condition=?, status=? WHERE promotionID = ?";
     private static final String GET_LATEST_PROMOTION_ID = "SELECT MAX(PromotionID) AS PromotionID FROM Promotions";
-    private final static String CHECK_PROMOTION_DUPLICATE = "SELECT * FROM Promotions WHERE promotionName LIKE ?";
+    private static final String CHECK_PROMOTION_DUPLICATE = "SELECT * FROM Promotions WHERE promotionName LIKE ? AND status = ?";
     private static final String GET_PROMOTION_BY_ID = "SELECT promotionID, promotionName, startDate, endDate, discountPer, condition, status FROM Promotions WHERE promotionID = ?";
 
     public boolean addPromotion(PromotionDTO promotion) throws SQLException {
@@ -145,7 +145,7 @@ public class PromotionDAO {
                 ptm.setInt(5, promotion.getCondition());
                 ptm.setInt(6, promotion.getStatus());
                 ptm.setInt(7, promotion.getPromotionID());
-                
+
                 check = ptm.executeUpdate() > 0 ? true : false;
             }
         } catch (Exception e) {
@@ -201,6 +201,38 @@ public class PromotionDAO {
             if (conn != null) {
                 ptm = conn.prepareStatement(CHECK_PROMOTION_DUPLICATE);
                 ptm.setString(1, promotionName);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    check = true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+
+    public boolean checkPromotionDuplicate(String promotionName, int status) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(CHECK_PROMOTION_DUPLICATE);
+                ptm.setString(1, promotionName);
+                ptm.setInt(2, status);
                 rs = ptm.executeQuery();
                 if (rs.next()) {
                     check = true;

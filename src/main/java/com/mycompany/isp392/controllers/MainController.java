@@ -8,18 +8,20 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public class MainController extends HttpServlet {
 
-    private static final String WELCOME = "login.jsp";
+    private static final String WELCOME = "US_SignIn.jsp";
 
     private static final String LOGIN = "Login";
     private static final String LOGIN_CONTROLLER = "LoginController";
 
     private static final String REGISTER_PAGE = "Sign_Up";
-    private static final String REGISTER_PAGE_VIEW = "signup.jsp";
+    private static final String REGISTER_PAGE_VIEW = "US_SignUp.jsp";
+    private static final String REGISTER = "Sign In";
+    private static final String REGISTER_CONTROLLER = "RegisterController";
 
-    private static final String ADD_MANAGER_PAGE = "Add_Manager_View";
-    private static final String ADD_MANAGER_PAGE_VIEW = "addManager.jsp";
-    private static final String ADD_MANAGER_CONTROLLER = "AddManagerController";
-    private static final String ADD_MANAGER = "Add_Manager";
+    private static final String ADD_EMPLOYEE_PAGE = "Add_Employee_View";
+    private static final String ADD_EMPLOYEE_PAGE_VIEW = "addEmployee.jsp";
+    private static final String ADD_EMPLOYEE_CONTROLLER = "AddEmployeeController";
+    private static final String ADD_EMPLOYEE = "Add_Employee";
 
     private static final String ADD_PRODUCT_PAGE = "Add_View";
     private static final String ADD_PRODUCT_PAGE_VIEW = "product.jsp";
@@ -36,7 +38,13 @@ public class MainController extends HttpServlet {
 
     private static final String ADD_BRAND = "Add_Brand";
     private static final String ADD_BRAND_CONTROLLER = "AddBrandController";
-
+    
+    private static final String GET_BRANDS_PAGE = "Manage_Brands_Page";
+    private static final String GET_BRANDS_PAGE_VIEW = "GetBrandsController";
+    
+    private static final String EDIT_BRAND_PAGE = "Edit_Brand_Page";
+    private static final String EDIT_BRAND_PAGE_VIEW = "GetSpecificBrandController";
+    
     private static final String SEARCH_BRAND = "Search_Brand";
     private static final String SEARCH_BRAND_CONTROLLER = "SearchBrandController";
 
@@ -45,9 +53,6 @@ public class MainController extends HttpServlet {
 
     private static final String EDIT_BRAND = "Edit_Brand";
     private static final String EDIT_BRAND_CONTROLLER = "UpdateBrandController";
-
-    private static final String REGISTER = "Sign_In";
-    private static final String REGISTER_CONTROLLER = "RegisterController";
 
     private static final String SENDMAIL = "Send_Email";
     private static final String SEND_EMAIL_CONTROLLER = "SendMailServlet";
@@ -68,23 +73,23 @@ public class MainController extends HttpServlet {
     private static final String DELETE_PROMOTION = "DeletePromotion";
     private static final String DELETE_PROMOTION_CONTROLLER = "DeletePromotionController";
 
-    //temp
     private static final String ADD_CATEGORY_PAGE = "Add_Category_View";
     private static final String ADD_CATEGORY_PAGE_VIEW = "addCategory.jsp";
     private static final String ADD_CATEGORY = "Add_Category";
     private static final String ADD_CATEGORY_CONTROLLER = "AddCategoryController";
 
-    //temp 
     private static final String ADD_CHILDREN_CATEGORY_PAGE = "Add_Children_Category_View";
     private static final String ADD_CHILDREN_CATEGORY_PAGE_VIEW = "addChildrenCategory.jsp";
-
     private static final String ADD_CHILDREN_CATEGORY = "Add_Children_Category";
     private static final String ADD_CHILDREN_CATEGORY_CONTROLLER = "AddChildrenCategoryController";
 
-    private static final String SEARCH_CATEGORY_PAGE = "Search_Category_View";
-    private static final String SEARCH_PAGE_VIEW = "SearchCategory.jsp";
-    private static final String SEARCH_CATEGORY = "Search_Category";
-    private static final String SEARCH_CATEGORY_CONTROLLER = "SearchCategoryController";
+    private static final String ADD_PROMOTION_PAGE = "Add_Promo_View";
+    private static final String ADD_PROMOTION_PAGE_VIEW = "addPromotion.jsp";
+    private static final String ADD_PROMOTION = "Add_Promotion";
+    private static final String ADD_PROMOTION_CONTROLLER = "AddPromotionController";
+
+    private static final String DELETE_USER = "DeleteUser";
+    private static final String DELETE_USER_CONTROLLER = "DeleteUserController";
 
     private static final String EDIT_CATEGORY = "Edit_Category";
     private static final String EDIT_CATEGORY_CONTROLLER = "EditCategoryController";
@@ -98,11 +103,10 @@ public class MainController extends HttpServlet {
     private static final String DELETE_CHILDREN_CATEGORY = "Delete_ChildrenCategory";
     private static final String DELETE_CHILDREN_CATEGORY_CONTROLLER = "DeleteChildrenCategoryController";
 
-    private static final String ADD_PROMOTION_PAGE = "Add_Promo_View";
-    private static final String ADD_PROMOTION_PAGE_VIEW = "addPromotion.jsp";
-
-    private static final String ADD_PROMOTION = "Add_Promotion";
-    private static final String ADD_PROMOTION_CONTROLLER = "AddPromotionController";
+    private static final String SEARCH_CATEGORY_PAGE = "Search_Category_View";
+    private static final String SEARCH_PAGE_VIEW = "SearchCategory.jsp";
+    private static final String SEARCH_CATEGORY = "Search_Category";
+    private static final String SEARCH_CATEGORY_CONTROLLER = "SearchCategoryController";
 
     private static final String SEARCH_ORDER_PAGE = "Search_Order_View";
     private static final String SEARCH_ORDER_VIEW = "order.jsp";
@@ -132,6 +136,40 @@ public class MainController extends HttpServlet {
 
     private static final String EDIT_EMPLOYEE = "EditEmployee";
     private static final String EDIT_EMPLOYEE_CONTROLLER = "EditEmployeeController";
+
+    private static final String ADD_PRODUCT_PAGE = "Add_View";
+    private static final String ADD_PRODUCT_PAGE_VIEW = "AddProductPageController";
+    
+    private static final String GET_PRODUCT_PAGE = "Add_Product_Details_Page";
+    private static final String GET_PRODUCT_PAGE_VIEW = "GetProductsController";
+    
+    private static final String ADD_PRODUCT = "Add_Product";
+    private static final String ADD_PRODUCT_CONTROLLER = "AddProductController";
+    
+    private static final String SEARCH_PRODUCT_PAGE = "Search_Product_Page";
+    private static final String SEARCH_PRODUCT_PAGE_VIEW = "product.jsp";
+    
+    private static final String ADD_PRODUCT_DETAILS = "Add_Product_Details";
+    private static final String ADD_PRODUCT_DETAILS_CONTROLLER = "AddProductDetailsController";
+    
+    private static final String SEARCH_PRODUCT = "Search_Product";
+    private static final String SEARCH_PRODUCT_CONTROLLER = "SearchProductController";
+    
+    private static final String EDIT_PRODUCT = "Edit_Product";
+    private static final String EDIT_PRODUCT_CONTROLLER = "EditProductController";
+    
+        private static final String EDIT_PRODUCT_DETAILS = "Edit_Product_Details";
+    private static final String EDIT_PRODUCT_DETAILS_CONTROLLER = "EditProductDetailsController";
+    
+    private static final String DELETE_PRODUCT = "Delete_Product";
+    private static final String DELETE_PRODUCT_CONTROLLER = "DeleteProductController";
+    
+    private static final String DELETE_DETAILS = "Delete_Detail";
+    private static final String DELETE_DETAILS_CONTROLLER = "DeleteProductDetailsController";
+    
+    private static final String VIEW_PRIVACY = "View privacy";
+    private static final String VIEW_PRIVACY_CONTROLLER = "ViewPrivacyController";
+
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -191,10 +229,10 @@ public class MainController extends HttpServlet {
                 url = SEARCH_PAGE_VIEW;
             } else if (SEARCH_CATEGORY.equals(action)) {
                 url = SEARCH_CATEGORY_CONTROLLER;
-            } else if (ADD_MANAGER.equals(action)) {
-                url = ADD_MANAGER_CONTROLLER;
-            } else if (ADD_MANAGER_PAGE.equals(action)) {
-                url = ADD_MANAGER_PAGE_VIEW;
+            } else if (ADD_EMPLOYEE.equals(action)) {
+                url = ADD_EMPLOYEE_CONTROLLER;
+            } else if (ADD_EMPLOYEE_PAGE.equals(action)) {
+                url = ADD_EMPLOYEE_PAGE_VIEW;
             } else if (EDIT_CHILDRENCATEGORY.equals(action)) {
                 url = EDIT_CHILDRENCATEGORY_CONTROLLER;
             } else if (EDIT_CATEGORY.equals(action)) {
@@ -223,7 +261,31 @@ public class MainController extends HttpServlet {
                 url = EDIT_EMPLOYEE_PAGE_VIEW;
             } else if (EDIT_EMPLOYEE.equals(action)) {
                 url = EDIT_EMPLOYEE_CONTROLLER;
-            } 
+            } else if (GET_PRODUCT_PAGE.equals(action)) {
+                url = GET_PRODUCT_PAGE_VIEW;
+            } else if (SEARCH_PRODUCT.equals(action)) {
+                url = SEARCH_PRODUCT_CONTROLLER;
+            } else if (DELETE_PRODUCT.equals(action)) {
+                url = DELETE_PRODUCT_CONTROLLER;
+            } else if (EDIT_PRODUCT.equals(action)) {
+                url = EDIT_PRODUCT_CONTROLLER;
+            } else if (ADD_PRODUCT_DETAILS.equals(action)) {
+                url = ADD_PRODUCT_DETAILS_CONTROLLER;
+            }else if (SEARCH_PRODUCT_PAGE.equals(action)) {
+                url = SEARCH_PRODUCT_PAGE_VIEW;
+            }else if (DELETE_DETAILS.equals(action)) {
+                url = DELETE_DETAILS_CONTROLLER;
+            }else if (EDIT_PRODUCT_DETAILS.equals(action)) {
+                url = EDIT_PRODUCT_DETAILS_CONTROLLER;
+            }else if (GET_BRANDS_PAGE.equals(action)) {
+                url = GET_BRANDS_PAGE_VIEW;
+            }else if (EDIT_BRAND_PAGE.equals(action)) {
+                url = EDIT_BRAND_PAGE_VIEW;
+            } else if (DELETE_USER.equals(action)) {
+                url = DELETE_USER_CONTROLLER;
+            } else if (VIEW_PRIVACY.equals(action)) {
+                url = VIEW_PRIVACY_CONTROLLER;
+            }
         } catch (Exception e) {
             log("error at MainController: " + e.toString());
         } finally {

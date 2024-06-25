@@ -1,9 +1,3 @@
-<%-- 
-    Document   : sidebar
-    Created on : May 30, 2024, 4:07:54 PM
-    Author     : jojo
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -29,86 +23,75 @@
         </style>
     </head>
     <body>
-        <ul class="navbar-nav sidebar sidebar-light accordion" id="accordionSidebar" style="background: #C43337">
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.jsp" style="background: #FFF">
-                <div class="sidebar-brand-text" style="color: #C43337">ISP392<span style="color: #000">SHOP</span></div>
-            </a>
-            <hr class="sidebar-divider my-0">
-            <hr class="sidebar-divider">
-            
-            <div class="sidebar-heading" style="font-size: 15px">
-                Features
-            </div>
-<!--            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap" aria-expanded="true" aria-controls="collapseBootstrap">
-                    <i class="far fa-fw fa-window-maximize"></i>
-                    <span>Product</span>
+        <form action="MainController" method="post">
+            <ul class="navbar-nav sidebar sidebar-light accordion" id="accordionSidebar" style="background: #C43337">
+                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.jsp" style="background: #FFF">
+                    <div class="sidebar-brand-text" style="color: #C43337">ISP392<span style="color: #000">SHOP</span></div>
                 </a>
-                <div id="collapseBootstrap" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">vbnfvhn</h6>
-                        <a class="collapse-item" href="alerts.html">Product List</a>
-                        <a class="collapse-item" href="buttons.html">Categories</a>
-                        <a class="collapse-item" href="dropdowns.html">Brand</a>
-                    </div>
+                <hr class="sidebar-divider my-0">
+                <hr class="sidebar-divider">
+
+                <div class="sidebar-heading" style="font-size: 15px">
+                    Features
                 </div>
-            </li>-->
-            <li class="nav-item mt-3">
-                <a class="nav-link" href="AD_ProductList.jsp">
-                    <i class="fas fa-box"></i>
-                    <span>Product List</span>
-                </a>
-            </li>
-            
-            <li class="nav-item mt-3">
-                <a class="nav-link" href="AD_CategoriesList.jsp">
-                    <i class="fa fa-pie-chart"></i>
-                    <span>Categories</span>
-                </a>
-            </li>
-            
-            <li class="nav-item mt-3">
-                <a class="nav-link" href="AD_ManageBrands.jsp">
-                    <i class="fas fa-tshirt"></i>
-                    <span>Brand</span>
-                </a>
-            </li>
 
-            <li class="nav-item mt-3">
-                <a class="nav-link" href="AD_SupportList.jsp">
-                    <i class="fas fa-comment"></i>
-                    <span>Support</span>
-                </a>
-            </li>
-            
-            <li class="nav-item mt-3">
-                <a class="nav-link" href="AD_OrderList.jsp">
-                    <i class="fas fa-cash-register"></i>
-                    <span>Order</span>
-                </a>
-            </li>
-            
-            <li class="nav-item mt-3">
-                <a class="nav-link" href="AD_PromotionList.jsp">
-                    <i class="fas fa-tags"></i>
-                    <span>Discount</span>
-                </a>
-            </li>
-            
-            <li class="nav-item mt-3">
-                <a class="nav-link" href="ProductList.jsp">
-                    <i class="fa fa-bar-chart"></i>
-                    <span>Statistic Report</span>
-                </a>
-            </li>
-            
-            <hr class="sidebar-divider">
+                <li class="nav-item mt-3">
+                    <button type="submit" class="nav-link btn btn-link" name="action" value="Product_List">
+                        <i class="fas fa-box"></i>
+                        <span>Product List</span>
+                    </button>
+                </li>
 
-            <a href="#" class="logout-btn">
-                <i class="fas fa-sign-out-alt"></i>
-                Log out
-            </a>
-        </ul>
+                <li class="nav-item mt-3">
+                    <button type="submit" class="nav-link btn btn-link" name="action" value="Categories_List">
+                        <i class="fa fa-pie-chart"></i>
+                        <span>Categories</span>
+                    </button>
+                </li>
+
+                <li class="nav-item mt-3">
+                    <button type="submit" class="nav-link btn btn-link" name="action" value="Manage_Brands_Page">
+                        <i class="fas fa-tshirt"></i>
+                        <span>Brand</span>
+                    </button>
+                </li>
+
+                <li class="nav-item mt-3">
+                    <button type="submit" class="nav-link btn btn-link" name="action" value="Support_List">
+                        <i class="fas fa-comment"></i>
+                        <span>Support</span>
+                    </button>
+                </li>
+
+                <li class="nav-item mt-3">
+                    <button type="submit" class="nav-link btn btn-link" name="action" value="Order_List">
+                        <i class="fas fa-cash-register"></i>
+                        <span>Order</span>
+                    </button>
+                </li>
+
+                <li class="nav-item mt-3">
+                    <button type="submit" class="nav-link btn btn-link" name="action" value="Promotion_List">
+                        <i class="fas fa-tags"></i>
+                        <span>Discount</span>
+                    </button>
+                </li>
+
+                <li class="nav-item mt-3">
+                    <button type="submit" class="nav-link btn btn-link" name="action" value="Statistic_Report">
+                        <i class="fa fa-bar-chart"></i>
+                        <span>Statistic Report</span>
+                    </button>
+                </li>
+
+                <hr class="sidebar-divider">
+
+                <button type="submit" class="logout-btn btn btn-link" name="action" value="Logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Log out
+                </button>
+            </ul>
+        </form>
 
         <!-- jQuery and Bootstrap JS -->
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>

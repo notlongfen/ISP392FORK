@@ -1,31 +1,51 @@
-
 package com.mycompany.isp392.controllers;
 
-import com.mycompany.isp392.product.ProductDAO;
+import com.mycompany.isp392.product.*;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+
+@WebServlet(name = "EditProductController", urlPatterns = {"/EditProductController"})
 
 public class EditProductController extends HttpServlet {
-     private static final String ERROR = "editProduct.jsp";
-    private static final String SUCCESS = "manageProduct.jsp";
+
+    private static final String ERROR = "product.jsp";
+    private static final String SUCCESS = "product.jsp";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
-       try {
+        ProductError productError = new ProductError();
+        boolean checkValidation = true;
+        ProductDAO productDAO = new ProductDAO();
+        try {
             String productID = request.getParameter("productID");
             String newName = request.getParameter("newName");
             String newDescription = request.getParameter("newDescription");
 
-            ProductDAO productDAO = new ProductDAO();
-            boolean check = productDAO.editProduct(productID, newName, newDescription);
-            if (check) {
-                request.setAttribute("MESSAGE", "Product updated successfully!");
-                url = SUCCESS;
+            if (productDAO.checkProductExists(newName)) {
+                productError.setProductNameError("Product already exists.");
+                checkValidation = false;
+            }
+
+            if (checkValidation) {
+                boolean check = productDAO.editProduct(productID, newName, newDescription);
+                if (check) {
+                    request.setAttribute("MESSAGE", "INFORMATION UPDATED SUCCESSFULLY !");
+                    url = SUCCESS;
+                }
+            } else {
+                productError.setError("UNABLE TO UPDATE INFORMATION !");
+                request.setAttribute("PRODUCT_ERROR", productError);
             }
         } catch (SQLException e) {
             log("Error at EditProductController: " + e.toString());
@@ -47,7 +67,11 @@ public class EditProductController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(EditProductController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -61,7 +85,11 @@ public class EditProductController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(EditProductController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

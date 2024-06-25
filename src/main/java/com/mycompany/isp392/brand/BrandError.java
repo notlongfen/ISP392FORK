@@ -13,14 +13,16 @@ public class BrandError {
     private String brandIDError;
     private String brandNameError;
     private String statusError;
+    private String error;
 
     public BrandError() {
     }
 
-    public BrandError(String brandIDError, String brandNameError, String statusError) {
+    public BrandError(String brandIDError, String brandNameError, String statusError, String error) {
         this.brandIDError = brandIDError;
         this.brandNameError = brandNameError;
         this.statusError = statusError;
+        this.error = error;
     }
 
     public String getBrandIDError() {
@@ -45,6 +47,14 @@ public class BrandError {
 
     public void setStatusError(String statusError) {
         this.statusError = statusError;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
     }
 
     

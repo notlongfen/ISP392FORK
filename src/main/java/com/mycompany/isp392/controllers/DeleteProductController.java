@@ -1,35 +1,44 @@
-
 package com.mycompany.isp392.controllers;
 
-import com.mycompany.isp392.product.ProductDAO;
+
+import com.mycompany.isp392.product.*;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.sql.SQLException;
 
+@WebServlet(name = "DeleteProductController", urlPatterns = {"/DeleteProductController"})
 public class DeleteProductController extends HttpServlet {
-    private static final String ERROR = "manageProduct.jsp";
-    private static final String SUCCESS = "manageProduct.jsp";
+    private static final String ERROR = "product.jsp";
+    private static final String SUCCESS = "product.jsp";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-         String url = ERROR;
+        String url = ERROR;
+        ProductError productError = new ProductError();
         try {
-            String productID = request.getParameter("productID");
+            int productID = Integer.parseInt(request.getParameter("productID"));
             ProductDAO productDAO = new ProductDAO();
-            boolean check = productDAO.deleteProduct(productID);
+            boolean check = productDAO.deleteProduct(productID) && productDAO.deleteProductDetails(productID);
             if (check) {
-                request.setAttribute("MESSAGE", "Product deactivated successfully!");
+                request.setAttribute("MESSAGE", "PRODUCT DELETED SUCCESSFULLY !");
                 url = SUCCESS;
+            } else {
+                productError.setError("UNABLE TO DELETE PRODUCT !");
+                request.setAttribute("PRODUCT_ERROR", productError);
             }
         } catch (SQLException e) {
-            log("Error at DeleteCloseOperation: " + e.toString());
+            log("Error at DeleteProductController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
     }
+
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

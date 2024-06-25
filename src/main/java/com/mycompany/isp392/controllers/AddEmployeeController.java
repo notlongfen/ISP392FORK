@@ -13,11 +13,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.mindrot.jbcrypt.BCrypt;
 
-@WebServlet(name = "AddManagerController", urlPatterns = {"/AddManagerController"})
-public class AddManagerController extends HttpServlet {
+@WebServlet(name = "AddEmployeeController", urlPatterns = {"/AddEmployeeController"})
+public class AddEmployeeController extends HttpServlet {
 
   
-   private static final String ERROR = "addManager.jsp";
+   private static final String ERROR = "AD_AddEmployees.jsp";
     private static final String SUCCESS = "login.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -32,7 +32,6 @@ public class AddManagerController extends HttpServlet {
             String userName = request.getParameter("userName");
             String email = request.getParameter("email");
             String password = request.getParameter("password");
-            String confirmPassword = request.getParameter("confirmPassword");
             int phone = Integer.parseInt(request.getParameter("phone"));
             int roleID = Integer.parseInt(request.getParameter("roleID"));
             String position = request.getParameter("position");
@@ -43,35 +42,27 @@ public class AddManagerController extends HttpServlet {
                 checkValidation = false;
             }
 
-            // Check phone exists
             if (dao.checkPhoneExists(phone)) {
                 userError.setPhoneError("Phone number already exists.");
                 checkValidation = false;
             }
 
-            // Check phone length
             if (String.valueOf(phone).length() != 9 && String.valueOf(phone).length() != 10) {
                 userError.setPhoneError("Phone number must be 9 or 10 digits.");
                 checkValidation = false;
             }
 
-            // Check password confirmation
-            if (!password.equals(confirmPassword)) {
-                userError.setConfirmError("Passwords do not match.");
-                checkValidation = false;
-            }
-
-            // Insert new user
             if (checkValidation) {
                 String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
                 UserDTO newUser = new UserDTO(userName, email, hashedPassword, roleID, phone, 1);
                 EmployeeDTO newEmployee = new EmployeeDTO(position);
-                boolean checkAddManager = dao.addManager(newUser, newEmployee);
+                boolean checkAddManager = dao.addEmployee(newUser, newEmployee);
 
                 if (checkAddManager) {
+                    request.setAttribute("MESSAGE", "EMPLOYEE ADDED SUCCESSFULLY !");
                     url = SUCCESS;
                 } else {
-                    userError.setError("Failed to add. Please try again.");
+                    userError.setError("UNABLE TO ADD EMPLOYEE TO DATABASE !");
                     request.setAttribute("USER_ERROR", userError);
                 }
             } else {
@@ -79,7 +70,7 @@ public class AddManagerController extends HttpServlet {
             }
 
         } catch (Exception e) {
-            log("Error at AddManagerController: " + e.toString());
+            log("Error at AddEmployeeController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
