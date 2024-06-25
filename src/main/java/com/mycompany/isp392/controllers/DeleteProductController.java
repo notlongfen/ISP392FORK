@@ -1,11 +1,8 @@
 package com.mycompany.isp392.controllers;
 
-<<<<<<< Updated upstream
-import com.mycompany.isp392.product.ProductDAO;
-=======
+
 import com.mycompany.isp392.product.*;
 import java.io.IOException;
->>>>>>> Stashed changes
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -16,15 +13,9 @@ import java.sql.SQLException;
 
 @WebServlet(name = "DeleteProductController", urlPatterns = {"/DeleteProductController"})
 public class DeleteProductController extends HttpServlet {
-<<<<<<< Updated upstream
     private static final String ERROR = "product.jsp";
     private static final String SUCCESS = "product.jsp";
-=======
 
-    private static final String ERROR = "manageProduct.jsp";
-    private static final String SUCCESS = "manageProduct.jsp";
-
->>>>>>> Stashed changes
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");

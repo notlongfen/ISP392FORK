@@ -28,7 +28,6 @@ public class MainController extends HttpServlet {
 
     private static final String ADD_BRAND = "Add_Brand";
     private static final String ADD_BRAND_CONTROLLER = "AddBrandController";
-<<<<<<< Updated upstream
     
     private static final String GET_BRANDS_PAGE = "Manage_Brands_Page";
     private static final String GET_BRANDS_PAGE_VIEW = "GetBrandsController";
@@ -45,9 +44,6 @@ public class MainController extends HttpServlet {
     private static final String EDIT_BRAND = "Edit_Brand";
     private static final String EDIT_BRAND_CONTROLLER = "UpdateBrandController";
 
-    private static final String REGISTER = "Sign_In";
-    private static final String REGISTER_CONTROLLER = "RegisterController";
-
     private static final String SENDMAIL = "Send_Email";
     private static final String SEND_EMAIL_CONTROLLER = "SendMailServlet";
 
@@ -67,10 +63,6 @@ public class MainController extends HttpServlet {
     private static final String DELETE_PROMOTION = "DeletePromotion";
     private static final String DELETE_PROMOTION_CONTROLLER = "DeletePromotionController";
 
-    //temp
-=======
-
->>>>>>> Stashed changes
     private static final String ADD_CATEGORY_PAGE = "Add_Category_View";
     private static final String ADD_CATEGORY_PAGE_VIEW = "addCategory.jsp";
     private static final String ADD_CATEGORY = "Add_Category";
@@ -86,17 +78,8 @@ public class MainController extends HttpServlet {
     private static final String ADD_PROMOTION = "Add_Promotion";
     private static final String ADD_PROMOTION_CONTROLLER = "AddPromotionController";
 
-    private static final String DELETE_BRAND = "Delete_Brand";
-    private static final String DELETE_BRAND_CONTROLLER = "DeleteBrandController";
-
-    private static final String DELETE_PROMOTION = "DeletePromotion";
-    private static final String DELETE_PROMOTION_CONTROLLER = "DeletePromotionController";
-
     private static final String DELETE_USER = "DeleteUser";
     private static final String DELETE_USER_CONTROLLER = "DeleteUserController";
-
-    private static final String EDIT_BRAND = "Edit_Brand";
-    private static final String EDIT_BRAND_CONTROLLER = "UpdateBrandController";
 
     private static final String EDIT_CATEGORY = "Edit_Category";
     private static final String EDIT_CATEGORY_CONTROLLER = "EditCategoryController";
@@ -109,25 +92,6 @@ public class MainController extends HttpServlet {
 
     private static final String DELETE_CHILDREN_CATEGORY = "Delete_ChildrenCategory";
     private static final String DELETE_CHILDREN_CATEGORY_CONTROLLER = "DeleteChildrenCategoryController";
-
-    private static final String EDIT_PROMOTION = "EditPromotion";
-    private static final String EDIT_PROMOTION_PAGE = "CopyPromotionController";
-    private static final String SAVE_EDIT_PROMOTION = "SaveEditPromotion";
-    private static final String EDIT_PROMOTION_CONTROLLER = "EditPromotionController";
-
-    private static final String SENDMAIL = "Send_Email";
-    private static final String SEND_EMAIL_CONTROLLER = "SendMailServlet";
-
-    private static final String SEARCH_BRAND = "Search_Brand";
-    private static final String SEARCH_BRAND_CONTROLLER = "SearchBrandController";
-
-    private static final String SEARCH_SUPPORT_PAGE = "View_Support";
-    private static final String SEARCH_SUPPORT_PAGE_VIEW = "support.jsp";
-    private static final String SEARCH_SUPPORT = "Search support";
-    private static final String SEARCH_SUPPORT_CONTROLLER = "SearchSupportController";
-
-    private static final String SEARCH_PROMOTION = "Search promotion";
-    private static final String SEARCH_PROMOTION_CONTROLLER = "SearchPromotionController";
 
     private static final String SEARCH_CATEGORY_PAGE = "Search_Category_View";
     private static final String SEARCH_PAGE_VIEW = "SearchCategory.jsp";
@@ -151,7 +115,6 @@ public class MainController extends HttpServlet {
     private static final String SEARCH_USER = "SearchUser";
     private static final String SEARCH_USER_CONTROLLER = "SearchUserController";
 
-<<<<<<< Updated upstream
     private static final String EDIT_CUSTOMER_PAGE = "EditCustomerPage";
     private static final String EDIT_CUSTOMER_PAGE_VIEW = "editCustomer.jsp";
 
@@ -194,11 +157,10 @@ public class MainController extends HttpServlet {
     private static final String DELETE_DETAILS = "Delete_Detail";
     private static final String DELETE_DETAILS_CONTROLLER = "DeleteProductDetailsController";
     
-=======
     private static final String VIEW_PRIVACY = "View privacy";
     private static final String VIEW_PRIVACY_CONTROLLER = "ViewPrivacyController";
 
->>>>>>> Stashed changes
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -279,7 +241,6 @@ public class MainController extends HttpServlet {
                 url = VERIFY_TOKEN_CONTROLLER;
             } else if (SEARCH_USER.equals(action)) {
                 url = SEARCH_USER_CONTROLLER;
-<<<<<<< Updated upstream
             } else if (EDIT_CUSTOMER_PAGE.equals(action)) {
                 url = EDIT_CUSTOMER_PAGE_VIEW;
             } else if (EDIT_CUSTOMER.equals(action)) {
@@ -308,12 +269,10 @@ public class MainController extends HttpServlet {
                 url = GET_BRANDS_PAGE_VIEW;
             }else if (EDIT_BRAND_PAGE.equals(action)) {
                 url = EDIT_BRAND_PAGE_VIEW;
-=======
             } else if (DELETE_USER.equals(action)) {
                 url = DELETE_USER_CONTROLLER;
             } else if (VIEW_PRIVACY.equals(action)) {
                 url = VIEW_PRIVACY_CONTROLLER;
->>>>>>> Stashed changes
             }
         } catch (Exception e) {
             log("error at MainController: " + e.toString());

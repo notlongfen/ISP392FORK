@@ -7,10 +7,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-<<<<<<< Updated upstream
-=======
 import java.sql.SQLException;
->>>>>>> Stashed changes
 
 public class AddProductController extends HttpServlet {
 
@@ -22,25 +19,16 @@ public class AddProductController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         ProductDAO productDAO = new ProductDAO();
+
         ProductError productError = new ProductError();
         boolean checkValidation = true;
         try {
             String productName = request.getParameter("productName");
             String description = request.getParameter("description");
-            int numberOfPurchase = 0; // Default value for a new product
-            int status = 1; // Default status
+            int numberOfPurchase = 0;
+            int status = 1;
             int brandID = Integer.parseInt(request.getParameter("brandID"));
 
-<<<<<<< Updated upstream
-            ProductDTO product = new ProductDTO(0, productName, description, numberOfPurchase, status, brandID);
-            ProductDAO productDAO = new ProductDAO();
-            boolean check = productDAO.addProduct(product);
-            if (check) {
-                int productID = productDAO.getLatestProductID();
-                request.setAttribute("MESSAGE", "Product added successfully!");
-                request.setAttribute("PRODUCT_ID", productID);
-                url = SUCCESS;
-=======
             if (productDAO.checkProductExists(productName)) {
                 productError.setProductNameError("Product is already exists.");
                 checkValidation = false;
@@ -50,18 +38,19 @@ public class AddProductController extends HttpServlet {
                 checkValidation = false;
             }
             if (checkValidation) {
-                ProductDTO product = new ProductDTO(productName, description, numberOfPurchase, status, brandID);
+                ProductDTO product = new ProductDTO(0, productName, description, numberOfPurchase, status, brandID);
                 boolean check = productDAO.addProduct(product);
                 if (check) {
-                    request.setAttribute("MESSAGE", "BRAND ADDED SUCCESSFULLY !");
+                    int productID = productDAO.getLatestProductID();
+                    request.setAttribute("MESSAGE", "Product added successfully!");
+                    request.setAttribute("PRODUCT_ID", productID);
                     url = SUCCESS;
-                }else{
+                } else {
                     productError.setError("UNABLE TO ADD PRODUCT TO DATABASE !");
                     request.setAttribute("PRODUCT_ERROR", productError);
                 }
             } else {
                 request.setAttribute("PRODUCT_ERROR", productError);
->>>>>>> Stashed changes
             }
         } catch (NumberFormatException | SQLException e) {
             log("Error at AddProductController: " + e.toString());

@@ -18,7 +18,7 @@ public class UserDAO {
     private static final String CHECK_EMAIL = "SELECT UserID FROM Users WHERE email = ?";
     private static final String CHECK_PHONE = "SELECT UserID FROM Users WHERE phone = ?";
     private static final String ADD_USER = "INSERT INTO Users(userName, roleID, email, password, phone, status) VALUES(?, ?, ?, ?, ?, 1)";
-    private static final String ADD_MANAGER = "INSERT INTO Employees(EmpID, position) VALUES(?, ?)";
+    private static final String ADD_EMPLOYEE = "INSERT INTO Employees(EmpID, position) VALUES(?, ?)";
     private static final String ADD_CUSTOMER = "INSERT INTO Customers(CustID, points, birthday, province_city, district, ward, detailAddress) VALUES(?, 0, ?, ?, ?, ?, ?)";
     private static final String GET_LAST_USER_ID = "SELECT MAX(UserID) AS LastUserID FROM Users";
     private static final String UPDATE_USER_PASSWORD = "UPDATE Users SET password = ? WHERE email = ?";
@@ -32,6 +32,8 @@ public class UserDAO {
     private static final String GET_CUSTOMER_BY_ID = "SELECT * FROM Customers WHERE CustID = ?";
     private static final String GET_EMPLOYEE_BY_ID = "SELECT * FROM Employees WHERE EmpID = ?";
     
+    private static final String DELETE_USER = "UPDATE Users SET status = 0 WHERE UserID=?";
+
     public UserDTO checkLogin(String email, String password) throws SQLException {
         UserDTO user = null;
         Connection conn = null;
@@ -218,7 +220,7 @@ public class UserDAO {
         return check;
     }
 
-    public boolean addManager(UserDTO user, EmployeeDTO employee) throws SQLException {
+    public boolean addEmployee(UserDTO user, EmployeeDTO employee) throws SQLException {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptmUser = null;
@@ -240,7 +242,7 @@ public class UserDAO {
                     rs = ptmUser.getGeneratedKeys();
                     if (rs.next()) {
                         int userId = rs.getInt(1);
-                        ptmEmployee = conn.prepareStatement(ADD_MANAGER);
+                        ptmEmployee = conn.prepareStatement(ADD_EMPLOYEE);
                         ptmEmployee.setInt(1, userId);
                         ptmEmployee.setString(2, employee.getPosition());
                         check = ptmEmployee.executeUpdate() > 0;
@@ -291,6 +293,34 @@ public class UserDAO {
         }
         return result;
     }
+    
+    
+    public boolean deleteUser(int UserID) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(DELETE_USER);
+                ptm.setInt(1, UserID);
+                check = ptm.executeUpdate() > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+    
+
+    
 
     public UserDTO getUserInfoByUserID(int userID) {
         Connection conn = null;
@@ -331,7 +361,7 @@ public class UserDAO {
         }
         return user;
     }
-    
+
     public List<UserDTO> searchListUser(String search) throws SQLException {
         List<UserDTO> list = new ArrayList<>();
         Connection conn = null;
@@ -368,6 +398,7 @@ public class UserDAO {
             }
         }
         return list;
+
     }
     
      public boolean editUserAndCustomer(UserDTO user, CustomerDTO customer) throws SQLException {
