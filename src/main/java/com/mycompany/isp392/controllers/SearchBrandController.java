@@ -11,20 +11,25 @@ import jakarta.servlet.http.HttpServletResponse;
 
 
 public class SearchBrandController extends HttpServlet {
-    private static final String ERROR = "brand.jsp";  
-    private static final String SUCCESS = "brand.jsp"; 
+    private static final String ERROR = "AD_ManageBrands.jsp";  
+    private static final String SUCCESS = "AD_ManageBrands.jsp"; 
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            String brandName = request.getParameter("brandName"); 
+            String brandName = request.getParameter("searchText"); 
             BrandDAO brandDAO = new BrandDAO();
             List<BrandDTO> brands = brandDAO.searchForBrand(brandName); 
             if (brands != null && !brands.isEmpty()) {
+<<<<<<< HEAD
                 request.setAttribute("brands", brands);  
                 request.setAttribute("MESSAGE", "BRAND FOUND !");
+=======
+                request.setAttribute("BRAND_LIST", brands);  
+                request.setAttribute("MESSAGE", "Brands found!");
+>>>>>>> 3447ac6 (Search Brand gán biến)
                 url = SUCCESS;
             } else {
                 request.setAttribute("MESSAGE", "NO BRAND FOUND !");

@@ -91,9 +91,9 @@
                                                     <option value="Deleted">Deleted</option>
                                                 </select>
                                             </div>
-                                            <div class="col-md-3">
+                                            <div class="col">
                                                 <form action="MainController" method="post">
-                                                    <div class="input-group" style="width:250px">
+                                                    <div class="input-group" style="auto">
                                                         <input type="text" name="searchText" class="form-control" placeholder="Search...">
                                                         <div class="input-group-append">
                                                             <button class="btn btn-outline-secondary" type="submit" name="action" value="Search_Brand">Search</button>
