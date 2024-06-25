@@ -26,6 +26,8 @@ public class ProductDAO {
     private static final String DELETE_PRODUCT_DETAILS = "UPDATE ProductDetails SET status = 0 WHERE ProductID=? AND color = ? AND size= ?";
     private static final String GET_ALL_PRODUCTS = "SELECT * FROM Products WHERE status = 1";
     private static final String DELETE_PRODUCT_DETAIL = "UPDATE ProductDetails SET status = 0 WHERE ProductID=?";
+    private static final String CHECK_PRODUCT = "SELECT productID FROM Products WHERE productName LIKE ?";
+
     public boolean addProduct(ProductDTO product) throws SQLException {
         boolean check = false;
         Connection conn = null;
@@ -248,7 +250,7 @@ public class ProductDAO {
                 ptm.setString(6, productDetails.getImage());
                 ptm.setInt(7, productDetails.getStatus());
                 ptm.setInt(8, productDetails.getProductID());
-                 ptm.setString(9, color);
+                ptm.setString(9, color);
                 ptm.setString(10, size);
                 check = ptm.executeUpdate() > 0;
             }
@@ -291,7 +293,8 @@ public class ProductDAO {
         }
         return check;
     }
-     public boolean deleteProductDetails(int productID) throws SQLException {
+
+    public boolean deleteProductDetails(int productID) throws SQLException {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -299,7 +302,7 @@ public class ProductDAO {
             conn = DbUtils.getConnection();
             if (conn != null) {
                 ptm = conn.prepareStatement(DELETE_PRODUCT_DETAIL);
-                ptm.setInt(1, productID);             
+                ptm.setInt(1, productID);
                 check = ptm.executeUpdate() > 0;
             }
         } catch (Exception e) {
@@ -420,4 +423,37 @@ public class ProductDAO {
         }
         return products;
     }
+
+    public boolean checkProductExists(String productName) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(CHECK_PRODUCT);
+                ptm.setString(1, productName);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    check = true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+
 }
