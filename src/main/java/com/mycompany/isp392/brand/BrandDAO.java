@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 public class BrandDAO {
 
     private static final String SEARCH_BRAND = "SELECT * FROM Brands WHERE brandName LIKE ?";
+    private static final String SEARCH_BRAND_BY_ID = "SELECT * FROM Brands WHERE brandID LIKE ?";
     private static final String INSERT_BRAND = "INSERT INTO Brands(BrandName, status) VALUES(?,1)";
     private static final String UPDATE_BRAND = "UPDATE Brands SET BrandName=? WHERE BrandID=?";
     private static final String DEACTIVATE_BRAND = "UPDATE Brands SET status = 0 WHERE BrandID=?";
@@ -50,6 +51,32 @@ public class BrandDAO {
 
         } catch (Exception e) {
             // TODO: handle exception
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<BrandDTO> searchBrandByBrandID(int brandID) {
+        List<BrandDTO> list = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(SEARCH_BRAND_BY_ID);
+                // FIXME: Should I add the "%" here at the end of the brandID?
+                ptm.setInt(1, brandID);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    String Name = rs.getString("brandName");
+                    int status = rs.getInt("status");
+
+                    list.add(new BrandDTO(brandID, Name, status));
+                }
+            }
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return list;

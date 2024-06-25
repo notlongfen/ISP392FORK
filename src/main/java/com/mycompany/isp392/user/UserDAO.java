@@ -270,8 +270,9 @@ public class UserDAO {
         try {
             conn = DbUtils.getConnection();
             if (conn != null) {
+                String hashedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
                 ptm = conn.prepareStatement(UPDATE_USER_PASSWORD);
-                ptm.setString(1, newPassword);
+                ptm.setString(1, hashedPassword);
                 ptm.setString(2, email);
                 result = ptm.executeUpdate() > 0;
             }

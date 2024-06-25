@@ -101,7 +101,7 @@ public class SendMailServlet extends HttpServlet {
                 });
 
         try {
-            int custID = Integer.parseInt(request.getParameter("custID"));
+            // int custID = Integer.parseInt(request.getParameter("custID"));
             EmployeeDTO edto = (EmployeeDTO) sessionCur.getAttribute("EMPLOYEE");
             int supportID = Integer.parseInt(request.getParameter("supportID"));
             // Create a default MimeMessage object
@@ -129,12 +129,14 @@ public class SendMailServlet extends HttpServlet {
             SupportDAO spdao = new SupportDAO();
             ProcessSupportDTO spdto = new ProcessSupportDTO(edto.getEmpID(), supportID, messageBody,
                     (java.sql.Date) new java.util.Date());
-            String status = spdao.supportStatusUpdate(custID);
-            ProcessSupportDTO spdtos = spdao.addReplyHistory(spdto);
-            url = SUCCESS;
-            
-            sessionCur.setAttribute("SUPPORT_STATUS", status);
-            sessionCur.setAttribute("PROCESS_SUPPORT", spdtos);
+            String status = spdao.supportStatusUpdate(supportID);
+            if (status != "Not Yet") {
+                ProcessSupportDTO spdtos = spdao.addReplyHistory(spdto);
+                url = SUCCESS;
+
+                sessionCur.setAttribute("SUPPORT_STATUS", status);
+                sessionCur.setAttribute("PROCESS_SUPPORT", spdtos);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

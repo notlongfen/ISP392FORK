@@ -26,6 +26,10 @@ public class MainController extends HttpServlet {
 
     private static final String ADD_PRODUCT = "Ađd_Product";
     private static final String ADD_PRODUCT_CONTROLLER = "AddProductController";
+    
+    private static final String SEARCH_PRODUCT = "Search_Product";
+    private static final String SEARCH_PRODUCT_CONTROLLER = "SearchProductController";
+    
 
     private static final String ADD_BRAND_PAGE = "Add_Brand_View";
     private static final String ADD_BRAND_PAGE_VIEW = "brand.jsp";
@@ -50,7 +54,7 @@ public class MainController extends HttpServlet {
 
     private static final String SEARCH_SUPPORT_PAGE = "View_Support";
     private static final String SEARCH_SUPPORT_PAGE_VIEW = "support.jsp";
-    private static final String SEARCH_SUPPORT = "Search support";
+    private static final String SEARCH_SUPPORT = "Search Support";
     private static final String SEARCH_SUPPORT_CONTROLLER = "SearchSupportController";
 
     private static final String SEARCH_PROMOTION = "Search promotion";
@@ -141,6 +145,8 @@ public class MainController extends HttpServlet {
                 url = REGISTER_PAGE_VIEW;
             } else if (REGISTER.equals(action)) {
                 url = REGISTER_CONTROLLER;
+            } else if (SEARCH_PRODUCT.equals(action)) {
+                url = SEARCH_PRODUCT_CONTROLLER;
             } else if (SENDMAIL.equals(action)) {
                 url = SEND_EMAIL_CONTROLLER;
             } else if (ADD_PRODUCT.equals(action)) {
@@ -217,7 +223,7 @@ public class MainController extends HttpServlet {
                 url = EDIT_EMPLOYEE_PAGE_VIEW;
             } else if (EDIT_EMPLOYEE.equals(action)) {
                 url = EDIT_EMPLOYEE_CONTROLLER;
-            }
+            } 
         } catch (Exception e) {
             log("error at MainController: " + e.toString());
         } finally {

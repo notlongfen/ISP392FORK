@@ -1,6 +1,8 @@
 
 package com.mycompany.isp392.controllers;
 
+import com.mycompany.isp392.brand.BrandDAO;
+import com.mycompany.isp392.brand.BrandDTO;
 import com.mycompany.isp392.product.ProductDAO;
 import com.mycompany.isp392.product.ProductDTO;
 import java.io.IOException;
@@ -22,10 +24,14 @@ public class SearchProductController extends HttpServlet {
         String url = ERROR;
         try {
             String searchText = request.getParameter("search");
+            int brandID = Integer.parseInt(request.getParameter("brandID"));
             ProductDAO productDAO = new ProductDAO();
+            BrandDAO brandDAO = new BrandDAO();
             List<ProductDTO> productList = productDAO.searchProducts(searchText);
+            List<BrandDTO> brandList = brandDAO.searchBrandByBrandID(brandID);
             if (productList != null) {
                 request.setAttribute("PRODUCT_LIST", productList);
+                request.setAttribute("BRAND_LIST", brandList);
                 url = SUCCESS;
             }
         } catch (SQLException e) {

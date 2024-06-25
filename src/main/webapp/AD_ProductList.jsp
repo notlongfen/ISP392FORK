@@ -110,18 +110,18 @@
                                                         <option value="False">False</option>
                                                     </select>
                                                 </div>
+                                                </form>
                                                 <div class="col-md-3">
-                                                    <form>
+                                                    <form action="MainController" method="GET">
                                                         <div class="input-group">
-                                                            <input type="text" class="form-control" placeholder="Search...">
+                                                            <input type="text" class="form-control" placeholder="Search..." name="search">
                                                             <div class="input-group-append">
-                                                                <button class="btn btn-outline-secondary" type="button">Search</button>
+                                                                <button class="btn btn-outline-secondary" type="submit" value="Search_Product">Search</button>
                                                             </div>
                                                         </div>
                                                     </form>
                                                 </div>
                                             </div>
-                                        </form>
 
                                         <table class="table align-items-center table-flush">
                                             <thead class="thead-light">

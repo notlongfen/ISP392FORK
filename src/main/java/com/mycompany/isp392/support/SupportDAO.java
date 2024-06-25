@@ -64,17 +64,18 @@ public class SupportDAO {
         return lastSupportId + 1;
     }
 
-    public String supportStatusUpdate(int custID) {
+    public String supportStatusUpdate(int spID) {
         Connection conn = null;
         PreparedStatement ptm = null;
-        String supportID = "";
+        String supportID = "Not Yet";
         try {
             conn = DbUtils.getConnection();
             if (conn != null) {
                 ptm = conn.prepareStatement(UPDATE_SUPPORT_STATUS);
-                ptm.setString(1, "Done");
-                ptm.setInt(2, custID);
+                ptm.setInt(1, 0);
+                ptm.setInt(2, spID);
                 ptm.executeUpdate();
+                supportID = "Done";
             }
         } catch (Exception e) {
             e.printStackTrace();

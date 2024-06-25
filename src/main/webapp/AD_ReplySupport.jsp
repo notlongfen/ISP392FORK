@@ -43,24 +43,24 @@
                         <div class="container mt-4">
                             <div class="form-container">
                                 <h2 class="text-center" style="color: #000; font-weight: bold">Reply Support</h2>
-                                <form>
+                                <form action="MainController" method="POST" >
                                     <div class="form-group">
                                         <label for="brandName">To</label>
-                                        <input type="text" class="form-control" id="to" placeholder="Enter">
+                                        <input type="text" class="form-control" id="to" placeholder="Enter receiver email" name="toEmail">
                                     </div>
                                     <div class="form-group">
                                         <label for="brandName">Title</label>
-                                        <input type="text" class="form-control" id="title" placeholder="Enter ">
+                                        <input type="text" class="form-control" id="title" placeholder="Enter title" name="subject">
                                     </div>
                                     <div class="form-group">
                                         <label for="brandName" class="form-label">Content</label>
-                                        <textarea class="form-control" id="textDescriptipn" rows="5">
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                        <textarea class="form-control" id="textDescriptipn" rows="5" name="content" placeholder="Enter Email Content Here">
+                                            
                                         </textarea>
                                     </div>
 
                                     <div class="form-group text-center">
-                                        <button type="submit" class="btn btn-primary btn-danger">Submit</button>
+                                        <button type="submit" class="btn btn-primary btn-danger" name="action" value="Send_Email">Submit</button>
                                         <button type="reset" class="btn btn-secondary btn-custom">Reset</button>
                                     </div>
                                 </form>

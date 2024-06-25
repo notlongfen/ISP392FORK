@@ -5,6 +5,10 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="java.util.List" %>
+<%@ page import="com.mycompany.isp392.support.SupportDTO" %>
+<%@ page import="com.mycompany.isp392.user.UserDTO" %>
+<%@ page import="java.sql.Date" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -74,7 +78,7 @@
                                         <!--<h6 class="m-0 font-weight-bold text-primary">Invoice</h6>-->
                                     </div>
                                     <div class="table-responsive">
-                                        <form>
+                                        <form action="MainController" method="POST">
                                             <div class="row mb-4 mx-2 justify-content-between">
                                                 <div class="col-md-3">
                                                     <div class="input-group">
@@ -95,19 +99,30 @@
                                                         <option value="Not yet">Not yet</option>
                                                     </select>
                                                 </div>
-                                                <div class="col-md-3">
-                                                    <form>
+                                                <%
+                                                String search = request.getParameter("search");
+                                                if (search == null) {
+                                                    search = "";
+                                                    }
+                                                    %>
+                                                    <div class="col-md-3">
+                                                    
                                                         <div class="input-group">
-                                                            <input type="text" class="form-control" placeholder="Search...">
+                                                            <input type="text" class="form-control" placeholder="Search..." name="search" value="<%= search%>">
                                                             <div class="input-group-append">
-                                                                <button class="btn btn-outline-secondary" type="button">Search</button>
+                                                                <!-- <button class="btn btn-outline-secondary" type="submit" name="action" value="Search Support">Search</button> -->
+                                                                <input type="submit" name="action" value="Search Support">
                                                             </div>
                                                         </div>
-                                                    </form>
+                                                    
                                                 </div>
                                             </div>
                                         </form>
-
+                                        <%
+            List<SupportDTO> supportList = (List<SupportDTO>) request.getAttribute("SUPPORT_LIST");
+            int count = 1;
+            if (supportList != null && !supportList.isEmpty()) {
+                                        %>
                                         <table class="table align-items-center table-flush">
                                             <thead class="thead-light">
                                                 <tr>
@@ -129,24 +144,47 @@
                                                 </tr>
                                             </thead>
                                             <tbody id="tableBody">
+                                                <%
+                for (SupportDTO support : supportList) {
+                    UserDTO user = (UserDTO) request.getAttribute("user_" + support.getSupportID());
+                    if (user != null) {
+                                                %>
 
                                                 <tr>
-                                                    <td>1</td>
-                                                    <td>John Doe</td>
-                                                    <td>johndoe@example.com</td>
-                                                    <td>123-456-7890</td>
-                                                    <td>2024-06-01</td>
+                                                    <td><%= count++ %></td>
+                                                    <!-- <td><%= user.getUserID() %></td> -->
+                                                    <!-- <td><%= user.getUserName() %></td> -->
+                                                    <td><%= user.getEmail() %></td>
+                                                    <td><%= user.getPhone() %></td>
+                                                    <td><%= support.getRequestDate() %></td>
+                                                    <td><%= support.getStatus() %></td>
                                                     <td><span class="badge badge-success">Done</span></td>
-                                                    <td><a href="AD_ViewSupport.jsp" class="btn btn-sm " style="background: green ; color: #FFF">View</a></td>
+                                                    <td><a href="AD_ViewSupport.jsp?userID=<%= user.getUserID() %>" class="btn btn-sm " style="background: green ; color: #FFF">View</a></td>
+                                                    <td>
+                                                        <% if (support.getStatus() == 1) { %>
+                                                            <form action="ViewSupportDetailsController" method="GET">
+                                                                <input type="hidden" name="supportID" value="<%= support.getSupportID() %>"/>
+                                                                <input type="submit" value="ViewSupport"/>
+                                                            </form>
+                                                        <% } else { %>
+                                                            <form action="ReplySupportController" method="POST">
+                                                                <input type="hidden" name="supportID" value="<%= support.getSupportID() %>"/>
+                                                                <input type="submit" value="ReplySupport"/>
+                                                            </form>
+                                                        <% } %>
+                                                    </td>
                                                 </tr>
-
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td>Jane Smith</td>
-                                                    <td>janesmith@example.com</td>
-                                                    <td>987-654-3210</td>
-                                                    <td>2024-05-30</td>
-                                                    <td><span class="badge badge-success">Done</span></td>
+                                                <%
+                    }
+                }
+                                                           %>
+                                                           <tr>
+                                                           <td>2</td>
+                                                           <td>Jane Smith</td>
+                                                           <td>janesmith@example.com</td>
+                                                           <td>987-654-3210</td>
+                                                           <td>2024-05-30</td>
+                                                           <td><span class="badge badge-success">Done</span></td>
                                                     <td><a href="AD_ViewSupport.jsp" class="btn btn-sm " style="background: green ; color: #FFF">View</a></td>
                                                 </tr>
 
@@ -191,6 +229,9 @@
                                                 </tr>
                                             </tbody>
                                         </table>
+                                        <%
+            }
+        %>
                                         <hr>
                                         <!-- Pagination -->
                                         <nav aria-label="Page navigation">
