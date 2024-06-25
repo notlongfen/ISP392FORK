@@ -24,8 +24,10 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "VerifyToken", urlPatterns = {"/VerifyToken"})
 public class VerifyToken extends HttpServlet {
+
     private static final String ERROR = "verifyForgetPassword.jsp";
     private static final String SUCCESS = "login.jsp";
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -38,17 +40,33 @@ public class VerifyToken extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet VerifyToken</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet VerifyToken at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        String url = ERROR;
+        ForgetPasswordErrors error = new ForgetPasswordErrors();
+        try {
+            String token = request.getParameter("token");
+            String newPassword = request.getParameter("newPassword");
+
+            ForgetPasswordDAO dao = new ForgetPasswordDAO();
+            UserDAO userDAO = new UserDAO();
+            ForgetPasswordDTO dto = dao.checkToken(token);
+            if (dto != null) {
+                if (userDAO.resetPassword(userDAO.getUserInfoByUserID(dto.getUserID()).getEmail(), newPassword)) {
+                    dao.invalidateToken(token);
+                    url = SUCCESS;
+                } else {
+                    error.setError("Reset password failed");
+                    request.setAttribute("ERROR", error);
+                }
+            } else {
+                error.setError("Token is invalid");
+                request.setAttribute("ERROR", error);
+            }
+
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        } finally {
+            response.sendRedirect(url);
         }
     }
 
@@ -79,35 +97,7 @@ public class VerifyToken extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-        String url = ERROR;
-        ForgetPasswordErrors error = new ForgetPasswordErrors();
-        try {
-            String token = request.getParameter("token");
-            String newPassword = request.getParameter("newPassword");
-            
-            ForgetPasswordDAO dao = new ForgetPasswordDAO();
-            UserDAO userDAO = new UserDAO();
-            ForgetPasswordDTO dto = dao.checkToken(token);
-            if(dto != null){
-                if(userDAO.resetPassword(userDAO.getUserInfoByUserID(dto.getUserID()).getEmail(), newPassword)){
-                    dao.invalidateToken(token);
-                    url = SUCCESS;
-                }else{
-                    error.setError("Reset password failed");
-                    request.setAttribute("ERROR", error);
-                }
-            }else{
-                error.setError("Token is invalid");
-                request.setAttribute("ERROR", error);
-            }
-            
-        } catch (Exception e) {
-            // TODO: handle exception
-            e.printStackTrace();
-        }finally{
-            response.sendRedirect(url);
-        }
-        
+
     }
 
     /**

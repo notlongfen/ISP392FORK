@@ -24,6 +24,7 @@ public class SearchProductController extends HttpServlet {
         try {
             String searchText = request.getParameter("searchText");
             ProductDAO productDAO = new ProductDAO();
+<<<<<<< Updated upstream
             Map<ProductDTO, List<ProductDetailsDTO>> productMap = productDAO.searchProducts(searchText);
 
             if (!productMap.isEmpty()) {
@@ -32,6 +33,15 @@ public class SearchProductController extends HttpServlet {
                 url = SUCCESS;
             } else {
                 request.setAttribute("MESSAGE", "No products found matching your search criteria.");
+=======
+            List<ProductDTO> productList = productDAO.searchProducts(searchText);
+            if (productList != null) {
+                request.setAttribute("PRODUCT_LIST", productList);
+                request.setAttribute("MESSAGE", "PRODUCT FOUND !");
+                url = SUCCESS;
+            } else {
+                request.setAttribute("MESSAGE", "NO PRODUCT FOUND !");
+>>>>>>> Stashed changes
             }
         } catch (SQLException e) {
             log("Error at SearchProductController: " + e.toString());

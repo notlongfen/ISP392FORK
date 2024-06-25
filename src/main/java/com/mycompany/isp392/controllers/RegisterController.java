@@ -16,8 +16,8 @@ import org.mindrot.jbcrypt.BCrypt;
 @WebServlet(name = "RegisterController", urlPatterns = {"/RegisterController"})
 public class RegisterController extends HttpServlet {
 
-    private static final String ERROR = "signup.jsp";
-    private static final String SUCCESS = "login.jsp";
+    private static final String ERROR = "US_SignUp.jsp";
+    private static final String SUCCESS = "US_SignIn.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -38,51 +38,44 @@ public class RegisterController extends HttpServlet {
             String city = request.getParameter("city");
             String address = request.getParameter("address");
             Date birthday = Date.valueOf(request.getParameter("birthday"));
-
             // Check email exists
             if (dao.checkEmailExists(email) != -1) {
                 userError.setEmailError("Email already exists.");
                 checkValidation = false;
             }
-
             // Check phone exists
             if (dao.checkPhoneExists(phone)) {
                 userError.setPhoneError("Phone number already exists.");
                 checkValidation = false;
             }
-
             // Check phone length
             if (String.valueOf(phone).length() != 9 && String.valueOf(phone).length() != 10) {
                 userError.setPhoneError("Phone number must be 9 or 10 digits.");
                 checkValidation = false;
             }
-
             // Check age > 16
             LocalDate birthDate = birthday.toLocalDate();
             LocalDate currentDate = LocalDate.now();
             int age = Period.between(birthDate, currentDate).getYears();
-            if (age < 16) {
-                userError.setBirthdayError("You must be older than 16 years old to register.");
+            if (age < 0) {
+                userError.setBirthdayError("Your age is not valid.");
                 checkValidation = false;
             }
-
             // Check password confirmation
             if (!password.equals(confirmPassword)) {
                 userError.setConfirmError("Passwords do not match.");
                 checkValidation = false;
             }
-
             // Insert new user
             if (checkValidation) {
                 String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
                 UserDTO newUser = new UserDTO(userName, email, hashedPassword, 4, phone, 1);
                 CustomerDTO newCustomer = new CustomerDTO(0, birthday, city, district, ward, address);
                 boolean checkAddUserAndCustomer = dao.addAccount(newUser, newCustomer);
-
                 if (checkAddUserAndCustomer) {
                     url = SUCCESS;
                 } else {
-                    userError.setError("Failed to sign up. Please try again.");
+                    userError.setError("UNABLE TO REGISTER !");
                     request.setAttribute("USER_ERROR", userError);
                 }
             } else {

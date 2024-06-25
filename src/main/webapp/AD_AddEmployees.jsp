@@ -50,32 +50,35 @@
                                     <div class="form-group col-md-8 mt-xl-5" style="margin-left: 100px;">
                                         <label for="brand" style="margin-top: 10px">Employee Name</label>
                                         <input type="text" class="form-control" id="empName" placeholder="Enter employee name" 
-                                               style="width: 550px">
-                                        <label for="position" style="margin-top: 10px">Position</label>
-                                        <input type="text" class="form-control" id="empPos" placeholder="Enter employee position" 
-                                               style="width: 550px">
+                                               style="width: 550px" name="userName">
+                                        <label for="position" style="margin-top: 10px">Position</label></br>
+                                        <select name ="roleID">
+                                            <option value="1">1 - System Manager</option>
+                                            <option value="2">2 - Shop Manager</option>
+                                            <option value="3">3 - Shop Staff</option>
+                                        </select></br>
                                         <label for="email" style="margin-top: 10px">Email</label>
-                                        <input type="text" class="form-control" id="empEmail" placeholder="Enter email" 
-                                               style="width: 550px">
+                                        <input type="email" class="form-control" id="empEmail" placeholder="Enter email" 
+                                               style="width: 550px" name="email">
                                         <label for="phone" style="margin-top: 10px">Phone</label>
-                                        <input type="text" class="form-control" id="empPhone" placeholder="Enter phone number" 
-                                               style="width: 550px">
+                                        <input type="number" class="form-control" id="empPhone" placeholder="Enter phone number" 
+                                               style="width: 550px" name="phone">
+                                        <label for="phone" style="margin-top: 10px">Password</label>
+                                        <input type="password" class="form-control" id="empPhone" placeholder="Enter phone number" 
+                                               style="width: 550px" name="password">
                                     </div>
 
                                 </div>
-                                <!--                                <div class="form-row">-->
                                 <div class="form-group text-center" style="margin-top: 10px">
                                     <button type="submit" class="btn btn-danger btn-custom">Submit</button>
                                     <button type="reset" class="btn btn-secondary btn-custom">Reset</button>
                                 </div>
-                                <!--                                </div>-->
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Include necessary scripts -->
             <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
             <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
             <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>

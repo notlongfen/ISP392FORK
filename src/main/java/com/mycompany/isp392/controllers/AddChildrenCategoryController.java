@@ -1,4 +1,3 @@
-
 package com.mycompany.isp392.controllers;
 
 import com.mycompany.isp392.category.*;
@@ -14,7 +13,7 @@ public class AddChildrenCategoryController extends HttpServlet {
 
     private static final String ERROR = "addChildrenCategory.jsp";
     private static final String SUCCESS = "login.jsp";
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -25,36 +24,27 @@ public class AddChildrenCategoryController extends HttpServlet {
         try {
             String cdCategoryName = request.getParameter("cdCategoryName");
             int parentID = Integer.parseInt(request.getParameter("parentID"));
-            
-            //checkValidation
-            if(cdCategoryName.length()>20){
-                error.setCdCategoryNameError("Category cannot be over 20 characters");
+
+            if (dao.checkChildrenCategoryDuplicate(cdCategoryName, parentID)) {
+                error.setCdCategoryNameError("This children category already exists.");
                 checkValidation = false;
             }
-            if(dao.checkChildrenCategoryDuplicate(cdCategoryName,parentID)){
-                error.setCdCategoryNameError("This child category already exists");
-                checkValidation = false;
-            }
-            boolean checkParentID = dao.checkParentID(parentID);
-            if(!checkParentID){
-                error.setParentIDError("Unable to find this parent category");
-                checkValidation=false;
-            }
-            
-            if(checkValidation){
-                int categoryID = dao.getLatestCdCategoryID() + 1; 
+
+            if (checkValidation) {
+                int categoryID = dao.getLatestCdCategoryID() + 1;
                 ChildrenCategoryDTO cdCategory = new ChildrenCategoryDTO(categoryID, cdCategoryName, parentID, 1);
                 boolean checkChildCategory = dao.addChildrenCategory(cdCategory);
-                if(checkChildCategory){
-                    url=SUCCESS;
-                }else {
-                    error.setError("Unable to add child category to database");
+                if (checkChildCategory) {
+                    request.setAttribute("MESSAGE", "BRAND ADDED SUCCESSFULLY !");
+                    url = SUCCESS;
+                } else {
+                    error.setError("UNABLE TO ADD CHILDREN CATEGORY TO DATABASE !");
                     request.setAttribute("CHILDREN_CATEGORY_ERROR", error);
                 }
-            }else{
-                request.setAttribute("CHILDREN_CATEGORY_ERROR",error);
+            } else {
+                request.setAttribute("CHILDREN_CATEGORY_ERROR", error);
             }
-            
+
         } catch (Exception e) {
             log("Error at AddChildrenCategoryController: " + e.toString());
         } finally {

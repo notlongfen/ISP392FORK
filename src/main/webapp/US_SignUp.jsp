@@ -42,61 +42,65 @@
                     </div>
 
                     <!--Form--->
-                    <form>
+                    <form action="MainController" method="POST">
                         <div class="mb-3">
                             <label for="fullName" class="form-label" >Enter your full name</label>
-                            <input type="text" class="form-control" id="fullName" placeholder="Enter your full name">
+                            <input type="text" class="form-control" id="fullName" placeholder="Enter your full name" name="userName" required="">
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email Address</label>
-                            <input type="email" class="form-control" id="email" placeholder="Email Address">
+                            <input type="email" class="form-control" id="email" placeholder="Email Address" name="email" required="">
                         </div>
                         <div class="mb-3">
                             <label for="phoneNumber" class="form-label">Phone number</label>
-                            <input type="tel" class="form-control" id="phoneNumber" placeholder="Phone number">
+                            <input type="tel" class="form-control" id="phoneNumber" placeholder="Phone number" name="phone" required="">
+                        </div>
+                        
+                        
+                        <div class="mb-3">
+                            <label for="city" class="form-label">City</label>
+                            <input type="text" class="form-control" id="city" placeholder="City" name="city" required="">
+
                         </div>
 
                         <div class="row mb-3 d-flex justify-content-between">
                             <div class="col-md-6 mb-3">
                                 <label for="ward" class="form-label">Ward</label>
-                                <select class="form-select" id="ward">
+                                <select class="form-select" id="ward" name="ward" required="">
                                     <option value="" disabled selected >Select Ward</option>
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="district" class="form-label">District</label>
-                                <select class="form-select" id="district">
+                                <select class="form-select" id="district" name="district" required="">
                                     <option value="" disabled selected>Select District</option>
                                 </select>
                             </div>  
                         </div>
 
                         <div class="mb-3">
-                            <label for="city" class="form-label">City</label>
-                            <input type="text" class="form-control" id="city" placeholder="City">
-                        </div>
-                        <div class="mb-3">
                             <label for="address" class="form-label">Address</label>
-                            <input type="text" class="form-control" id="address" placeholder="Address">
+                            <input type="text" class="form-control" id="address" placeholder="Address" name="address" required="">
                         </div>
+                        
                         <div class="mb-3">
                             <label for="dob" class="form-label">Date of birth</label>
-                            <input type="date" class="form-control" id="dob">
+                            <input type="date" class="form-control" id="dob" name="birthday" required="">
                         </div>
 
                         <div class="mb-3 position-relative">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" placeholder="Password">
+                            <input type="password" class="form-control" id="password" placeholder="Password" name="password" required="">
                             <!--<i class="fas fa-eye position-absolute" id="togglePassword" style="cursor: pointer; right: 10px; top: 50%; transform: translateY(50%);color: grey;"></i>-->
                         </div>
                         <div class="mb-3 position-relative">
                             <label for="confirmPassword" class="form-label">Confirm Password</label>
-                            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password">
+                            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password" name="confirmPassword" required="">
                             <!--<i class="fas fa-eye position-absolute" id="toggleConfirmPassword" style="cursor: pointer; right: 10px; top: 50%; transform: translateY(50%); color: grey;"></i>-->
                         </div>
 
                         <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input" id="terms">
+                            <input type="checkbox" class="form-check-input" id="terms" required="">
                             <label class="form-check-label" for="terms">
                                 I confirm that I have read and accept the <a href="#">Terms and Conditions</a> and the <a href="#">Privacy Policy</a>.
                             </label>

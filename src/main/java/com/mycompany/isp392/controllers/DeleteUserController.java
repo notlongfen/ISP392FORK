@@ -1,45 +1,48 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ */
 package com.mycompany.isp392.controllers;
 
-import com.mycompany.isp392.category.*;
+import com.mycompany.isp392.user.*;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-public class EditChildrenCategoryController extends HttpServlet {
+@WebServlet(name = "DeleteUserController", urlPatterns = {"/DeleteUserController"})
+public class DeleteUserController extends HttpServlet {
 
-    private static final String ERROR = "SearchCategory.jsp";
-    private static final String SUCCESS = "SearchCategory.jsp";
+    private static final String ERROR = "shopManager.jsp";
+    private static final String SUCCESS = "shopManager.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
-        CategoryError categoryError = new CategoryError();
-
+        UserDAO dao = new UserDAO();
+        UserError userError = new UserError();
         try {
-            int cdCategoryID = Integer.parseInt(request.getParameter("cdCategoryID"));
-            String newName = request.getParameter("categoryName");
-
-            CategoryDAO categoryDAO = new CategoryDAO();
-            boolean check = categoryDAO.updateChildrenCategory(cdCategoryID, newName);
-            if (check) {
-                request.setAttribute("MESSAGE", "INFORMATION UPDATED SUCCESSFULLY !");
+            int UserID = Integer.parseInt(request.getParameter("UserID"));
+            boolean checkDelete = dao.deleteUser(UserID);
+            if (checkDelete) {
+                request.setAttribute("MESSAGE", "USER DELETED SUCCESSFULLY !");
                 url = SUCCESS;
             } else {
-                categoryError.setError("UNABLE TO UPDATE INFORMATION !");
-                request.setAttribute("CATEGORY_ERROR", categoryError);
+                userError.setError("UNABLE TO DELETE USER !");
+                request.setAttribute("USER_ERROR", userError);
             }
+
         } catch (Exception e) {
-            log("Error at EditChildrenCategoryController: " + e.toString());
-            request.setAttribute("ERROR", "Error updating child category: " + e.getMessage());
+            log("Error at DeleteUserController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
     }
 
-// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *

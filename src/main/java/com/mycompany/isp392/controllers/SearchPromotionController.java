@@ -1,4 +1,3 @@
-
 package com.mycompany.isp392.controllers;
 
 import com.mycompany.isp392.promotion.PromotionDAO;
@@ -10,7 +9,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 
 @WebServlet(name = "SearchPromotionController", urlPatterns = {"/SearchPromotionController"})
 public class SearchPromotionController extends HttpServlet {
@@ -28,7 +26,10 @@ public class SearchPromotionController extends HttpServlet {
             List<PromotionDTO> promotionList = promotionDAO.searchPromotion(searchText);
             if (promotionList.size() > 0) {
                 request.setAttribute("LIST_PROMOTION", promotionList);
+                request.setAttribute("MESSAGE", "PROMOTION FOUND !");
                 url = SUCCESS;
+            } else {
+                request.setAttribute("MESSAGE", "NO PROMOTION FOUND !");
             }
         } catch (Exception e) {
             log("Error at SearchPromotionController: " + e.toString());

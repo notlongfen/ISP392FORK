@@ -1,7 +1,6 @@
-
 package com.mycompany.isp392.controllers;
 
-import com.mycompany.isp392.brand.BrandDAO;
+import com.mycompany.isp392.brand.*;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -11,22 +10,27 @@ import java.sql.SQLException;
 
 public class DeleteBrandController extends HttpServlet {
 
-      private static final String ERROR = "brand.jsp";
+    private static final String ERROR = "brand.jsp";
     private static final String SUCCESS = "brand.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
+        BrandError brandError = new BrandError();
         try {
             int brandID = Integer.parseInt(request.getParameter("brandID"));
             BrandDAO brandDAO = new BrandDAO();
             boolean check = brandDAO.deleteBrand(brandID);
             if (check) {
+                request.setAttribute("MESSAGE", "BRAND DELETED SUCCESSFULLY !");
                 url = SUCCESS;
+            } else {
+                brandError.setError("UNABLE TO DELETE BRAND !");
+                request.setAttribute("BRAND_ERROR", brandError);
             }
         } catch (SQLException e) {
-            log("Error at DeactivateBrandController: " + e.toString());
+            log("Error at DeleteBrandController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

@@ -1,4 +1,3 @@
-
 package com.mycompany.isp392.controllers;
 
 import com.mycompany.isp392.promotion.*;
@@ -19,16 +18,20 @@ public class CopyPromotionController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
+        PromotionError error = new PromotionError();
         try {
             int promotionID = Integer.parseInt(request.getParameter("promotionID"));
             PromotionDAO dao = new PromotionDAO();
             PromotionDTO promotion = dao.getPromotionByID(promotionID);
-            if(promotion !=null){
-            request.setAttribute("PROMOTION", promotion);
-            url = SUCCESS;
+            if (promotion != null) {
+                request.setAttribute("PROMOTION", promotion);
+                url = SUCCESS;
+            } else {
+                error.setError("UNABLE TO GET PROMOTION INFORMATION !");
+                request.setAttribute("PROMOTION_ERROR", error);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log("Error at CopyPromotionController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

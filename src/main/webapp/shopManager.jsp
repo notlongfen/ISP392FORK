@@ -13,7 +13,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Admin Page</title>
+        <title>Shop Manager Page</title>
     </head>
     <body>
         <%
@@ -27,12 +27,15 @@
                 search = "";
             }
         %>
+        
         <h1>Welcome: <%= loginUser.getUserName()%></h1>
         </br>
 
         <form action="MainController">
-            Search: <input type="text" name="search" value="<%= search%>"/>
-            <input type="submit" name="action" value="Search promotion"/>
+            <input type="submit" name="action" value="Manage promotions"/>
+            <input type="submit" name="action" value="Manage categories"/>
+            <input type="submit" name="action" value="Manage orders"/>
+            <input type="submit" name="action" value="Statistics"/>
 
             <%
                 List<PromotionDTO> promotionList = (List<PromotionDTO>) request.getAttribute("LIST_PROMOTION");

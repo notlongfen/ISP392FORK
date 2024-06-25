@@ -33,10 +33,11 @@ public class SearchCategoryController extends HttpServlet {
                     categoryChildrenMap.put(category, childrenCategories);
                 }
                 request.setAttribute("categoryChildrenMap", categoryChildrenMap);
-                request.setAttribute("MESSAGE", "Categories and related children categories found!");
+                request.setAttribute("MESSAGE", "CATEGORY AND RELATED CHILDREN CATEGORIES FOUND !");
+                
                 url = SUCCESS;
             } else {
-                request.setAttribute("MESSAGE", "No categories found matching your search criteria.");
+                request.setAttribute("MESSAGE", "NO CATEGORY FOUND !");
             }
         } catch (Exception e) {
             log("Error at SearchCategoryController: " + e.toString());

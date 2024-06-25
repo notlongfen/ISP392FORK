@@ -52,17 +52,8 @@
                                         <input type="text" class="form-control" id="brandName" placeholder="Enter Brand Name" 
                                                style="width: 550px">
                                     </div>
-                                    <!--                                    <div class="form-group col-md-4">
-                                                                            <label for="brand">Brand</label>
-                                                                            <select class="form-control" id="brand">
-                                                                                <option selected>Choose...</option>
-                                                                                <option>Brand A</option>
-                                                                                <option>Brand B</option>
-                                                                                <option>Brand C</option>
-                                                                            </select>
-                                                                        </div>-->
+                                 
                                 </div>
-<!--                                <div class="form-row">-->
                                     <div class="form-group text-center">
                                         <button type="submit" class="btn btn-danger btn-custom">Submit</button>
                                         <button type="reset" class="btn btn-secondary btn-custom">Reset</button>

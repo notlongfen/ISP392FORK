@@ -30,10 +30,11 @@ public class EditBrandController extends HttpServlet {
             if (checkValidation) {
                 boolean check = brandDAO.updateBrand(brandName, brandID);
                 if (check) {
-                    request.setAttribute("MESSAGE", "Brand Updated successfully!");
+                    request.setAttribute("MESSAGE", "INFORMATION UPDATED SUCCESSFULLY !");
                     url = SUCCESS;
                 }
             } else {
+                brandError.setError("UNABLE TO UPDATE INFORMATION !");
                 request.setAttribute("BRAND_ERROR", brandError);
             }
         } catch (SQLException e) {

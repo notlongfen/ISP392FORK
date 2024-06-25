@@ -24,10 +24,10 @@ public class SearchBrandController extends HttpServlet {
             List<BrandDTO> brands = brandDAO.searchForBrand(brandName); 
             if (brands != null && !brands.isEmpty()) {
                 request.setAttribute("brands", brands);  
-                request.setAttribute("MESSAGE", "Brands found!");
+                request.setAttribute("MESSAGE", "BRAND FOUND !");
                 url = SUCCESS;
             } else {
-                request.setAttribute("MESSAGE", "No brands found.");
+                request.setAttribute("MESSAGE", "NO BRAND FOUND !");
             }
         } catch (Exception e) {
             log("Error at SearchBrandController: " + e.toString());

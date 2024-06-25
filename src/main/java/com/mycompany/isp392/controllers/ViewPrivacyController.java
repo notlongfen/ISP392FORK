@@ -1,40 +1,47 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ */
 package com.mycompany.isp392.controllers;
 
-import com.mycompany.isp392.category.*;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
+import java.io.FileReader;
 
-public class EditChildrenCategoryController extends HttpServlet {
+/**
+ *
+ * @author Oscar
+ */
+@WebServlet(name = "ViewPrivacyController", urlPatterns = {"/ViewPrivacyController"})
+public class ViewPrivacyController extends HttpServlet {
 
-    private static final String ERROR = "SearchCategory.jsp";
-    private static final String SUCCESS = "SearchCategory.jsp";
+    private static final String ERROR = "login.jsp";
+    private static final String SUCCESS = "privacy.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = ERROR;
-        CategoryError categoryError = new CategoryError();
+        String url = SUCCESS; 
+        String filePath = "D:\\Document\\FPT\\HK5_SU24\\ISP392\\ISP392\\privacy_policy.txt";
+        StringBuilder contentBuilder = new StringBuilder();
 
-        try {
-            int cdCategoryID = Integer.parseInt(request.getParameter("cdCategoryID"));
-            String newName = request.getParameter("categoryName");
-
-            CategoryDAO categoryDAO = new CategoryDAO();
-            boolean check = categoryDAO.updateChildrenCategory(cdCategoryID, newName);
-            if (check) {
-                request.setAttribute("MESSAGE", "INFORMATION UPDATED SUCCESSFULLY !");
-                url = SUCCESS;
-            } else {
-                categoryError.setError("UNABLE TO UPDATE INFORMATION !");
-                request.setAttribute("CATEGORY_ERROR", categoryError);
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                contentBuilder.append(line).append("\n");
             }
-        } catch (Exception e) {
-            log("Error at EditChildrenCategoryController: " + e.toString());
-            request.setAttribute("ERROR", "Error updating child category: " + e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            url= ERROR;
         } finally {
+            String privacyContent = contentBuilder.toString();
+            request.setAttribute("privacyContent", privacyContent);
             request.getRequestDispatcher(url).forward(request, response);
         }
     }

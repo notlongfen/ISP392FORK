@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet(name = "LoginController", urlPatterns = {"/LoginController"})
 public class LoginController extends HttpServlet {
 
-    private static final String ERROR = "login.jsp";
+    private static final String ERROR = "US_SignIn.jsp";
     private static final int CUSTOMER = 4;
     private static final String CUSTOMER_PAGE = "customer.jsp";
     private static final int SYSTEM_MANAGER = 1;
@@ -26,8 +26,13 @@ public class LoginController extends HttpServlet {
     private static final String SHOP_STAFF_PAGE = "shopStaff.jsp";
     private String clientID;
     public void initClientID() throws ServletException{
+<<<<<<< Updated upstream
         Dotenv dotenv = Dotenv.configure().directory("C:\\Users\\tuan tran\\Desktop\\ISP392_Project\\.env").load();
         clientID = dotenv.get("GOOGLE_CLIENT_ID");
+=======
+        Dotenv dotenv = Dotenv.configure().directory("D:\\Document\\FPT\\HK5_SU24\\ISP392\\ISP392").load();
+         clientID = dotenv.get("GOOGLE_CLIENT_ID");
+>>>>>>> Stashed changes
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -59,11 +64,11 @@ public class LoginController extends HttpServlet {
                         url = SHOP_STAFF_PAGE;
                         break;
                     default:
-                        request.setAttribute("ERROR", "Your role is not supported");
+                        request.setAttribute("ERROR", "YOUR ROLE IS NOT SUPPORTED !");
                         break;
                 }
             } else {
-                request.setAttribute("ERROR", "Incorrect UserID or Password");
+                request.setAttribute("ERROR", "INCORRECT EMAIL OR PASSWORD !");
             }
 
         } catch (Exception e) {

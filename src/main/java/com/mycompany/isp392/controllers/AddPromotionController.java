@@ -1,4 +1,3 @@
-
 package com.mycompany.isp392.controllers;
 
 import java.io.IOException;
@@ -32,42 +31,44 @@ public class AddPromotionController extends HttpServlet {
             Date endDate = Date.valueOf(LocalDate.parse(request.getParameter("endDate"), DateTimeFormatter.ISO_DATE));
             int discountPer = Integer.parseInt(request.getParameter("discountPer"));
             int condition = Integer.parseInt(request.getParameter("condition"));
+            int status = 1; 
 
-            if (promotionName.length() > 20) {
-                error.setPromotionNameError("Promotion name cannot be over 20 characters");
+            if (dao.checkPromotionDuplicate(promotionName, status)) {
+                error.setPromotionNameError("This promotion already exists.");
                 checkValidation = false;
             }
-            if(dao.checkPromotionDuplicate(promotionName)){
-                error.setPromotionNameError("This promotion already exists");
-                checkValidation=false;
-            }
-            if(promotionName.contains(" ")){
-                error.setPromotionNameError("Promotion name cannot contain any spaces");
-                checkValidation=false;
+            if (promotionName.contains(" ")) {
+                error.setPromotionNameError("Promotion name cannot contain any spaces.");
+                checkValidation = false;
             }
             if (endDate.before(startDate)) {
-                error.setEndDateError("End date must be after start date");
+                error.setEndDateError("End date must be after start date.");
+                checkValidation = false;
+            }
+            if (discountPer < 0) {
+                error.setDiscountPerError("Discount percentage cannot be under 0.");
                 checkValidation = false;
             }
             if (condition < 0) {
-                error.setConditionError("Condition cannot be under 0");
+                error.setConditionError("Condition cannot be under 0.");
                 checkValidation = false;
             }
 
             if (checkValidation) {
                 int promotionID = dao.getLatestPromotionID() + 1;
-                PromotionDTO promotion = new PromotionDTO(promotionID, promotionName, startDate, endDate, discountPer, condition, 1);
+                PromotionDTO promotion = new PromotionDTO(promotionID, promotionName, startDate, endDate, discountPer, condition, status);
                 boolean checkPromotion = dao.addPromotion(promotion);
                 if (checkPromotion) {
+                    request.setAttribute("MESSAGE", "PROMOTION ADDED SUCCESSFULLY !");
                     url = SUCCESS;
                 } else {
-                    error.setError("Unable to add promotion to database");
+                    error.setError("UNABLE TO ADD PROMOTION TO DATABASE !");
                     request.setAttribute("PROMOTION_ERROR", error);
                 }
             } else {
                 request.setAttribute("PROMOTION_ERROR", error);
             }
-            
+
         } catch (Exception e) {
             log("Error at AddPromotionController: " + e.toString());
         } finally {

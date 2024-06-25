@@ -1,4 +1,3 @@
-
 package com.mycompany.isp392.controllers;
 
 import com.mycompany.isp392.promotion.*;
@@ -34,28 +33,39 @@ public class EditPromotionController extends HttpServlet {
             int status = Integer.parseInt(request.getParameter("status"));
             PromotionDAO dao = new PromotionDAO();
             PromotionDTO promotion = new PromotionDTO(promotionID, promotionName, startDate, endDate, discountPer, condition, status);
+            
+            if (dao.checkPromotionDuplicate(promotionName, status)) {
+                error.setPromotionNameError("This promotion already exists.");
+                checkValidation = false;
+            }
             if (promotionName.contains(" ")) {
-                error.setPromotionNameError("Promotion name cannot contain any spaces");
+                error.setPromotionNameError("Promotion name cannot contain any spaces.");
                 checkValidation = false;
             }
             if (endDate.before(startDate)) {
-                error.setEndDateError("End date must be after start date");
+                error.setEndDateError("End date must be after start date.");
+                checkValidation = false;
+            }
+            if (discountPer < 0) {
+                error.setDiscountPerError("Discount percentage cannot be under 0.");
                 checkValidation = false;
             }
             if (condition < 0) {
-                error.setConditionError("Condition cannot be under 0");
+                error.setConditionError("Condition cannot be under 0.");
                 checkValidation = false;
             }
 
             if (checkValidation) {
                 boolean check = dao.editPromotion(promotion);
                 if (check) {
+                    request.setAttribute("MESSAGE", "INFORMATION UPDATED SUCCESSFULLY !");
                     url = SUCCESS;
-                } else {
-                    promotionError.setError("Failed to edit promotion. Please try again.");
-                    request.setAttribute("PROMOTION_ERROR", promotionError);
                 }
+            } else {
+                promotionError.setError("UNABLE TO UPDATE INFORMATION !");
+                request.setAttribute("PROMOTION_ERROR", promotionError);
             }
+
         } catch (Exception e) {
             log("Error at EditPromotionController: " + e.toString());
         } finally {

@@ -1,6 +1,6 @@
 package com.mycompany.isp392.controllers;
 
-import com.mycompany.isp392.product.ProductDAO;
+import com.mycompany.isp392.product.*;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -12,13 +12,19 @@ import java.sql.SQLException;
 
 public class EditProductController extends HttpServlet {
 
+<<<<<<< Updated upstream
     private static final String ERROR = "product.jsp";
     private static final String SUCCESS = "product.jsp";
+=======
+    private static final String ERROR = "editProduct.jsp";
+    private static final String SUCCESS = "manageProduct.jsp";
+>>>>>>> Stashed changes
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
+<<<<<<< Updated upstream
         try {
             // Retrieve product information
             String productID = request.getParameter("productID");
@@ -35,7 +41,31 @@ public class EditProductController extends HttpServlet {
                 url = SUCCESS;
             } else {
                 request.setAttribute("ERROR_MESSAGE", "Failed to update product or product details.");
+=======
+        ProductError productError = new ProductError();
+        boolean checkValidation = true;
+        ProductDAO productDAO = new ProductDAO();
+
+        try {
+            String productID = request.getParameter("productID");
+            String newName = request.getParameter("newName");
+            String newDescription = request.getParameter("newDescription");
+            if (productDAO.checkProductExists(newName)) {
+                productError.setProductNameError("Product already exists.");
+                checkValidation = false;
+>>>>>>> Stashed changes
             }
+            if (checkValidation) {
+                boolean check = productDAO.editProduct(productID, newName, newDescription);
+                if (check) {
+                    request.setAttribute("MESSAGE", "INFORMATION UPDATED SUCCESSFULLY !");
+                    url = SUCCESS;
+                }
+            } else {
+                productError.setError("UNABLE TO UPDATE INFORMATION !");
+                request.setAttribute("PRODUCT_ERROR", productError);
+            }
+
         } catch (SQLException e) {
             log("Error at EditProductController: " + e.toString());
             request.setAttribute("ERROR_MESSAGE", "Error updating product: " + e.getMessage());
