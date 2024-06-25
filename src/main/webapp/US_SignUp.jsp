@@ -27,7 +27,7 @@
                 </div>
             </div>
         </div>
-            <div class="container mb-5" style="width: 500px">
+        <div class="container mb-5" style="width: 500px">
             <div class="card">
                 <div class="card-body">
                     <div class="mt-1">
@@ -55,29 +55,26 @@
                             <label for="phoneNumber" class="form-label">Phone number</label>
                             <input type="tel" class="form-control" id="phoneNumber" placeholder="Phone number" name="phone" required="">
                         </div>
-                        
-                        
                         <div class="mb-3">
-                            <label for="city" class="form-label">City</label>
-                            <input type="text" class="form-control" id="city" placeholder="City" name="city" required="">
-
+                            <label class="form-label">City</label>
+                            <select class="form-select" id="city" aria-label = ".form-select-sm">
+<option value="" selected>Select your city</option>  
+                            </select>
                         </div>
-
                         <div class="row mb-3 d-flex justify-content-between">
                             <div class="col-md-6 mb-3">
-                                <label for="ward" class="form-label">Ward</label>
-                                <select class="form-select" id="ward" name="ward" required="">
-                                    <option value="" disabled selected >Select Ward</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="district" class="form-label">District</label>
-                                <select class="form-select" id="district" name="district" required="">
-                                    <option value="" disabled selected>Select District</option>
+                                <label class="form-label">District</label>
+                                <select class="form-select" id="district" aria-label=".form-select-sm">
+                                    <option value="" selected>Select District</option>
                                 </select>
                             </div>  
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Ward</label>
+                                <select class="form-select" id="ward" aria-label=".form-select-sm">
+                                    <option value="" selected>Select Ward</option>
+                                </select>
+                            </div>
                         </div>
-
                         <div class="mb-3">
                             <label for="address" class="form-label">Address</label>
                             <input type="text" class="form-control" id="address" placeholder="Address" name="address" required="">
@@ -87,7 +84,6 @@
                             <label for="dob" class="form-label">Date of birth</label>
                             <input type="date" class="form-control" id="dob" name="birthday" required="">
                         </div>
-
                         <div class="mb-3 position-relative">
                             <label for="password" class="form-label">Password</label>
                             <input type="password" class="form-control" id="password" placeholder="Password" name="password" required="">
@@ -105,15 +101,59 @@
                                 I confirm that I have read and accept the <a href="#">Terms and Conditions</a> and the <a href="#">Privacy Policy</a>.
                             </label>
                         </div>
-                        <button type="submit" class="btn btn-dark w-100">Sign In</button>
+<button type="submit" class="btn btn-dark w-100">Sign In</button>
                     </form>
                 </div>
             </div>
         </div>
-         <a class="scroll-to-top rounded" href="#page-top">
+        <a class="scroll-to-top rounded" href="#page-top">
             <i class="fas fa-angle-up"></i>
         </a>
         <jsp:include page="US_footer.jsp" />
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+        <script>
+            var citis = document.getElementById("city");
+            var districts = document.getElementById("district");
+            var wards = document.getElementById("ward");
+            var Parameter = {
+                url: "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json",
+                method: "GET",
+                responseType: "application/json",
+            };
+            var promise = axios(Parameter);
+            promise.then(function (result) {
+                renderCity(result.data);
+            });
+
+            function renderCity(data) {
+                for (const x of data) {
+                    citis.options[citis.options.length] = new Option(x.Name, x.Id);
+                }
+                citis.onchange = function () {
+                    district.length = 1;
+                    ward.length = 1;
+                    if (this.value != "") {
+                        const result = data.filter(n => n.Id === this.value);
+
+                        for (const k of result[0].Districts) {
+                            district.options[district.options.length] = new Option(k.Name, k.Id);
+                        }
+                    }
+                };
+                district.onchange = function () {
+                    ward.length = 1;
+                    const dataCity = data.filter((n) => n.Id === citis.value);
+                    if (this.value != "") {
+                        const dataWards = dataCity[0].Districts.filter(n => n.Id === this.value)[0].Wards;
+
+                        for (const w of dataWards) {
+                            wards.options[wards.options.length] = new Option(w.Name, w.Id);
+                        }
+                    }
+                };
+            }
+        </script>
         <script>
             const togglePassword = document.querySelector('#togglePassword');
             const password = document.querySelector('#password');
@@ -127,15 +167,12 @@
             });
 
             toggleConfirmPassword.addEventListener('click', function (e) {
-                const type = confirmPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+const type = confirmPassword.getAttribute('type') === 'password' ? 'text' : 'password';
                 confirmPassword.setAttribute('type', type);
                 this.classList.toggle('fa-eye-slash');
             });
         </script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
-        
-    </body>
-    
 
-    
+    </body>
 </html>
