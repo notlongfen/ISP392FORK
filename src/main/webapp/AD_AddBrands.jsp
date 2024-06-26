@@ -45,17 +45,17 @@
 
                         <div class="form-container" style="height: 300px">
                             <h2 class="text-center" style="color: #000; font-weight: bold;">Add Brand</h2>
-                            <form>
+                            <form action="MainController" method="post">
                                 <div class="form-row">
                                     <div class="form-group col-md-8 mt-xl-5" style="margin-left: 100px;">
                                         <label for="brand">Brand Name</label>
-                                        <input type="text" class="form-control" id="brandName" placeholder="Enter Brand Name" 
+                                        <input type="text" class="form-control" id="brandName" name="brandName" placeholder="Enter Brand Name" 
                                                style="width: 550px">
                                     </div>
                                  
                                 </div>
                                     <div class="form-group text-center">
-                                        <button type="submit" class="btn btn-danger btn-custom">Submit</button>
+                                        <button type="submit" class="btn btn-danger btn-custom" name="action" value="Add_Brand">Submit</button>
                                         <button type="reset" class="btn btn-secondary btn-custom">Reset</button>
                                     </div>
 <!--                                </div>-->

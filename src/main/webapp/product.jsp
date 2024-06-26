@@ -40,7 +40,7 @@
                 </div>
             </form>
 
-            <c:if test="${not empty PRODUCT_MAP}">
+            <c:if test="${not empty PRODUCT_LIST}">
                 <table class="table table-bordered mt-3">
                     <thead class="thead-dark">
                         <tr>
@@ -55,7 +55,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="entry" items="${PRODUCT_MAP}">
+                        <c:forEach var="entry" items="${PRODUCT_LIST}">
                             <tr data-toggle="collapse" data-target="#details-${entry.key.productID}" class="accordion-toggle">
                                 <td>${entry.key.productID}</td>
                                 <td>${entry.key.productName}</td>
@@ -188,7 +188,7 @@
                     </tbody>
                 </table>
             </c:if>
-            <c:if test="${empty PRODUCT_MAP}">
+            <c:if test="${empty PRODUCT_LIST}">
                 <div class="alert alert-info text-center">No products found matching your search criteria.</div>
             </c:if>
         </div>

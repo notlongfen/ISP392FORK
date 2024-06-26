@@ -25,15 +25,11 @@ public class SearchProductController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            String searchText = request.getParameter("search");
-            int brandID = Integer.parseInt(request.getParameter("brandID"));
+            String searchText = request.getParameter("searchText");
             ProductDAO productDAO = new ProductDAO();
-            BrandDAO brandDAO = new BrandDAO();
             Map<ProductDTO, List<ProductDetailsDTO>> productList = productDAO.searchProducts(searchText);
-            List<BrandDTO> brandList = brandDAO.searchBrandByBrandID(brandID);
             if (productList != null) {
                 request.setAttribute("PRODUCT_LIST", productList);
-                request.setAttribute("BRAND_LIST", brandList);
                 url = SUCCESS;
             } else {
                 request.setAttribute("MESSAGE", "NO PRODUCT FOUND !");

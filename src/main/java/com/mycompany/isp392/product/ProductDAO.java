@@ -202,67 +202,6 @@ public class ProductDAO {
         return list;
     }
 
-    public Map<ProductDTO, List<ProductDetailsDTO>> searchProducts(String searchText) throws SQLException {
-        Map<ProductDTO, List<ProductDetailsDTO>> productMap = new HashMap<>();
-        Connection conn = null;
-        PreparedStatement ptm = null;
-        ResultSet rs = null;
-        try {
-            conn = DbUtils.getConnection();
-            if (conn != null) {
-                ptm = conn.prepareStatement(SEARCH_PRODUCT);
-                String searchPattern = "%" + searchText + "%";
-                ptm.setString(1, searchPattern);
-                ptm.setString(2, searchPattern);
-                ptm.setString(3, searchPattern);
-                ptm.setString(4, searchPattern);
-                ptm.setString(5, searchPattern);
-                rs = ptm.executeQuery();
-                while (rs.next()) {
-                    int productID = rs.getInt("productID");
-                    String productName = rs.getString("productName");
-                    String description = rs.getString("description");
-                    int numberOfPurchase = rs.getInt("NumberOfPurchasing");
-                    int status = rs.getInt("status");
-                    int brandID = rs.getInt("BrandID");
-
-                    ProductDTO product = new ProductDTO(productID, productName, description, numberOfPurchase, status, brandID);
-
-                    String color = rs.getString("color");
-                    String size = rs.getString("size");
-                    int stockQuantity = rs.getInt("stockQuantity");
-                    int price = rs.getInt("price");
-                    Date importDate = rs.getDate("importDate");
-                    String image = rs.getString("image");
-                    int detailStatus = rs.getInt("status");
-
-                    ProductDetailsDTO productDetails = new ProductDetailsDTO(productID, color, size, stockQuantity, price, importDate, image, detailStatus);
-
-                    if (productMap.containsKey(product)) {
-                        productMap.get(product).add(productDetails);
-                    } else {
-                        List<ProductDetailsDTO> detailsList = new ArrayList<>();
-                        detailsList.add(productDetails);
-                        productMap.put(product, detailsList);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (rs != null) {
-                rs.close();
-            }
-            if (ptm != null) {
-                ptm.close();
-            }
-            if (conn != null) {
-                conn.close();
-            }
-        }
-        return productMap;
-    }
-
     public boolean editProductDetails(ProductDetailsDTO productDetails, String color, String size) throws SQLException {
         boolean check = false;
         Connection conn = null;
@@ -485,4 +424,64 @@ public class ProductDAO {
         return check;
     }
 
+    public Map<ProductDTO, List<ProductDetailsDTO>> searchProducts(String searchText) throws SQLException {
+        Map<ProductDTO, List<ProductDetailsDTO>> productMap = new HashMap<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(SEARCH_PRODUCT);
+                String searchPattern = "%" + searchText + "%";
+                ptm.setString(1, searchPattern);
+                ptm.setString(2, searchPattern);
+                ptm.setString(3, searchPattern);
+                ptm.setString(4, searchPattern);
+                ptm.setString(5, searchPattern);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    int productID = rs.getInt("productID");
+                    String productName = rs.getString("productName");
+                    String description = rs.getString("description");
+                    int numberOfPurchase = rs.getInt("NumberOfPurchasing");
+                    int status = rs.getInt("status");
+                    int brandID = rs.getInt("BrandID");
+
+                    ProductDTO product = new ProductDTO(productID, productName, description, numberOfPurchase, status, brandID);
+
+                    String color = rs.getString("color");
+                    String size = rs.getString("size");
+                    int stockQuantity = rs.getInt("stockQuantity");
+                    int price = rs.getInt("price");
+                    Date importDate = rs.getDate("importDate");
+                    String image = rs.getString("image");
+                    int detailStatus = rs.getInt("status");
+
+                    ProductDetailsDTO productDetails = new ProductDetailsDTO(productID, color, size, stockQuantity, price, importDate, image, detailStatus);
+
+                    if (productMap.containsKey(product)) {
+                        productMap.get(product).add(productDetails);
+                    } else {
+                        List<ProductDetailsDTO> detailsList = new ArrayList<>();
+                        detailsList.add(productDetails);
+                        productMap.put(product, detailsList);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return productMap;
+    }
 }

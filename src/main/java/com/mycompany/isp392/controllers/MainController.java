@@ -176,8 +176,6 @@ public class MainController extends HttpServlet {
                 url = REGISTER_PAGE_VIEW;
             } else if (REGISTER.equals(action)) {
                 url = REGISTER_CONTROLLER;
-            } else if (SEARCH_PRODUCT.equals(action)) {
-                url = SEARCH_PRODUCT_CONTROLLER;
             } else if (SENDMAIL.equals(action)) {
                 url = SEND_EMAIL_CONTROLLER;
             } else if (ADD_PRODUCT.equals(action)) {

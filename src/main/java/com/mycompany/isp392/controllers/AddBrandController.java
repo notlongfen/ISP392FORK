@@ -10,8 +10,8 @@ import java.sql.SQLException;
 
 public class AddBrandController extends HttpServlet {
 
-    private static final String ERROR = "brand.jsp";
-    private static final String SUCCESS = "brand.jsp";
+    private static final String ERROR = "AD_AddBrands.jsp";
+    private static final String SUCCESS = "GetBrandsController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
