@@ -23,13 +23,8 @@ public class SearchBrandController extends HttpServlet {
             BrandDAO brandDAO = new BrandDAO();
             List<BrandDTO> brands = brandDAO.searchForBrand(brandName); 
             if (brands != null && !brands.isEmpty()) {
-<<<<<<< HEAD
-                request.setAttribute("brands", brands);  
-                request.setAttribute("MESSAGE", "BRAND FOUND !");
-=======
                 request.setAttribute("BRAND_LIST", brands);  
                 request.setAttribute("MESSAGE", "Brands found!");
->>>>>>> 3447ac6 (Search Brand gán biến)
                 url = SUCCESS;
             } else {
                 request.setAttribute("MESSAGE", "NO BRAND FOUND !");

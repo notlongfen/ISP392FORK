@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +29,7 @@ public class SearchProductController extends HttpServlet {
             int brandID = Integer.parseInt(request.getParameter("brandID"));
             ProductDAO productDAO = new ProductDAO();
             BrandDAO brandDAO = new BrandDAO();
-            List<ProductDTO> productList = productDAO.searchProducts(searchText);
+            Map<ProductDTO, List<ProductDetailsDTO>> productList = productDAO.searchProducts(searchText);
             List<BrandDTO> brandList = brandDAO.searchBrandByBrandID(brandID);
             if (productList != null) {
                 request.setAttribute("PRODUCT_LIST", productList);

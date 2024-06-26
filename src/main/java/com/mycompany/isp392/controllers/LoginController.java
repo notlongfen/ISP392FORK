@@ -26,13 +26,8 @@ public class LoginController extends HttpServlet {
     private static final String SHOP_STAFF_PAGE = "shopStaff.jsp";
     private String clientID;
     public void initClientID() throws ServletException{
-<<<<<<< Updated upstream
-        Dotenv dotenv = Dotenv.configure().directory("C:\\Users\\tuan tran\\Desktop\\ISP392_Project\\.env").load();
+        Dotenv dotenv = Dotenv.configure().directory("/home/notlongfen/code/java/ISP392/.env").load();
         clientID = dotenv.get("GOOGLE_CLIENT_ID");
-=======
-        Dotenv dotenv = Dotenv.configure().directory("D:\\Document\\FPT\\HK5_SU24\\ISP392\\ISP392").load();
-         clientID = dotenv.get("GOOGLE_CLIENT_ID");
->>>>>>> Stashed changes
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)

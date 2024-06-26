@@ -137,23 +137,16 @@ public class MainController extends HttpServlet {
     private static final String EDIT_EMPLOYEE = "EditEmployee";
     private static final String EDIT_EMPLOYEE_CONTROLLER = "EditEmployeeController";
 
-    private static final String ADD_PRODUCT_PAGE = "Add_View";
-    private static final String ADD_PRODUCT_PAGE_VIEW = "AddProductPageController";
-    
     private static final String GET_PRODUCT_PAGE = "Add_Product_Details_Page";
     private static final String GET_PRODUCT_PAGE_VIEW = "GetProductsController";
     
-    private static final String ADD_PRODUCT = "Add_Product";
-    private static final String ADD_PRODUCT_CONTROLLER = "AddProductController";
-    
+
     private static final String SEARCH_PRODUCT_PAGE = "Search_Product_Page";
     private static final String SEARCH_PRODUCT_PAGE_VIEW = "product.jsp";
     
     private static final String ADD_PRODUCT_DETAILS = "Add_Product_Details";
     private static final String ADD_PRODUCT_DETAILS_CONTROLLER = "AddProductDetailsController";
     
-    private static final String SEARCH_PRODUCT = "Search_Product";
-    private static final String SEARCH_PRODUCT_CONTROLLER = "SearchProductController";
     
     private static final String EDIT_PRODUCT = "Edit_Product";
     private static final String EDIT_PRODUCT_CONTROLLER = "EditProductController";

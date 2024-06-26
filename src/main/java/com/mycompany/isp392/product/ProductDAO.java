@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.mycompany.isp392.brand.BrandDTO;
+
 public class ProductDAO {
 
     private static final String ADD_PRODUCT = "INSERT INTO Products(productName, description, NumberOfPurchasing, status, BrandID)VALUES(?,?,?,?,?)";
@@ -27,6 +29,7 @@ public class ProductDAO {
     private static final String GET_ALL_PRODUCTS = "SELECT * FROM Products WHERE status = 1";
     private static final String DELETE_PRODUCT_DETAIL = "UPDATE ProductDetails SET status = 0 WHERE ProductID=?";
     private static final String CHECK_PRODUCT = "SELECT productID FROM Products WHERE productName LIKE ?";
+    private static final String SEARCH_BRAND_BY_ID = "SELECT * FROM Brands WHERE brandID LIKE ?";
 
     public boolean addProduct(ProductDTO product) throws SQLException {
         boolean check = false;
@@ -171,6 +174,32 @@ public class ProductDAO {
             }
         }
         return product;
+    }
+
+    public List<BrandDTO> searchBrandByBrandID(int brandID) {
+        List<BrandDTO> list = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(SEARCH_BRAND_BY_ID);
+                // FIXME: Should I add the "%" here at the end of the brandID?
+                ptm.setInt(1, brandID);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    String Name = rs.getString("brandName");
+                    int status = rs.getInt("status");
+
+                    list.add(new BrandDTO(brandID, Name, status));
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
     public Map<ProductDTO, List<ProductDetailsDTO>> searchProducts(String searchText) throws SQLException {
