@@ -6,16 +6,10 @@ package com.mycompany.isp392.user;
 
 public class EmployeeDTO {
 
-    private String position;
     private int EmpID;
 
-    public EmployeeDTO(String position, int EmpID) {
-        this.position = position;
+    public EmployeeDTO(int EmpID) {
         this.EmpID = EmpID;
-    }
-    
-    public EmployeeDTO(String position) {
-        this.position = position;
     }
 
     public EmployeeDTO() {
@@ -27,14 +21,6 @@ public class EmployeeDTO {
 
     public void setEmpID(int EmpID) {
         this.EmpID = EmpID;
-    }
-
-    public String getPosition() {
-        return position;
-    }
-
-    public void setPosition(String position) {
-        this.position = position;
     }
 }
 
