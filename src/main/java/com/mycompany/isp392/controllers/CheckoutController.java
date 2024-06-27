@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import com.mycompany.isp392.cart.CartDTO;
+import com.mycompany.isp392.user.UserDTO;
 
 /**
  *
@@ -79,6 +80,9 @@ public class CheckoutController extends HttpServlet {
         processRequest(request, response);
         HttpSession session = request.getSession();
         CartDTO Cart = (CartDTO) session.getAttribute("cart");
+        UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
+        
+
         
 
     }

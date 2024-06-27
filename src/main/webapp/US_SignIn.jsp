@@ -134,22 +134,20 @@
                         <div class="mb-3 text-end">
                             <a href="#" style="text-decoration: none">Forgot Password?</a>
                         </div>
-                        <button type="submit" class="btn btn-dark w-100" style="border-radius: 0;" name="action" value="Login">Log in</button>
+                        <button type="submit" class="btn btn-dark w-100" style="border-radius: 0;" name="action" value="Login">Log in</button>    
+                    </form>
                             <div class="row d-flex justify-content-center">
                                 <div class="social-login-buttons mt-3">
-                                    <button type="button" class="btn btn-light border mb-2" style="" 
-                                            href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/ISP392/google-login&response_type=code
-                                            &client_id=786115507775-obtimai0mtsb6b6fsudfv0629n9uc6oq.apps.googleusercontent.com&approval_prompt=force">
-                                        <div style="text-align: center">
-                                            <img src="https://img.icons8.com/color/16/000000/google-logo.png" alt="Google Logo" /> Google
-                                        </div>
-                                    </button>
+                                    <a class="border m-5 p-3 rounded" href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/ISP392/google-login&response_type=code
+           &client_id=786115507775-obtimai0mtsb6b6fsudfv0629n9uc6oq.apps.googleusercontent.com&approval_prompt=force"><img src="https://img.icons8.com/color/16/000000/google-logo.png">Login With Google</a>
                                 </div>
                             </div>
-                    </form>
                 </div>
             </div>
         </div>
+        <form action="MainController" method="POST">
+            <input type="submit" name="action" value="Add_Employee_View"/>
+        </form>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <link rel="stylesheet" href="styles.css">

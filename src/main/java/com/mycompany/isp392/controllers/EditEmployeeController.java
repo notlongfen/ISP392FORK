@@ -87,7 +87,7 @@ public class EditEmployeeController extends HttpServlet {
                     hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
                 }
                 UserDTO user = new UserDTO(userID, userName, email, hashedPassword, roleID, phone, status);
-                EmployeeDTO employee = new EmployeeDTO(position, userID);
+                EmployeeDTO employee = new EmployeeDTO(userID);
                 boolean checkUpdate = dao.editUserAndEmployee(user, employee);
                 if (checkUpdate) {
                     url = SUCCESS;

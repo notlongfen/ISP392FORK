@@ -18,7 +18,7 @@ public class UserDAO {
     private static final String CHECK_EMAIL = "SELECT UserID FROM Users WHERE email = ?";
     private static final String CHECK_PHONE = "SELECT UserID FROM Users WHERE phone = ?";
     private static final String ADD_USER = "INSERT INTO Users(userName, roleID, email, password, phone, status) VALUES(?, ?, ?, ?, ?, 1)";
-    private static final String ADD_EMPLOYEE = "INSERT INTO Employees(EmpID, position) VALUES(?, ?)";
+    private static final String ADD_EMPLOYEE = "INSERT INTO Employees(EmpID) VALUES(?)";
     private static final String ADD_CUSTOMER = "INSERT INTO Customers(CustID, points, birthday, province_city, district, ward, detailAddress) VALUES(?, 0, ?, ?, ?, ?, ?)";
     private static final String GET_LAST_USER_ID = "SELECT MAX(UserID) AS LastUserID FROM Users";
     private static final String UPDATE_USER_PASSWORD = "UPDATE Users SET password = ? WHERE email = ?";
@@ -220,7 +220,7 @@ public class UserDAO {
         return check;
     }
 
-    public boolean addEmployee(UserDTO user, EmployeeDTO employee) throws SQLException {
+    public boolean addEmployee(UserDTO user) throws SQLException {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptmUser = null;
@@ -244,7 +244,6 @@ public class UserDAO {
                         int userId = rs.getInt(1);
                         ptmEmployee = conn.prepareStatement(ADD_EMPLOYEE);
                         ptmEmployee.setInt(1, userId);
-                        ptmEmployee.setString(2, employee.getPosition());
                         check = ptmEmployee.executeUpdate() > 0;
                     }
                 }
@@ -484,7 +483,8 @@ public class UserDAO {
 
                 // Update Employee
                 ptmEmployee = conn.prepareStatement(EDIT_EMPLOYEE);
-                ptmEmployee.setString(1, employee.getPosition());
+                // FIXME: Chỉnh db xóa position . Nhớ chỉnh lại querry
+                // ptmEmployee.setString(1, employee.getPosition());
                 ptmEmployee.setInt(2, employee.getEmpID());
                 boolean employeeUpdated = ptmEmployee.executeUpdate() > 0;
 
@@ -601,8 +601,7 @@ public class UserDAO {
                 ptm.setInt(1, EmpID);
                 rs = ptm.executeQuery();
                 if (rs.next()) {
-                    String position = rs.getString("position");
-                    employee = new EmployeeDTO(position, EmpID);
+                    employee = new EmployeeDTO(EmpID);
                 }
             }
         } catch (Exception e) {

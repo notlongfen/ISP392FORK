@@ -14,7 +14,7 @@
         <title>JSP Page</title>
     </head>
     <div>Input your information</div>
-    <form action="AddManagerController" method="POST">
+    <form action="MainController" method="POST">
         Full Name <input type="text" name="userName"/><br/>
         Email <input type="text" name="email"/><br/>
         Phone number <input type="number" name="phone"/><br/>
@@ -30,7 +30,7 @@
         </select><br/>
         Password <input type="password" name="password" /><br/>
         Confirm password <input type="password" name="confirmPassword" /><br/>
-        <input type="submit" name="action" value="Add_Manager"/>
+        <input type="submit" name="action" value="Add_Employee"/>
         <input type="reset" value="Reset"/>
     </form>
     

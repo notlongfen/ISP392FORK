@@ -17,7 +17,7 @@ import org.mindrot.jbcrypt.BCrypt;
 public class AddEmployeeController extends HttpServlet {
 
   
-   private static final String ERROR = "AD_AddEmployees.jsp";
+   private static final String ERROR = "addEmployee.jsp";
     private static final String SUCCESS = "login.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -34,10 +34,9 @@ public class AddEmployeeController extends HttpServlet {
             String password = request.getParameter("password");
             int phone = Integer.parseInt(request.getParameter("phone"));
             int roleID = Integer.parseInt(request.getParameter("roleID"));
-            String position = request.getParameter("position");
 
             // Check email exists
-            if (dao.checkEmailExists(email) == -1) {
+            if (dao.checkEmailExists(email) != -1) {
                 userError.setEmailError("Email already exists.");
                 checkValidation = false;
             }
@@ -55,8 +54,7 @@ public class AddEmployeeController extends HttpServlet {
             if (checkValidation) {
                 String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
                 UserDTO newUser = new UserDTO(userName, email, hashedPassword, roleID, phone, 1);
-                EmployeeDTO newEmployee = new EmployeeDTO(position);
-                boolean checkAddManager = dao.addEmployee(newUser, newEmployee);
+                boolean checkAddManager = dao.addEmployee(newUser);
 
                 if (checkAddManager) {
                     request.setAttribute("MESSAGE", "EMPLOYEE ADDED SUCCESSFULLY !");
