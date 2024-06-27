@@ -44,28 +44,12 @@ public class EditEmployeeController extends HttpServlet {
             int oldPhone = Integer.parseInt(request.getParameter("oldPhone"));
             int phone = Integer.parseInt(request.getParameter("phone"));
             int status = Integer.parseInt(request.getParameter("status"));
-            String position;
-            switch (roleID) {
-                case 1:
-                    position = "Admin";
-                    break;
-                case 2:
-                    position = "Manager";
-                    break;
-                case 3:
-                    position = "Staff";
-                    break;
-                default:
-                    position = null;
-                    break;
-            }
-
+            
             //error handling
             //check email exists
             if (!oldEmail.equals(email) && dao.checkEmailExists(email) != -1) {
                 error.setEmailError("Email already exists.");
                 checkValidation = false;
-
             }
             //check if password and confirmation password matches
             if (!password.isEmpty() || !confirm.isEmpty()) {
@@ -87,8 +71,7 @@ public class EditEmployeeController extends HttpServlet {
                     hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
                 }
                 UserDTO user = new UserDTO(userID, userName, email, hashedPassword, roleID, phone, status);
-                EmployeeDTO employee = new EmployeeDTO(userID);
-                boolean checkUpdate = dao.editUserAndEmployee(user, employee);
+                boolean checkUpdate = dao.editEmployee(user);
                 if (checkUpdate) {
                     url = SUCCESS;
                 } else {

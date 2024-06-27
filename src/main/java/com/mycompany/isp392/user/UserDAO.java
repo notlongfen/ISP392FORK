@@ -457,54 +457,28 @@ public class UserDAO {
         return check;
     }
     
-    public boolean editUser(UserDTO user, EmployeeDTO employee) throws SQLException {
+    public boolean editEmployee(UserDTO user) throws SQLException {
         boolean check = false;
         Connection conn = null;
-        PreparedStatement ptmUser = null;
-        PreparedStatement ptmEmployee = null;
+        PreparedStatement ptm = null;
         try {
             conn = DbUtils.getConnection();
             if (conn != null) {
-                // Disable auto-commit mode
-                conn.setAutoCommit(false);
-
-                // Update User
-                ptmUser = conn.prepareStatement(EDIT_USER);
-                ptmUser.setString(1, user.getUserName());
-                ptmUser.setInt(2, user.getRoleID());
-                ptmUser.setString(3, user.getEmail());
-                ptmUser.setString(4, user.getPassword());
-                ptmUser.setInt(5, user.getPhone());
-                ptmUser.setInt(6, user.getStatus());
-                ptmUser.setInt(7, user.getUserID());
-                boolean userUpdated = ptmUser.executeUpdate() > 0;
-
-                // Update Employee
-                //ptmEmployee = conn.prepareStatement(EDIT_EMPLOYEE);
-                // FIXME: Chỉnh db xóa position . Nhớ chỉnh lại querry
-                // ptmEmployee.setString(1, employee.getPosition());
-                ptmEmployee.setInt(2, employee.getEmpID());
-                boolean employeeUpdated = ptmEmployee.executeUpdate() > 0;
-
-
-                // Check both updates
-                if (userUpdated) {
-                    // Commit the transaction if both updates are successful
-                    conn.commit();
-                    check = true;
-                } else {
-                    // Rollback the transaction if any update fails
-                    conn.rollback();
-                }
+                ptm = conn.prepareStatement(EDIT_USER);
+                ptm.setString(1, user.getUserName());
+                ptm.setInt(2, user.getRoleID());
+                ptm.setString(3, user.getEmail());
+                ptm.setString(4, user.getPassword());
+                ptm.setInt(5, user.getPhone());
+                ptm.setInt(6, user.getStatus());
+                ptm.setInt(7, user.getUserID());
+                check = ptm.executeUpdate() > 0;
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (ptmUser != null) {
-                ptmUser.close();
-            }
-            if (ptmEmployee != null) {
-                ptmEmployee.close();
+            if (ptm != null) {
+                ptm.close();
             }
             if (conn != null) {
                 conn.close();
