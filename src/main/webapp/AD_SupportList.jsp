@@ -104,24 +104,24 @@
                                                 if (search == null) {
                                                     search = "";
                                                     }
-                                                    %>
-                                                    <div class="col-md-3">
-                                                    
-                                                        <div class="input-group">
-                                                            <input type="text" class="form-control" placeholder="Search..." name="search" value="<%= search%>">
-                                                            <div class="input-group-append">
-                                                                <!-- <button class="btn btn-outline-secondary" type="submit" name="action" value="Search Support">Search</button> -->
-                                                                <input type="submit" name="action" value="Search Support">
-                                                            </div>
+                                                %>
+                                                <div class="col-md-3">
+
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" placeholder="Search..." name="search" value="<%= search%>">
+                                                        <div class="input-group-append">
+                                                            <!-- <button class="btn btn-outline-secondary" type="submit" name="action" value="Search Support">Search</button> -->
+                                                            <input type="submit" name="action" value="Search Support">
                                                         </div>
-                                                    
+                                                    </div>
+
                                                 </div>
                                             </div>
                                         </form>
                                         <%
-            List<SupportDTO> supportList = (List<SupportDTO>) request.getAttribute("SUPPORT_LIST");
-            int count = 1;
-            if (supportList != null && !supportList.isEmpty()) {
+                                            List<SupportDTO> supportList = (List<SupportDTO>) request.getAttribute("SUPPORT_LIST");
+                                            int count = 1;
+                                            if (supportList != null && !supportList.isEmpty()) {
                                         %>
                                         <table class="table align-items-center table-flush">
                                             <thead class="thead-light">
@@ -152,86 +152,36 @@
 
                                                 <tr>
                                                     <td><%= count++ %></td>
-                                                    <!-- <td><%= user.getUserID() %></td> -->
-                                                    <!-- <td><%= user.getUserName() %></td> -->
+                                                    <td><%= user.getUserName() %></td> 
                                                     <td><%= user.getEmail() %></td>
                                                     <td><%= user.getPhone() %></td>
                                                     <td><%= support.getRequestDate() %></td>
-                                                    <td><%= support.getStatus() %></td>
+                                                    <!--<td><%= support.getStatus() %></td>-->
                                                     <td><span class="badge badge-success">Done</span></td>
-                                                    <td><a href="AD_ViewSupport.jsp?userID=<%= user.getUserID() %>" class="btn btn-sm " style="background: green ; color: #FFF">View</a></td>
+                                                    <td><a href="MainController?action=ViewSupport&email=<%= user.getEmail() %>&supportID=<%=support.getSupportID()%>" class="btn btn-sm " style="background: green ; color: #FFF">View</a></td>
                                                     <td>
                                                         <% if (support.getStatus() == 1) { %>
-                                                            <form action="ViewSupportDetailsController" method="GET">
-                                                                <input type="hidden" name="supportID" value="<%= support.getSupportID() %>"/>
-                                                                <input type="submit" value="ViewSupport"/>
-                                                            </form>
+                                                        <form action="ViewSupportDetailsController" method="GET">
+                                                            <input type="hidden" name="supportID" value="<%= support.getSupportID() %>"/>
+                                                            <input type="submit" value="ViewSupport" name=""/>
+                                                        </form>
                                                         <% } else { %>
-                                                            <form action="ReplySupportController" method="POST">
-                                                                <input type="hidden" name="supportID" value="<%= support.getSupportID() %>"/>
-                                                                <input type="submit" value="ReplySupport"/>
-                                                            </form>
+                                                        <form action="SendMailServlet" method="POST">
+                                                            <input type="hidden" name="supportID" value="<%= support.getSupportID() %>"/>
+                                                            <input type="submit" value="ReplySupport"/>
+                                                        </form>
                                                         <% } %>
                                                     </td>
                                                 </tr>
                                                 <%
                     }
                 }
-                                                           %>
-                                                           <tr>
-                                                           <td>2</td>
-                                                           <td>Jane Smith</td>
-                                                           <td>janesmith@example.com</td>
-                                                           <td>987-654-3210</td>
-                                                           <td>2024-05-30</td>
-                                                           <td><span class="badge badge-success">Done</span></td>
-                                                    <td><a href="AD_ViewSupport.jsp" class="btn btn-sm " style="background: green ; color: #FFF">View</a></td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>3</td>
-                                                    <td>Michael Johnson</td>
-                                                    <td>michael@example.com</td>
-                                                    <td>555-123-4567</td>
-                                                    <td>2024-06-03</td>
-                                                    <td><span class="badge badge-success">Done</span></td>
-                                                    <td><a href="AD_ViewSupport.jsp" class="btn btn-sm " style="background: green ; color: #FFF">View</a></td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>4</td>
-                                                    <td>Sarah Williams</td>
-                                                    <td>sarahw@example.com</td>
-                                                    <td>333-555-7777</td>
-                                                    <td>2024-06-02</td>
-                                                    <td><span class="badge badge-warning">Not yet</td>
-                                                    <td><a href="AD_ReplySupport.jsp"><button class="btn btn-sm btn-primary">Reply</button></a></td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>5</td>
-                                                    <td>Robert Brown</td>
-                                                    <td>robertb@example.com</td>
-                                                    <td>777-888-9999</td>
-                                                    <td>2024-05-29</td>
-                                                    <td><span class="badge badge-warning">Not yet</td>
-                                                    <td><a href="AD_ReplySupport.jsp"><button class="btn btn-sm btn-primary">Reply</button></a></td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>6</td>
-                                                    <td>Emily Davis</td>
-                                                    <td>emilyd@example.com</td>
-                                                    <td>111-222-3333</td>
-                                                    <td>2024-06-04</td>
-                                                    <td><span class="badge badge-warning">Not yet</td>
-                                                    <td><a href="AD_ReplySupport.jsp"><button class="btn btn-sm btn-primary">Reply</button></a></td>
-                                                </tr>
+                                                %>
                                             </tbody>
                                         </table>
                                         <%
             }
-        %>
+                                        %>
                                         <hr>
                                         <!-- Pagination -->
                                         <nav aria-label="Page navigation">

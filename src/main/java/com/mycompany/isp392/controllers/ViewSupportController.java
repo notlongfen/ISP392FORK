@@ -1,46 +1,50 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ */
 package com.mycompany.isp392.controllers;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-
-import com.mycompany.isp392.support.SupportDAO;
-import com.mycompany.isp392.support.SupportDTO;
+import com.mycompany.isp392.support.*;
 import com.mycompany.isp392.user.*;
+import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
+/**
+ *
+ * @author Oscar
+ */
+@WebServlet(name = "ViewSupportController", urlPatterns = {"/ViewSupportController"})
+public class ViewSupportController extends HttpServlet {
 
-@WebServlet(name = "SearchSupportController", urlPatterns = {"/SearchSupportController"})
-public class SearchSupportController extends HttpServlet {
-
-    private static final String ERROR = "errorPage.jsp";
-    private static final String SUCCESS = "AD_SupportList.jsp";
-
+     private static final String ERROR = "AD_SupportList.jsp";
+    private static final String SUCCESS = "AD_ViewSupport.jsp";
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
+        SupportError error = new SupportError();
         try {
-            String search = request.getParameter("search");
-            UserDAO userDAO = new UserDAO();
-            SupportDAO supportDAO = new SupportDAO();
-            List<SupportDTO> supportList = supportDAO.searchSupport(search);
-            if (supportList.size() > 0) {
-                for (SupportDTO support : supportList) {
-                    UserDTO user = userDAO.getUserInfo(support.getSupportID());
-                    request.setAttribute("user_" + support.getSupportID(), user);
-                }
-                request.setAttribute("SUPPORT_LIST", supportList);
-                request.setAttribute("MESSAGE", "SUPPORT FOUND !");
+            int supportID = Integer.parseInt(request.getParameter("supportID"));
+            UserDAO userDao = new UserDAO();
+            SupportDAO supportDao = new SupportDAO();
+            UserDTO user = userDao.getUserInfo(supportID);
+            SupportDTO support = supportDao.getSupportInfo(supportID);
+            ProcessSupportDTO process = supportDao.getInfoProcessSupport(supportID);
+            if (user != null) {
+                request.setAttribute("USER", user);
+                request.setAttribute("SUPPORT", support);
+                request.setAttribute("PROCESS_SUPPORT", process);
                 url = SUCCESS;
             } else {
-                request.setAttribute("MESSAGE", "NO SUPPORT FOUND !");
+                error.setError("UNABLE TO GET SUPPORT INFORMATION !");
+                request.setAttribute("SUPPORT_ERROR", error);
             }
         } catch (Exception e) {
-            log("Error at SearchSupportController: " + e.toString());
+            log("Error at ViewSupportController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

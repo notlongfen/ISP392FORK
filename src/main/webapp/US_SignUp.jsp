@@ -5,6 +5,8 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="com.mycompany.isp392.user.UserError" %>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>

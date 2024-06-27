@@ -56,8 +56,9 @@ public class MainController extends HttpServlet {
     private static final String SENDMAIL = "Send_Email";
     private static final String SEND_EMAIL_CONTROLLER = "SendMailServlet";
 
-    private static final String SEARCH_SUPPORT_PAGE = "View_Support";
-    private static final String SEARCH_SUPPORT_PAGE_VIEW = "support.jsp";
+    private static final String VIEW_SUPPORT_PAGE = "ViewSupport";
+    private static final String VIEW_SUPPORT_PAGE_CONTROLLER = "ViewSupportController";
+    
     private static final String SEARCH_SUPPORT = "Search Support";
     private static final String SEARCH_SUPPORT_CONTROLLER = "SearchSupportController";
 
@@ -161,7 +162,9 @@ public class MainController extends HttpServlet {
     
     private static final String VIEW_PRIVACY = "View privacy";
     private static final String VIEW_PRIVACY_CONTROLLER = "ViewPrivacyController";
-
+    
+    private static final String MANAGE_PROMOTION_PAGE = "Manage promotions";
+    private static final String MANAGE_PROMOTION_PAGE_VIEW = "AD_PromotionList.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -179,8 +182,8 @@ public class MainController extends HttpServlet {
                 url = SEND_EMAIL_CONTROLLER;
             } else if (ADD_PRODUCT.equals(action)) {
                 url = ADD_PRODUCT_CONTROLLER;
-            } else if (SEARCH_SUPPORT_PAGE.equals(action)) {
-                url = SEARCH_SUPPORT_PAGE_VIEW;
+            } else if (VIEW_SUPPORT_PAGE.equals(action)) {
+                url = VIEW_SUPPORT_PAGE_CONTROLLER;
             } else if (SEARCH_SUPPORT.equals(action)) {
                 url = SEARCH_SUPPORT_CONTROLLER;
             } else if (ADD_PRODUCT_PAGE.equals(action)) {
@@ -275,6 +278,8 @@ public class MainController extends HttpServlet {
                 url = DELETE_USER_CONTROLLER;
             } else if (VIEW_PRIVACY.equals(action)) {
                 url = VIEW_PRIVACY_CONTROLLER;
+            } else if (MANAGE_PROMOTION_PAGE.equals(action)) {
+                url = MANAGE_PROMOTION_PAGE_VIEW;
             }
         } catch (Exception e) {
             log("error at MainController: " + e.toString());

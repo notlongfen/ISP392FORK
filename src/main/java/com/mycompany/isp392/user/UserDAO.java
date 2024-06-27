@@ -31,6 +31,10 @@ public class UserDAO {
     private static final String GET_CUSTOMER_BY_ID = "SELECT * FROM Customers WHERE CustID = ?";
     private static final String GET_EMPLOYEE_BY_ID = "SELECT * FROM Employees WHERE EmpID = ?";
     private static final String DELETE_USER = "UPDATE Users SET status = 0 WHERE UserID=?";
+    private static final String GET_USER_INFO_BASED_ON_SUPPORTID = "SELECT * FROM Supports s \n"
+            + "INNER JOIN Customers c ON s.CustID = c.CustID\n"
+            + "INNER JOIN Users u ON c.CustID = u.UserID\n"
+            + "WHERE s.SupportID = ?";
 
     public UserDTO checkLogin(String email, String password) throws SQLException {
         UserDTO user = null;
@@ -291,8 +295,7 @@ public class UserDAO {
         }
         return result;
     }
-    
-    
+
     public boolean deleteUser(int UserID) throws SQLException {
         boolean check = false;
         Connection conn = null;
@@ -316,9 +319,6 @@ public class UserDAO {
         }
         return check;
     }
-    
-
-    
 
     public UserDTO getUserInfoByUserID(int userID) {
         Connection conn = null;
@@ -398,8 +398,8 @@ public class UserDAO {
         return list;
 
     }
-    
-     public boolean editUserAndCustomer(UserDTO user, CustomerDTO customer) throws SQLException {
+
+    public boolean editUserAndCustomer(UserDTO user, CustomerDTO customer) throws SQLException {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptmUser = null;
@@ -473,6 +473,7 @@ public class UserDAO {
                 ptm.setInt(6, user.getStatus());
                 ptm.setInt(7, user.getUserID());
                 check = ptm.executeUpdate() > 0;
+
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -486,7 +487,6 @@ public class UserDAO {
         }
         return check;
     }
-    
 
     public UserDTO getUserByID(int UserID) throws SQLException {
         UserDTO user = null;
@@ -502,7 +502,7 @@ public class UserDAO {
                 if (rs.next()) {
                     String userName = rs.getString("userName");
                     String email = rs.getString("email");
-                    String password = rs.getString("password"); 
+                    String password = rs.getString("password");
                     int roleID = rs.getInt("roleID");
                     int phone = rs.getInt("phone");
                     int status = rs.getInt("status");
@@ -591,5 +591,46 @@ public class UserDAO {
             }
         }
         return employee;
+    }
+
+    public UserDTO getUserInfo(int supportID) {
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        UserDTO user = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_USER_INFO_BASED_ON_SUPPORTID);
+                ptm.setInt(1, supportID);
+                int id = supportID;
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    int userID = rs.getInt("UserID");
+                    String userName = rs.getString("userName");
+                    String email = rs.getString("email");
+                    int phone = rs.getInt("phone");
+                    user = new UserDTO(userID, userName, email, phone);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ptm != null) {
+                    ptm.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return user;
     }
 }
