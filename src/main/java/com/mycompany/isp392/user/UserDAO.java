@@ -27,11 +27,9 @@ public class UserDAO {
     private static final String EDIT_USER = "UPDATE Users SET userName = ?, roleID = ?, email = ?, password = ?, phone = ?, status = ? WHERE UserID = ?";
     private static final String EDIT_USER_NO_PASS = "UPDATE Users SET userName = ?, roleID = ?, email = ?, phone = ?, status = ? WHERE UserID = ?";
     private static final String EDIT_CUSTOMER = "UPDATE Customers SET points = ?, birthday = ?, province_city = ?, district = ?, ward = ?, detailAddress = ? WHERE CustID = ?";
-    private static final String EDIT_EMPLOYEE = "UPDATE Employees SET position = ? WHERE EmpID = ?";
     private static final String GET_USER_BY_ID = "SELECT * FROM Users WHERE UserID = ?";
     private static final String GET_CUSTOMER_BY_ID = "SELECT * FROM Customers WHERE CustID = ?";
     private static final String GET_EMPLOYEE_BY_ID = "SELECT * FROM Employees WHERE EmpID = ?";
-    
     private static final String DELETE_USER = "UPDATE Users SET status = 0 WHERE UserID=?";
 
     public UserDTO checkLogin(String email, String password) throws SQLException {
@@ -459,7 +457,7 @@ public class UserDAO {
         return check;
     }
     
-    public boolean editUserAndEmployee(UserDTO user, EmployeeDTO employee) throws SQLException {
+    public boolean editUser(UserDTO user, EmployeeDTO employee) throws SQLException {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptmUser = null;
@@ -482,14 +480,15 @@ public class UserDAO {
                 boolean userUpdated = ptmUser.executeUpdate() > 0;
 
                 // Update Employee
-                ptmEmployee = conn.prepareStatement(EDIT_EMPLOYEE);
+                //ptmEmployee = conn.prepareStatement(EDIT_EMPLOYEE);
                 // FIXME: Chỉnh db xóa position . Nhớ chỉnh lại querry
                 // ptmEmployee.setString(1, employee.getPosition());
                 ptmEmployee.setInt(2, employee.getEmpID());
                 boolean employeeUpdated = ptmEmployee.executeUpdate() > 0;
 
+
                 // Check both updates
-                if (userUpdated && employeeUpdated) {
+                if (userUpdated) {
                     // Commit the transaction if both updates are successful
                     conn.commit();
                     check = true;

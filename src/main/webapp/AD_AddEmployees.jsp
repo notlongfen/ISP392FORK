@@ -45,18 +45,21 @@
 
                         <div class="form-container" style="height: 600px;">
                             <h2 class="text-center" style="color: #000; font-weight: bold;">Add A New Employee</h2>
-                            <form>
+                            <form action="MainController" method="POST">
                                 <div class="form-row">
                                     <div class="form-group col-md-8 mt-xl-5" style="margin-left: 100px;">
                                         <label for="brand" style="margin-top: 10px">Employee Name</label>
                                         <input type="text" class="form-control" id="empName" placeholder="Enter employee name" 
                                                style="width: 550px" name="userName">
-                                        <label for="position" style="margin-top: 10px">Position</label></br>
-                                        <select name ="roleID">
-                                            <option value="1">1 - System Manager</option>
-                                            <option value="2">2 - Shop Manager</option>
-                                            <option value="3">3 - Shop Staff</option>
-                                        </select></br>
+                                        <label for="roleID" style="margin-top: 10px">Role</label>
+                                        <div style="color: #dee2e6">
+                                            <select class="form-select form-control" id="roleID" aria-label=".form-select-sm" placeholder="Employee role" 
+                                                    style="width: 550px" name="roleID">
+                                                <option value="1">1 - System Manager</option>
+                                                <option value="2">2 - Shop Manager</option>
+                                                <option value="3">3 - Shop Staff</option>
+                                            </select>
+                                        </div>
                                         <label for="email" style="margin-top: 10px">Email</label>
                                         <input type="email" class="form-control" id="empEmail" placeholder="Enter email" 
                                                style="width: 550px" name="email">
@@ -64,13 +67,12 @@
                                         <input type="number" class="form-control" id="empPhone" placeholder="Enter phone number" 
                                                style="width: 550px" name="phone">
                                         <label for="phone" style="margin-top: 10px">Password</label>
-                                        <input type="password" class="form-control" id="empPhone" placeholder="Enter phone number" 
+                                        <input type="password" class="form-control" id="empPhone" placeholder="Enter password" 
                                                style="width: 550px" name="password">
                                     </div>
-
                                 </div>
                                 <div class="form-group text-center" style="margin-top: 10px">
-                                    <button type="submit" class="btn btn-danger btn-custom">Submit</button>
+                                    <button type="submit" class="btn btn-danger btn-custom" name="action" value="Add Employee">Submit</button>
                                     <button type="reset" class="btn btn-secondary btn-custom">Reset</button>
                                 </div>
                             </form>

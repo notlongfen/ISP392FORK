@@ -58,7 +58,7 @@
                         <div class="mb-3">
                             <label class="form-label">City</label>
                             <select class="form-select" id="city" aria-label = ".form-select-sm">
-<option value="" selected>Select your city</option>  
+                                <option value="" selected>Select your city</option>  
                             </select>
                         </div>
                         <div class="row mb-3 d-flex justify-content-between">
@@ -79,7 +79,7 @@
                             <label for="address" class="form-label">Address</label>
                             <input type="text" class="form-control" id="address" placeholder="Address" name="address" required="">
                         </div>
-                        
+
                         <div class="mb-3">
                             <label for="dob" class="form-label">Date of birth</label>
                             <input type="date" class="form-control" id="dob" name="birthday" required="">
@@ -87,12 +87,10 @@
                         <div class="mb-3 position-relative">
                             <label for="password" class="form-label">Password</label>
                             <input type="password" class="form-control" id="password" placeholder="Password" name="password" required="">
-                            <!--<i class="fas fa-eye position-absolute" id="togglePassword" style="cursor: pointer; right: 10px; top: 50%; transform: translateY(50%);color: grey;"></i>-->
                         </div>
                         <div class="mb-3 position-relative">
                             <label for="confirmPassword" class="form-label">Confirm Password</label>
                             <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password" name="confirmPassword" required="">
-                            <!--<i class="fas fa-eye position-absolute" id="toggleConfirmPassword" style="cursor: pointer; right: 10px; top: 50%; transform: translateY(50%); color: grey;"></i>-->
                         </div>
 
                         <div class="mb-3 form-check">
@@ -101,7 +99,7 @@
                                 I confirm that I have read and accept the <a href="#">Terms and Conditions</a> and the <a href="#">Privacy Policy</a>.
                             </label>
                         </div>
-<button type="submit" class="btn btn-dark w-100">Sign In</button>
+                        <button type="submit" class="btn btn-dark w-100" name="action" value="Sign In">Sign In</button>
                     </form>
                 </div>
             </div>
@@ -167,7 +165,7 @@
             });
 
             toggleConfirmPassword.addEventListener('click', function (e) {
-const type = confirmPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+                const type = confirmPassword.getAttribute('type') === 'password' ? 'text' : 'password';
                 confirmPassword.setAttribute('type', type);
                 this.classList.toggle('fa-eye-slash');
             });

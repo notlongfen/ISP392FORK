@@ -5,6 +5,8 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="com.mycompany.isp392.user.UserDTO"%>
+<%@page import="java.util.List"%>
 <!DOCTYPE html>
 <html>
     <head>

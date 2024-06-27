@@ -17,7 +17,7 @@
         <%
             UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
             if (loginUser == null || 1 != loginUser.getRoleID()) {
-                response.sendRedirect("login.jsp");
+                response.sendRedirect("US_SignIn.jsp");
                 return;
             }
             String search = request.getParameter("search");
@@ -28,13 +28,14 @@
         <h1> Welcome: <%= loginUser.getUserName()%>  </h1>
         <form action="MainController">
             Search:<input type="text" name="search" value="<%= search%>"/>
-            <input type="submit" name="action" value ="SearchUser"/>
+            <input type="submit" name="action" value ="Search User"/>
         </form>
-        <%
-            List<UserDTO> listUser = (List<UserDTO>) request.getAttribute("LIST_USER");
-            if (listUser != null) {
-                if (listUser.size() > 0) {
-        %>
+        <form> <input type="submit" name="action" value="Add_Employee_View"/></form>
+            <%
+                List<UserDTO> listUser = (List<UserDTO>) request.getAttribute("LIST_USER");
+                if (listUser != null) {
+                    if (listUser.size() > 0) {
+            %>
         <table border="1">
             <thead>
                 <tr>
@@ -103,16 +104,18 @@
                                 }
                             %>
                         </form>
+                    <td>
+                        <a href="MainController?action=DeleteUser&UserID=<%= user.getUserID() %>"> Delete</a>
                     </td>
                 </tr>
-            <%
+                <%
+                    }
+                %>
+            </tbody>
+        </table>
+        <%
                 }
-            %>
-        </tbody>
-    </table>
-    <%
             }
-        }
-    %>
+        %>
     </body>
 </html>

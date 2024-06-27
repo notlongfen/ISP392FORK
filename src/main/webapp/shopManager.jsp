@@ -70,10 +70,8 @@
                         <td><input type="text" name="condition" value="Points >= <%= promotion.getCondition() %>" readonly=""/></td>
                         <td><input type="text" name="status" value="<%= promotion.getStatus()%>" readonly=""/></td>
                         <td>
-
                             <input type="hidden" name="promotionID" value="<%= promotion.getPromotionID() %>"/>
                             <input type="submit" name="action" value="EditPromotion"/>
-
                         </td>
                         <td>
                             <a href="MainController?action=DeletePromotion&promotionID=<%= promotion.getPromotionID()%>"> Delete</a>

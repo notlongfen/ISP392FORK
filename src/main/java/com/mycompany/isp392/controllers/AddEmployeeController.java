@@ -17,8 +17,9 @@ import org.mindrot.jbcrypt.BCrypt;
 public class AddEmployeeController extends HttpServlet {
 
   
-   private static final String ERROR = "addEmployee.jsp";
-    private static final String SUCCESS = "login.jsp";
+
+   private static final String ERROR = "AD_AddEmployees.jsp";
+    private static final String SUCCESS = "US_SignIn.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -35,7 +36,7 @@ public class AddEmployeeController extends HttpServlet {
             int phone = Integer.parseInt(request.getParameter("phone"));
             int roleID = Integer.parseInt(request.getParameter("roleID"));
 
-            // Check email exists
+
             if (dao.checkEmailExists(email) != -1) {
                 userError.setEmailError("Email already exists.");
                 checkValidation = false;
