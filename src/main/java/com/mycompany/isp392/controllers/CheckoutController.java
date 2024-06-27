@@ -24,7 +24,11 @@ import com.mycompany.isp392.user.UserDTO;
  */
 @WebServlet(name = "CheckoutController", urlPatterns = {"/CheckoutController"})
 public class CheckoutController extends HttpServlet {
+    private static final String NOT_LOGED_IN = "US_SignIn.jsp";
+    private static final String ERROR = "US_Checkout.jsp";
 
+    
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -78,9 +82,27 @@ public class CheckoutController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+        String url = ERROR;
         HttpSession session = request.getSession();
-        CartDTO Cart = (CartDTO) session.getAttribute("cart");
+        CartDTO cart = (CartDTO) session.getAttribute("cart");
         UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
+        if(user == null){
+            url = NOT_LOGED_IN;
+            request.getRequestDispatcher(url).forward(request, response);
+        }
+        try {
+            String name = request.getParameter("name");
+            String ward = request.getParameter("ward");
+            String district = request.getParameter("district");
+            String city = request.getParameter("city");
+            String address = request.getParameter("address");
+            String note = request.getParameter("note");
+            String phone = request.getParameter("phone");
+
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        
         
 
         

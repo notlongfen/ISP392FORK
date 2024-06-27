@@ -132,7 +132,7 @@
                             <input type="password" class="form-control" id="password" style="border-radius: 0" placeholder="Password" name="password" required="">
                         </div>
                         <div class="mb-3 text-end">
-                            <a href="#" style="text-decoration: none">Forgot Password?</a>
+                            <a href="US_ForgotPassword.jsp" style="text-decoration: none">Forgot Password?</a>
                         </div>
 
                         <button type="submit" class="btn btn-dark w-100" style="border-radius: 0;" name="action" value="Login">Log in</button>
