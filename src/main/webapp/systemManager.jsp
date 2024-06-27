@@ -28,7 +28,7 @@
         <h1> Welcome: <%= loginUser.getUserName()%>  </h1>
         <form action="MainController">
             Search:<input type="text" name="search" value="<%= search%>"/>
-            <input type="submit" name="action" value ="Search User"/>
+            <input type="submit" name="action" value ="Search_User"/>
         </form>
         <form> <input type="submit" name="action" value="Add_Employee_View"/></form>
             <%

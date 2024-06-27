@@ -21,8 +21,8 @@ import com.mycompany.isp392.user.*;
 @WebServlet(name = "SearchUserController", urlPatterns = {"/SearchUserController"})
 public class SearchUserController extends HttpServlet {
 
-    private static final String ERROR = "systemManager.jsp";
-    private static final String SUCCESS = "systemManager.jsp";
+    private static final String ERROR = "AD_ManageUsers.jsp";
+    private static final String SUCCESS = "AD_ManageUsers.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -32,7 +32,7 @@ public class SearchUserController extends HttpServlet {
             String search = request.getParameter("search");
             UserDAO dao = new UserDAO();
             List<UserDTO> listUser = dao.searchListUser(search);
-            if (listUser.size() > 0) {
+            if (!listUser.isEmpty()) {
                 request.setAttribute("LIST_USER", listUser);
                 request.setAttribute("MESSAGE", "USER FOUND !");
                 url = SUCCESS;

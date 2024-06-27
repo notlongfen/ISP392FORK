@@ -4,6 +4,8 @@
     Author     : jojo
 --%>
 
+<%@page import="java.util.List"%>
+<%@page import="com.mycompany.isp392.user.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -117,7 +119,17 @@
     </head>
 
     <body id="page-top">
-
+        <%
+            UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
+            if (loginUser == null || 1 != loginUser.getRoleID()) {
+                response.sendRedirect("US_SignIn.jsp");
+                return;
+            }
+            String search = request.getParameter("search");
+            if (search == null) {
+                search = "";
+            }
+        %>
         <div id="wrapper">
             <!-- Sidebar -->
             <%@include file="AD_sidebar.jsp" %>
@@ -147,13 +159,15 @@
                                         <!--<h6 class="m-0 font-weight-bold text-primary">Invoice</h6>-->
                                     </div>
                                     <div class="table-responsive">
-                                        <form>
+                                        <form action="MainController" method="post">
                                             <div class="row mb-4 mx-2 justify-content-between">
                                                 <div class="col-md-3">
                                                     <div class="input-group">
                                                         <select id="roleSelect" class="custom-select">
                                                             <option value="Select role">Select role</option>
-                                                            <option value="Admin">Admin</option>
+                                                            <option value="System Manager">System Manager</option>
+                                                            <option value="Shop Manager">Shop Manager</option>
+                                                            <option value="Shop Staff">Shop Staff</option>
                                                             <option value="Customer">Customer</option>
                                                         </select>
                                                     </div>
@@ -161,23 +175,25 @@
                                                 <div class="col-md-3">
                                                     <select id="statusSelect" class="custom-select">
                                                         <option value="Select Status">Select Status</option>
-                                                        <option value="True">True</option>
-                                                        <option value="False">False</option>
+                                                        <option value="Active">Active</option>
+                                                        <option value="Inactive">Inactive</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <form>
-                                                        <div class="input-group" style="width:250px">
-                                                            <input type="text" class="form-control" placeholder="Search...">
-                                                            <div class="input-group-append">
-                                                                <button class="btn btn-outline-secondary" type="button">Search</button>
-                                                            </div>
+                                                    <div class="input-group" style="width:250px">
+                                                        <input type="text" name="search" value="<%= search%>" class="form-control" placeholder="Search...">
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-outline-secondary" type="submit" name="action" value="Search_User">Search</button>
                                                         </div>
-                                                    </form>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </form>
-
+                                        <%
+                                                List<UserDTO> listUser = (List<UserDTO>) request.getAttribute("LIST_USER");
+                                                if (listUser != null) {
+                                                    if (listUser.size() > 0){
+                                        %>                    
                                         <table class="table align-items-center table-flush">
                                             <thead class="thead-light">
                                                 <tr>
@@ -197,7 +213,48 @@
                                                 </tr>
                                             </thead>
                                             <tbody id="tableBody">
-                                                <tr data-role="Customer">
+                                                <%
+                                                    for (UserDTO user : listUser) {
+                                                %>
+                                                <tr data-role="<%= (user.getRoleID() == 4) ? "Customer" : "Employee" %>">
+                                                    <td><%= user.getUserID()%></td>
+                                                    <td><%= user.getUserName()%></td>
+                                                    <td>
+                                                        <%
+                                                            int roleID = user.getRoleID();
+                                                            String roleName = "";
+                                                            switch (roleID) {
+                                                                case 1:
+                                                                    roleName = "System Manager";
+                                                                    break;
+                                                                case 2:
+                                                                    roleName = "Shop Manager";
+                                                                    break;
+                                                                case 3:
+                                                                    roleName = "Shop Staff";
+                                                                    break;
+                                                                case 4:
+                                                                    roleName = "Customer";
+                                                                    break;
+                                                                default:
+                                                                    roleName = "Unknown Role";
+                                                            }
+                                                        %>
+                                                        <%= roleName%>
+                                                    </td>
+                                                    <td><%= user.getEmail()%></td>
+                                                    <td><%= user.getPhone()%></td>
+                                                    <td>
+                                                        <span class="badge <%= (user.getStatus() == 1) ? "badge-success" : "badge-secondary" %>">
+                                                            <%= (user.getStatus() == 1) ? "Active" : "Inactive" %>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
+                                                        <button class="editButton btn btn-sm btn-dark">Edit</button>
+                                                    </td>
+                                                </tr>
+<!--                                                <tr data-role="Customer">
                                                     <td>U1</td>
                                                     <td>John Doe</td>
                                                     <td>Customer</td>
@@ -259,9 +316,16 @@
                                                         <a href="#" class="btn btn-sm btn-danger">Delete</a>
                                                         <button class="editButton btn btn-sm btn-dark" >Edit</button>
                                                     </td>
-                                                </tr>  
+                                                </tr>  -->
+                                                <%
+                                                    }
+                                                %>
                                             </tbody>
                                         </table>
+                                            <%
+                                                    }
+                                                }
+                                            %>
                                         <hr>
                                         <!-- Pagination -->
                                         <nav aria-label="Page navigation">

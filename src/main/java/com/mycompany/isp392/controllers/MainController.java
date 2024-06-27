@@ -121,7 +121,7 @@ public class MainController extends HttpServlet {
     private static final String VERIFY_TOKEN = "Verify_Token";
     private static final String VERIFY_TOKEN_CONTROLLER = "VerifyToken";
 
-    private static final String SEARCH_USER = "SearchUser";
+    private static final String SEARCH_USER = "Search_User";
     private static final String SEARCH_USER_CONTROLLER = "SearchUserController";
 
     private static final String EDIT_CUSTOMER_PAGE = "EditCustomerPage";
