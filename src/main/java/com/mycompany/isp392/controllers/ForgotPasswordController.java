@@ -23,8 +23,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet(name = "ForgotPasswordController", urlPatterns = { "/ForgotPasswordController" })
 public class ForgotPasswordController extends HttpServlet {
-    private static final String ERROR = "forgotPassword.jsp";
-    private static final String SUCCESS = "verifyForgetPassword.jsp";
+    private static final String ERROR = "US_ForgotPassword.jsp";
+    private static final String SUCCESS = "US_CreateNewPassword.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

@@ -74,9 +74,9 @@
                         <p style="color: #838383">Enter the email address you used to create an account, and we will email you instruction to reset your password</p>
                         <p style="font-size: 18px;">Email Address</p>
                         <div class="mb-3">
-                            <input type="email" class="form-control" style="border-radius: 0" id="email" placeholder="Email Address">
+                            <input type="email" class="form-control" style="border-radius: 0" id="email" placeholder="Email Address" name="email">
                         </div>
-                        <button type="submit" class="btn btn-dark w-100" style="border-radius: 0; font-size: 25px;" name="action" value="Forgot_Password">Send Mail</button>
+                        <input type="submit" class="btn btn-dark w-100" style="border-radius: 0; font-size: 25px;" name="action" value="Forgot_Password">Send Mail
                     </form>
                 </div>
             </div>
