@@ -1,9 +1,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="com.mycompany.isp392.user.UserDTO"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>SiderBar</title>
+        <title>Sidebar</title>
         <!-- Bootstrap CSS -->
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -23,66 +24,82 @@
         </style>
     </head>
     <body>
+        <%
+            UserDTO loggedInUser = (UserDTO) session.getAttribute("LOGIN_USER");
+            int roleID = loggedInUser != null ? loggedInUser.getRoleID() : -1;
+        %>
         <form action="MainController" method="post">
             <ul class="navbar-nav sidebar sidebar-light accordion" id="accordionSidebar" style="background: #C43337">
                 <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.jsp" style="background: #FFF">
                     <div class="sidebar-brand-text" style="color: #C43337">ISP392<span style="color: #000">SHOP</span></div>
                 </a>
                 <hr class="sidebar-divider my-0">
-                <hr class="sidebar-divider">
-
-                <div class="sidebar-heading" style="font-size: 15px">
+                <div class="sidebar-heading pt-3" style="font-size: 15px">
                     Features
                 </div>
 
-                <li class="nav-item mt-3">
-                    <button type="submit" class="nav-link btn btn-link" name="action" value="Product_List">
-                        <i class="fas fa-box"></i>
-                        <span>Product List</span>
-                    </button>
-                </li>
+                <% if (roleID == 2 || roleID == 3) { %> <!-- Shop Manager, Shop Staff, System Manager -->
+                    <li class="nav-item mt-3">
+                        <button type="submit" class="nav-link btn btn-link" name="action" value="Manage_Products_Page">
+                            <i class="fas fa-box"></i>
+                            <span>Product List</span>
+                        </button>
+                    </li>
+                <% } %>
 
-                <li class="nav-item mt-3">
-                    <button type="submit" class="nav-link btn btn-link" name="action" value="Categories_List">
-                        <i class="fa fa-pie-chart"></i>
-                        <span>Categories</span>
-                    </button>
-                </li>
+                <% if (roleID == 2) { %> <!-- Shop Manager -->
+                    <li class="nav-item mt-3">
+                        <button type="submit" class="nav-link btn btn-link" name="action" value="Categories_List">
+                            <i class="fa fa-pie-chart"></i>
+                            <span>Categories</span>
+                        </button>
+                    </li>
+                <% } %>
 
-                <li class="nav-item mt-3">
-                    <button type="submit" class="nav-link btn btn-link" name="action" value="Manage_Brands_Page">
-                        <i class="fas fa-tshirt"></i>
-                        <span>Brand</span>
-                    </button>
-                </li>
+                <% if (roleID == 2) { %> <!-- Shop Manager -->
+                    <li class="nav-item mt-3">
+                        <button type="submit" class="nav-link btn btn-link" name="action" value="Manage_Brands_Page">
+                            <i class="fas fa-tshirt"></i>
+                            <span>Brand</span>
+                        </button>
+                    </li>
+                <% } %>
 
-                <li class="nav-item mt-3">
-                    <button type="submit" class="nav-link btn btn-link" name="action" value="Support_List">
-                        <i class="fas fa-comment"></i>
-                        <span>Support</span>
-                    </button>
-                </li>
+                <% if (roleID == 2 || roleID == 3) { %> <!-- Shop Manager, Shop Staff -->
+                    <li class="nav-item mt-3">
+                        <button type="submit" class="nav-link btn btn-link" name="action" value="Support_List">
+                            <i class="fas fa-comment"></i>
+                            <span>Support</span>
+                        </button>
+                    </li>
+                <% } %>
 
-                <li class="nav-item mt-3">
-                    <button type="submit" class="nav-link btn btn-link" name="action" value="Order_List">
-                        <i class="fas fa-cash-register"></i>
-                        <span>Order</span>
-                    </button>
-                </li>
+                <% if (roleID == 2) { %> <!-- Shop Manager -->
+                    <li class="nav-item mt-3">
+                        <button type="submit" class="nav-link btn btn-link" name="action" value="Order_List">
+                            <i class="fas fa-cash-register"></i>
+                            <span>Order</span>
+                        </button>
+                    </li>
+                <% } %>
 
-                <li class="nav-item mt-3">
-                    <button type="submit" class="nav-link btn btn-link" name="action" value="Promotion_List">
-                        <i class="fas fa-tags"></i>
-                        <span>Discount</span>
-                    </button>
-                </li>
+                <% if (roleID == 2) { %> <!-- Shop Manager -->
+                    <li class="nav-item mt-3">
+                        <button type="submit" class="nav-link btn btn-link" name="action" value="Promotion_List">
+                            <i class="fas fa-tags"></i>
+                            <span>Discount</span>
+                        </button>
+                    </li>
+                <% } %>
 
-                <li class="nav-item mt-3">
-                    <button type="submit" class="nav-link btn btn-link" name="action" value="Statistic_Report">
-                        <i class="fa fa-bar-chart"></i>
-                        <span>Statistic Report</span>
-                    </button>
-                </li>
+                <% if (roleID == 1) { %> <!-- System Manager -->
+                    <li class="nav-item mt-3">
+                        <button type="submit" class="nav-link btn btn-link" name="action" value="Manage_Users">
+                            <i class="fas fa-users"></i>
+                            <span>Manage Users</span>
+                        </button>
+                    </li>
+                <% } %>
 
                 <hr class="sidebar-divider">
 

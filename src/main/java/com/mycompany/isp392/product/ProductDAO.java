@@ -18,7 +18,7 @@ public class ProductDAO {
     private static final String ADD_PRODUCT = "INSERT INTO Products(productName, description, NumberOfPurchasing, status, BrandID)VALUES(?,?,?,?,?)";
     private static final String EDIT_PRODUCT = "UPDATE Products SET productName=?, description=? WHERE productID=?";
     private static final String DELETE_PRODUCT = "UPDATE Products SET status = 0 WHERE productID=?";
-    private static final String SELECT_PRODUCT = "SELECT productName, description, numberOfPurchasing, brandID FROM Products WHERE productID=? and status= 1";
+    private static final String SELECT_PRODUCT = "SELECT productName, description, numberOfPurchasing, brandID FROM Products WHERE productID=?";
     private static final String SEARCH_PRODUCT = "SELECT p.productID, p.productName, p.description, p.NumberOfPurchasing, p.status AS productStatus, p.BrandID, "
             + "pd.color, pd.size, pd.stockQuantity, pd.price, pd.importDate, pd.image, pd.status "
             + "FROM Products p LEFT JOIN ProductDetails pd ON p.productID = pd.ProductID "
@@ -26,7 +26,7 @@ public class ProductDAO {
     private static final String ADD_PRODUCT_DETAILS = "INSERT INTO ProductDetails (ProductID, color, size, stockQuantity, price, importDate, image, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String EDIT_PRODUCT_DETAILS = "UPDATE ProductDetails SET color=?, size=?, stockQuantity=?, price=?, importDate=?, image=?, status=? WHERE ProductID=? AND color = ? AND size = ?";
     private static final String DELETE_PRODUCT_DETAILS = "UPDATE ProductDetails SET status = 0 WHERE ProductID=? AND color = ? AND size= ?";
-    private static final String GET_ALL_PRODUCTS = "SELECT * FROM Products WHERE status = 1";
+    private static final String GET_ALL_PRODUCTS = "SELECT * FROM Products";
     private static final String DELETE_PRODUCT_DETAIL = "UPDATE ProductDetails SET status = 0 WHERE ProductID=?";
     private static final String CHECK_PRODUCT = "SELECT productID FROM Products WHERE productName LIKE ?";
     private static final String SEARCH_BRAND_BY_ID = "SELECT * FROM Brands WHERE brandID LIKE ?";
@@ -155,7 +155,7 @@ public class ProductDAO {
                 if (rs.next()) {
                     String productName = rs.getString("productName");
                     String description = rs.getString("description");
-                    int numberOfPurchase = rs.getInt("numberOfPurchase");
+                    int numberOfPurchase = rs.getInt("numberOfPurchasing");
                     int brandID = rs.getInt("brandID");
                     product = new ProductDTO(productID, productName, description, numberOfPurchase, 1, brandID);
                 }
@@ -262,29 +262,46 @@ public class ProductDAO {
         return check;
     }
 
-    public boolean deleteProductDetails(int productID) throws SQLException {
-        boolean check = false;
-        Connection conn = null;
-        PreparedStatement ptm = null;
-        try {
-            conn = DbUtils.getConnection();
-            if (conn != null) {
-                ptm = conn.prepareStatement(DELETE_PRODUCT_DETAIL);
-                ptm.setInt(1, productID);
-                check = ptm.executeUpdate() > 0;
+public boolean deleteProductDetails(int productID) throws SQLException {
+    boolean check = false;
+    Connection conn = null;
+    PreparedStatement ptm = null;
+    ResultSet rs = null;
+    try {
+        conn = DbUtils.getConnection();
+        if (conn != null) {
+            // First, check if there are any product details for the given productID
+            String checkQuery = "SELECT 1 FROM ProductDetails WHERE ProductID = ?";
+            ptm = conn.prepareStatement(checkQuery);
+            ptm.setInt(1, productID);
+            rs = ptm.executeQuery();
+
+            if (!rs.next()) {
+                // No product details found for the given productID, so no need to delete anything
+                return true; // Consider this a successful operation
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (ptm != null) {
-                ptm.close();
-            }
-            if (conn != null) {
-                conn.close();
-            }
+
+            // If there are product details, proceed to delete them
+            ptm = conn.prepareStatement(DELETE_PRODUCT_DETAIL);
+            ptm.setInt(1, productID);
+            check = ptm.executeUpdate() > 0;
         }
-        return check;
+    } catch (Exception e) {
+        e.printStackTrace();
+        check = false; // Set check to false if an exception occurs
+    } finally {
+        if (rs != null) {
+            rs.close();
+        }
+        if (ptm != null) {
+            ptm.close();
+        }
+        if (conn != null) {
+            conn.close();
+        }
     }
+    return check;
+}
 
     public List<ProductDetailsDTO> getProductDetails(int productID) throws SQLException {
         List<ProductDetailsDTO> productDetailsList = new ArrayList<>();

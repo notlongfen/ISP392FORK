@@ -2,7 +2,6 @@ package com.mycompany.isp392.controllers;
 
 import com.mycompany.isp392.product.*;
 import java.io.IOException;
-import java.sql.SQLException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,8 +10,8 @@ import java.sql.SQLException;
 
 public class AddProductController extends HttpServlet {
 
-    private static final String ERROR = "login.jsp";
-    private static final String SUCCESS = "AddProduct.jsp";
+    private static final String ERROR = "AD_CreateProduct.jsp";
+    private static final String SUCCESS = "GetProductsController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

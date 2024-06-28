@@ -1,9 +1,5 @@
-<%-- 
-    Document   : CreateProduct
-    Created on : Jun 2, 2024, 4:10:09 PM
-    Author     : jojo
---%>
-
+<%@page import="com.mycompany.isp392.brand.BrandDTO"%>
+<%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -13,7 +9,7 @@
         <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
-        <title>Create New Product</title>
+        <title>Add Product</title>
         <style>
             .form-container {
                 max-width: 800px;
@@ -44,66 +40,35 @@
                     <div class="container-fluid" id="container-wrapper">
 
                         <div class="form-container">
-                            <h2 class="text-center" style="color: #000; font-weight: bold;">Create New Product</h2>
-                            <form>
-                                <div class="form-row">
-                                    <div class="form-group col-md-8">
-                                        <label for="productName">Product Name</label>
-                                        <input type="text" class="form-control" id="productName" placeholder="Enter Product Name">
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="brand">Brand</label>
-                                        <select class="form-control" id="brand">
-                                            <option selected>Choose...</option>
-                                            <option>Brand A</option>
-                                            <option>Brand B</option>
-                                            <option>Brand C</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group col-md-4">
-                                        <label for="stockQuantity">Stock Quantity</label>
-                                        <input type="number" class="form-control" id="stockQuantity" placeholder="Enter Stock Quantity">
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="price">Price</label>
-                                        <input type="number" class="form-control" id="price" placeholder="Enter Price">
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="importDate">Import Date</label>
-                                        <input type="date" class="form-control" id="importDate">
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group col-md-4">
-                                        <label for="size">Size</label>
-                                        <input type="text" class="form-control" id="size" placeholder="Enter Size">
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="color">Color</label>
-                                        <input type="text" class="form-control" id="color" placeholder="Enter Color">
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="category">Category</label>
-                                        <select class="form-control" id="category">
-                                            <option selected>Choose...</option>
-                                            <option>Category 1</option>
-                                            <option>Category 2</option>
-                                            <option>Category 3</option>
-                                        </select>
-                                    </div>
+                            <h2 class="text-center" style="color: #000; font-weight: bold;">Add New Product</h2>
+                            <form action="MainController" method="post">
+                                <div class="form-group">
+                                    <label for="productName">Product Name</label>
+                                    <input type="text" class="form-control" id="productName" name="productName" placeholder="Enter Product Name">
                                 </div>
                                 <div class="form-group">
                                     <label for="description">Description</label>
-                                    <textarea class="form-control" id="description" rows="3" placeholder="Enter Description"></textarea>
+                                    <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter Description"></textarea>
                                 </div>
                                 <div class="form-group">
-                                    <label for="uploadImage">Upload Image</label>
-                                    <input type="file" class="form-control-file" id="uploadImage">
+                                    <label for="brandID">Brand</label>
+                                    <select class="form-control" id="brandID" name="brandID">
+                                        <option value="">Choose...</option>
+                                        <%
+                                            List<BrandDTO> brandList = (List<BrandDTO>) request.getAttribute("BRAND_LIST");
+                                            String message = (String) request.getAttribute("MESSAGE");
+                                            if (brandList != null) {
+                                                for (BrandDTO brand : brandList) {
+                                        %>
+                                        <option value="<%= brand.getBrandID() %>"><%= brand.getBrandName() %></option>
+                                        <%
+                                                }
+                                            }
+                                        %>
+                                    </select>
                                 </div>
                                 <div class="form-group text-center">
-                                    <button type="submit" class="btn btn-danger btn-custom">Submit</button>
+                                    <button type="submit" class="btn btn-danger btn-custom" name="action" value="Add_Product">Submit</button>
                                     <button type="reset" class="btn btn-secondary btn-custom">Reset</button>
                                 </div>
                             </form>

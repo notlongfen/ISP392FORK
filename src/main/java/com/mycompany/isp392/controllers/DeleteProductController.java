@@ -2,7 +2,6 @@ package com.mycompany.isp392.controllers;
 
 
 import com.mycompany.isp392.product.*;
-import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,7 +13,7 @@ import java.sql.SQLException;
 @WebServlet(name = "DeleteProductController", urlPatterns = {"/DeleteProductController"})
 public class DeleteProductController extends HttpServlet {
     private static final String ERROR = "product.jsp";
-    private static final String SUCCESS = "product.jsp";
+    private static final String SUCCESS = "GetProductsController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -35,7 +34,7 @@ public class DeleteProductController extends HttpServlet {
         } catch (SQLException e) {
             log("Error at DeleteProductController: " + e.toString());
         } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+            response.sendRedirect(url);
         }
     }
 

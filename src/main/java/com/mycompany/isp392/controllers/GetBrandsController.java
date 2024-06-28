@@ -13,14 +13,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-
-/**
- *
- * @author tuan tran
- */
 public class GetBrandsController extends HttpServlet {
-private static final String BRAND_PAGE = "AD_ManageBrands.jsp";
 
+    private static final String BRAND_PAGE = "AD_ManageBrands.jsp";
+    private static final String ADD_PRODUCT_PAGE = "AD_CreateProduct.jsp";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -30,12 +26,19 @@ private static final String BRAND_PAGE = "AD_ManageBrands.jsp";
             BrandDAO dao = new BrandDAO();
             List<BrandDTO> brands = dao.getAllBrands();
             request.setAttribute("BRAND_LIST", brands);
+            if ("AddProductPage".equals(request.getParameter("ProductPage"))) {
+                url = ADD_PRODUCT_PAGE;
+            } else {
+                url = BRAND_PAGE;
+
+            }
         } catch (Exception e) {
             log("Error at LoadBrandsController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
     }
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

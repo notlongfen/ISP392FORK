@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public class AddProductDetailsController extends HttpServlet {
 
-    private static final String ERROR = "GetProductsController";
+    private static final String ERROR = "CreateProductDetail.jsp";
     private static final String SUCCESS = "GetProductsController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -19,17 +19,17 @@ public class AddProductDetailsController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            int productID = Integer.parseInt(request.getParameter("productID"));
+            int productID = Integer.parseInt(request.getParameter("parentProductID"));
             String color = request.getParameter("color");
             String[] sizes = request.getParameterValues("sizes");
             int stockQuantity = Integer.parseInt(request.getParameter("stockQuantity"));
             int price = Integer.parseInt(request.getParameter("price"));
             Date importDate = Date.valueOf(request.getParameter("importDate"));
             String image = request.getParameter("image");
-            int status = 1; // Default status
+            int status = 1;
 
             ProductDAO productDAO = new ProductDAO();
-           boolean check = true;
+            boolean check = true;
 
             for (String size : sizes) {
                 ProductDetailsDTO productDetails = new ProductDetailsDTO(productID, color, size, stockQuantity, price, importDate, image, status);
@@ -40,6 +40,7 @@ public class AddProductDetailsController extends HttpServlet {
             }
 
             if (check) {
+                request.setAttribute("newProductID", productID);
                 url = SUCCESS;
             }
         } catch (Exception e) {

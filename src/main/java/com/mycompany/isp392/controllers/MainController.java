@@ -23,10 +23,13 @@ public class MainController extends HttpServlet {
     private static final String ADD_EMPLOYEE_CONTROLLER = "AddEmployeeController";
     private static final String ADD_EMPLOYEE = "Add Employee";
 
-    private static final String ADD_PRODUCT_PAGE = "Add_View";
-    private static final String ADD_PRODUCT_PAGE_VIEW = "product.jsp";
+    private static final String ADD_PRODUCT_PAGE = "Add_Product_Page";
+    private static final String ADD_PRODUCT_PAGE_VIEW = "GetBrandsController";
 
-    private static final String ADD_PRODUCT = "Ađd_Product";
+    private static final String GET_PRODUCTS_PAGE = "Manage_Products_Page";
+    private static final String GET_PRODUCTS_PAGE_VIEW = "GetProductsController";
+    
+    private static final String ADD_PRODUCT = "Add_Product";
     private static final String ADD_PRODUCT_CONTROLLER = "AddProductController";
     
     private static final String SEARCH_PRODUCT = "Search_Product";
@@ -38,7 +41,7 @@ public class MainController extends HttpServlet {
     private static final String ADD_BRAND = "Add_Brand";
     private static final String ADD_BRAND_CONTROLLER = "AddBrandController";
     
-    private static final String GET_BRANDS_PAGE = "Manage_Brands_Page";
+    private static final String GET_BRANDS_PAGE = "Add_Brands_Page";
     private static final String GET_BRANDS_PAGE_VIEW = "GetBrandsController";
     
     private static final String EDIT_BRAND_PAGE = "Edit_Brand_Page";
@@ -147,6 +150,8 @@ public class MainController extends HttpServlet {
     private static final String ADD_PRODUCT_DETAILS = "Add_Product_Details";
     private static final String ADD_PRODUCT_DETAILS_CONTROLLER = "AddProductDetailsController";
     
+     private static final String ADD_PRODUCT_DETAIL_PAGE = "Add_Product_Detail_Page";
+    private static final String ADD_PRODUCT_DETAIL_PAGE_VIEW = "GetProductsController";
     
     private static final String EDIT_PRODUCT = "Edit_Product";
     private static final String EDIT_PRODUCT_CONTROLLER = "EditProductController";
@@ -165,7 +170,9 @@ public class MainController extends HttpServlet {
     
     private static final String MANAGE_PROMOTION_PAGE = "Manage promotions";
     private static final String MANAGE_PROMOTION_PAGE_VIEW = "AD_PromotionList.jsp";
-
+    
+    private static final String GET_PRODUCT_DETAIL = "Search_ProductDetail";
+    private static final String GET_PRODUCT_DETAIL_CONTROLLER = "GetProductsController";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -280,6 +287,12 @@ public class MainController extends HttpServlet {
                 url = VIEW_PRIVACY_CONTROLLER;
             } else if (MANAGE_PROMOTION_PAGE.equals(action)) {
                 url = MANAGE_PROMOTION_PAGE_VIEW;
+            }else if (GET_PRODUCTS_PAGE.equals(action)) {
+                url = GET_PRODUCTS_PAGE_VIEW;
+            }else if (GET_PRODUCT_DETAIL.equals(action)) {
+                url = GET_PRODUCT_DETAIL_CONTROLLER;
+            }else if (ADD_PRODUCT_DETAIL_PAGE.equals(action)) {
+                url = ADD_PRODUCT_DETAIL_PAGE_VIEW;
             }
         } catch (Exception e) {
             log("error at MainController: " + e.toString());
