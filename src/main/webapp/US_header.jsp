@@ -143,14 +143,14 @@
                                         <li class="checkout">
                                             <a href="#">
                                                 <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                                                <span id="checkout_items" class="checkout_items">2</span>
+                                                <!--<span id="checkout_items" class="checkout_items">2</span>-->
                                             </a>
                                         </li>
 
                                         <li class="checkout">
-                                            <a href="US_MyWishlist.jsp">
+                                            <a href="MainController?action=wishlist">
                                                 <i class="fa fa-heart" aria-hidden="true"></i>
-                                                <span id="checkout_items" class="checkout_items">2</span>
+                                                <!--<span id="checkout_items" class="checkout_items">2</span>-->
                                             </a>
                                         </li>
                                     </ul>

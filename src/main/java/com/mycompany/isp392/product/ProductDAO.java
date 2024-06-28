@@ -30,6 +30,26 @@ public class ProductDAO {
     private static final String DELETE_PRODUCT_DETAIL = "UPDATE ProductDetails SET status = 0 WHERE ProductID=?";
     private static final String CHECK_PRODUCT = "SELECT productID FROM Products WHERE productName LIKE ?";
     private static final String SEARCH_BRAND_BY_ID = "SELECT * FROM Brands WHERE brandID LIKE ?";
+    private static final String SELECT_CATEGORY_PRODUCT = "	SELECT \n"
+            + "    p.productName,\n"
+            + "    pd.price,\n"
+            + "    pd.image\n"
+            + "FROM \n"
+            + "    Products p\n"
+            + "JOIN \n"
+            + "    ProductDetails pd ON p.ProductID = pd.ProductID\n"
+            + "JOIN \n"
+            + "    ProductBelongtoCategories pbc ON p.ProductID = pbc.ProductID\n"
+            + "JOIN \n"
+            + "    Categories c ON pbc.Categories = c.CategoryID\n"
+            + "WHERE \n"
+            + "    c.CategoriesName = ?";
+    private static final String SELECT__WISHLIST = "SELECT wd.ProductID, p.productName, pd.image, b.BrandName, pd.price "
+            + "FROM Wishlists w JOIN WishlistDetails wd ON w.WishlistID = wd.WishlistID JOIN Products p ON wd.ProductID = p.ProductID JOIN ProductDetails pd ON p.ProductID = pd.ProductID JOIN  Brands b ON p.BrandID = b.BrandID "
+            + "WHERE w.CustID = ? ";
+    private static final String DELETE__WISHLIST = "DELETE FROM WishlistDetails "
+            + "WHERE WishlistID = (SELECT WishlistID FROM Wishlists WHERE CustID = ?) "
+            + "AND ProductID = ?";
 
     public boolean addProduct(ProductDTO product) throws SQLException {
         boolean check = false;
@@ -500,5 +520,101 @@ public boolean deleteProductDetails(int productID) throws SQLException {
             }
         }
         return productMap;
+    }
+
+    public List<ProductDetailsDTO> CateProducts(String gender) throws SQLException {
+        List<ProductDetailsDTO> products = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(SELECT_CATEGORY_PRODUCT);
+                ptm.setString(1, gender);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    String name = rs.getString("productName");
+                    int price = rs.getInt("price");
+                    String images = rs.getString("image");
+                    products.add(new ProductDetailsDTO(name, images, price));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return products;
+    }
+
+    public List<ProductDetailsDTO> showWishlist(int cusID) throws SQLException {
+        List<ProductDetailsDTO> products = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(SELECT__WISHLIST);
+                ptm.setInt(1, cusID);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    int productID = rs.getInt("ProductID");
+                    String name = rs.getString("productName");
+                    int price = rs.getInt("price");
+                    String images = rs.getString("image");
+                    String brandName = rs.getString("BrandName");
+                    products.add(new ProductDetailsDTO(productID, name, images, price, brandName));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return products;
+    }
+
+    public boolean deleteWishlist(int cusID, int productID) throws SQLException {
+        boolean result = false;
+        Connection conn = null;
+        PreparedStatement stm = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                stm = conn.prepareStatement(DELETE__WISHLIST);
+                stm.setInt(1, cusID);
+                stm.setInt(2, productID);
+                int value = stm.executeUpdate();
+                result = value > 0 ? true : false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return result;
     }
 }

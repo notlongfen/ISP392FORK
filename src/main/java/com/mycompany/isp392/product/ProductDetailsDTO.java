@@ -4,13 +4,14 @@ package com.mycompany.isp392.product;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+import com.mycompany.isp392.brand.BrandDTO;
 import java.sql.Date;
 
 /**
  *
  * @author TTNHAT
  */
-public class ProductDetailsDTO {
+public class ProductDetailsDTO extends ProductDTO {
 
     private int productID;
     private String color;
@@ -20,6 +21,8 @@ public class ProductDetailsDTO {
     private Date importDate;
     private String image;
     private int status;
+
+    private String brandName;
 
     public ProductDetailsDTO() {
     }
@@ -33,6 +36,20 @@ public class ProductDetailsDTO {
         this.importDate = importDate;
         this.image = image;
         this.status = status;
+    }
+
+    public ProductDetailsDTO(String productName, String image, int price) {
+        super(productName);
+        this.image = image;
+        this.price = price;
+    }
+
+    public ProductDetailsDTO(int productID, String productName, String image, int price, String brandName) {
+        super(productName);
+        this.productID = productID;
+        this.image = image;
+        this.price = price;
+        this.brandName = brandName;
     }
 
     public int getProductID() {
@@ -97,6 +114,14 @@ public class ProductDetailsDTO {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public String getBrandName() {
+        return brandName;
+    }
+
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
     }
 
     @Override

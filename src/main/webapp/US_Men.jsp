@@ -5,6 +5,8 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.util.List"%>
+<%@page import="com.mycompany.isp392.product.ProductDetailsDTO"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -58,7 +60,7 @@
                 max-width: 100%;
                 height: auto;
             }
-            .container-fluid{
+            .container-fluid1{
                 background: #1E1E27;
                 color: #fff;
             }
@@ -208,12 +210,12 @@
                     margin-bottom: 30px;
                 }
             }
-                   </style>
+        </style>
     </head>
     <body>
 
         <%@include file="US_header.jsp" %>
-        <div class="container-fluid p-3 mt-5">
+        <div class="container-fluid1 p-3 mt-5">
             <h2 style="color: #fff; padding-left: 40px;">Men</h2>
             <p style="padding-left: 40px; color: #fff">Buy and Sell items for Men on ISP392. Every item is ISP392 Verified. </p>
         </div>
@@ -221,7 +223,6 @@
             <div class="row">
                 <!-- Sidebar -->
                 <div class="col-md-3">
-                    <!--                    <h3 class="mb-2" style="color: #c53337">FILTER</h3>-->
                     <hr>
                     <div>
                         <h4 style="color: #c53337">FILTER</h4>
@@ -263,13 +264,18 @@
                     <h5 style="color: grey;"><a style="color: grey; text-decoration: none" href="US_index.jsp">Home ></a> <a style="color: grey; text-decoration: none" href="Men.jsp">Men</a></h5>
                     <!--                    <hr>-->
                     <div class="row">
+                        <%
+                        List<ProductDetailsDTO> listProduct = (List<ProductDetailsDTO>) request.getAttribute("menProduct");
+                        if (listProduct != null && listProduct.size() > 0) {
+                        for (ProductDetailsDTO list : listProduct) {
+                        %>
                         <div class="col-md-3 col-sm-6">
                             <div class="product-grid">
                                 <div class="product-image">
                                     <a href="#" class="image">
-                                        <img src="images/product_8.png">
+                                        <img src="<%= list.getImage() %>">
                                     </a>
-                                    <span class="product-discount-label">-23%</span>
+                                    <!--<span class="product-discount-label">-23%</span>-->
                                     <ul class="product-links">
 
                                         <li><a href="#"><i class="fa fa-heart"></i></a></li>
@@ -278,124 +284,22 @@
                                     <a href="" class="add-to-cart">Add to Cart</a>
                                 </div>
                                 <div class="product-content">
-                                    <h3 class="title"><a href="#">Women's Blouse Top</a></h3>
-                                    <div class="price">$53.55 <span>$68.88</span></div>
+                                    <h3 class="title"><a href="#"><%= list.getProductName() %></a></h3>
+                                    <div class="price"><%= list.getPrice() %></div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3 col-sm-6">
-                            <div class="product-grid">
-                                <div class="product-image">
-                                    <a href="#" class="image">
-                                        <img src="images/product_9.png">
-                                    </a>
-                                    <span class="product-discount-label">-23%</span>
-                                    <ul class="product-links">
-                                        <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                    </ul>
-                                    <a href="" class="add-to-cart">Add to Cart</a>
-                                </div>
-                                <div class="product-content">
-                                    <h3 class="title"><a href="#">Women's Blouse Top</a></h3>
-                                    <div class="price">$53.55 <span>$68.88</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <div class="product-grid">
-                                <div class="product-image">
-                                    <a href="#" class="image">
-                                        <img src="images/product_5.png">
-                                    </a>
-                                    <span class="product-discount-label">-23%</span>
-                                    <ul class="product-links">
 
-                                        <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                        <%
+                            }
+} else {
+                        %>
+                        <h1>No products found</h1>
 
-                                    </ul>
-                                    <a href="" class="add-to-cart">Add to Cart</a>
-                                </div>
-                                <div class="product-content">
-                                    <h3 class="title"><a href="#">Women's Blouse Top</a></h3>
-                                    <div class="price">$53.55 <span>$68.88</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <div class="product-grid">
-                                <div class="product-image">
-                                    <a href="#" class="image">
-                                        <img src="images/product_7.png">
-                                    </a>
-                                    <span class="product-discount-label">-23%</span>
-                                    <ul class="product-links">
+                        <%
+                        }
+                        %>
 
-                                        <li><a href="#"><i class="fa fa-heart"></i></a></li>
-
-                                    </ul>
-                                    <a href="" class="add-to-cart">Add to Cart</a>
-                                </div>
-                                <div class="product-content">
-                                    <h3 class="title"><a href="#">Women's Blouse Top</a></h3>
-                                    <div class="price">$53.55 <span>$68.88</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <div class="product-grid">
-                                <div class="product-image">
-                                    <a href="#" class="image">
-                                        <img src="images/product_2.png">
-                                    </a>
-                                    <span class="product-discount-label">-23%</span>
-                                    <ul class="product-links">
-                                        <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                    </ul>
-                                    <a href="" class="add-to-cart">Add to Cart</a>
-                                </div>
-                                <div class="product-content">
-                                    <h3 class="title"><a href="#">Women's Blouse Top</a></h3>
-                                    <div class="price">$53.55 <span>$68.88</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <div class="product-grid">
-                                <div class="product-image">
-                                    <a href="#" class="image">
-                                        <img src="images/product_8.png">
-                                    </a>
-                                    <span class="product-discount-label">-23%</span>
-                                    <ul class="product-links">
-
-                                        <li><a href="#"><i class="fa fa-heart"></i></a></li>
-
-                                    </ul>
-                                    <a href="" class="add-to-cart">Add to Cart</a>
-                                </div>
-                                <div class="product-content">
-                                    <h3 class="title"><a href="#">Women's Blouse Top</a></h3>
-                                    <div class="price">$53.55 <span>$68.88</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <div class="product-grid">
-                                <div class="product-image">
-                                    <a href="#" class="image">
-                                        <img src="images/product_10.png">
-                                    </a>
-                                    <ul class="product-links">
-                                        <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                    </ul>
-                                    <a href="" class="add-to-cart">Add to Cart</a>
-                                </div>
-                                <div class="product-content">
-                                    <h3 class="title"><a href="#">Men's Jacket</a></h3>
-                                    <div class="price">$75.55</div>
-                                </div>
-                            </div>
-                        </div>
                         <nav aria-label="Page navigation">
                             <ul class="pagination justify-content-center mt-3">
                                 <li class="page-item">

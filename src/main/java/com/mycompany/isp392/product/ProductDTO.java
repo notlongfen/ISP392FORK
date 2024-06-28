@@ -36,6 +36,10 @@ public class ProductDTO {
         this.status = status;
         this.brandID = brandID;
     }
+    
+            public ProductDTO(String productName) {
+        this.productName = productName;
+    }
 
     public int getProductID() {
         return productID;

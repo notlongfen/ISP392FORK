@@ -250,7 +250,7 @@
                     </div>
                 </div>
             </div>
-              
+
 
 
 
@@ -259,470 +259,469 @@
             <div class="banner">
                 <div class="banner-container">
                     <div class="banener-row">
-                        <div class="col-md-4">
-                            <div class="banner_item align-items-center mx-5" style="background-image:url('images/s3.png'); right: 100px">
-                                <div class="banner_category">
-                                    <a href="US_Women.jsp">women's</a>
+                        <form action="MainController" class="col-md-4">
+                            <div class="col-md-4" >
+                                <div class="banner_item align-items-center mx-5" style="background-image:url('images/s3.png'); right: 100px">
+                                    <div class="banner_category">
+                                        <a href="MainController?action=Category&category=Women">Women's</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <form action="MainController" method="post" class="col-md-4">
+                            <div class="col-md-4">
+                                <div class="banner_item align-items-center mx-5" style="background-image:url('images/s2.png'); left: -10px">
+                                    <div class="banner_category">
+                                        <a href="MainController?action=Category&category=Men">men's</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- New Arrivals -->
+
+            <div class="new_arrivals">
+                <div class="container">
+                    <div class="row">
+                        <div class="col text-center">
+                            <div class="section_title new_arrivals_title">
+                                <h2>New Arrivals</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row align-items-center">
+                        <div class="col text-center">
+                            <div class="new_arrivals_sorting">
+                                <ul
+                                    class="arrivals_grid_sorting clearfix button-group filters-button-group">
+                                    <li
+                                        class="grid_sorting_button button d-flex flex-column justify-content-center align-items-center active is-checked"
+                                        data-filter="*">all</li>
+                                    <li
+                                        class="grid_sorting_button button d-flex flex-column justify-content-center align-items-center"
+                                        data-filter=".women">women's</li>
+                                    <li
+                                        class="grid_sorting_button button d-flex flex-column justify-content-center align-items-center"
+                                        data-filter=".men">men's</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="product-grid"
+                                 data-isotope='{ "itemSelector": ".product-item", "layoutMode": "fitRows" }'>
+
+                                <!-- Product 1 -->
+
+                                <div class="product-item men">
+                                    <div class="product discount product_filter">
+                                        <div class="product_image">
+                                            <img src="images/s5.png" alt>
+                                        </div>
+                                        <div class="favorite favorite_left"></div>
+                                        <div
+                                            class="product_bubble product_bubble_red d-flex flex-column align-items-center " style="background-color: #C53337; right: 20px;" ><span >-$20</span></div>
+                                        <div class="product_info">
+                                            <h6 class="product_name"><a href="single.html">Samsung CF591 Series
+                                                    Curved 27-Inch FHD Monitor</a></h6>
+                                            <div class="product_price" style="color: #C53337">$520.00<span>$590.00</span></div>
+                                        </div>
+                                    </div>
+                                    <!--                            <div class="red_button add_to_cart_button"><a href="#">add to
+                                                                        cart</a></div>-->
+                                </div>
+
+                                <!-- Product 2 -->
+                                <div class="product-item men">
+                                    <div class="product discount product_filter">
+                                        <div class="product_image">
+                                            <img src="images/s5.png" alt>
+                                        </div>
+                                        <div class="favorite favorite_left"></div>
+                                        <div
+                                            class="product_bubble product_bubble_left product_bubble_green d-flex flex-column align-items-center"><span>new</span></div>
+
+                                        <div class="product_info">
+                                            <h6 class="product_name"><a href="single.html">Samsung CF591 Series
+                                                    Curved 27-Inch FHD Monitor</a></h6>
+                                            <div class="product_price" style="color: #C53337">$520.00</div>
+                                        </div>
+                                    </div>
+                                    <!--                            <div class="red_button add_to_cart_button"><a href="#">add to
+                                                                        cart</a></div>-->
+                                </div>
+
+                                <!-- Product 2 -->
+                                <div class="product-item women">
+                                    <div class="product discount product_filter">
+                                        <div class="product_image">
+                                            <img src="images/s5.png" alt>
+                                        </div>
+                                        <div class="favorite favorite_left"></div>
+                                        <div class="product_info">
+                                            <h6 class="product_name"><a href="single.html">Samsung CF591 Series
+                                                    Curved 27-Inch FHD Monitor</a></h6>
+                                            <div class="product_price" style="color: #C53337">$520.00</div>
+                                        </div>
+                                    </div>
+                                    <!--<div class="red_button add_to_cart_button"><a href="#">add to
+                                                                        cart</a></div>-->
+                                </div>
+
+                                <!-- Product 2 -->
+                                <div class="product-item women">
+                                    <div class="product discount product_filter">
+                                        <div class="product_image">
+                                            <img src="images/s5.png" alt>
+                                        </div>
+                                        <div class="favorite favorite_left"></div>
+                                        <div class="product_info">
+                                            <h6 class="product_name"><a href="single.html">Samsung CF591 Series
+                                                    Curved 27-Inch FHD Monitor</a></h6>
+                                            <div class="product_price" style="color: #C53337">$520.00</div>
+                                        </div>
+                                    </div>
+                                    <!--                            <div class="red_button add_to_cart_button"><a href="#">add to
+                                                                        cart</a></div>-->
+                                </div>
+
+                                <!-- Product 2 -->
+                                <div class="product-item men">
+                                    <div class="product discount product_filter">
+                                        <div class="product_image">
+                                            <img src="images/s5.png" alt>
+                                        </div>
+                                        <div class="favorite favorite_left"></div>
+                                        <div class="product_info">
+                                            <h6 class="product_name"><a href="single.html">Samsung CF591 Series
+                                                    Curved 27-Inch FHD Monitor</a></h6>
+                                            <div class="product_price" style="color: #C53337">$520.00</div>
+                                        </div>
+                                    </div>
+                                    <!--                            <div class="red_button add_to_cart_button"><a href="#">add to
+                                                                        cart</a></div>-->
+                                </div>
+
+                                <!-- Product 2 -->
+                                <div class="product-item men">
+                                    <div class="product discount product_filter">
+                                        <div class="product_image">
+                                            <img src="images/s5.png" alt>
+                                        </div>
+                                        <div class="favorite favorite_left"></div>
+                                        <div class="product_info">
+                                            <h6 class="product_name"><a href="single.html">Samsung CF591 Series
+                                                    Curved 27-Inch FHD Monitor</a></h6>
+                                            <div class="product_price" style="color: #C53337">$520.00</div>
+                                        </div>
+                                    </div>
+                                    <!--                            <div class="red_button add_to_cart_button"><a href="#">add to
+                                                                        cart</a></div>-->
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
 
-                        <div class="col-md-4">
-                            <div class="banner_item align-items-center mx-5" style="background-image:url('images/s2.png'); left: -10px">
-                                <div class="banner_category">
-                                    <a href="US_Men.jsp">men's</a>
-                                </div>
+            <div class="mt-5 d-flex justify-content-center">
+                <a href="US_AllProducts.jsp" class="btn" style="background-color: #C53337; color: white;">Show more</a>
+            </div>
+
+
+            <!-- Best Sellers -->
+
+            <div class="best_sellers">
+                <div class="container">
+                    <div class="row">
+                        <div class="col text-center">
+                            <div class="section_title new_arrivals_title ">
+                                <h2>Best Sellers</h2>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-    
+                    <div class="row">
+                        <div class="col">
+                            <div class="product_slider_container">
+                                <div class="owl-carousel owl-theme product_slider">
 
+                                    <!-- Slide 1 -->
 
+                                    <div class="owl-item product_slider_item">
+                                        <div class="product-item">
+                                            <div class="product discount">
+                                                <div class="product_image">
+                                                    <img src="images/s5.png" alt>
+                                                </div>
+                                                <div class="favorite favorite_left"></div>
+                                                <div
+                                                    class="product_bubble product_bubble_red d-flex flex-column align-items-center " style="background-color: #C53337; right: 20px;" ><span >-$20</span></div>
+                                                <div class="product_info">
+                                                    <h6 class="product_name"><a href="single.html">Fujifilm X100T 16 MP
+                                                            Digital Camera (Silver)</a></h6>
+                                                    <div class="product_price" style="color: #C53337">$520.00<span>$590.00</span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
-    <!-- New Arrivals -->
+                                    <!-- Slide 2 -->
+                                    <div class="owl-item product_slider_item">
+                                        <div class="product-item">
+                                            <div class="product discount">
+                                                <div class="product_image">
+                                                    <img src="images/s5.png" alt>
+                                                </div>
+                                                <div class="favorite favorite_left"></div>
+                                                <div
+                                                    class="product_bubble product_bubble_red d-flex flex-column align-items-center " style="background-color: #C53337; right: 20px;" ><span >-$20</span></div>
+                                                <div class="product_info">
+                                                    <h6 class="product_name"><a href="single.html">Fujifilm X100T 16 MP
+                                                            Digital Camera (Silver)</a></h6>
+                                                    <div class="product_price" style="color: #C53337">$520.00<span>$590.00</span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
-    <div class="new_arrivals">
-        <div class="container">
-            <div class="row">
-                <div class="col text-center">
-                    <div class="section_title new_arrivals_title">
-                        <h2>New Arrivals</h2>
-                    </div>
-                </div>
-            </div>
-            <div class="row align-items-center">
-                <div class="col text-center">
-                    <div class="new_arrivals_sorting">
-                        <ul
-                            class="arrivals_grid_sorting clearfix button-group filters-button-group">
-                            <li
-                                class="grid_sorting_button button d-flex flex-column justify-content-center align-items-center active is-checked"
-                                data-filter="*">all</li>
-                            <li
-                                class="grid_sorting_button button d-flex flex-column justify-content-center align-items-center"
-                                data-filter=".women">women's</li>
-                            <li
-                                class="grid_sorting_button button d-flex flex-column justify-content-center align-items-center"
-                                data-filter=".men">men's</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <div class="product-grid"
-                         data-isotope='{ "itemSelector": ".product-item", "layoutMode": "fitRows" }'>
+                                    <!-- Slide 4 -->
+                                    <div class="owl-item product_slider_item">
+                                        <div class="product-item">
+                                            <div class="product discount">
+                                                <div class="product_image">
+                                                    <img src="images/s5.png" alt>
+                                                </div>
+                                                <div class="favorite favorite_left"></div>
+                                                <div
+                                                    class="product_bubble product_bubble_red d-flex flex-column align-items-center " style="background-color: #C53337; right: 20px;" ><span >-$20</span></div>
+                                                <div class="product_info">
+                                                    <h6 class="product_name"><a href="single.html">Fujifilm X100T 16 MP
+                                                            Digital Camera (Silver)</a></h6>
+                                                    <div class="product_price" style="color: #C53337">$520.00<span>$590.00</span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                        <!-- Product 1 -->
+                                    <!-- Slide 5 -->
+                                    <div class="owl-item product_slider_item">
+                                        <div class="product-item">
+                                            <div class="product discount">
+                                                <div class="product_image">
+                                                    <img src="images/s5.png" alt>
+                                                </div>
+                                                <div class="favorite favorite_left"></div>
+                                                <div
+                                                    class="product_bubble product_bubble_red d-flex flex-column align-items-center " style="background-color: #C53337; right: 20px;" ><span >-$20</span></div>
+                                                <div class="product_info">
+                                                    <h6 class="product_name"><a href="single.html">Fujifilm X100T 16 MP
+                                                            Digital Camera (Silver)</a></h6>
+                                                    <div class="product_price" style="color: #C53337">$520.00<span>$590.00</span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                        <div class="product-item men">
-                            <div class="product discount product_filter">
-                                <div class="product_image">
-                                    <img src="images/s5.png" alt>
+                                    <!-- Slide 6 -->
+                                    <div class="owl-item product_slider_item">
+                                        <div class="product-item">
+                                            <div class="product discount">
+                                                <div class="product_image">
+                                                    <img src="images/s5.png" alt>
+                                                </div>
+                                                <div class="favorite favorite_left"></div>
+                                                <div
+                                                    class="product_bubble product_bubble_red d-flex flex-column align-items-center " style="background-color: #C53337; right: 20px;" ><span >-$20</span></div>
+                                                <div class="product_info">
+                                                    <h6 class="product_name"><a href="single.html">Fujifilm X100T 16 MP
+                                                            Digital Camera (Silver)</a></h6>
+                                                    <div class="product_price" style="color: #C53337">$520.00<span>$590.00</span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
-                                <div class="favorite favorite_left"></div>
+
+
+                                <!-- Slider Navigation -->
+
                                 <div
-                                    class="product_bubble product_bubble_red d-flex flex-column align-items-center " style="background-color: #C53337; right: 20px;" ><span >-$20</span></div>
-                                <div class="product_info">
-                                    <h6 class="product_name"><a href="single.html">Samsung CF591 Series
-                                            Curved 27-Inch FHD Monitor</a></h6>
-                                    <div class="product_price" style="color: #C53337">$520.00<span>$590.00</span></div>
+                                    class="product_slider_nav_left product_slider_nav d-flex align-items-center justify-content-center flex-column">
+                                    <i class="fa fa-chevron-left" aria-hidden="true"></i>
                                 </div>
-                            </div>
-                            <!--                            <div class="red_button add_to_cart_button"><a href="#">add to
-                                                                cart</a></div>-->
-                        </div>
-
-                        <!-- Product 2 -->
-                        <div class="product-item men">
-                            <div class="product discount product_filter">
-                                <div class="product_image">
-                                    <img src="images/s5.png" alt>
-                                </div>
-                                <div class="favorite favorite_left"></div>
                                 <div
-                                    class="product_bubble product_bubble_left product_bubble_green d-flex flex-column align-items-center"><span>new</span></div>
-
-                                <div class="product_info">
-                                    <h6 class="product_name"><a href="single.html">Samsung CF591 Series
-                                            Curved 27-Inch FHD Monitor</a></h6>
-                                    <div class="product_price" style="color: #C53337">$520.00</div>
+                                    class="product_slider_nav_right product_slider_nav d-flex align-items-center justify-content-center flex-column">
+                                    <i class="fa fa-chevron-right" aria-hidden="true"></i>
                                 </div>
                             </div>
-                            <!--                            <div class="red_button add_to_cart_button"><a href="#">add to
-                                                                cart</a></div>-->
-                        </div>
-
-                        <!-- Product 2 -->
-                        <div class="product-item women">
-                            <div class="product discount product_filter">
-                                <div class="product_image">
-                                    <img src="images/s5.png" alt>
-                                </div>
-                                <div class="favorite favorite_left"></div>
-                                <div class="product_info">
-                                    <h6 class="product_name"><a href="single.html">Samsung CF591 Series
-                                            Curved 27-Inch FHD Monitor</a></h6>
-                                    <div class="product_price" style="color: #C53337">$520.00</div>
-                                </div>
-                            </div>
-                            <!--<div class="red_button add_to_cart_button"><a href="#">add to
-                                                                cart</a></div>-->
-                        </div>
-
-                        <!-- Product 2 -->
-                        <div class="product-item women">
-                            <div class="product discount product_filter">
-                                <div class="product_image">
-                                    <img src="images/s5.png" alt>
-                                </div>
-                                <div class="favorite favorite_left"></div>
-                                <div class="product_info">
-                                    <h6 class="product_name"><a href="single.html">Samsung CF591 Series
-                                            Curved 27-Inch FHD Monitor</a></h6>
-                                    <div class="product_price" style="color: #C53337">$520.00</div>
-                                </div>
-                            </div>
-                            <!--                            <div class="red_button add_to_cart_button"><a href="#">add to
-                                                                cart</a></div>-->
-                        </div>
-
-                        <!-- Product 2 -->
-                        <div class="product-item men">
-                            <div class="product discount product_filter">
-                                <div class="product_image">
-                                    <img src="images/s5.png" alt>
-                                </div>
-                                <div class="favorite favorite_left"></div>
-                                <div class="product_info">
-                                    <h6 class="product_name"><a href="single.html">Samsung CF591 Series
-                                            Curved 27-Inch FHD Monitor</a></h6>
-                                    <div class="product_price" style="color: #C53337">$520.00</div>
-                                </div>
-                            </div>
-                            <!--                            <div class="red_button add_to_cart_button"><a href="#">add to
-                                                                cart</a></div>-->
-                        </div>
-
-                        <!-- Product 2 -->
-                        <div class="product-item men">
-                            <div class="product discount product_filter">
-                                <div class="product_image">
-                                    <img src="images/s5.png" alt>
-                                </div>
-                                <div class="favorite favorite_left"></div>
-                                <div class="product_info">
-                                    <h6 class="product_name"><a href="single.html">Samsung CF591 Series
-                                            Curved 27-Inch FHD Monitor</a></h6>
-                                    <div class="product_price" style="color: #C53337">$520.00</div>
-                                </div>
-                            </div>
-                            <!--                            <div class="red_button add_to_cart_button"><a href="#">add to
-                                                                cart</a></div>-->
                         </div>
                     </div>
                 </div>
             </div>
+
+
+
+            <!----Brand-->
+            <div class="brands">
+                <div class="container">
+                    <div class="brands-inner">
+                        <div class="brand-title">
+                            <span>Brands</span>
+                        </div>
+
+                        <div id="slider-home" class="brands">
+                            <div id="brand-carousel" class="owl-carousel owl-theme">
+                                <div class="item">
+                                    <img src="images/s4.png" alt="slide-1" class="img-responsive" style="width: 180px; height: 180px;">
+                                </div>
+                                <div class="item">
+                                    <img src="images/s4.png" alt="slide-1" class="img-responsive" style="width: 180px; height: 180px;">
+                                </div>
+                                <div class="item">
+                                    <img src="images/s4.png" alt="slide-1" class="img-responsive" style="width: 180px; height: 180px;">
+                                </div>
+                                <div class="item">
+                                    <img src="images/s4.png" alt="slide-1" class="img-responsive" style="width: 180px; height: 180px;">
+                                </div>
+                                <div class="item">
+                                    <img src="images/s4.png" alt="slide-1" class="img-responsive" style="width: 180px; height: 180px;">
+                                </div>
+                                <div class="item">
+                                    <img src="images/s4.png" alt="slide-1" class="img-responsive" style="width: 180px; height: 180px;">
+                                </div>
+                                <div class="item">
+                                    <img src="images/s4.png" alt="slide-1" class="img-responsive" style="width: 180px; height: 180px;">
+                                </div>
+                                <div class="item">
+                                    <img src="images/s4.png" alt="slide-1" class="img-responsive" style="width: 180px; height: 180px;">
+                                </div>
+                                <div class="item">
+                                    <img src="images/s4.png" alt="slide-1" class="img-responsive" style="width: 180px; height: 180px;">
+                                </div>                   
+                            </div>
+                        </div>
+                        <!--Slider-->
+
+                    </div>
+                </div>
+            </div>
+            <!----Brand-->
+
+            <!-- Benefit -->
+
+            <div class="benefit">
+                <div class="container">
+                    <div class="row benefit_row" style="padding: 30px;">
+                        <div class="col-lg-3 benefit_col">
+                            <div class="benefit_item d-flex flex-row align-items-center" style="width: 400 px; height: 100px;">
+                                <div class="benefit_icon"><i class="fa fa-truck"
+                                                             aria-hidden="true" style="color: #C53337"></i></div>
+                                <div class="benefit_content">
+                                    <p><b>FREE SHIPPING</b></p>
+                                    <p style="font-size: 10px">Suffered Alteration in Some Form</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 benefit_col">
+                            <div class="benefit_item d-flex flex-row align-items-center" style="width: 400 px; height: 100px;">
+                                <div class="benefit_icon"><i class="fa fa-money"
+                                                             aria-hidden="true" style="color: #C53337"></i></div>
+                                <div class="benefit_content">
+                                    <p><b>CATCH ON DELIVERY</b></p>
+                                    <p style="font-size: 10px">The Internet Tend To Repeat</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 benefit_col">
+                            <div class="benefit_item d-flex flex-row align-items-center" style="width: 400 px; height: 100px;">
+                                <div class="benefit_icon"><i class="fa fa-undo"
+                                                             aria-hidden="true" style="color: #C53337"></i></div>
+                                <div class="benefit_content">
+                                    <p><b>45 DAYS RETURN</b></p>
+                                    <p style="font-size: 10px">Making it Look Like Readable</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 benefit_col">
+                            <div class="benefit_item d-flex flex-row align-items-center" style="width: 400 px; height: 100px;">
+                                <div class="benefit_icon"><i class="fa fa-clock-o"
+                                                             aria-hidden="true" style="color: #C53337"></i></div>
+                                <div class="benefit_content">
+                                    <p><b>OPENING ALL WEEK</b></p>
+                                    <p style="font-size: 10px">8AM - 09PM</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <%@include file="US_footer.jsp" %>
+            <button id="openFormButton"><i class='fas fa-pen'></i></button>
+
+            <div id="popupForm" class="form-popup">
+                <form class="form-container">
+                    <h4 style="text-align: center">PLEASE FILL IN THE BLANKS TO REQUEST SUPPORT</h4>
+                    <label for="email"><b>Email</b></label>
+                    <input type="text" id="email" name="email" required>
+
+                    <label for="content"><b>Content</b></label>
+                    <textarea id="content" name="content" required></textarea>
+
+                    <button type="submit" class="btn">Send</button>
+                    <button type="button" class="btn cancel" id="closeFormButton">Close</button>
+                </form>
+            </div>
+
+
+
+
         </div>
-    </div>
-    
-<!--    <div class="mt-5 ml-lg-5 mr-lg-5 " style="text-align: center; display: inline-block">
-        <a href="US_AllProducts.jsp" class="btn" style="background-color: #C53337; color: white; right: 400px; ">Show more</a>
-    </div>-->
-   
 
-    <!-- Best Sellers -->
+        <!-- Khoi tao Owl Carousel -->
+        <script>
+            $(document).ready(function () {
+                $("#brand-carousel").owlCarousel({
+                    loop: true,
+                    margin: 10,
+                    nav: false, // ?n các nút ?i?u h??ng prev và next
+                    dots: true, // Hi?n th? các nút ?i?u khi?n trang (pagination)
+                    responsive: {
+                        0: {
+                            items: 1
+                        },
+                        600: {
+                            items: 2
+                        },
+                        1000: {
+                            items: 4
+                        }
+                    }
+                });
+            });
 
-    <div class="best_sellers">
-        <div class="container">
-            <div class="row">
-                <div class="col text-center">
-                    <div class="section_title new_arrivals_title ">
-                        <h2>Best Sellers</h2>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <div class="product_slider_container">
-                        <div class="owl-carousel owl-theme product_slider">
+            document.getElementById('openFormButton').addEventListener('click', function () {
+                document.getElementById('popupForm').style.display = 'block';
+            });
 
-                            <!-- Slide 1 -->
+            document.getElementById('closeFormButton').addEventListener('click', function () {
+                document.getElementById('popupForm').style.display = 'none';
+            });
 
-                            <div class="owl-item product_slider_item">
-                                <div class="product-item">
-                                    <div class="product discount">
-                                        <div class="product_image">
-                                            <img src="images/s5.png" alt>
-                                        </div>
-                                        <div class="favorite favorite_left"></div>
-                                        <div
-                                            class="product_bubble product_bubble_red d-flex flex-column align-items-center " style="background-color: #C53337; right: 20px;" ><span >-$20</span></div>
-                                        <div class="product_info">
-                                            <h6 class="product_name"><a href="single.html">Fujifilm X100T 16 MP
-                                                    Digital Camera (Silver)</a></h6>
-                                            <div class="product_price" style="color: #C53337">$520.00<span>$590.00</span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+        </script>
 
-                            <!-- Slide 2 -->
-                            <div class="owl-item product_slider_item">
-                                <div class="product-item">
-                                    <div class="product discount">
-                                        <div class="product_image">
-                                            <img src="images/s5.png" alt>
-                                        </div>
-                                        <div class="favorite favorite_left"></div>
-                                        <div
-                                            class="product_bubble product_bubble_red d-flex flex-column align-items-center " style="background-color: #C53337; right: 20px;" ><span >-$20</span></div>
-                                        <div class="product_info">
-                                            <h6 class="product_name"><a href="single.html">Fujifilm X100T 16 MP
-                                                    Digital Camera (Silver)</a></h6>
-                                            <div class="product_price" style="color: #C53337">$520.00<span>$590.00</span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Slide 4 -->
-                            <div class="owl-item product_slider_item">
-                                <div class="product-item">
-                                    <div class="product discount">
-                                        <div class="product_image">
-                                            <img src="images/s5.png" alt>
-                                        </div>
-                                        <div class="favorite favorite_left"></div>
-                                        <div
-                                            class="product_bubble product_bubble_red d-flex flex-column align-items-center " style="background-color: #C53337; right: 20px;" ><span >-$20</span></div>
-                                        <div class="product_info">
-                                            <h6 class="product_name"><a href="single.html">Fujifilm X100T 16 MP
-                                                    Digital Camera (Silver)</a></h6>
-                                            <div class="product_price" style="color: #C53337">$520.00<span>$590.00</span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Slide 5 -->
-                            <div class="owl-item product_slider_item">
-                                <div class="product-item">
-                                    <div class="product discount">
-                                        <div class="product_image">
-                                            <img src="images/s5.png" alt>
-                                        </div>
-                                        <div class="favorite favorite_left"></div>
-                                        <div
-                                            class="product_bubble product_bubble_red d-flex flex-column align-items-center " style="background-color: #C53337; right: 20px;" ><span >-$20</span></div>
-                                        <div class="product_info">
-                                            <h6 class="product_name"><a href="single.html">Fujifilm X100T 16 MP
-                                                    Digital Camera (Silver)</a></h6>
-                                            <div class="product_price" style="color: #C53337">$520.00<span>$590.00</span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Slide 6 -->
-                            <div class="owl-item product_slider_item">
-                                <div class="product-item">
-                                    <div class="product discount">
-                                        <div class="product_image">
-                                            <img src="images/s5.png" alt>
-                                        </div>
-                                        <div class="favorite favorite_left"></div>
-                                        <div
-                                            class="product_bubble product_bubble_red d-flex flex-column align-items-center " style="background-color: #C53337; right: 20px;" ><span >-$20</span></div>
-                                        <div class="product_info">
-                                            <h6 class="product_name"><a href="single.html">Fujifilm X100T 16 MP
-                                                    Digital Camera (Silver)</a></h6>
-                                            <div class="product_price" style="color: #C53337">$520.00<span>$590.00</span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                       
-
-                        <!-- Slider Navigation -->
-
-                        <div
-                            class="product_slider_nav_left product_slider_nav d-flex align-items-center justify-content-center flex-column">
-                            <i class="fa fa-chevron-left" aria-hidden="true"></i>
-                        </div>
-                        <div
-                            class="product_slider_nav_right product_slider_nav d-flex align-items-center justify-content-center flex-column">
-                            <i class="fa fa-chevron-right" aria-hidden="true"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
-    <!----Brand-->
-    <div class="brands">
-        <div class="container">
-            <div class="brands-inner">
-                <div class="brand-title">
-                    <span>Brands</span>
-                </div>
-
-                <div id="slider-home" class="brands">
-                    <div id="brand-carousel" class="owl-carousel owl-theme">
-                        <div class="item">
-                            <img src="images/s4.png" alt="slide-1" class="img-responsive" style="width: 180px; height: 180px;">
-                        </div>
-                        <div class="item">
-                            <img src="images/s4.png" alt="slide-1" class="img-responsive" style="width: 180px; height: 180px;">
-                        </div>
-                        <div class="item">
-                            <img src="images/s4.png" alt="slide-1" class="img-responsive" style="width: 180px; height: 180px;">
-                        </div>
-                        <div class="item">
-                            <img src="images/s4.png" alt="slide-1" class="img-responsive" style="width: 180px; height: 180px;">
-                        </div>
-                        <div class="item">
-                            <img src="images/s4.png" alt="slide-1" class="img-responsive" style="width: 180px; height: 180px;">
-                        </div>
-                        <div class="item">
-                            <img src="images/s4.png" alt="slide-1" class="img-responsive" style="width: 180px; height: 180px;">
-                        </div>
-                        <div class="item">
-                            <img src="images/s4.png" alt="slide-1" class="img-responsive" style="width: 180px; height: 180px;">
-                        </div>
-                        <div class="item">
-                            <img src="images/s4.png" alt="slide-1" class="img-responsive" style="width: 180px; height: 180px;">
-                        </div>
-                        <div class="item">
-                            <img src="images/s4.png" alt="slide-1" class="img-responsive" style="width: 180px; height: 180px;">
-                        </div>                   
-                    </div>
-                </div>
-                <!--Slider-->
-
-            </div>
-        </div>
-    </div>
-    <!----Brand-->
-
-    <!-- Benefit -->
-
-    <div class="benefit">
-        <div class="container">
-            <div class="row benefit_row" style="padding: 30px;">
-                <div class="col-lg-3 benefit_col">
-                    <div class="benefit_item d-flex flex-row align-items-center" style="width: 400 px; height: 100px;">
-                        <div class="benefit_icon"><i class="fa fa-truck"
-                                                     aria-hidden="true" style="color: #C53337"></i></div>
-                        <div class="benefit_content">
-                            <p><b>FREE SHIPPING</b></p>
-                            <p style="font-size: 10px">Suffered Alteration in Some Form</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 benefit_col">
-                    <div class="benefit_item d-flex flex-row align-items-center" style="width: 400 px; height: 100px;">
-                        <div class="benefit_icon"><i class="fa fa-money"
-                                                     aria-hidden="true" style="color: #C53337"></i></div>
-                        <div class="benefit_content">
-                            <p><b>CATCH ON DELIVERY</b></p>
-                            <p style="font-size: 10px">The Internet Tend To Repeat</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 benefit_col">
-                    <div class="benefit_item d-flex flex-row align-items-center" style="width: 400 px; height: 100px;">
-                        <div class="benefit_icon"><i class="fa fa-undo"
-                                                     aria-hidden="true" style="color: #C53337"></i></div>
-                        <div class="benefit_content">
-                            <p><b>45 DAYS RETURN</b></p>
-                            <p style="font-size: 10px">Making it Look Like Readable</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 benefit_col">
-                    <div class="benefit_item d-flex flex-row align-items-center" style="width: 400 px; height: 100px;">
-                        <div class="benefit_icon"><i class="fa fa-clock-o"
-                                                     aria-hidden="true" style="color: #C53337"></i></div>
-                        <div class="benefit_content">
-                            <p><b>OPENING ALL WEEK</b></p>
-                            <p style="font-size: 10px">8AM - 09PM</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <%@include file="US_footer.jsp" %>
-    <button id="openFormButton"><i class='fas fa-pen'></i></button>
-
-    <div id="popupForm" class="form-popup">
-        <form class="form-container">
-            <h4 style="text-align: center">PLEASE FILL IN THE BLANKS TO REQUEST SUPPORT</h4>
-            <label for="email"><b>Email</b></label>
-            <input type="text" id="email" name="email" required>
-
-            <label for="content"><b>Content</b></label>
-            <textarea id="content" name="content" required></textarea>
-
-            <button type="submit" class="btn">Send</button>
-            <button type="button" class="btn cancel" id="closeFormButton">Close</button>
-        </form>
-    </div>
-
-
-
-
-</div>
-
-<!-- Khoi tao Owl Carousel -->
-<script>
-    $(document).ready(function () {
-        $("#brand-carousel").owlCarousel({
-            loop: true,
-            margin: 10,
-            nav: false, // ?n các nút ?i?u h??ng prev và next
-            dots: true, // Hi?n th? các nút ?i?u khi?n trang (pagination)
-            responsive: {
-                0: {
-                    items: 1
-                },
-                600: {
-                    items: 2
-                },
-                1000: {
-                    items: 4
-                }
-            }
-        });
-    });
-
-    document.getElementById('openFormButton').addEventListener('click', function () {
-        document.getElementById('popupForm').style.display = 'block';
-    });
-
-    document.getElementById('closeFormButton').addEventListener('click', function () {
-        document.getElementById('popupForm').style.display = 'none';
-    });
-
-</script>
-
-<script src="js/jquery-3.2.1.min.js"></script>
-<script src="styles/bootstrap4/popper.js"></script>
-<script src="styles/bootstrap4/bootstrap.min.js"></script>
-<script src="plugins/Isotope/isotope.pkgd.min.js"></script>
-<script src="plugins/OwlCarousel2-2.2.1/owl.carousel.js"></script>
-<script src="plugins/easing/easing.js"></script>
-<script src="js/custom.js"></script>
-<script src="js/brand.js"></script>
-</body>
+        <script src="js/jquery-3.2.1.min.js"></script>
+        <script src="styles/bootstrap4/popper.js"></script>
+        <script src="styles/bootstrap4/bootstrap.min.js"></script>
+        <script src="plugins/Isotope/isotope.pkgd.min.js"></script>
+        <script src="plugins/OwlCarousel2-2.2.1/owl.carousel.js"></script>
+        <script src="plugins/easing/easing.js"></script>
+        <script src="US_js/custom.js"></script>
+        <script src="US_js/brand.js"></script>
+    </body>
 
 </html>
