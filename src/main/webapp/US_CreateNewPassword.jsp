@@ -69,18 +69,19 @@
         <div class="container my-5" style="width: 500px; ">
             <div class="card" style="margin-bottom: 250px;">
                 <div class="card-body" >
-                    <form>
+                    <form action="MainController" method="POST">
+                        <input type="hidden" name="token" value="<%= request.getParameter("token") %>">
                         <p style="font-weight: bold; font-size: 23px;">Create New Password</p>
                         <p style="color: #838383">Your new password must be different from your previous password</p>
                         <p class="mb-0" style="font-size: 18px;">New password</p>
                         <div class="mb-0">
-                            <input type="password" class="form-control" style="border-radius: 0" id="password" placeholder="Enter password">
+                            <input type="password" class="form-control" style="border-radius: 0" id="password" placeholder="Enter password" name="newPassword">
                         </div>
                         <p class="mt-3 mb-0" style="font-size: 18px;">Confirm password</p>
                         <div class="mb-3 mt-0">
-                            <input type="password" class="form-control" style="border-radius: 0" id="confirmPassword" placeholder="Enter password">
+                            <input type="password" class="form-control" style="border-radius: 0" id="confirmPassword" placeholder="Enter password" name="confirmPassword">
                         </div>
-                        <button type="submit" class="btn btn-dark w-100" style="border-radius: 0; font-size: 20px;">Reset Password</button>
+                        <button type="submit" class="btn btn-dark w-100" style="border-radius: 0; font-size: 20px;" name="action" value="Verify_Token">Reset Password</button>
                     </form>
                 </div>
             </div>

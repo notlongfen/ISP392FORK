@@ -4,6 +4,7 @@
  */
 package stackjava.com.accessgoogle.servlet;
 
+import com.mycompany.isp392.user.CustomerDTO;
 import com.mycompany.isp392.user.UserDAO;
 import com.mycompany.isp392.user.UserDTO;
 import jakarta.servlet.RequestDispatcher;
@@ -27,12 +28,16 @@ import stackjava.com.accessgoogle.common.GoogleUtils;
  */
 @WebServlet(name = "LoginGoogleServlet", urlPatterns = {"/ISP392/google-login"})
 public class LoginGoogleServlet extends HttpServlet {
+  private static final String ERROR = "US_SignIn.jsp";
+  private static final String SUCCESS = "US_index.jsp";
+
 private static final long serialVersionUID = 1L;
   public LoginGoogleServlet() {
     super();
   }
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
+    String url = ERROR;
     String code = request.getParameter("code");
     HttpSession session = request.getSession();
     
@@ -48,16 +53,30 @@ private static final long serialVersionUID = 1L;
       String id = googlePojo.getId();
       String email = googlePojo.getEmail();
       UserDAO dao = new UserDAO();
-      UserDTO dto = null;
+      UserDTO userDTO = null;
+      CustomerDTO customerDTO = null;
         try {
-            dto = new UserDTO(dao.getLastUserId(),email, email, "***", 1, 0, 1);
+            if(dao.checkEmailExists(email) == -1){
+              userDTO = new UserDTO(dao.getLastUserId(),email, email, "***", 1, 0, 1);
+              customerDTO = new CustomerDTO(dao.getLastUserId(), null, "", "", "", "");
+              boolean checkAddUserAndCustomer = dao.addAccount(userDTO, customerDTO);
+              if(checkAddUserAndCustomer){
+                session.setAttribute("LOGIN_USER", userDTO);
+                System.out.println(userDTO);
+                url = SUCCESS;
+              }
+            }else{
+              session.setAttribute("LOGIN_USER", userDTO);
+                System.out.println(userDTO);
+                url = SUCCESS;
+            }
+
         } catch (SQLException ex) {
             Logger.getLogger(LoginGoogleServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+          RequestDispatcher dis = request.getRequestDispatcher(url);
+          dis.forward(request, response);
         }
-      session.setAttribute("LOGIN_USER", dto);
-      System.out.println(dto);
-      RequestDispatcher dis = request.getRequestDispatcher("admin.jsp");
-      dis.forward(request, response);
     }
   }
 }

@@ -110,7 +110,7 @@ public class UserDAO {
     }
 
     public int checkEmailExists(String email) throws SQLException {
-        int check = -1;
+        int check = -1; // -1 means email does not exist
         Connection conn = null;
         PreparedStatement ptm = null;
         ResultSet rs = null;
