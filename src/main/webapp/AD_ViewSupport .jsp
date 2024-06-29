@@ -11,7 +11,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
         <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-        <title>Reply Support</title>
+        <title>View Support</title>
         <style>
             .form-container {
                 max-width: 600px;
@@ -49,16 +49,18 @@
                                 <h2 class="text-center" style="color: #000; font-weight: bold">Reply Support</h2>
                                 <form>
                                     <div class="form-group">
-                                        <label for="to">To</label>
-                                        <input type="text" class="form-control readonly-input" id="to" value="Customer" readonly>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="title">Title</label>
-                                        <input type="text" class="form-control readonly-input" id="title" value="Your product is good " readonly>
+                                        <label for="from">From</label>
+                                        <input type="text" class="form-control readonly-input" id="to" value="Admin" readonly>
                                     </div>
                                     <div class="form-group">
                                         <label for="textDescriptipn" class="form-label">Content</label>
                                         <textarea class="form-control readonly-input" id="textDescriptipn" rows="5" readonly>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                        </textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="replyMessage" class="form-label">Reply Message</label>
+                                        <textarea class="form-control readonly-input" id="replyMessage" rows="5" readonly>
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                                         </textarea>
                                     </div>
