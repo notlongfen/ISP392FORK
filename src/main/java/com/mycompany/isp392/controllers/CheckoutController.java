@@ -16,6 +16,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import com.mycompany.isp392.cart.CartDTO;
+import com.mycompany.isp392.order.OrderDAO;
+import com.mycompany.isp392.order.OrderDTO;
+import com.mycompany.isp392.order.OrderDetailsDTO;
+import com.mycompany.isp392.product.ProductDTO;
+import com.mycompany.isp392.product.ProductDetailsDTO;
+import com.mycompany.isp392.promotion.PromotionDAO;
 import com.mycompany.isp392.user.UserDTO;
 
 /**
@@ -86,6 +92,12 @@ public class CheckoutController extends HttpServlet {
         HttpSession session = request.getSession();
         CartDTO cart = (CartDTO) session.getAttribute("cart");
         UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
+        // List<ProductDetailsDTO> products = (List<ProductDetailsDTO>) session.getAttribute("LIST_PRODUCT");
+        String promotionIDS = request.getParameter("promotionID");
+        int promotionID = 0;
+        if(promotionIDS != null){
+            promotionID = Integer.parseInt(promotionIDS);
+        }
         if(user == null){
             url = NOT_LOGED_IN;
             request.getRequestDispatcher(url).forward(request, response);
@@ -97,14 +109,24 @@ public class CheckoutController extends HttpServlet {
             String city = request.getParameter("city");
             String address = request.getParameter("address");
             String note = request.getParameter("note");
-            String phone = request.getParameter("phone");
+            int phone = Integer.parseInt(request.getParameter("phone"));
+            PromotionDAO promotionDAO = new PromotionDAO();
+            double percentage = promotionDAO.getPromotionByID(promotionID).getDiscountPer() / 100;
+            cart.setTotalPrice(cart.getTotalPrice() - (cart.getTotalPrice() * percentage));
+
+            OrderDAO orderDAO = new OrderDAO();
+            OrderDTO order = orderDAO.insertOrder(cart.getTotalPrice(), user.getUserID(), promotionID, cart.getCartID(), name, city, district, ward, address, phone, note);
+            if(order != null){
+                OrderDetailsDTO orderDetailsDTO = orderDAO.insertOrderDetails()
+            }
+
 
         } catch (Exception e) {
             // TODO: handle exception
+        }finally{
+            request.getRequestDispatcher(url).forward(request, response);
         }
         
-        
-
         
 
     }

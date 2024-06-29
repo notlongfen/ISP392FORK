@@ -25,8 +25,8 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet(name = "VerifyToken", urlPatterns = {"/VerifyToken"})
 public class VerifyToken extends HttpServlet {
 
-    private static final String ERROR = "verifyForgetPassword.jsp";
-    private static final String SUCCESS = "login.jsp";
+    private static final String ERROR = "US_CreateNewPassword.jsp";
+    private static final String SUCCESS = "US_SignIn.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

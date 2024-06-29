@@ -163,12 +163,12 @@
                                                         <% if (support.getStatus() == 1) { %>
                                                         <form action="ViewSupportDetailsController" method="GET">
                                                             <input type="hidden" name="supportID" value="<%= support.getSupportID() %>"/>
-                                                            <input type="submit" value="ViewSupport" name=""/>
+                                                            <input type="submit" value="ViewSupport" name="action"/>
                                                         </form>
                                                         <% } else { %>
-                                                        <form action="SendMailServlet" method="POST">
+                                                        <form action="AD_ReplySupport.jsp" method="POST">
                                                             <input type="hidden" name="supportID" value="<%= support.getSupportID() %>"/>
-                                                            <input type="submit" value="ReplySupport"/>
+                                                            <input type="submit" value="ReplySupport" name="action"/>
                                                         </form>
                                                         <% } %>
                                                     </td>

@@ -15,14 +15,14 @@ package com.mycompany.isp392.cart;
  */
 public class CartDTO {
     private int cartID;
-    private int totalPrice;
+    private double totalPrice;
     private int quantity;
     private int custID;
 
     public CartDTO() {
     }
 
-    public CartDTO(int cartID, int totalPrice, int quantity, int custID) {
+    public CartDTO(int cartID, double totalPrice, int quantity, int custID) {
         this.cartID = cartID;
         this.totalPrice = totalPrice;
         this.quantity = quantity;
@@ -33,7 +33,7 @@ public class CartDTO {
         return cartID;
     }
 
-    public int getTotalPrice() {
+    public double getTotalPrice() {
         return totalPrice;
     }
 
@@ -49,7 +49,7 @@ public class CartDTO {
         this.cartID = cartID;
     }
 
-    public void setTotalPrice(int totalPrice) {
+    public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
     }
 

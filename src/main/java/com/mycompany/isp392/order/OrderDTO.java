@@ -14,16 +14,23 @@ public class OrderDTO {
 
     private int orderID;
     private int status;
-    private int total;
+    private double total;
     private Date orderDate;
     private int custID;
     private int promotionID;
     private int cartID;
+    private String userName;
+    private String city;
+    private String district;
+    private String ward;
+    private String address;
+    private int phone;
+    private String note;
 
     public OrderDTO() {
     }
 
-    public OrderDTO(int orderID, int status, int total, Date orderDate, int custID, int promotionID, int cartID) {
+    public OrderDTO(int orderID, int status, double total, Date orderDate, int custID, int promotionID, int cartID, String userName, String city, String district, String ward, String address, int phone, String note) {
         this.orderID = orderID;
         this.status = status;
         this.total = total;
@@ -31,6 +38,13 @@ public class OrderDTO {
         this.custID = custID;
         this.promotionID = promotionID;
         this.cartID = cartID;
+        this.userName = userName;
+        this.city = city;
+        this.district = district;
+        this.ward = ward;
+        this.address = address;
+        this.phone = phone;
+        this.note = note;
     }
 
     public int getOrderID() {
@@ -41,7 +55,7 @@ public class OrderDTO {
         return status;
     }
 
-    public int getTotal() {
+    public double getTotal() {
         return total;
     }
 
@@ -61,6 +75,34 @@ public class OrderDTO {
         return cartID;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public String getWard() {
+        return ward;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public int getPhone() {
+        return phone;
+    }   
+
+    public String getNote() {
+        return note;
+    }
+
     public void setOrderID(int orderID) {
         this.orderID = orderID;
     }
@@ -69,7 +111,7 @@ public class OrderDTO {
         this.status = status;
     }
 
-    public void setTotal(int total) {
+    public void setTotal(double total) {
         this.total = total;
     }
 
@@ -87,6 +129,34 @@ public class OrderDTO {
 
     public void setCartID(int cartID) {
         this.cartID = cartID;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
+    public void setWard(String ward) {
+        this.ward = ward;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setPhone(int phone) {
+        this.phone = phone;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public String getStatusDescription() {
