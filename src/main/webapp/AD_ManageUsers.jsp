@@ -52,7 +52,7 @@
             }
 
             /* Button styling */
-            #editButton {
+            #editButtons {
                 padding: 10px 20px;
                 font-size: 16px;
                 cursor: pointer;
@@ -102,7 +102,7 @@
             form label {
                 margin-top: 10px;
             }
-
+            
 /*            form input {
                 padding: 5px;
                 margin-top: 5px;
@@ -120,8 +120,8 @@
 
     <body id="page-top">
         <%
-            UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
-            if (loginUser == null || 1 != loginUser.getRoleID()) {
+           UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
+           if (loginUser == null || 1 != loginUser.getRoleID() || loginUser.getStatus() == 0) {
                 response.sendRedirect("US_SignIn.jsp");
                 return;
             }
@@ -129,6 +129,7 @@
             if (search == null) {
                 search = "";
             }
+            UserDAO dao = new UserDAO();
         %>
         <div id="wrapper">
             <!-- Sidebar -->
@@ -221,7 +222,7 @@
                                                     <td><%= user.getUserName()%></td>
                                                     <td>
                                                         <%
-                                                            int roleID = user.getRoleID();
+                                                            roleID = user.getRoleID();
                                                             String roleName = "";
                                                             switch (roleID) {
                                                                 case 1:
@@ -245,78 +246,41 @@
                                                     <td><%= user.getEmail()%></td>
                                                     <td><%= user.getPhone()%></td>
                                                     <td>
-                                                        <span class="badge <%= (user.getStatus() == 1) ? "badge-success" : "badge-secondary" %>">
+                                                        <span class="badge <%= (user.getStatus() == 1) ? "badge-success" : "badge-danger" %>">
                                                             <%= (user.getStatus() == 1) ? "Active" : "Inactive" %>
                                                         </span>
                                                     </td>
                                                     <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <button class="editButton btn btn-sm btn-dark">Edit</button>
+                                                       <%
+                                                           if(user.getStatus() == 0){
+                                                       %>
+                                                       <a href="#" class="btn btn-sm btn-danger disabled" aria-disabled="true">Delete</a>
+                                                       <%
+                                                           } else {
+                                                       %>
+                                                       <a href="#" class="btn btn-sm btn-danger" onclick="showConfirmDeleteModal(<%= user.getUserID() %>)">Delete</a>
+                                                       <%
+                                                           }
+                                                       %>
+                                                       <form action="MainController" method="POST" style="display:inline;">
+                                                            <%
+                                                                if(roleID==4){
+                                                            %>
+                                                            <input type="hidden" name="userID" value="<%= user.getUserID()%>"/>
+                                                            <input type="hidden" name="action" value="EditCustomerPage"/>
+                                                            <button type="submit" class="btn btn-sm btn-dark">Edit</button>
+                                                            <%
+                                                                } else {
+                                                            %>
+                                                            <input type="hidden" name="userID" value="<%= user.getUserID()%>"/>
+                                                            <input type="hidden" name="action" value="EditEmployeePage"/>
+                                                            <button type="submit" class="btn btn-sm btn-dark">Edit</button>
+                                                            <%
+                                                                }
+                                                            %>
+                                                        </form>
                                                     </td>
-                                                </tr>
-<!--                                                <tr data-role="Customer">
-                                                    <td>U1</td>
-                                                    <td>John Doe</td>
-                                                    <td>Customer</td>
-                                                    <td>johndoeu1@gmail.com</td>
-                                                    <td>0123456789</td>
-                                                    <td><span class="badge badge-success">True</span></td>                       
-                                                    <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <button class="editButton btn btn-sm btn-dark">Edit</button>
-                                                    </td>
-                                                </tr>
-                                                <tr data-role="Employee">
-                                                    <td>U2</td>
-                                                    <td>Elouise Cassano</td>
-                                                    <td>Employee</td>
-                                                    <td>eloucassau2@gmail.com</td>
-                                                    <td>0123456987</td>
-                                                    <td><span class="badge badge-success">True</span></td>
-                                                    <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <button class="editButton btn btn-sm btn-dark">Edit</button>
-                                                    </td>
-                                                </tr>
-
-                                                <tr data-role="Employee">
-                                                    <td>U3</td>
-                                                    <td>Tim Nguyen</td>
-                                                    <td>Employee</td>
-                                                    <td>admin1@gmail.com</td>
-                                                    <td>0123456879</td>
-                                                    <td><span class="badge badge-success">True</span></td>
-                                                    <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <button class="editButton btn btn-sm btn-dark">Edit</button>
-                                                    </td>
-                                                </tr>
-
-                                                <tr data-role="Customer">
-                                                    <td>U1</td>
-                                                    <td>John Doe</td>
-                                                    <td>Customer</td>
-                                                    <td>johndoeu1@gmail.com</td>
-                                                    <td>0123456789</td>
-                                                    <td><span class="badge badge-success">True</span></td>                       
-                                                    <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <button class="editButton btn btn-sm btn-dark">Edit</button>
-                                                    </td>
-                                                </tr>
-
-                                                <tr data-role="Customer">
-                                                    <td>U1</td>
-                                                    <td>John Doe</td>
-                                                    <td>Customer</td>
-                                                    <td>johndoeu1@gmail.com</td>
-                                                    <td>0123456789</td>
-                                                    <td><span class="badge badge-success">True</span></td>                       
-                                                    <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <button class="editButton btn btn-sm btn-dark" >Edit</button>
-                                                    </td>
-                                                </tr>  -->
+                                                </tr>   
                                                 <%
                                                     }
                                                 %>
@@ -380,15 +344,15 @@
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="confirmDeleteModalLabel">Xác nhận Xóa</h5>
+                                        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Delete</h5>
                                         <!--                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>-->
                                     </div>
                                     <div class="modal-body">
-                                        Bạn có chắc chắn muốn xóa mục này không?
+                                        Are you sure you want to delete this user?
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                                        <button type="button" class="btn btn-danger" id="confirmDeleteButton">Xóa</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="button" class="btn btn-danger" id="confirmDeleteButton">Confirm</button>
                                     </div>
                                 </div>
                             </div>
@@ -443,6 +407,10 @@
                     <div class="form-group col-md-4">
                         <label for="district">District/Province</label>
                         <input type="text" class="form-control" id="district" value="1">
+                    </div>
+                    <div>
+                        <label for="userid">User ID</label>
+                        <input type="text" class="form-control" id="userid" >
                     </div>
                 </div>
 
@@ -571,28 +539,42 @@
                     }
                 });
             });
-            // Thêm sự kiện click vào nút xóa trong mỗi dòng
-            document.querySelectorAll('.btn-danger').forEach(btn => {
-                btn.addEventListener('click', function () {
-                    // Hiển thị modal xác nhận xóa
-                    $('#confirmDeleteModal').modal('show');
+//           // Thêm sự kiện click vào nút xóa trong mỗi dòng
+//            document.querySelectorAll('.btn-danger').forEach(btn => {
+//                btn.addEventListener('click', function () {
+//                    // Hiển thị modal xác nhận xóa
+//                    $('#confirmDeleteModal').modal('show');
+//
+//                    // Lưu trữ thông tin dòng cần xóa vào một thuộc tính data để sử dụng sau này
+//                    const rowToDelete = this.closest('tr');
+//                    $('#confirmDeleteButton').data('rowToDelete', rowToDelete);
+//                });
+//            });
+//
+//            // Thêm sự kiện click vào nút xác nhận xóa trong modal
+//            document.getElementById('confirmDeleteButton').addEventListener('click', function () {
+//                // Ẩn modal xác nhận xóa
+//                $('#confirmDeleteModal').modal('hide');
+//
+//                // Lấy thông tin dòng cần xóa từ thuộc tính data đã lưu trữ
+//                const rowToDelete = $('#confirmDeleteButton').data('rowToDelete');
+//
+//                // Xóa dòng
+//                rowToDelete.remove();
+//            });
 
-                    // Lưu trữ thông tin dòng cần xóa vào một thuộc tính data để sử dụng sau này
-                    const rowToDelete = this.closest('tr');
-                    $('#confirmDeleteButton').data('rowToDelete', rowToDelete);
-                });
-            });
+            function showConfirmDeleteModal(userID) {
+                // Store the user ID in a global variable or data attribute
+                document.getElementById('confirmDeleteButton').setAttribute('data-user-id', userID);
+                // Show the modal
+                var confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+                confirmDeleteModal.show();
+            }
 
-            // Thêm sự kiện click vào nút xác nhận xóa trong modal
-            document.getElementById('confirmDeleteButton').addEventListener('click', function () {
-                // Ẩn modal xác nhận xóa
-                $('#confirmDeleteModal').modal('hide');
-
-                // Lấy thông tin dòng cần xóa từ thuộc tính data đã lưu trữ
-                const rowToDelete = $('#confirmDeleteButton').data('rowToDelete');
-
-                // Xóa dòng
-                rowToDelete.remove();
+            document.getElementById('confirmDeleteButton').addEventListener('click', function() {
+                var userID = this.getAttribute('data-user-id');
+                var url = "MainController?action=DeleteUser&UserID=" + userID;
+                window.location.href = url;
             });
 
             document.addEventListener("DOMContentLoaded", function () {
@@ -604,10 +586,17 @@
 
                 editButtons.forEach(function (button) {
                     button.addEventListener("click", function () {
+                        var userID = parseInt(this.getAttribute("data-userid"));
+                        console.log("UserID:", userID);
+
                         var role = this.closest("tr").getAttribute("data-role");
                         if (role === "Customer") {
                             popup.style.display = "flex";
                             popupEmp.style.display = "none";
+                            // Access the userid input element
+                            var userInputID = document.getElementById("userid");
+                           // Set the value of the input to the userID variable
+                            userInputID.value = userID;
                         } else if (role === "Employee") {
                             popupEmp.style.display = "flex";
                             popup.style.display = "none";
@@ -642,10 +631,12 @@
         <script src="AD_js/ruang-admin.min.js"></script>
         <script src="vendor/chart.js/Chart.min.js"></script>
         <script src="AD_js/demo/chart-area-demo.js"></script>  
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> 
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        
         <!-- Bootstrap CSS -->
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
 

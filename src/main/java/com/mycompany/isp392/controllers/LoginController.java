@@ -21,12 +21,12 @@ public class LoginController extends HttpServlet {
     private static final int SYSTEM_MANAGER = 1;
     private static final int SHOP_MANAGER = 2;
     private static final int SHOP_STAFF = 3;
-    private static final String SYSTEM_MANAGER_PAGE = "AD_ManageUsers.jsp";
+    private static final String SYSTEM_MANAGER_PAGE = "SearchUserController";
     private static final String SHOP_MANAGER_PAGE = "GetProductsController";
     private static final String SHOP_STAFF_PAGE = "GetProductsController";
     private String clientID;
     public void initClientID() throws ServletException{
-        Dotenv dotenv = Dotenv.configure().directory("/home/notlongfen/code/java/ISP392/.env").load();
+        Dotenv dotenv = Dotenv.configure().directory("C:\\Users\\TTNHAT\\Documents\\GitHub\\ISP392\\.env").load();
         clientID = dotenv.get("GOOGLE_CLIENT_ID");
     }
 

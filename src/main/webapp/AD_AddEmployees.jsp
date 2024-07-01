@@ -72,7 +72,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group text-center" style="margin-top: 10px">
-                                    <button type="submit" class="btn btn-danger btn-custom" name="action" value="Add Employee">Submit</button>
+                                    <button type="submit" class="btn btn-danger btn-custom" name="action" value="Add_Employee">Submit</button>
                                     <button type="reset" class="btn btn-secondary btn-custom">Reset</button>
                                 </div>
                             </form>

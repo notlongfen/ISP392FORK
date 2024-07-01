@@ -22,8 +22,10 @@ public class UserDAO {
     private static final String ADD_CUSTOMER = "INSERT INTO Customers(CustID, points, birthday, province_city, district, ward, detailAddress) VALUES(?, 0, ?, ?, ?, ?, ?)";
     private static final String GET_LAST_USER_ID = "SELECT MAX(UserID) AS LastUserID FROM Users";
     private static final String UPDATE_USER_PASSWORD = "UPDATE Users SET password = ? WHERE email = ?";
+    private static final String UPDATE_CUSTOMER_STATUS = "UPDATE Users SET status = ? WHERE userID = ?";
     private static final String GET_USER_INFO_BY_USERID = "SELECT * FROM Users WHERE UserID = ?";
     private static final String SEARCH_USER = "SELECT * FROM Users WHERE userName LIKE ?";
+    private static final String GET_ALL_USERS = "SELECT * FROM Users";
     private static final String EDIT_USER = "UPDATE Users SET userName = ?, roleID = ?, email = ?, password = ?, phone = ?, status = ? WHERE UserID = ?";
     private static final String EDIT_USER_NO_PASS = "UPDATE Users SET userName = ?, roleID = ?, email = ?, phone = ?, status = ? WHERE UserID = ?";
     private static final String EDIT_CUSTOMER = "UPDATE Customers SET points = ?, birthday = ?, province_city = ?, district = ?, ward = ?, detailAddress = ? WHERE CustID = ?";
@@ -295,6 +297,31 @@ public class UserDAO {
         }
         return result;
     }
+    
+    public boolean updateCustomerStatus (int userID, int status) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(UPDATE_CUSTOMER_STATUS);
+                ptm.setInt(1, status);
+                ptm.setInt(2, userID);
+                check = ptm.executeUpdate() > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
 
     public boolean deleteUser(int UserID) throws SQLException {
         boolean check = false;
@@ -397,6 +424,43 @@ public class UserDAO {
         }
         return list;
 
+    }
+    
+    public List<UserDTO> getAllUsers() throws SQLException {
+        List<UserDTO> list = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_ALL_USERS);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    int userID = rs.getInt("UserID");
+                    String userName = rs.getString("userName");
+                    String email = rs.getString("email");
+                    String password = "*******";
+                    int roleID = rs.getInt("roleID");
+                    int phone = rs.getInt("phone");
+                    int status = rs.getInt("status");
+                    list.add(new UserDTO(userID, userName, email, password, roleID, phone, status));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return list;
     }
 
     public boolean editUserAndCustomer(UserDTO user, CustomerDTO customer) throws SQLException {

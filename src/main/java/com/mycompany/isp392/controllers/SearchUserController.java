@@ -29,16 +29,26 @@ public class SearchUserController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
+         
             String search = request.getParameter("search");
             UserDAO dao = new UserDAO();
-            List<UserDTO> listUser = dao.searchListUser(search);
-            if (!listUser.isEmpty()) {
+            List<UserDTO> listUser;
+
+            // If search is null or empty, fetch all users
+            if (search == null || search.isEmpty()) {
+                listUser = dao.getAllUsers();
+            } else {
+                listUser = dao.searchListUser(search);
+            }
+
+            if (listUser != null && !listUser.isEmpty()) {
                 request.setAttribute("LIST_USER", listUser);
                 request.setAttribute("MESSAGE", "USER FOUND !");
                 url = SUCCESS;
             } else {
                 request.setAttribute("MESSAGE", "NO USER FOUND !");
             }
+            
         } catch (Exception e) {
             log("Error at SearchUserController: " + e.toString());
         } finally {

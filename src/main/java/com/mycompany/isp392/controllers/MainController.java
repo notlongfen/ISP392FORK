@@ -21,7 +21,7 @@ public class MainController extends HttpServlet {
     private static final String ADD_EMPLOYEE_PAGE = "Add_Employee_View";
     private static final String ADD_EMPLOYEE_PAGE_VIEW = "AD_AddEmployees.jsp";
     private static final String ADD_EMPLOYEE_CONTROLLER = "AddEmployeeController";
-    private static final String ADD_EMPLOYEE = "Add Employee";
+    private static final String ADD_EMPLOYEE = "Add_Employee";
 
     private static final String ADD_PRODUCT_PAGE = "Add_Product_Page";
     private static final String ADD_PRODUCT_PAGE_VIEW = "GetBrandsController";
@@ -130,13 +130,13 @@ public class MainController extends HttpServlet {
     private static final String SEARCH_USER_CONTROLLER = "SearchUserController";
 
     private static final String EDIT_CUSTOMER_PAGE = "EditCustomerPage";
-    private static final String EDIT_CUSTOMER_PAGE_VIEW = "editCustomer.jsp";
+    private static final String EDIT_CUSTOMER_PAGE_VIEW = "AD_EditCustomer.jsp";
 
     private static final String EDIT_CUSTOMER = "EditCustomer";
     private static final String EDIT_CUSTOMER_CONTROLLER = "EditCustomerController";
 
     private static final String EDIT_EMPLOYEE_PAGE = "EditEmployeePage";
-    private static final String EDIT_EMPLOYEE_PAGE_VIEW = "editEmployee.jsp";
+    private static final String EDIT_EMPLOYEE_PAGE_VIEW = "AD_EditEmployee.jsp";
 
     private static final String EDIT_EMPLOYEE = "EditEmployee";
     private static final String EDIT_EMPLOYEE_CONTROLLER = "EditEmployeeController";

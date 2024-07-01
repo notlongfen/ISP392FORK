@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.mindrot.jbcrypt.BCrypt;
 import com.mycompany.isp392.user.*;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
@@ -21,8 +22,8 @@ import com.mycompany.isp392.user.*;
 @WebServlet(name = "EditEmployeeController", urlPatterns = {"/EditEmployeeController"})
 public class EditEmployeeController extends HttpServlet {
 
-    private static final String ERROR = "editEmployee.jsp";
-    private static final String SUCCESS = "systemManager.jsp";
+    private static final String ERROR = "AD_EditEmployee.jsp";
+    private static final String SUCCESS = "SearchUserController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -32,6 +33,9 @@ public class EditEmployeeController extends HttpServlet {
         UserDAO dao = new UserDAO();
         boolean checkValidation = true;
         try {
+            HttpSession session = request.getSession();
+            UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
+
             //call
             int userID = Integer.parseInt(request.getParameter("userID"));
             String userName = request.getParameter("userName");
@@ -39,7 +43,6 @@ public class EditEmployeeController extends HttpServlet {
             String email = request.getParameter("email");
             String currentPassword = request.getParameter("currentPassword");
             String password = request.getParameter("password");
-            String confirm = request.getParameter("confirm");
             int roleID = Integer.parseInt(request.getParameter("roleID"));
             int oldPhone = Integer.parseInt(request.getParameter("oldPhone"));
             int phone = Integer.parseInt(request.getParameter("phone"));
@@ -50,13 +53,6 @@ public class EditEmployeeController extends HttpServlet {
             if (!oldEmail.equals(email) && dao.checkEmailExists(email) != -1) {
                 error.setEmailError("Email already exists.");
                 checkValidation = false;
-            }
-            //check if password and confirmation password matches
-            if (!password.isEmpty() || !confirm.isEmpty()) {
-                if (!password.equals(confirm)) {
-                    error.setConfirmError("The 2 passwords don't match");
-                    checkValidation = false;
-                }
             }
             //check if phone exists
             if (oldPhone != phone && dao.checkPhoneExists(phone)) {
@@ -73,6 +69,14 @@ public class EditEmployeeController extends HttpServlet {
                 UserDTO user = new UserDTO(userID, userName, email, hashedPassword, roleID, phone, status);
                 boolean checkUpdate = dao.editEmployee(user);
                 if (checkUpdate) {
+                    if(loginUser!=null && loginUser.getUserID() == userID){
+                        loginUser.setUserName(userName);
+                        loginUser.setEmail(email);
+                        loginUser.setRoleID(roleID);
+                        loginUser.setPhone(phone);
+                        loginUser.setStatus(status);
+                        session.setAttribute("LOGIN_USER", loginUser);
+                    }
                     url = SUCCESS;
                 } else {
                     error.setError("Unable to update database");

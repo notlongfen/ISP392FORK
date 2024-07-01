@@ -11,12 +11,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @WebServlet(name = "DeleteUserController", urlPatterns = {"/DeleteUserController"})
 public class DeleteUserController extends HttpServlet {
 
-    private static final String ERROR = "shopManager.jsp";
-    private static final String SUCCESS = "shopManager.jsp";
+    private static final String ERROR = "SearchUserController";
+    private static final String SUCCESS = "SearchUserController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -25,16 +26,21 @@ public class DeleteUserController extends HttpServlet {
         UserDAO dao = new UserDAO();
         UserError userError = new UserError();
         try {
+            HttpSession session = request.getSession();
+            UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
             int UserID = Integer.parseInt(request.getParameter("UserID"));
             boolean checkDelete = dao.deleteUser(UserID);
             if (checkDelete) {
+                if(loginUser != null && loginUser.getUserID() == UserID){
+                    loginUser.setStatus(0);
+                    session.setAttribute("LOGIN_USER", loginUser);
+                }
                 request.setAttribute("MESSAGE", "USER DELETED SUCCESSFULLY !");
                 url = SUCCESS;
             } else {
                 userError.setError("UNABLE TO DELETE USER !");
                 request.setAttribute("USER_ERROR", userError);
             }
-
         } catch (Exception e) {
             log("Error at DeleteUserController: " + e.toString());
         } finally {

@@ -24,8 +24,8 @@ import com.mycompany.isp392.user.*;
 @WebServlet(name = "EditCustomerController", urlPatterns = {"/EditCustomerController"})
 public class EditCustomerController extends HttpServlet {
 
-    private static final String ERROR = "editCustomer.jsp";
-    private static final String SUCCESS = "systemManager.jsp";
+    private static final String ERROR = "AD_EditCustomer.jsp";
+    private static final String SUCCESS = "SearchUserController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -33,64 +33,14 @@ public class EditCustomerController extends HttpServlet {
         String url = ERROR;
         UserError error = new UserError();
         UserDAO dao = new UserDAO();
-        boolean checkValidation = true;
-        try {
-            //call 
+        try { 
             int userID = Integer.parseInt(request.getParameter("userID"));
-            String userName = request.getParameter("userName");
-            String oldEmail = request.getParameter("oldEmail");
-            String email = request.getParameter("email");
-            int oldPhone = Integer.parseInt(request.getParameter("oldPhone"));
-            int phone = Integer.parseInt(request.getParameter("phone"));
             int status = Integer.parseInt(request.getParameter("status"));
-            int points = Integer.parseInt(request.getParameter("points"));
-            Date birthday = Date.valueOf(LocalDate.parse(request.getParameter("birthday"), DateTimeFormatter.ISO_DATE));
-            String city = request.getParameter("city");
-            String district = request.getParameter("district");
-            String ward = request.getParameter("ward");
-            String address = request.getParameter("address");
-
-            //error handling
-            //check email exists
-            if (!oldEmail.equals(email)) {
-                if (dao.checkEmailExists(email) != -1) {
-                    error.setEmailError("Email already exists.");
-                    checkValidation = false;
-                }
-            }
-            // Check phone exists
-            if (oldPhone != phone) {
-                if (dao.checkPhoneExists(phone)) {
-                    error.setPhoneError("Phone number already exists.");
-                    checkValidation = false;
-                }
-            }
-            // Check phone length
-            if (String.valueOf(phone).length() != 9 && String.valueOf(phone).length() != 10) {
-                error.setPhoneError("Phone number must be 9 or 10 digits.");
-                checkValidation = false;
-            }
-            // Check age > 16
-            LocalDate birthDate = birthday.toLocalDate();
-            LocalDate currentDate = LocalDate.now();
-            int age = Period.between(birthDate, currentDate).getYears();
-            if (age < 16) {
-                error.setBirthdayError("Customer must be over 16 years old");
-                checkValidation = false;
-            }
-
-            //execute
-            if (checkValidation) {
-                UserDTO user = new UserDTO(userID, userName, email, "", 4, phone, status);
-                CustomerDTO customer = new CustomerDTO(userID, points, birthday, city, district, ward, address);
-                boolean checkUpdate = dao.editUserAndCustomer(user, customer);
-                if (checkUpdate) {
-                    url = SUCCESS;
-                } else {
-                    error.setError("Unable to update database");
-                    request.setAttribute("EDIT_ERROR", error);
-                }
+            boolean checkUpdate = dao.updateCustomerStatus(userID, status);
+            if(checkUpdate){
+                url = SUCCESS;
             } else {
+                error.setError("Unable to update database");
                 request.setAttribute("EDIT_ERROR", error);
             }
         } catch (Exception e) {
