@@ -4,7 +4,6 @@ package com.mycompany.isp392.product;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-import com.mycompany.isp392.brand.BrandDTO;
 import java.sql.Date;
 
 /**
@@ -13,7 +12,7 @@ import java.sql.Date;
  */
 public class ProductDetailsDTO extends ProductDTO {
 
-     private int productDetailID; 
+    private int productDetailsID; 
     private int productID;
     private String color;
     private String size;
@@ -39,6 +38,18 @@ public class ProductDetailsDTO extends ProductDTO {
         this.status = status;
     }
 
+    public ProductDetailsDTO(int productDetailsID, int productID, String color, String size, int stockQuantity, int price, Date importDate, String image, int status) {
+        this.productDetailsID = productDetailsID;
+        this.productID = productID;
+        this.color = color;
+        this.size = size;
+        this.stockQuantity = stockQuantity;
+        this.price = price;
+        this.importDate = importDate;
+        this.image = image;
+        this.status = status;
+    }
+    
     public ProductDetailsDTO(String productName, String image, int price) {
         super(productName);
         this.image = image;
@@ -53,6 +64,10 @@ public class ProductDetailsDTO extends ProductDTO {
         this.brandName = brandName;
     }
 
+    public int getProductDetailsID() {
+        return productDetailsID;
+    }
+    
     public int getProductID() {
         return productID;
     }
@@ -85,6 +100,10 @@ public class ProductDetailsDTO extends ProductDTO {
         return status;
     }
 
+    public void setProductDetailsID(int productDetailsID) {
+        this.productDetailsID = productDetailsID;
+    }
+    
     public void setProductID(int productID) {
         this.productID = productID;
     }
@@ -127,6 +146,6 @@ public class ProductDetailsDTO extends ProductDTO {
 
     @Override
     public String toString() {
-        return "ProductDetailsDTO{" + "productID=" + productID + "color=" + color + ", size=" + size + ", stockQuantity=" + stockQuantity + ", price=" + price + ", importDate=" + importDate + ", image=" + image + ", status=" + status + '}';
+        return "ProductDetailsDTO{" + "productDetailsID=" + productDetailsID + ", productID=" + productID + ", color=" + color + ", size=" + size + ", stockQuantity=" + stockQuantity + ", price=" + price + ", importDate=" + importDate + ", image=" + image + ", status=" + status + ", brandName=" + brandName + '}';
     }
 }

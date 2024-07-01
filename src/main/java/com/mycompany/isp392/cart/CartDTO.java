@@ -16,16 +16,16 @@ package com.mycompany.isp392.cart;
 public class CartDTO {
     private int cartID;
     private double totalPrice;
-    private int quantity;
     private int custID;
 
     public CartDTO() {
+        
     }
+    
 
-    public CartDTO(int cartID, double totalPrice, int quantity, int custID) {
+    public CartDTO(int cartID, double totalPrice, int custID) {
         this.cartID = cartID;
         this.totalPrice = totalPrice;
-        this.quantity = quantity;
         this.custID = custID;
     }
 
@@ -37,10 +37,6 @@ public class CartDTO {
         return totalPrice;
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
-
     public int getCustID() {
         return custID;
     }
@@ -49,12 +45,8 @@ public class CartDTO {
         this.cartID = cartID;
     }
 
-    public void setTotalPrice(double totalPrice) {
+    public void setTotalPrice(int totalPrice) {
         this.totalPrice = totalPrice;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
     }
 
     public void setCustID(int custID) {
@@ -64,6 +56,6 @@ public class CartDTO {
 
     @Override
     public String toString() {
-        return "CartDTO{" + "cartID=" + cartID + ", totalPrice=" + totalPrice + ", quantity=" + quantity + ", custID=" + custID + '}';
+        return "CartDTO{" + "cartID=" + cartID + ", totalPrice=" + totalPrice + ", custID=" + custID + '}';
     }
 }

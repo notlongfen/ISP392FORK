@@ -38,7 +38,8 @@ public class ProductDAO {
     private static final String DELETE_PRODUCT_CATEGORIES = "DELETE FROM ProductBelongtoCDCategories WHERE ProductID=?";
     private static final String ADD_PRODUCT_CATEGORY = "INSERT INTO ProductBelongtoCDCategories (ProductID, CDCategoryID) VALUES (?, ?)";
     private static final String GET_CATEGORIES_BY_PRODUCT_ID = "SELECT c.* FROM Categories c INNER JOIN ProductBelongtoCDCategories pbc ON c.categoryID = pbc.CDCategoryID WHERE pbc.ProductID = ?";
-
+    private static final String GET_PRODUCT_DETAILS_BY_ID = "SELECT * FROM ProductDetails WHERE ProductDetailsID LIKE ? AND status = 1";
+    
     public boolean addProduct(ProductDTO product) throws SQLException {
         boolean check = false;
         Connection conn = null;
@@ -96,6 +97,45 @@ public class ProductDAO {
             }
         }
         return check;
+    }
+    
+    public ProductDetailsDTO getProductDetailsByID(int productDetailsID) throws SQLException {
+        ProductDetailsDTO details = null;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if(conn!=null){
+                ptm = conn.prepareStatement(GET_PRODUCT_DETAILS_BY_ID);
+                ptm.setInt(1, productDetailsID);
+                rs = ptm.executeQuery();
+                if(rs.next()){
+                    int productID = rs.getInt("ProductID");
+                    String color = rs.getString("color");
+                    String size = rs.getString("size");
+                    int stockQuantity = rs.getInt("stockQuantity");
+                    int price = rs.getInt("price");
+                    Date importDate = rs.getDate("importDate");
+                    String image = rs.getString("image");
+                    int status = rs.getInt("status");
+                    details = new ProductDetailsDTO(productDetailsID, productID, color, size, stockQuantity, price, importDate, image, status);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return details;
     }
 
      public boolean editProduct(int productID, String productName, String description, int numberOfPurchasing, int brandID, String[] categoryIDs) throws SQLException, Exception {
