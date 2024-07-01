@@ -7,49 +7,37 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import utils.DbUtils;
 import java.sql.ResultSet;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 
 import com.mycompany.isp392.brand.BrandDTO;
 
 public class ProductDAO {
 
     private static final String ADD_PRODUCT = "INSERT INTO Products(productName, description, NumberOfPurchasing, status, BrandID)VALUES(?,?,?,?,?)";
-    private static final String EDIT_PRODUCT = "UPDATE Products SET productName=?, description=? WHERE productID=?";
     private static final String DELETE_PRODUCT = "UPDATE Products SET status = 0 WHERE productID=?";
     private static final String SELECT_PRODUCT = "SELECT productName, description, numberOfPurchasing, brandID FROM Products WHERE productID=?";
-    private static final String SEARCH_PRODUCT = "SELECT p.productID, p.productName, p.description, p.NumberOfPurchasing, p.status AS productStatus, p.BrandID, "
-            + "pd.color, pd.size, pd.stockQuantity, pd.price, pd.importDate, pd.image, pd.status "
-            + "FROM Products p LEFT JOIN ProductDetails pd ON p.productID = pd.ProductID "
-            + "WHERE p.productName LIKE ? OR p.description LIKE ? OR pd.color LIKE ? OR pd.size LIKE ? OR pd.price LIKE ?";
+    private static final String SEARCH_PRODUCT = "SELECT productID, productName, description, NumberOfPurchasing, status, BrandID "
+            + "FROM Products "
+            + "WHERE productName LIKE ? OR description LIKE ?";
     private static final String ADD_PRODUCT_DETAILS = "INSERT INTO ProductDetails (ProductID, color, size, stockQuantity, price, importDate, image, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String EDIT_PRODUCT_DETAILS = "UPDATE ProductDetails SET color=?, size=?, stockQuantity=?, price=?, importDate=?, image=?, status=? WHERE ProductID=? AND color = ? AND size = ?";
     private static final String DELETE_PRODUCT_DETAILS = "UPDATE ProductDetails SET status = 0 WHERE ProductID=? AND color = ? AND size= ?";
     private static final String GET_ALL_PRODUCTS = "SELECT * FROM Products";
     private static final String DELETE_PRODUCT_DETAIL = "UPDATE ProductDetails SET status = 0 WHERE ProductID=?";
-    private static final String CHECK_PRODUCT = "SELECT productID FROM Products WHERE productName LIKE ?";
+    private static final String CHECK_PRODUCT = "SELECT productID FROM Products WHERE productName LIKE ? and productID != ?";
+       private static final String CHECK_PRODUCT_NAME = "SELECT productID FROM Products WHERE productName LIKE ?";
     private static final String SEARCH_BRAND_BY_ID = "SELECT * FROM Brands WHERE brandID LIKE ?";
-    private static final String SELECT_CATEGORY_PRODUCT = "	SELECT \n"
-            + "    p.productName,\n"
-            + "    pd.price,\n"
-            + "    pd.image\n"
-            + "FROM \n"
-            + "    Products p\n"
-            + "JOIN \n"
-            + "    ProductDetails pd ON p.ProductID = pd.ProductID\n"
-            + "JOIN \n"
-            + "    ProductBelongtoCategories pbc ON p.ProductID = pbc.ProductID\n"
-            + "JOIN \n"
-            + "    Categories c ON pbc.Categories = c.CategoryID\n"
-            + "WHERE \n"
-            + "    c.CategoriesName = ?";
     private static final String SELECT__WISHLIST = "SELECT wd.ProductID, p.productName, pd.image, b.BrandName, pd.price "
             + "FROM Wishlists w JOIN WishlistDetails wd ON w.WishlistID = wd.WishlistID JOIN Products p ON wd.ProductID = p.ProductID JOIN ProductDetails pd ON p.ProductID = pd.ProductID JOIN  Brands b ON p.BrandID = b.BrandID "
             + "WHERE w.CustID = ? ";
     private static final String DELETE__WISHLIST = "DELETE FROM WishlistDetails "
             + "WHERE WishlistID = (SELECT WishlistID FROM Wishlists WHERE CustID = ?) "
             + "AND ProductID = ?";
+   private static final String EDIT_PRODUCT = "UPDATE Products SET productName=?, description=?, numberOfPurchasing=?, brandID=? WHERE productID=?";
+    private static final String DELETE_PRODUCT_CATEGORIES = "DELETE FROM ProductBelongtoCDCategories WHERE ProductID=?";
+    private static final String ADD_PRODUCT_CATEGORY = "INSERT INTO ProductBelongtoCDCategories (ProductID, CDCategoryID) VALUES (?, ?)";
+    private static final String GET_CATEGORIES_BY_PRODUCT_ID = "SELECT c.* FROM Categories c INNER JOIN ProductBelongtoCDCategories pbc ON c.categoryID = pbc.CDCategoryID WHERE pbc.ProductID = ?";
 
     public boolean addProduct(ProductDTO product) throws SQLException {
         boolean check = false;
@@ -110,22 +98,42 @@ public class ProductDAO {
         return check;
     }
 
-    public boolean editProduct(String productID, String newName, String newDescription) throws SQLException {
-        boolean check = false;
+     public boolean editProduct(int productID, String productName, String description, int numberOfPurchasing, int brandID, String[] categoryIDs) throws SQLException, Exception {
         Connection conn = null;
         PreparedStatement ptm = null;
+        boolean check = false;
         try {
             conn = DbUtils.getConnection();
             if (conn != null) {
+                conn.setAutoCommit(false);
                 ptm = conn.prepareStatement(EDIT_PRODUCT);
-                ptm.setString(1, newName); // Set new product name
-                ptm.setString(2, newDescription); // Set new description
-                ptm.setString(3, productID); // Where clause, identifying which product to update
+                ptm.setString(1, productName);
+                ptm.setString(2, description);
+                ptm.setInt(3, numberOfPurchasing);
+                ptm.setInt(4, brandID);
+                ptm.setInt(5, productID);
+                check = ptm.executeUpdate() > 0;
 
-                check = ptm.executeUpdate() > 0; // Check if any rows were actually updated
+                if (check) {
+                    ptm = conn.prepareStatement(DELETE_PRODUCT_CATEGORIES);
+                    ptm.setInt(1, productID);
+                    ptm.executeUpdate();
+
+                    if (categoryIDs != null) {
+                        ptm = conn.prepareStatement(ADD_PRODUCT_CATEGORY);
+                        for (String categoryID : categoryIDs) {
+                            ptm.setInt(1, productID);
+                            ptm.setInt(2, Integer.parseInt(categoryID));
+                            ptm.executeUpdate();
+                        }
+                    }
+                }
+                conn.commit();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            if (conn != null) {
+                conn.rollback();
+            }
         } finally {
             if (ptm != null) {
                 ptm.close();
@@ -136,6 +144,7 @@ public class ProductDAO {
         }
         return check;
     }
+
 
     public boolean deleteProduct(int productID) throws SQLException {
         boolean check = false;
@@ -282,46 +291,46 @@ public class ProductDAO {
         return check;
     }
 
-public boolean deleteProductDetails(int productID) throws SQLException {
-    boolean check = false;
-    Connection conn = null;
-    PreparedStatement ptm = null;
-    ResultSet rs = null;
-    try {
-        conn = DbUtils.getConnection();
-        if (conn != null) {
-            // First, check if there are any product details for the given productID
-            String checkQuery = "SELECT 1 FROM ProductDetails WHERE ProductID = ?";
-            ptm = conn.prepareStatement(checkQuery);
-            ptm.setInt(1, productID);
-            rs = ptm.executeQuery();
+    public boolean deleteProductDetails(int productID) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                // First, check if there are any product details for the given productID
+                String checkQuery = "SELECT 1 FROM ProductDetails WHERE ProductID = ?";
+                ptm = conn.prepareStatement(checkQuery);
+                ptm.setInt(1, productID);
+                rs = ptm.executeQuery();
 
-            if (!rs.next()) {
-                // No product details found for the given productID, so no need to delete anything
-                return true; // Consider this a successful operation
+                if (!rs.next()) {
+                    // No product details found for the given productID, so no need to delete anything
+                    return true; // Consider this a successful operation
+                }
+
+                // If there are product details, proceed to delete them
+                ptm = conn.prepareStatement(DELETE_PRODUCT_DETAIL);
+                ptm.setInt(1, productID);
+                check = ptm.executeUpdate() > 0;
             }
-
-            // If there are product details, proceed to delete them
-            ptm = conn.prepareStatement(DELETE_PRODUCT_DETAIL);
-            ptm.setInt(1, productID);
-            check = ptm.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            check = false; // Set check to false if an exception occurs
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
         }
-    } catch (Exception e) {
-        e.printStackTrace();
-        check = false; // Set check to false if an exception occurs
-    } finally {
-        if (rs != null) {
-            rs.close();
-        }
-        if (ptm != null) {
-            ptm.close();
-        }
-        if (conn != null) {
-            conn.close();
-        }
+        return check;
     }
-    return check;
-}
 
     public List<ProductDetailsDTO> getProductDetails(int productID) throws SQLException {
         List<ProductDetailsDTO> productDetailsList = new ArrayList<>();
@@ -429,7 +438,7 @@ public boolean deleteProductDetails(int productID) throws SQLException {
         return products;
     }
 
-    public boolean checkProductExists(String productName) throws SQLException {
+    public boolean checkProductExists(String productName, int productID) throws SQLException {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -439,6 +448,38 @@ public boolean deleteProductDetails(int productID) throws SQLException {
             conn = DbUtils.getConnection();
             if (conn != null) {
                 ptm = conn.prepareStatement(CHECK_PRODUCT);
+                ptm.setString(1, productName);
+                 ptm.setInt(2, productID);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    check = true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+     public boolean checkProductExistsOnlyName(String productName) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(CHECK_PRODUCT_NAME);
                 ptm.setString(1, productName);
                 rs = ptm.executeQuery();
                 if (rs.next()) {
@@ -461,49 +502,32 @@ public boolean deleteProductDetails(int productID) throws SQLException {
         return check;
     }
 
-    public Map<ProductDTO, List<ProductDetailsDTO>> searchProducts(String searchText) throws SQLException {
-        Map<ProductDTO, List<ProductDetailsDTO>> productMap = new HashMap<>();
+    public List<ProductDTO> searchProducts(String searchText) throws SQLException {
+        List<ProductDTO> products = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ptm = null;
         ResultSet rs = null;
+        String searchPattern = "%" + searchText + "%";
+
+        String searchQuery = SEARCH_PRODUCT;
+
         try {
             conn = DbUtils.getConnection();
             if (conn != null) {
-                ptm = conn.prepareStatement(SEARCH_PRODUCT);
-                String searchPattern = "%" + searchText + "%";
+                ptm = conn.prepareStatement(searchQuery);
                 ptm.setString(1, searchPattern);
                 ptm.setString(2, searchPattern);
-                ptm.setString(3, searchPattern);
-                ptm.setString(4, searchPattern);
-                ptm.setString(5, searchPattern);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
                     int productID = rs.getInt("productID");
                     String productName = rs.getString("productName");
                     String description = rs.getString("description");
-                    int numberOfPurchase = rs.getInt("NumberOfPurchasing");
+                    int numberOfPurchasing = rs.getInt("NumberOfPurchasing");
                     int status = rs.getInt("status");
                     int brandID = rs.getInt("BrandID");
 
-                    ProductDTO product = new ProductDTO(productID, productName, description, numberOfPurchase, status, brandID);
-
-                    String color = rs.getString("color");
-                    String size = rs.getString("size");
-                    int stockQuantity = rs.getInt("stockQuantity");
-                    int price = rs.getInt("price");
-                    Date importDate = rs.getDate("importDate");
-                    String image = rs.getString("image");
-                    int detailStatus = rs.getInt("status");
-
-                    ProductDetailsDTO productDetails = new ProductDetailsDTO(productID, color, size, stockQuantity, price, importDate, image, detailStatus);
-
-                    if (productMap.containsKey(product)) {
-                        productMap.get(product).add(productDetails);
-                    } else {
-                        List<ProductDetailsDTO> detailsList = new ArrayList<>();
-                        detailsList.add(productDetails);
-                        productMap.put(product, detailsList);
-                    }
+                    ProductDTO product = new ProductDTO(productID, productName, description, numberOfPurchasing, status, brandID);
+                    products.add(product);
                 }
             }
         } catch (Exception e) {
@@ -519,7 +543,7 @@ public boolean deleteProductDetails(int productID) throws SQLException {
                 conn.close();
             }
         }
-        return productMap;
+        return products;
     }
 
     public List<ProductDetailsDTO> CateProducts(String gender) throws SQLException {
@@ -530,7 +554,7 @@ public boolean deleteProductDetails(int productID) throws SQLException {
         try {
             conn = DbUtils.getConnection();
             if (conn != null) {
-                ptm = conn.prepareStatement(SELECT_CATEGORY_PRODUCT);
+                //ptm = conn.prepareStatement(SELECT_CATEGORY_PRODUCT);
                 ptm.setString(1, gender);
                 rs = ptm.executeQuery();
                 while (rs.next()) {

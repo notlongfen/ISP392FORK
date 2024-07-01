@@ -88,6 +88,10 @@
         <servlet-name>GetSpecificBrandController</servlet-name>
         <servlet-class>com.mycompany.isp392.controllers.GetSpecificBrandController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>GetSpecificProductController</servlet-name>
+        <servlet-class>com.mycompany.isp392.controllers.GetSpecificProductController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>MainController</servlet-name>
         <url-pattern>/MainController</url-pattern>
@@ -175,6 +179,10 @@
     <servlet-mapping>
         <servlet-name>GetSpecificBrandController</servlet-name>
         <url-pattern>/GetSpecificBrandController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetSpecificProductController</servlet-name>
+        <url-pattern>/GetSpecificProductController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

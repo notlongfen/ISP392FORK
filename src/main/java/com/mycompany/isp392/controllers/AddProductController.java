@@ -1,6 +1,7 @@
 package com.mycompany.isp392.controllers;
 
 import com.mycompany.isp392.product.*;
+import com.mycompany.isp392.category.CategoryDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -10,7 +11,7 @@ import java.sql.SQLException;
 
 public class AddProductController extends HttpServlet {
 
-    private static final String ERROR = "AD_CreateProduct.jsp";
+    private static final String ERROR = "GetBrandsController";
     private static final String SUCCESS = "GetProductsController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -18,6 +19,7 @@ public class AddProductController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         ProductDAO productDAO = new ProductDAO();
+        CategoryDAO categoryDAO = new CategoryDAO();
 
         ProductError productError = new ProductError();
         boolean checkValidation = true;
@@ -27,9 +29,10 @@ public class AddProductController extends HttpServlet {
             int numberOfPurchase = 0;
             int status = 1;
             int brandID = Integer.parseInt(request.getParameter("brandID"));
+            String[] categoryArray = request.getParameterValues("categories");
 
-            if (productDAO.checkProductExists(productName)) {
-                productError.setProductNameError("Product is already exists.");
+            if (productDAO.checkProductExistsOnlyName(productName)) {
+                productError.setProductNameError("Product already exists.");
                 checkValidation = false;
             }
             if (numberOfPurchase < 0) {
@@ -41,11 +44,14 @@ public class AddProductController extends HttpServlet {
                 boolean check = productDAO.addProduct(product);
                 if (check) {
                     int productID = productDAO.getLatestProductID();
+                    for (String categoryID : categoryArray) {
+                        categoryDAO.addProductCategory(productID, Integer.parseInt(categoryID));
+                    }
                     request.setAttribute("MESSAGE", "Product added successfully!");
                     request.setAttribute("PRODUCT_ID", productID);
                     url = SUCCESS;
                 } else {
-                    productError.setError("UNABLE TO ADD PRODUCT TO DATABASE !");
+                    productError.setError("Unable to add product to the database!");
                     request.setAttribute("PRODUCT_ERROR", productError);
                 }
             } else {

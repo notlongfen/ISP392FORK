@@ -13,6 +13,7 @@ import java.sql.Date;
  */
 public class ProductDetailsDTO extends ProductDTO {
 
+     private int productDetailID; 
     private int productID;
     private String color;
     private String size;

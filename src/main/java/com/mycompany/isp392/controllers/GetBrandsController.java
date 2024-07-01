@@ -6,6 +6,8 @@ package com.mycompany.isp392.controllers;
 
 import com.mycompany.isp392.brand.BrandDAO;
 import com.mycompany.isp392.brand.BrandDTO;
+import com.mycompany.isp392.category.CategoryDAO;
+import com.mycompany.isp392.category.ChildrenCategoryDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,7 +28,10 @@ public class GetBrandsController extends HttpServlet {
             BrandDAO dao = new BrandDAO();
             List<BrandDTO> brands = dao.getAllBrands();
             request.setAttribute("BRAND_LIST", brands);
-            if ("AddProductPage".equals(request.getParameter("ProductPage"))) {
+            if ("AddProductPage".equals(request.getParameter("ProductPage")) || request.getAttribute("PRODUCT_ERROR") != null) {
+                 CategoryDAO categoryDAO = new CategoryDAO();
+                 List <ChildrenCategoryDTO> list = categoryDAO.getListCDCategory();
+                 request.setAttribute("CATEGORY_LIST", list);
                 url = ADD_PRODUCT_PAGE;
             } else {
                 url = BRAND_PAGE;

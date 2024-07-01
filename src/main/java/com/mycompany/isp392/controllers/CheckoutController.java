@@ -117,7 +117,7 @@ public class CheckoutController extends HttpServlet {
             OrderDAO orderDAO = new OrderDAO();
             OrderDTO order = orderDAO.insertOrder(cart.getTotalPrice(), user.getUserID(), promotionID, cart.getCartID(), name, city, district, ward, address, phone, note);
             if(order != null){
-                OrderDetailsDTO orderDetailsDTO = orderDAO.insertOrderDetails()
+               // OrderDetailsDTO orderDetailsDTO = orderDAO.insertOrderDetails();
             }
 
 

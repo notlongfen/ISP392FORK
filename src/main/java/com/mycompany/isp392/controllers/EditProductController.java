@@ -1,24 +1,22 @@
 package com.mycompany.isp392.controllers;
 
-import com.mycompany.isp392.product.*;
+import com.mycompany.isp392.product.ProductDAO;
+import com.mycompany.isp392.product.ProductError;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 
 @WebServlet(name = "EditProductController", urlPatterns = {"/EditProductController"})
-
 public class EditProductController extends HttpServlet {
 
-    private static final String ERROR = "product.jsp";
-    private static final String SUCCESS = "product.jsp";
+    private static final String ERROR = "AD_EditProduct.jsp";
+    private static final String SUCCESS = "GetProductsController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
@@ -28,42 +26,42 @@ public class EditProductController extends HttpServlet {
         boolean checkValidation = true;
         ProductDAO productDAO = new ProductDAO();
         try {
-            String productID = request.getParameter("productID");
-            String newName = request.getParameter("newName");
-            String newDescription = request.getParameter("newDescription");
+            int productID = Integer.parseInt(request.getParameter("productID"));
+            String productName = request.getParameter("productName");
+            String description = request.getParameter("description");
+            int numberOfPurchasing = Integer.parseInt(request.getParameter("numberOfPurchasing"));
+            int brandID = Integer.parseInt(request.getParameter("brandID"));
+            String[] categoryIDs = request.getParameterValues("categoryIDs");
 
-            if (productDAO.checkProductExists(newName)) {
+            if (productDAO.checkProductExists(productName, productID)) {
                 productError.setProductNameError("Product already exists.");
                 checkValidation = false;
             }
 
             if (checkValidation) {
-                boolean check = productDAO.editProduct(productID, newName, newDescription);
+                boolean check = productDAO.editProduct(productID, productName, description, numberOfPurchasing, brandID, categoryIDs);
                 if (check) {
                     request.setAttribute("MESSAGE", "INFORMATION UPDATED SUCCESSFULLY !");
                     url = SUCCESS;
+                } else {
+                    productError.setError("UNABLE TO UPDATE INFORMATION !");
+                    request.setAttribute("PRODUCT_ERROR", productError);
                 }
             } else {
-                productError.setError("UNABLE TO UPDATE INFORMATION !");
                 request.setAttribute("PRODUCT_ERROR", productError);
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             log("Error at EditProductController: " + e.toString());
             request.setAttribute("ERROR_MESSAGE", "Error updating product: " + e.getMessage());
         } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+            if(url == SUCCESS){
+                response.sendRedirect(url);
+            } else{
+             request.getRequestDispatcher(url).forward(request, response);   
+            }
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -74,14 +72,6 @@ public class EditProductController extends HttpServlet {
         }
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -92,14 +82,8 @@ public class EditProductController extends HttpServlet {
         }
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
-
+    }
 }

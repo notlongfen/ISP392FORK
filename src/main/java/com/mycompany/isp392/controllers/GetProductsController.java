@@ -2,6 +2,8 @@ package com.mycompany.isp392.controllers;
 
 import com.mycompany.isp392.brand.BrandDAO;
 import com.mycompany.isp392.brand.BrandDTO;
+import com.mycompany.isp392.category.CategoryDAO;
+import com.mycompany.isp392.category.CategoryDTO;
 import com.mycompany.isp392.product.ProductDAO;
 import com.mycompany.isp392.product.ProductDTO;
 import com.mycompany.isp392.product.ProductDetailsDTO;
@@ -18,7 +20,7 @@ public class GetProductsController extends HttpServlet {
     private static final String ERROR = "US_SignIn.jsp";
     private static final String PRODUCTS_PAGE = "AD_ProductList.jsp";
     private static final String PRODUCT_DETAILS_PAGE = "AD_ProductDetail.jsp";
-    private static final String ADD_PRODUCT_DETAIL_PAGE = "CreateProductDetail.jsp";
+    private static final String ADD_PRODUCT_DETAIL_PAGE = "AD_CreateProductDetail.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -26,6 +28,8 @@ public class GetProductsController extends HttpServlet {
         try {
             BrandDAO dao = new BrandDAO();
             ProductDAO productDAO = new ProductDAO();
+             CategoryDAO categoryDAO = new CategoryDAO();
+            // get product details page
             if (request.getParameter("productID") != null) {
                 int productID = Integer.parseInt(request.getParameter("productID"));
                 List<ProductDetailsDTO> productDetailsList = productDAO.getProductDetails(productID);
@@ -40,18 +44,24 @@ public class GetProductsController extends HttpServlet {
                 request.setAttribute("PARENT_PRODUCT", parentProduct);
                 request.setAttribute("PRODUCT_DETAILS_LIST", productDetailsList);
                 url = PRODUCT_DETAILS_PAGE;
+                //Add product details page
             } else if (request.getParameter("parentProductID") != null) {
                 int parentProductID = Integer.parseInt(request.getParameter("parentProductID"));
                 String parentProductName = request.getParameter("parentProductName");
                 request.setAttribute("PARENT_PRODUCT_ID", parentProductID);
                 request.setAttribute("PARENT_PRODUCT_NAME", parentProductName);
-                url = ADD_PRODUCT_DETAIL_PAGE;          
+                url = ADD_PRODUCT_DETAIL_PAGE;
             } else {
                 List<ProductDTO> productList = productDAO.getAllProducts();
                 List<BrandDTO> brands = dao.getAllBrands();
                 request.setAttribute("BRAND_LIST", brands);
                 request.setAttribute("PRODUCT_LIST", productList);
-                url = PRODUCTS_PAGE;
+                  for (ProductDTO detail : productList) {
+                    List<CategoryDTO> categories = categoryDAO.getCategoriesByProductID(detail.getProductID());
+                    request.setAttribute("CATEGORY_LIST_" + detail.getProductID(), categories);
+                   
+                }
+                   url = PRODUCTS_PAGE;
             }
         } catch (SQLException e) {
             log("Error at GetProductsController: " + e.toString());

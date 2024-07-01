@@ -18,23 +18,19 @@
             .pagination .page-link {
                 border-radius: 20px;
             }
-
             .pagination .page-item.active .page-link {
                 background-color: #007bff;
                 border-color: #007bff;
             }
-
             .pagination .page-link:focus,
             .pagination .page-link:hover {
                 background-color: #007bff;
                 border-color: #007bff;
             }
-
             .pagination .page-item:first-child .page-link {
                 border-top-left-radius: 15px;
                 border-bottom-left-radius: 15px;
             }
-
             .pagination .page-item:last-child .page-link {
                 border-top-right-radius: 15px;
                 border-bottom-right-radius: 15px;
@@ -56,19 +52,19 @@
                             <h1 class="h3 mb-0 text-gray-900">Product Details</h1>
                         </div>
                         <div class="d-flex justify-content-end mb-4">
-                        <% 
-                            ProductDTO parentProduct = (ProductDTO) request.getAttribute("PARENT_PRODUCT");
-                            if (parentProduct != null) {
-                        %>
-                        <form action="MainController" method="post">
-                            <input type="hidden" name="parentProductID" value="<%= parentProduct.getProductID() %>">
-                            <input type="hidden" name="parentProductName" value="<%= parentProduct.getProductName() %>">
-                            <button type="submit" class="btn btn-danger" name="action" value="Add_Product_Details_Page" style="background: #C43337;">
-                                Add Product Detail for <%= parentProduct.getProductName() %>
-                            </button>
-                        </form>
-                        <% } %>
-                    </div>
+                            <% 
+                                ProductDTO parentProduct = (ProductDTO) request.getAttribute("PARENT_PRODUCT");
+                                if (parentProduct != null) {
+                            %>
+                            <form action="MainController" method="post">
+                                <input type="hidden" name="parentProductID" value="<%= parentProduct.getProductID() %>">
+                                <input type="hidden" name="parentProductName" value="<%= parentProduct.getProductName() %>">
+                                <button type="submit" class="btn btn-danger" name="action" value="Add_Product_Details_Page" style="background: #C43337;">
+                                    Add Product Detail for <%= parentProduct.getProductName() %>
+                                </button>
+                            </form>
+                            <% } %>
+                        </div>
                         <div class="row mb-3">
                             <div class="col-xl-12 mb-4">
                                 <div class="card">
@@ -102,13 +98,27 @@
                                                     <td class="text-center"><%= details.getSize() %></td>
                                                     <td class="text-center"><%= details.getPrice() %>$</td>
                                                     <td class="text-center"><%= details.getStockQuantity() %></td>
-                                                    <td class="text-center"><%= details.getImage() %></td>
+                                                    <td class="text-center">
+                                                        <% 
+                                                        String[] images = details.getImage().split(";"); // Assuming images are stored as a semicolon-separated string
+                                                        for (String image : images) {
+                                                            if (!image.trim().isEmpty()) { 
+                                                        %>
+                                                        <img src="<%= image %>" alt="Product Image" style="max-width: 100px; max-height: 100px;">
+                                                        <% 
+                                                            }
+                                                        }
+                                                        %>
+                                                    </td>
                                                     <td class="text-center"><%= details.getImportDate() %></td>
                                                     <td class="text-center"><span class="badge <%= details.getStatus() == 1 ? "badge-success" : "badge-warning" %>"><%= details.getStatus() == 1 ? "Available" : "Deleted" %></span></td>
                                                     <td class="text-center action-buttons">
                                                         <form action="MainController" method="post" style="display:inline;">
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <a href="AD_EditProduct.jsp" class="btn btn-sm btn-dark">Edit</a>
+                                                            <input type="hidden" name="productID" value="<%= details.getProductID() %>">
+                                                            <input type="hidden" name="color" value="<%=details.getColor()%>">
+                                                            <input type="hidden" name="size" value="<%=details.getSize()%>">
+                                                            <button type="submit" class="btn btn-sm btn-danger" name="action" value="Delete_Product_Detail">Delete</button>
+                                                            <button type="submit" class="btn btn-sm btn-dark" name="action" value="Edit_Product_Detail">Edit</button>
                                                         </form>
                                                     </td>
                                                 </tr>

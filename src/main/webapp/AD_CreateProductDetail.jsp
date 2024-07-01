@@ -28,7 +28,7 @@
                 String parentProductName = (String) request.getAttribute("PARENT_PRODUCT_NAME");
             %>
             <h2 class="text-center" style="color: #000; font-weight: bold;">Add Product Details for <%= parentProductName %></h2>
-            <form action="MainController" method="post" >
+            <form action="AddProductDetailsController" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="parentProductID" value="<%= parentProductID %>">
                 <input type="hidden" name="parentProductName" value="<%= parentProductName %>">
                 <div class="form-group">
@@ -59,8 +59,8 @@
                     <input type="date" class="form-control" id="importDate" name="importDate" required>
                 </div>
                 <div class="form-group">
-                    <label for="uploadImage">Upload Image</label>
-                    <input type="file" class="form-control-file" id="uploadImage" name="image">
+                    <label for="uploadImages">Upload Images</label>
+                    <input type="file" class="form-control-file" id="uploadImages" name="images" multiple>
                 </div>
                 <div class="form-group text-center">
                     <button type="submit" class="btn btn-danger" name="action" value="Add_Product_Details">Submit</button>

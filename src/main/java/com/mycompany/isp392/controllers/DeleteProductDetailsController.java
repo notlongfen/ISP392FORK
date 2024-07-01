@@ -12,8 +12,8 @@ import java.sql.SQLException;
 
 public class DeleteProductDetailsController extends HttpServlet {
 
-    private static final String ERROR = "product.jsp";
-    private static final String SUCCESS = "product.jsp";
+    private static final String ERROR = "GetProductsController";
+    private static final String SUCCESS = "GetProductsController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

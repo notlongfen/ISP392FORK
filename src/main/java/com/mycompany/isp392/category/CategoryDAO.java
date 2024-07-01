@@ -36,6 +36,8 @@ public class CategoryDAO {
     private static final String CHECK_CHILDREN_CATEGORY_DUPLICATE = "SELECT * FROM ChildrenCategories WHERE CategoriesName LIKE ? AND ParentID LIKE ?";
     private static final String CHECK_PARENT_ID = "SELECT * FROM  Categories WHERE CategoryID LIKE ? AND status = 1";
     private static final String GET_CHILDREN_CATEGORIES = "SELECT * FROM ChildrenCategories WHERE status = 1 AND ParentID LIKE ?";
+    private static final String ADD_PRODUCT_CATEGORY = "INSERT INTO ProductBelongtoCDCategories(ProductID, CDCategoryID) VALUES(?, ?)";
+    private static final String GET_LIST_CDCATEGORY = "SELECT * FROM ChildrenCategories where status = 1";
 
     public boolean addCategory(CategoryDTO category) throws SQLException {
         Connection conn = null;
@@ -266,6 +268,40 @@ public class CategoryDAO {
                     String description = rs.getString("Description");
                     int status = rs.getInt("status");
                     list.add(new CategoryDTO(categoryID, categoryName, description, status));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return list;
+    }
+
+    public List<ChildrenCategoryDTO> getListCDCategory() throws Exception {
+        List<ChildrenCategoryDTO> list = new ArrayList<ChildrenCategoryDTO>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_LIST_CDCATEGORY);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    int categoryID = rs.getInt("CDCategoryID");
+                    String categoryName = rs.getString("CategoriesName");
+                    int parentID = rs.getInt("ParentID");
+                    int status = rs.getInt("status");
+                    list.add(new ChildrenCategoryDTO(categoryID, categoryName, parentID, status));
                 }
             }
         } catch (Exception e) {
@@ -537,4 +573,67 @@ public class CategoryDAO {
         }
         return list;
     }
+
+    public boolean addProductCategory(int productID, int categoryID) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(ADD_PRODUCT_CATEGORY);
+                ptm.setInt(1, productID);
+                ptm.setInt(2, categoryID);
+                check = ptm.executeUpdate() > 0;
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+
+    private static final String GET_CATEGORIES_BY_PRODUCT_ID = "SELECT c.CDCategoryID, c.CategoriesName FROM ChildrenCategories c "
+            + "INNER JOIN ProductBelongtoCDCategories pbc ON c.CDCategoryID = pbc.CDCategoryID "
+            + "WHERE pbc.ProductID = ?";
+
+    public List<CategoryDTO> getCategoriesByProductID(int productID) throws SQLException {
+        List<CategoryDTO> categories = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_CATEGORIES_BY_PRODUCT_ID);
+                ptm.setInt(1, productID);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    int categoryID = rs.getInt("CDCategoryID");
+                    String categoryName = rs.getString("CategoriesName");
+                    categories.add(new CategoryDTO(categoryID, categoryName));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return categories;
+    }
+
 }

@@ -17,7 +17,10 @@ public class CategoryDTO {
 
     public CategoryDTO() {
     }
-
+ public CategoryDTO(int categoryID, String categoryName) {
+        this.categoryID = categoryID;
+        this.categoryName = categoryName;
+    }
     public CategoryDTO(int categoryID, String categoryName, String description, int status) {
         this.categoryID = categoryID;
         this.categoryName = categoryName;

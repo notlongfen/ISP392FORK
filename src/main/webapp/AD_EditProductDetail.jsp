@@ -1,10 +1,8 @@
-<%-- 
-    Document   : EditProduct
-    Created on : Jun 3, 2024, 4:15:02 PM
-    Author     : jojo
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="com.mycompany.isp392.product.ProductDetailsDTO"%>
+<%@ page import="com.mycompany.isp392.brand.BrandDTO"%>
+<%@ page import="com.mycompany.isp392.category.CategoryDTO"%>
+<%@ page import="java.util.List"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -54,85 +52,77 @@
                     <div class="container-fluid" id="container-wrapper">
                         <div class="form-container">
                             <h2 class="text-center mb-5" style="color: #000; font-weight: bold;">Edit Product Detail</h2>
-                                <form>
+
+                            <%
+                                ProductDetailsDTO productDetail = (ProductDetailsDTO) request.getAttribute("PRODUCT_DETAIL");
+                                List<BrandDTO> brandList = (List<BrandDTO>) request.getAttribute("BRAND_LIST");
+                                List<CategoryDTO> categoryList = (List<CategoryDTO>) request.getAttribute("CATEGORY_LIST");
+                                List<CategoryDTO> productCategories = (List<CategoryDTO>) request.getAttribute("PRODUCT_CATEGORIES");
+                            %>
+
+                            <form action="EditProductDetailsController" method="post" enctype="multipart/form-data">
+                                <input type="hidden" name="productID" value="<%= productDetail.getProductID() %>">
+                                <input type="hidden" name="originalColor" value="<%= productDetail.getColor() %>">
+                                <input type="hidden" name="originalSize" value="<%= productDetail.getSize() %>">
+                                
                                 <div class="form-row mb-3">
-                                <div class="form-group col-md-8">
-                                    <label for="productName">Product Name</label>
-                                    <input type="text" class="form-control" id="productName" value="Air force 1">
+                                    <div class="form-group col-md-4">
+                                        <label for="color">Color</label>
+                                        <input type="text" class="form-control" id="color" name="color" value="<%= productDetail.getColor() %>">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="size">Size</label>
+                                        <input type="text" class="form-control" id="size" name="size" value="<%= productDetail.getSize() %>">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="stockQuantity">Stock Quantity</label>
+                                        <input type="number" class="form-control" id="stockQuantity" name="stockQuantity" value="<%= productDetail.getStockQuantity() %>">
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-4">
-                                    <label for="brand">Brand</label>
-                                    <select class="form-control" id="brand" >
-                                        <option>Nike</option>
-                                        <option>Adidas</option>
-                                        <option>Puma</option>
-                                        <option>Vans</option>
-                                    </select>
+
+                                <div class="form-row mb-3">
+                                    <div class="form-group col-md-6">
+                                        <label for="price">Price</label>
+                                        <input type="number" class="form-control" id="price" name="price" value="<%= productDetail.getPrice() %>">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="importDate">Import Date</label>
+                                        <input type="date" class="form-control" id="importDate" name="importDate" value="<%= productDetail.getImportDate() %>">
+                                    </div>
                                 </div>
-                        </div>
 
-                        <div class="form-row mb-3">
-                            <div class="form-group col-md-4">
-                                <label for="stockQuantity">Stock Quantity</label>
-                                <input type="text" class="form-control" id="stockQuantity" value="100">
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="price">Price</label>
-                                <input type="text" class="form-control" id="price" value="2,000">
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="importDate">Import Date</label>
-                                <input type="text" class="form-control" id="importDate" value="01/06/2024">
-                            </div>
-                        </div>
-
-
-                        <div class="form-row mb-3">
-
-                            <div class="form-group col-md-4">
-                                <label for="size">Size</label>
-                                <select class="form-control" id="brand" >
-                                    <option>39</option>
-                                    <option>40</option>
-                                    <option>41</option>
-                                    <option>42</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="color">Color</label>
-                                <input type="text" class="form-control" id="color" value="White">
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="category">Category</label>
-                                <input type="text" class="form-control" id="category" value="Shoes">
-                            </div>
-                        </div>
-
-                        <div class="form-group mb-3">
-                            <label for="description">Description</label>
-                            <textarea class="form-control" id="description" rows="3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</textarea>
-                        </div>
-
-                        <div class="form-group mb-5">
-                            <label for="imageGallery">Image Gallery</label>
-                            <div class="row">
-                                <div>
-                                    <img src="images/product_8.png" alt="Image 1" class="img-thumbnail" style="width: 100px; height: 100px; margin-right: 10px;">
-                                    <img src="images/product_4.png" alt="Image 2" class="img-thumbnail" style="width: 100px; height: 100px; margin-right: 10px;">
-                                    <img src="images/product_6.png" alt="Image 3" class="img-thumbnail" style="width: 100px; height: 100px; margin-right: 10px;">
+                                <div class="form-group mb-3">
+                                    <label for="description">Description</label>
+                                    <textarea class="form-control" id="description" name="description" rows="3"><%= productDetail.getDescription() %></textarea>
                                 </div>
-                                <div class="mt-5">
-                                    <input type="file" class="form-control-file" id="imageUpload">
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="form-group text-center">
-                            <button type="submit" class="btn btn-danger btn-custom">Submit</button>
-                            <button type="reset" class="btn btn-secondary btn-custom">Reset</button>
-                            <!--<a href="previousPage.jsp" class="btn btn-secondary btn-custom">Back</a>-->
+                                <div class="form-group mb-5">
+                                    <label for="imageGallery">Image Gallery</label>
+                                    <div class="row">
+                                        <%
+                                            String[] images = productDetail.getImage().split(";");
+                                            for (String image : images) {
+                                                if (!image.trim().isEmpty()) {
+                                        %>
+                                        <div class="col-md-3">
+                                            <img src="<%= image %>" alt="Product Image" class="img-thumbnail" style="width: 100px; height: 100px; margin-right: 10px;">
+                                        </div>
+                                        <%
+                                                }
+                                            }
+                                        %>
+                                    </div>
+                                    <div class="mt-3">
+                                        <input type="file" class="form-control-file" id="imageUpload" name="imageUpload">
+                                    </div>
+                                </div>
+
+                                <div class="form-group text-center">
+                                    <button type="submit" class="btn btn-danger btn-custom">Submit</button>
+                                    <button type="reset" class="btn btn-secondary btn-custom">Reset</button>
+                                </div>
+                            </form>
                         </div>
-                        </form>
                     </div>
                 </div>
             </div>
@@ -148,7 +138,7 @@
 
     <!-- Include necessary scripts -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDzwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
