@@ -15,13 +15,12 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet(name = "EditProductController", urlPatterns = {"/EditProductController"})
 public class EditProductController extends HttpServlet {
 
-    private static final String ERROR = "AD_EditProduct.jsp";
+    private static final String ERROR = "GetSpecificProductController";
     private static final String SUCCESS = "GetProductsController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = ERROR;
         ProductError productError = new ProductError();
         boolean checkValidation = true;
         ProductDAO productDAO = new ProductDAO();
@@ -32,6 +31,7 @@ public class EditProductController extends HttpServlet {
             int numberOfPurchasing = Integer.parseInt(request.getParameter("numberOfPurchasing"));
             int brandID = Integer.parseInt(request.getParameter("brandID"));
             String[] categoryIDs = request.getParameterValues("categoryIDs");
+            int status = Integer.parseInt(request.getParameter("status"));
 
             if (productDAO.checkProductExists(productName, productID)) {
                 productError.setProductNameError("Product already exists.");
@@ -39,27 +39,23 @@ public class EditProductController extends HttpServlet {
             }
 
             if (checkValidation) {
-                boolean check = productDAO.editProduct(productID, productName, description, numberOfPurchasing, brandID, categoryIDs);
+                boolean check = productDAO.editProduct(productID, productName, description, numberOfPurchasing, brandID, categoryIDs, status);
                 if (check) {
-                    request.setAttribute("MESSAGE", "INFORMATION UPDATED SUCCESSFULLY !");
-                    url = SUCCESS;
+                    request.getSession().setAttribute("SUCCESS_MESSAGE", "Product updated successfully!");
+                    response.sendRedirect(SUCCESS);
+                    return;
                 } else {
-                    productError.setError("UNABLE TO UPDATE INFORMATION !");
-                    request.setAttribute("PRODUCT_ERROR", productError);
+                    productError.setError("UNABLE TO UPDATE INFORMATION!");
+                    request.getSession().setAttribute("PRODUCT_ERROR", productError);
                 }
             } else {
-                request.setAttribute("PRODUCT_ERROR", productError);
+                request.getSession().setAttribute("PRODUCT_ERROR", productError);
             }
         } catch (Exception e) {
             log("Error at EditProductController: " + e.toString());
-            request.setAttribute("ERROR_MESSAGE", "Error updating product: " + e.getMessage());
-        } finally {
-            if(url == SUCCESS){
-                response.sendRedirect(url);
-            } else{
-             request.getRequestDispatcher(url).forward(request, response);   
-            }
+            request.getSession().setAttribute("ERROR_MESSAGE", "Error updating product: " + e.getMessage());
         }
+         request.getRequestDispatcher(ERROR).forward(request, response);   
     }
 
     @Override

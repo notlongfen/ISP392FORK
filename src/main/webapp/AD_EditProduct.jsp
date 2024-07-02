@@ -1,11 +1,13 @@
 <%@page import="com.mycompany.isp392.brand.BrandDTO" %>
 <%@page import="com.mycompany.isp392.product.ProductDTO" %>
+<%@page import="com.mycompany.isp392.product.ProductError" %>
 <%@page import="com.mycompany.isp392.category.ChildrenCategoryDTO" %>
 <%@page import="com.mycompany.isp392.category.CategoryUtils" %>
 <%@page import="com.mycompany.isp392.category.CategoryDTO" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List"%>
 <!DOCTYPE html>
+
 <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -75,11 +77,20 @@
                                     </div>
                                 </div>
                                 <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label for="status">Status</label>
+                                        <select class="form-control" id="status" name="status">
+                                            <option value="1" <%= product.getStatus() == 1 ? "selected" : "" %>>Available</option>
+                                            <option value="0" <%= product.getStatus() == 0 ? "selected" : "" %>>Deleted</option>
+                                        </select>
+                                    </div>
                                     <div class="form-group col-md-8">
                                         <label for="numberOfPurchasing">Number of Purchasing</label>
                                         <input type="number" class="form-control" id="numberOfPurchasing" name="numberOfPurchasing" value="<%= product.getNumberOfPurchase() %>">
                                     </div>
-                                    <div class="form-group col-md-4">
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
                                         <label for="categoryIDs">Categories</label>
                                         <div id="categories">
                                             <%
@@ -112,6 +123,19 @@
         <a class="scroll-to-top rounded" href="#page-top">
             <i class="fas fa-angle-up"></i>
         </a>
+        
+        <!-- Error Modal -->
+         <% if (request.getAttribute("PRODUCT_ERROR") != null) { %>
+                    <%@include file="errorModal.jsp" %>
+                    <% } %>
+        <% if (request.getAttribute("PRODUCT_ERROR") != null) { %>
+        <script>
+            $(document).ready(function () {
+                $('#errorModal').modal('show');
+            });
+        </script>
+        <% } %>
+        
         <!-- Include necessary scripts -->
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDzwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

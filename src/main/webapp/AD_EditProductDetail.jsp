@@ -3,6 +3,7 @@
 <%@ page import="com.mycompany.isp392.brand.BrandDTO"%>
 <%@ page import="com.mycompany.isp392.category.CategoryDTO"%>
 <%@ page import="java.util.List"%>
+<%@page import="com.mycompany.isp392.product.ProductError"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -55,24 +56,19 @@
 
                             <%
                                 ProductDetailsDTO productDetail = (ProductDetailsDTO) request.getAttribute("PRODUCT_DETAIL");
-                                List<BrandDTO> brandList = (List<BrandDTO>) request.getAttribute("BRAND_LIST");
-                                List<CategoryDTO> categoryList = (List<CategoryDTO>) request.getAttribute("CATEGORY_LIST");
-                                List<CategoryDTO> productCategories = (List<CategoryDTO>) request.getAttribute("PRODUCT_CATEGORIES");
                             %>
 
                             <form action="EditProductDetailsController" method="post" enctype="multipart/form-data">
-                                <input type="hidden" name="productID" value="<%= productDetail.getProductID() %>">
-                                <input type="hidden" name="originalColor" value="<%= productDetail.getColor() %>">
-                                <input type="hidden" name="originalSize" value="<%= productDetail.getSize() %>">
+                                <input type="hidden" name="productDetailID" value="<%= productDetail.getProductDetailsID() %>">
                                 
                                 <div class="form-row mb-3">
                                     <div class="form-group col-md-4">
                                         <label for="color">Color</label>
-                                        <input type="text" class="form-control" id="color" name="color" value="<%= productDetail.getColor() %>">
+                                        <input type="text" class="form-control" id="color" name="color" value="<%= productDetail.getColor() %>" readonly>
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label for="size">Size</label>
-                                        <input type="text" class="form-control" id="size" name="size" value="<%= productDetail.getSize() %>">
+                                        <input type="text" class="form-control" id="size" name="size" value="<%= productDetail.getSize() %>" readonly>
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label for="stockQuantity">Stock Quantity</label>
@@ -89,11 +85,6 @@
                                         <label for="importDate">Import Date</label>
                                         <input type="date" class="form-control" id="importDate" name="importDate" value="<%= productDetail.getImportDate() %>">
                                     </div>
-                                </div>
-
-                                <div class="form-group mb-3">
-                                    <label for="description">Description</label>
-                                    <textarea class="form-control" id="description" name="description" rows="3"><%= productDetail.getDescription() %></textarea>
                                 </div>
 
                                 <div class="form-group mb-5">
@@ -115,6 +106,14 @@
                                     <div class="mt-3">
                                         <input type="file" class="form-control-file" id="imageUpload" name="imageUpload">
                                     </div>
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label for="status">Status</label>
+                                    <select class="form-control" id="status" name="detailStatus">
+                                        <option value="1" <%= productDetail.getStatus() == 1 ? "selected" : "" %>>Available</option>
+                                        <option value="0" <%= productDetail.getStatus() == 0 ? "selected" : "" %>>Deleted</option>
+                                    </select>
                                 </div>
 
                                 <div class="form-group text-center">

@@ -7,6 +7,7 @@ import com.mycompany.isp392.category.CategoryDTO;
 import com.mycompany.isp392.product.ProductDAO;
 import com.mycompany.isp392.product.ProductDTO;
 import com.mycompany.isp392.product.ProductDetailsDTO;
+import com.mycompany.isp392.product.ProductError;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -28,7 +29,29 @@ public class GetProductsController extends HttpServlet {
         try {
             BrandDAO dao = new BrandDAO();
             ProductDAO productDAO = new ProductDAO();
-             CategoryDAO categoryDAO = new CategoryDAO();
+            CategoryDAO categoryDAO = new CategoryDAO();
+
+            // Retrieve and clear success message from session
+            String successMessage = (String) request.getSession().getAttribute("SUCCESS_MESSAGE");
+            if (successMessage != null) {
+                request.setAttribute("SUCCESS_MESSAGE", successMessage);
+                request.getSession().removeAttribute("SUCCESS_MESSAGE");
+            }
+
+            // Retrieve and clear error message from session
+            ProductError productError = (ProductError) request.getSession().getAttribute("PRODUCT_ERROR");
+            if (productError != null) {
+                request.setAttribute("PRODUCT_ERROR", productError);
+                request.getSession().removeAttribute("PRODUCT_ERROR");
+            }
+
+            // Retrieve and clear general error message from session
+            String errorMessage = (String) request.getSession().getAttribute("ERROR_MESSAGE");
+            if (errorMessage != null) {
+                request.setAttribute("ERROR_MESSAGE", errorMessage);
+                request.getSession().removeAttribute("ERROR_MESSAGE");
+            }
+
             // get product details page
             if (request.getParameter("productID") != null) {
                 int productID = Integer.parseInt(request.getParameter("productID"));
@@ -37,7 +60,7 @@ public class GetProductsController extends HttpServlet {
                 request.setAttribute("PARENT_PRODUCT", parentProduct);
                 request.setAttribute("PRODUCT_DETAILS_LIST", productDetailsList);
                 url = PRODUCT_DETAILS_PAGE;
-            }else if (request.getAttribute("newProductID") != null) {
+            } else if (request.getAttribute("newProductID") != null) {
                 int newProductID = (int) request.getAttribute("newProductID");
                 List<ProductDetailsDTO> productDetailsList = productDAO.getProductDetails(newProductID);
                 ProductDTO parentProduct = productDAO.selectProduct(newProductID);
@@ -56,12 +79,11 @@ public class GetProductsController extends HttpServlet {
                 List<BrandDTO> brands = dao.getAllBrands();
                 request.setAttribute("BRAND_LIST", brands);
                 request.setAttribute("PRODUCT_LIST", productList);
-                  for (ProductDTO detail : productList) {
+                for (ProductDTO detail : productList) {
                     List<CategoryDTO> categories = categoryDAO.getCategoriesByProductID(detail.getProductID());
                     request.setAttribute("CATEGORY_LIST_" + detail.getProductID(), categories);
-                   
                 }
-                   url = PRODUCTS_PAGE;
+                url = PRODUCTS_PAGE;
             }
         } catch (SQLException e) {
             log("Error at GetProductsController: " + e.toString());

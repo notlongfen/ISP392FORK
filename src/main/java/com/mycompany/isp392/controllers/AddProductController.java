@@ -7,7 +7,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
 
 public class AddProductController extends HttpServlet {
 
@@ -35,33 +34,31 @@ public class AddProductController extends HttpServlet {
                 productError.setProductNameError("Product already exists.");
                 checkValidation = false;
             }
-            if (numberOfPurchase < 0) {
-                productError.setNumberOfPurchaseError("Number of Purchase cannot be less than 0.");
-                checkValidation = false;
-            }
+         
             if (checkValidation) {
-                ProductDTO product = new ProductDTO(0, productName, description, numberOfPurchase, status, brandID);
+                ProductDTO product = new ProductDTO( productName, description, numberOfPurchase, status, brandID);
                 boolean check = productDAO.addProduct(product);
                 if (check) {
                     int productID = productDAO.getLatestProductID();
                     for (String categoryID : categoryArray) {
                         categoryDAO.addProductCategory(productID, Integer.parseInt(categoryID));
                     }
-                    request.setAttribute("MESSAGE", "Product added successfully!");
-                    request.setAttribute("PRODUCT_ID", productID);
-                    url = SUCCESS;
+                    request.getSession().setAttribute("SUCCESS_MESSAGE", "Product added successfully!");
+                    request.getSession().setAttribute("PRODUCT_ID", productID);
+                    response.sendRedirect(SUCCESS);
+                    return;
                 } else {
                     productError.setError("Unable to add product to the database!");
-                    request.setAttribute("PRODUCT_ERROR", productError);
+                    request.getSession().setAttribute("PRODUCT_ERROR", productError);
                 }
             } else {
-                request.setAttribute("PRODUCT_ERROR", productError);
+                request.getSession().setAttribute("PRODUCT_ERROR", productError);
             }
-        } catch (NumberFormatException | SQLException e) {
+        } catch (Exception e) {
             log("Error at AddProductController: " + e.toString());
-        } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+            request.getSession().setAttribute("ERROR_MESSAGE", "Error adding product: " + e.getMessage());
         }
+        request.getRequestDispatcher(url).forward(request, response);
     }
 
     @Override

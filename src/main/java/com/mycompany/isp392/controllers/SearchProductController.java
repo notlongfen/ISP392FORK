@@ -2,6 +2,8 @@ package com.mycompany.isp392.controllers;
 
 import com.mycompany.isp392.brand.BrandDAO;
 import com.mycompany.isp392.brand.BrandDTO;
+import com.mycompany.isp392.category.CategoryDAO;
+import com.mycompany.isp392.category.CategoryDTO;
 import com.mycompany.isp392.product.ProductDAO;
 import com.mycompany.isp392.product.ProductDTO;
 import java.io.IOException;
@@ -25,11 +27,17 @@ public class SearchProductController extends HttpServlet {
             String searchText = request.getParameter("searchText");
             BrandDAO dao = new BrandDAO();
             ProductDAO productDAO = new ProductDAO();
+            CategoryDAO categoryDAO = new CategoryDAO();
             List<BrandDTO> brands = dao.getAllBrands();
             List<ProductDTO> productList = productDAO.searchProducts(searchText);
             if (productList != null) {
                 request.setAttribute("PRODUCT_LIST", productList);
                 request.setAttribute("BRAND_LIST", brands);
+                for (ProductDTO detail : productList) {
+                    List<CategoryDTO> categories = categoryDAO.getCategoriesByProductID(detail.getProductID());
+                    request.setAttribute("CATEGORY_LIST_" + detail.getProductID(), categories);
+                   
+                }
                 url = SUCCESS;
             } else {
                 request.setAttribute("MESSAGE", "NO PRODUCT FOUND !");

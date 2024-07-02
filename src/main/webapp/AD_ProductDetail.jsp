@@ -1,7 +1,7 @@
+<%@page import="com.mycompany.isp392.product.ProductDetailsDTO"%>
+<%@page import="com.mycompany.isp392.product.ProductDTO"%>
+<%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="com.mycompany.isp392.product.ProductDetailsDTO" %>
-<%@ page import="com.mycompany.isp392.product.ProductDTO" %>
-<%@ page import="java.util.List" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -35,6 +35,10 @@
                 border-top-right-radius: 15px;
                 border-bottom-right-radius: 15px;
             }
+            .action-buttons .btn {
+                margin-left: 5px;
+                margin-right: 5px;
+            }
         </style>
     </head>
 
@@ -60,7 +64,7 @@
                                 <input type="hidden" name="parentProductID" value="<%= parentProduct.getProductID() %>">
                                 <input type="hidden" name="parentProductName" value="<%= parentProduct.getProductName() %>">
                                 <button type="submit" class="btn btn-danger" name="action" value="Add_Product_Details_Page" style="background: #C43337;">
-                                    Add Product Detail for <%= parentProduct.getProductName() %>
+                                    Add Product Detail
                                 </button>
                             </form>
                             <% } %>
@@ -75,12 +79,13 @@
                                         <table class="table align-items-center table-flush">
                                             <thead class="thead-light">
                                                 <tr>
-                                                    <th class="text-center">ID</th>
+                                                    <th class="text-center">Product Name</th>
+                                                    <th class="text-center">Product Detail ID</th>
                                                     <th class="text-center">Color</th>
                                                     <th class="text-center">Size</th>
                                                     <th class="text-center">Price</th>
                                                     <th class="text-center">Stock Quantity</th>
-                                                    <th class="text-center">Image</th>
+                                                    <th class="text-center">Images</th>
                                                     <th class="text-center">Import Date</th>
                                                     <th class="text-center">Status</th>
                                                     <th class="text-center">Action</th>
@@ -93,7 +98,8 @@
                                                     for (ProductDetailsDTO details : productDetailsList) {
                                                 %>
                                                 <tr>
-                                                    <td class="text-center"><%= details.getProductID() %></td>
+                                                    <td class="text-center"><%= parentProduct.getProductName() %></td>
+                                                    <td class="text-center"><%= details.getProductDetailsID() %></td>
                                                     <td class="text-center"><%= details.getColor() %></td>
                                                     <td class="text-center"><%= details.getSize() %></td>
                                                     <td class="text-center"><%= details.getPrice() %>$</td>
@@ -110,15 +116,15 @@
                                                         }
                                                         %>
                                                     </td>
-                                                    <td class="text-center"><%= details.getImportDate() %></td>
+                                                    <td class="text-center px-0"><%= details.getImportDate() %></td>
                                                     <td class="text-center"><span class="badge <%= details.getStatus() == 1 ? "badge-success" : "badge-warning" %>"><%= details.getStatus() == 1 ? "Available" : "Deleted" %></span></td>
-                                                    <td class="text-center action-buttons">
+                                                    <td class="text-center action-buttons px-0">
+                                                        <% if (details.getStatus() == 1) { %>
+                                                        <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirmDeleteModal" data-id="<%= details.getProductDetailsID() %>" data-parentId = "<%= parentProduct.getProductID() %>"data-delete-type="productDetail">Delete</button>
+                                                        <% } %>
                                                         <form action="MainController" method="post" style="display:inline;">
-                                                            <input type="hidden" name="productID" value="<%= details.getProductID() %>">
-                                                            <input type="hidden" name="color" value="<%=details.getColor()%>">
-                                                            <input type="hidden" name="size" value="<%=details.getSize()%>">
-                                                            <button type="submit" class="btn btn-sm btn-danger" name="action" value="Delete_Product_Detail">Delete</button>
-                                                            <button type="submit" class="btn btn-sm btn-dark" name="action" value="Edit_Product_Detail">Edit</button>
+                                                            <input type="hidden" name="productDetailID" value="<%= details.getProductDetailsID() %>">
+                                                            <button type="submit" class="btn btn-sm btn-dark" name="action" value="Edit_Product_Detail_Page">Edit</button>
                                                         </form>
                                                     </td>
                                                 </tr>
@@ -127,7 +133,7 @@
                                                 } else {
                                                 %>
                                                 <tr>
-                                                    <td colspan="9" class="text-center">No product details found</td>
+                                                    <td colspan="10" class="text-center">No product details found</td>
                                                 </tr>
                                                 <% 
                                                 }
@@ -158,45 +164,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Modal Logout -->
-                        <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabelLogout">Ohh No!</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p>Are you sure you want to logout?</p>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
-                                        <a href="login.html" class="btn btn-primary">Logout</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Modal Confirm Delete -->
-                        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Delete</h5>
-                                    </div>
-                                    <div class="modal-body">
-                                        Are you sure you want to delete this item?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                        <button type="button" class="btn btn-danger" id="confirmDeleteButton">Delete</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
-                    <!---Container Fluid-->
                 </div>
                 <!-- Footer -->
                 <!-- Footer -->
@@ -206,6 +174,13 @@
         <a class="scroll-to-top rounded" href="#page-top">
             <i class="fas fa-angle-up"></i>
         </a>
+        
+          <!-- Include the Modals -->
+                        <%@include file="logoutModal.jsp" %>
+                        <%@include file="confirmDeleteModal.jsp" %>
+                        <% if (request.getAttribute("SUCCESS_MESSAGE") != null) { %>
+                        <%@include file="successModal.jsp" %>
+                        <% } %>
         <script>
             // Sorting functionality
             let ascending = true;
@@ -226,17 +201,13 @@
                 document.getElementById('sortIconProduct').textContent = ascending ? '▲' : '▼';
             }
             // Deleting functionality
-            document.querySelectorAll('.btn-danger').forEach(btn => {
+            document.querySelectorAll('.btn-danger[data-toggle="modal"]').forEach(btn => {
                 btn.addEventListener('click', function () {
-                    $('#confirmDeleteModal').modal('show');
-                    const rowToDelete = this.closest('tr');
-                    $('#confirmDeleteButton').data('rowToDelete', rowToDelete);
+                    const productDetailID = this.getAttribute('data-productdetailid');
+                     const parentProductID = this.getAttribute('data-parentid');
+                    document.getElementById('modalProductDetailID').value = productDetailID;
+                     document.getElementById('modalParentProductID').value = parentProductID;
                 });
-            });
-            document.getElementById('confirmDeleteButton').addEventListener('click', function () {
-                $('#confirmDeleteModal').modal('hide');
-                const rowToDelete = $('#confirmDeleteButton').data('rowToDelete');
-                rowToDelete.remove();
             });
         </script>
         <script src="vendor/jquery/jquery.min.js"></script>
@@ -246,7 +217,7 @@
         <script src="vendor/chart.js/Chart.min.js"></script>
         <script src="AD_js/demo/chart-area-demo.js"></script>
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDzwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDzwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     </body>
 </html>

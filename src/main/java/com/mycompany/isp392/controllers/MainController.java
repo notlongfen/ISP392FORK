@@ -162,6 +162,9 @@ public class MainController extends HttpServlet {
     private static final String EDIT_PRODUCT_PAGE = "Edit_Product_Page";
     private static final String EDIT_PRODUCT_PAGE_VIEW = "GetSpecificProductController";
 
+    private static final String EDIT_PRODUCT_DETAIL_PAGE = "Edit_Product_Detail_Page";
+    private static final String EDIT_PRODUCT_DETAIL_PAGE_VIEW = "GetSpecificProductController";
+    
     private static final String EDIT_PRODUCT_DETAILS = "Edit_Product_Details";
     private static final String EDIT_PRODUCT_DETAILS_CONTROLLER = "EditProductDetailsController";
 
@@ -319,6 +322,8 @@ public class MainController extends HttpServlet {
                 url = ADD_BRANDS_PAGE_VIEW;
             } else if (EDIT_PRODUCT_PAGE.equals(action)) {
                 url = EDIT_PRODUCT_PAGE_VIEW;
+            }else if (EDIT_PRODUCT_DETAIL_PAGE.equals(action)) {
+                url = EDIT_PRODUCT_DETAIL_PAGE_VIEW;
             }
         } catch (Exception e) {
             log("error at MainController: " + e.toString());
