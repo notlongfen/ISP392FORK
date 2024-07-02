@@ -98,7 +98,7 @@
                         <div class="mb-3 form-check">
                             <input type="checkbox" class="form-check-input" id="terms" required="">
                             <label class="form-check-label" for="terms">
-                                I confirm that I have read and accept the <a href="#">Terms and Conditions</a> and the <a href="#">Privacy Policy</a>.
+                                I confirm that I have read and accept the <a href="MainController?action=View_term_and_condition">Terms and Conditions</a> and the <a href="MainController?action=View_privacy">Privacy Policy</a>.
                             </label>
                         </div>
                         <button type="submit" class="btn btn-dark w-100" name="action" value="Sign In">Sign In</button>

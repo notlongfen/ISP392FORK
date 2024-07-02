@@ -12,8 +12,8 @@ import java.sql.Date;
 @WebServlet(name = "EditPromotionController", urlPatterns = {"/EditPromotionController"})
 public class EditPromotionController extends HttpServlet {
 
-    private static final String ERROR = "editPromotion.jsp";
-    private static final String SUCCESS = "shopManager.jsp";
+    private static final String ERROR = "AD_EditPromotion.jsp";
+    private static final String SUCCESS = "GetPromotionListController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -30,9 +30,10 @@ public class EditPromotionController extends HttpServlet {
             Date endDate = Date.valueOf(request.getParameter("endDate"));
             int discountPer = Integer.parseInt(request.getParameter("discountPer"));
             int condition = Integer.parseInt(request.getParameter("condition"));
+            String description = request.getParameter("description");
             int status = Integer.parseInt(request.getParameter("status"));
             PromotionDAO dao = new PromotionDAO();
-            PromotionDTO promotion = new PromotionDTO(promotionID, promotionName, startDate, endDate, discountPer, condition, status);
+            PromotionDTO promotion = new PromotionDTO(promotionID, promotionName, startDate, endDate, discountPer, condition, description, status);
             
             if (dao.checkPromotionDuplicate(promotionName, status)) {
                 error.setPromotionNameError("This promotion already exists.");
@@ -69,7 +70,7 @@ public class EditPromotionController extends HttpServlet {
         } catch (Exception e) {
             log("Error at EditPromotionController: " + e.toString());
         } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+            response.sendRedirect(url);
         }
     }
 

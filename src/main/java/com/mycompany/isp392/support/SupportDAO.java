@@ -29,9 +29,10 @@ public class SupportDAO {
             + "INNER JOIN Customers c ON s.CustID = c.CustID\n"
             + "INNER JOIN Users u ON c.CustID = u.UserID\n"
             + "WHERE s.SupportID = ?";
-    private static final String ADD_SUPPORT_HISTORY = "INSERT INTO  ProcessSupports (EmpID, SupportID, responseMessage, responseDate) VALUES (?, ?, ?, ?, GETDATE());";
+    private static final String GET_ALL_SUPPORT_INFO = "SELECT * FROM Supports \n";
+    private static final String ADD_SUPPORT_HISTORY = "INSERT INTO  ProcessSupports (EmpID, SupportID, responseMessage, title, responseDate) VALUES (?, ?, ?,?, GETDATE());";
     private static final String GET_SUPPORT_PROCESS_INFO_BY_SUPPORT_ID = "SELECT * FROM ProcessSupports WHERE SupportID = ?";
-    
+
     public int getLastSupportId() throws SQLException {
         int lastSupportId = 0;
         Connection conn = null;
@@ -133,10 +134,11 @@ public class SupportDAO {
                 rs = ptm.executeQuery();
                 if (rs.next()) {
                     int status = rs.getInt("status");
+                    String title = rs.getString("title");
                     Date requestDate = rs.getDate("requestDate");
                     String requestMessage = rs.getString("requestMessage");
                     int custID = rs.getInt("custID");
-                    support = new SupportDTO(supportID, status, requestDate, requestMessage, custID);
+                    support = new SupportDTO(supportID, status, title, requestDate, requestMessage, custID);
                 }
             }
         } catch (Exception e) {
@@ -160,6 +162,41 @@ public class SupportDAO {
         return support;
     }
 
+    public List<SupportDTO> getAllSupport() throws SQLException {
+        List<SupportDTO> supports = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_ALL_SUPPORT_INFO);
+                rs = ptm.executeQuery();
+                 while (rs.next()) {
+                    int supportID = rs.getInt("supportID");
+                    int status = rs.getInt("status");
+                    Date requestDate = rs.getDate("requestDate");
+                    String requestMessage = rs.getString("requestMessage");
+                    int custID = rs.getInt("custID");
+                     supports.add( new SupportDTO(supportID, status, requestDate, requestMessage, custID));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return supports;
+    }
+
     public ProcessSupportDTO addReplyHistory(ProcessSupportDTO psp) throws SQLException {
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -170,6 +207,7 @@ public class SupportDAO {
                 ptm.setInt(1, psp.getEmpID());
                 ptm.setInt(2, psp.getSupportID());
                 ptm.setString(3, psp.getResponseMessage());
+                ptm.setString(4, psp.getTitle());
                 ptm.executeUpdate();
             }
         } catch (Exception e) {
@@ -186,74 +224,38 @@ public class SupportDAO {
         }
         return psp;
     }
-    
-    public ProcessSupportDTO getInfoProcessSupport(int supportID) throws SQLException{
-        Connection  conn= null;
+
+    public ProcessSupportDTO getInfoProcessSupport(int supportID) throws SQLException {
+        Connection conn = null;
         PreparedStatement ptm = null;
         ResultSet rs = null;
         ProcessSupportDTO pdto = null;
         try {
             conn = DbUtils.getConnection();
-            if(conn != null){
+            if (conn != null) {
                 ptm = conn.prepareStatement(GET_SUPPORT_PROCESS_INFO_BY_SUPPORT_ID);
                 ptm.setInt(1, supportID);
                 rs = ptm.executeQuery();
-                if(rs.next()){
-                int empID = rs.getInt("EmpID");
-                String responseMessage = rs.getString("responseMessage");
-                Date responseDate = rs.getDate("responseDate");
-                pdto = new ProcessSupportDTO(empID, supportID, responseMessage, responseDate);
+                if (rs.next()) {
+                    int empID = rs.getInt("EmpID");
+                    String responseMessage = rs.getString("responseMessage");
+                    Date responseDate = rs.getDate("responseDate");
+                    pdto = new ProcessSupportDTO(empID, supportID, responseMessage, responseDate);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-             if (rs != null) {
-                    rs.close();
-                }
-                if (ptm != null) {
-                    ptm.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
         }
         return pdto;
     }
-
-//    public SupportDTO getSupportByID(int supportID) throws SQLException {
-//        SupportDTO support = null;
-//        Connection conn = null;
-//        PreparedStatement ptm = null;
-//        ResultSet rs = null;
-//        try {
-//            conn = DbUtils.getConnection();
-//            if (conn != null) {
-//                ptm = conn.prepareStatement(GET_SUPPORT_BY_ID);
-//                ptm.setInt(1, supportID);
-//                rs = ptm.executeQuery();
-//                if (rs.next()) {
-//                    int status = rs.getInt("status");
-//                    Date requestDate = rs.getDate("requestDate");
-//                    String requestMessage = rs.getString("requestMessage");
-//                    int custID = rs.getInt("custID");
-//                    support = new SupportDTO(supportID, status, requestDate, requestMessage, custID);
-//                }
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        } finally {
-//            if (rs != null) {
-//                rs.close();
-//            }
-//            if (ptm != null) {
-//                ptm.close();
-//            }
-//            if (conn != null) {
-//                conn.close();
-//            }
-//        }
-//        return support;
-//    }
-
 }

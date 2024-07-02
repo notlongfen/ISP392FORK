@@ -42,7 +42,7 @@ private static final long serialVersionUID = 1L;
     HttpSession session = request.getSession();
     
     if (code == null || code.isEmpty()) {
-      RequestDispatcher dis = request.getRequestDispatcher("login.jsp");
+      RequestDispatcher dis = request.getRequestDispatcher("US_SignIn.jsp");
       dis.forward(request, response);
     } else {
       String accessToken = GoogleUtils.getToken(code);

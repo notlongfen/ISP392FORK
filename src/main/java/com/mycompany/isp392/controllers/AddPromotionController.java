@@ -15,8 +15,8 @@ import com.mycompany.isp392.promotion.*;
 public class AddPromotionController extends HttpServlet {
 
     //temp
-    private static final String ERROR = "addPromotion.jsp";
-    private static final String SUCCESS = "login.jsp";
+    private static final String ERROR = "AD_CreatePromotion.jsp";
+    private static final String SUCCESS = "GetPromotionListController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -31,6 +31,7 @@ public class AddPromotionController extends HttpServlet {
             Date endDate = Date.valueOf(LocalDate.parse(request.getParameter("endDate"), DateTimeFormatter.ISO_DATE));
             int discountPer = Integer.parseInt(request.getParameter("discountPer"));
             int condition = Integer.parseInt(request.getParameter("condition"));
+            String description = request.getParameter("description");
             int status = 1; 
 
             if (dao.checkPromotionDuplicate(promotionName, status)) {
@@ -56,7 +57,7 @@ public class AddPromotionController extends HttpServlet {
 
             if (checkValidation) {
                 int promotionID = dao.getLatestPromotionID() + 1;
-                PromotionDTO promotion = new PromotionDTO(promotionID, promotionName, startDate, endDate, discountPer, condition, status);
+                PromotionDTO promotion = new PromotionDTO(promotionID, promotionName, startDate, endDate, discountPer, condition, description, status);
                 boolean checkPromotion = dao.addPromotion(promotion);
                 if (checkPromotion) {
                     request.setAttribute("MESSAGE", "PROMOTION ADDED SUCCESSFULLY !");
@@ -72,7 +73,7 @@ public class AddPromotionController extends HttpServlet {
         } catch (Exception e) {
             log("Error at AddPromotionController: " + e.toString());
         } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+            response.sendRedirect(url);
         }
     }
 

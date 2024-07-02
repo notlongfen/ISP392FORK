@@ -20,14 +20,16 @@ import utils.DbUtils;
  */
 public class PromotionDAO {
 
-    private static final String ADD_PROMOTION = "INSERT INTO Promotions (PromotionID, promotionName, startDate, endDate, discountPer, condition, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    private static final String ADD_PROMOTION = "INSERT INTO Promotions (PromotionID, promotionName, startDate, endDate, discountPer, condition,description, status) VALUES (?, ?, ?, ?, ?, ?,?, 1)";
     private static final String DELETE_PROMOTION = "UPDATE Promotions SET status = 0 WHERE status = 1 AND promotionID LIKE ?";
-    private static final String SEARCH_PROMOTION = "SELECT promotionID, promotionName, startDate, endDate, discountPer, condition, status FROM Promotions WHERE promotionName LIKE ?";
-    private static final String EDIT_PROMOTION = "UPDATE Promotions Set promotionName=?, startDate=?, endDate=?, discountPer=?, condition=?, status=? WHERE promotionID = ?";
+    private static final String SEARCH_PROMOTION = "SELECT promotionID, promotionName, startDate, endDate, discountPer, condition,description, status FROM Promotions WHERE promotionName LIKE ?";
+    private static final String EDIT_PROMOTION = "UPDATE Promotions Set promotionName=?, startDate=?, endDate=?, discountPer=?, condition=?, description=?, status=? WHERE promotionID = ?";
     private static final String GET_LATEST_PROMOTION_ID = "SELECT MAX(PromotionID) AS PromotionID FROM Promotions";
     private static final String CHECK_PROMOTION_DUPLICATE = "SELECT * FROM Promotions WHERE promotionName LIKE ? AND status = ?";
-    private static final String GET_PROMOTION_BY_ID = "SELECT promotionID, promotionName, startDate, endDate, discountPer, condition, status FROM Promotions WHERE promotionID = ?";
+    private static final String GET_PROMOTION_BY_ID = "SELECT promotionID, promotionName, startDate, endDate, discountPer, condition, description, status FROM Promotions WHERE promotionID = ?";
+    private static final String GET_ALL_PROMOTIONS = "SELECT * FROM Promotions";
 
+    
     public boolean addPromotion(PromotionDTO promotion) throws SQLException {
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -46,7 +48,7 @@ public class PromotionDAO {
                 ptm.setDate(4, promotion.getEndDate());
                 ptm.setInt(5, promotion.getDiscountPer());
                 ptm.setInt(6, promotion.getCondition());
-                ptm.setInt(7, promotion.getStatus());
+                ptm.setString(7, promotion.getDescription());
                 check = ptm.executeUpdate() > 0;
 
                 stm.executeUpdate("SET IDENTITY_INSERT Promotions OFF");
@@ -109,8 +111,9 @@ public class PromotionDAO {
                     Date endDate = rs.getDate("endDate");
                     int discountPer = rs.getInt("discountPer");
                     int condition = rs.getInt("condition");
+                    String description = rs.getString("description");
                     int status = rs.getInt("status");
-                    list.add(new PromotionDTO(promotionID, promotionName, startDate, endDate, discountPer, condition, status));
+                    list.add(new PromotionDTO(promotionID, promotionName, startDate, endDate, discountPer, condition, description, status));
                 }
             }
         } catch (Exception e) {
@@ -143,8 +146,9 @@ public class PromotionDAO {
                 ptm.setDate(3, promotion.getEndDate());
                 ptm.setInt(4, promotion.getDiscountPer());
                 ptm.setInt(5, promotion.getCondition());
-                ptm.setInt(6, promotion.getStatus());
-                ptm.setInt(7, promotion.getPromotionID());
+                ptm.setString(6, promotion.getDescription());
+                ptm.setInt(7, promotion.getStatus());
+                ptm.setInt(8, promotion.getPromotionID());
 
                 check = ptm.executeUpdate() > 0 ? true : false;
             }
@@ -271,8 +275,9 @@ public class PromotionDAO {
                     Date endDate = rs.getDate("endDate");
                     int discountPer = rs.getInt("discountPer");
                     int condition = rs.getInt("condition");
+                    String description = rs.getString("description");
                     int status = rs.getInt("status");
-                    promotion = new PromotionDTO(promotionID, promotionName, startDate, endDate, discountPer, condition, status);
+                    promotion = new PromotionDTO(promotionID, promotionName, startDate, endDate, discountPer, condition,description, status);
                 }
             }
         } catch (Exception e) {
@@ -289,5 +294,43 @@ public class PromotionDAO {
             }
         }
         return promotion;
+    }
+
+    public List<PromotionDTO> getAllPromotion() throws SQLException {
+        List<PromotionDTO> promotions = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_ALL_PROMOTIONS);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    int promotionID = rs.getInt("PromotionID");
+                    String promotionName = rs.getString("promotionName");
+                    Date startDate = rs.getDate("startDate");
+                    Date endDate = rs.getDate("endDate");
+                    int discountPer = rs.getInt("discountPer");
+                    int condition = rs.getInt("condition");
+                    String description = rs.getString("description");
+                    int status = rs.getInt("status");
+                    promotions.add(new PromotionDTO(promotionID, promotionName, startDate, endDate, discountPer, condition, description, status));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return promotions;
     }
 }

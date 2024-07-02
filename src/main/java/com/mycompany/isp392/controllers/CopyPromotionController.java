@@ -11,8 +11,8 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet(name = "CopyPromotionController", urlPatterns = {"/CopyPromotionController"})
 public class CopyPromotionController extends HttpServlet {
 
-    private static final String SUCCESS = "editPromotion.jsp";
-    private static final String ERROR = "shopManager.jsp";
+    private static final String ERROR = "AD_PromotionList.jsp";
+    private static final String SUCCESS = "AD_EditPromotion.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

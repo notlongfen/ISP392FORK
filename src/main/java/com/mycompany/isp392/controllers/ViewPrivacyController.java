@@ -21,8 +21,8 @@ import java.io.FileReader;
 @WebServlet(name = "ViewPrivacyController", urlPatterns = {"/ViewPrivacyController"})
 public class ViewPrivacyController extends HttpServlet {
 
-    private static final String ERROR = "login.jsp";
-    private static final String SUCCESS = "privacy.jsp";
+    private static final String ERROR = "US_SignUp.jsp";
+    private static final String SUCCESS = "US_Privacy.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

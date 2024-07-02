@@ -38,11 +38,11 @@
                     Features
                 </div>
 
-                <% if (roleID == 2 || roleID == 3) { %> <!-- Shop Manager, Shop Staff, System Manager -->
+                <% if (roleID == 2 || roleID == 3) { %> <!-- Shop Manager, Shop Staff -->
                     <li class="nav-item mt-3">
                         <button type="submit" class="nav-link btn btn-link" name="action" value="Manage_Products_Page">
                             <i class="fas fa-box"></i>
-                            <span>Product List</span>
+                            <span>Products</span>
                         </button>
                     </li>
                 <% } %>
@@ -60,16 +60,16 @@
                     <li class="nav-item mt-3">
                         <button type="submit" class="nav-link btn btn-link" name="action" value="Manage_Brands_Page">
                             <i class="fas fa-tshirt"></i>
-                            <span>Brand</span>
+                            <span>Brands</span>
                         </button>
                     </li>
                 <% } %>
 
                 <% if (roleID == 2 || roleID == 3) { %> <!-- Shop Manager, Shop Staff -->
                     <li class="nav-item mt-3">
-                        <button type="submit" class="nav-link btn btn-link" name="action" value="Support_List">
+                        <button type="submit" class="nav-link btn btn-link" name="action" value="Manage_Support">
                             <i class="fas fa-comment"></i>
-                            <span>Support</span>
+                            <span>Supports</span>
                         </button>
                     </li>
                 <% } %>
@@ -78,16 +78,16 @@
                     <li class="nav-item mt-3">
                         <button type="submit" class="nav-link btn btn-link" name="action" value="Order_List">
                             <i class="fas fa-cash-register"></i>
-                            <span>Order</span>
+                            <span>Orders</span>
                         </button>
                     </li>
                 <% } %>
 
                 <% if (roleID == 2) { %> <!-- Shop Manager -->
                     <li class="nav-item mt-3">
-                        <button type="submit" class="nav-link btn btn-link" name="action" value="Promotion_List">
+                        <button type="submit" class="nav-link btn btn-link" name="action" value="Manage promotions">
                             <i class="fas fa-tags"></i>
-                            <span>Discount</span>
+                            <span>Promotions</span>
                         </button>
                     </li>
                 <% } %>
@@ -96,7 +96,7 @@
                     <li class="nav-item mt-3">
                         <button type="submit" class="nav-link btn btn-link" name="action" value="Manage_Users">
                             <i class="fas fa-users"></i>
-                            <span>Manage Users</span>
+                            <span>Users</span>
                         </button>
                     </li>
                 <% } %>

@@ -9,6 +9,7 @@ import java.sql.Date;
 public class SupportDTO {
     private int supportID;
     private int status;
+    private String title;
     private Date requestDate;
     private String requestMessage;
     private int custID;
@@ -19,6 +20,15 @@ public class SupportDTO {
     public SupportDTO(int supportID, int status, Date requestDate, String requestMessage, int custID) {
         this.supportID = supportID;
         this.status = status;
+        this.requestDate = requestDate;
+        this.requestMessage = requestMessage;
+        this.custID = custID;
+    }
+    
+    public SupportDTO(int supportID, int status, String title, Date requestDate, String requestMessage, int custID) {
+        this.supportID = supportID;
+        this.status = status;
+        this.title = title;
         this.requestDate = requestDate;
         this.requestMessage = requestMessage;
         this.custID = custID;
@@ -38,6 +48,14 @@ public class SupportDTO {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public Date getRequestDate() {

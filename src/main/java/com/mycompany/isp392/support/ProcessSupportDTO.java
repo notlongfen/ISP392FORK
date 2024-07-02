@@ -10,6 +10,7 @@ public class ProcessSupportDTO {
     private int empID;
     private int supportID;
     private String responseMessage;
+    private String title;
     private Date responseDate;
 
     public ProcessSupportDTO() {
@@ -19,6 +20,14 @@ public class ProcessSupportDTO {
         this.empID = empID;
         this.supportID = supportID;
         this.responseMessage = responseMessage;
+        this.responseDate = responseDate;
+    }
+    
+    public ProcessSupportDTO(int empID, int supportID, String responseMessage,String title, Date responseDate) {
+        this.empID = empID;
+        this.supportID = supportID;
+        this.responseMessage = responseMessage;
+        this.title = title;
         this.responseDate = responseDate;
     }
 
@@ -44,6 +53,14 @@ public class ProcessSupportDTO {
 
     public void setResponseMessage(String responseMessage) {
         this.responseMessage = responseMessage;
+    }
+    
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public Date getResponseDate() {

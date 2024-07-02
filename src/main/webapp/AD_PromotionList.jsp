@@ -5,6 +5,9 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="com.mycompany.isp392.user.UserDTO" %>
+<%@ page import="com.mycompany.isp392.promotion.PromotionDTO" %>
+<%@ page import="java.util.List" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -48,7 +51,7 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                margin-top: 10px;      
+                margin-top: 10px;
             }
             .container input[type="date"] {
                 padding: 10px;
@@ -56,7 +59,7 @@
                 border: 1px solid #ccc;
                 border-radius: 5px;
                 width: 400px;
-                
+
             }
             .container button:hover {
                 background-color: #0056b3;
@@ -66,189 +69,180 @@
     </head>
 
     <body id="page-top">
-
+        <%
+            UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
+            if (loginUser == null || 2 != loginUser.getRoleID()) {
+                response.sendRedirect("US_SignIn.jsp");
+                return;
+            }
+            String search = request.getParameter("search");
+            if (search == null) {
+                search = "";
+            }
+        %>
         <div id="wrapper">
             <!-- Sidebar -->
             <%@include file="AD_sidebar.jsp" %>
-
             <!-- Sidebar -->
             <div id="content-wrapper" class="d-flex flex-column">
-
                 <div id="content">
                     <!---Header --->
-
                     <!-- Container Fluid-->
                     <%@include file="AD_header.jsp" %>
+                    <form action="MainController">
+                        <div class="container-fluid" id="container-wrapper">
+                            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                                <h1 class="h3 mb-0 text-gray-900"><b>Promotions</b></h1>
+                            </div>
+                            <div class="d-flex justify-content-end mb-4">
+                                <a href="AD_CreatePromotion.jsp" class="btn btn-danger" style="background: #C43337;">Create Promotion</a>
+                            </div>
+                            <div class="row mb-3">
+                                <!-- Invoice Example -->
+                                <div class="col-xl-12 mb-4">
+                                    <div class="card">
 
-                    <div class="container-fluid" id="container-wrapper">
-                        <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                            <h1 class="h3 mb-0 text-gray-900"><b>Promotions</b></h1>
-                        </div>
-                        <div class="d-flex justify-content-end mb-4">
-                            <a href="AD_CreatePromotion.jsp" class="btn btn-danger" style="background: #C43337;">Create Promotion</a>
-                        </div>
-                        <div class="row mb-3">
-                            <!-- Invoice Example -->
-                            <div class="col-xl-12 mb-4">
-                                <div class="card">
+                                        <div class="table-responsive">
+                                            <div class="container">
+                                                <input type="date" id="ngayBatDau" placeholder="Start Date">
+                                                <input type="date" id="ngayKetThuc" placeholder="End Date">
+<!--                                                <input type="text" name="search" value="<%= search%>"/>
+                                                <input type="submit" name="action" value ="Search promotion"/> -->
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" placeholder="Search..." name="search" value="<%= search%>">
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-outline-secondary" type="submit" name="action" value="Search promotion">Search</button>
+                                                    </div>
+                                                </div>
+                                                <!--<button class="btn btn-outline-secondary" onclick="locNgay()" style="padding: 10px 20px;">Search</button>-->
 
-                                    <div class="table-responsive">
-                                        <div class="container">
-                                            <input type="date" id="ngayBatDau" placeholder="Start Date">
-                                            <input type="date" id="ngayKetThuc" placeholder="End Date">
-                                            <button class="btn btn-outline-secondary" onclick="locNgay()" style="padding: 10px 20px;">Search</button>
+                                            </div>
+
+                                            <table class="table align-items-center table-flush">
+                                                <thead class="thead-light">
+                                                    <tr>
+                                                        <th>NO</th>
+                                                        <th>ID</th>
+                                                        <th>Code Name</th>
+                                                        <th>Start Date</th>
+                                                        <th>End Date</th>
+                                                        <th>Percentage</th>
+                                                        <th>Condition</th>
+                                                        <th>Description</th>
+                                                        <th>Status</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <%
+                                               List<PromotionDTO> promotionList = (List<PromotionDTO>) request.getAttribute("LIST_PROMOTION");
+                                               if (promotionList != null) {
+                                                   for (PromotionDTO promotion : promotionList) {
+                                                %>
+                                                <tbody id="tableBody">
+                                                    <%
+                                                        int count = 1;
+                                                    %>
+                                                    <tr>
+                                                        <td><%= count++ %></td>
+                                                        <td class="text-center"><%= promotion.getPromotionID() %></td>
+                                                        <td class="text-center"><%= promotion.getPromotionName() %></td>
+                                                        <td class="text-center"><%= promotion.getStartDate() %></td>
+                                                        <td class="text-center"><%= promotion.getEndDate() %></td>
+                                                        <td class="text-center"><%= promotion.getDiscountPer() %></td>
+                                                        <td class="text-center">Points >=<%= promotion.getCondition() %></td>
+                                                        <td class="text-center"><%= promotion.getDescription() %></td>
+                                                        <td class="text-center"><span class="badge <%= promotion.getStatus() == 1 ? "badge-success" : "badge-warning" %>"><%= promotion.getStatus() == 1 ? "Available" : "Deleted" %></span></td>
+                                                        <td>
+                                                            <a href="MainController?action=DeletePromotion&promotionID=<%= promotion.getPromotionID()%>" class="btn btn-sm btn-danger">Delete</a> 
+                                                            <a href="MainController?action=EditPromotion&promotionID=<%= promotion.getPromotionID()%>" class="btn btn-sm btn-dark">Edit</a>
+                                                        </td>
+                                                    </tr>                                        
+                                                </tbody>
+
+                                                <% 
+                                                 }
+                                             } else {
+                                                %>
+                                                <tr>
+                                                    <td colspan="7" class="text-center">No products found</td>
+                                                </tr>
+                                                <% 
+                                                }
+                                                %>
+
+                                            </table>
+                                            <hr>
+
+                                            <!-- Pagination -->
+                                            <nav aria-label="Page navigation">
+                                                <ul class="pagination justify-content-center mt-3">
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="#" aria-label="Previous" style="color: #C43337">
+                                                            <span aria-hidden="true">&laquo;</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">1</a></li>
+                                                    <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">2</a></li>
+                                                    <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">3</a></li>
+                                                    <li class="page-item" >
+                                                        <a class="page-link" href="#" aria-label="Next" style="color: #C43337">
+                                                            <span aria-hidden="true">&raquo;</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                            <!-- End Pagination -->
                                         </div>
-
-                                        <table class="table align-items-center table-flush">
-                                            <thead class="thead-light">
-                                                <tr>
-                                                    <th>ID</th>
-                                                    <th>
-                                                        <button class="btn p-0" onclick="sortTable()">Code Name <span id="sortIconProduct">▲</span></button>
-                                                    </th>
-                                                    <th>
-                                                        <button class="btn p-0" onclick="sortBrandTable()">Percentage <span id="sortIconProduct">▲</span></button>
-                                                    </th>
-
-                                                    <th>Start Date</th>
-                                                    <th>End Date</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="tableBody">
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>Save50</td>
-                                                    <td>50%</td>
-                                                    <td>2024-06-01</td>
-                                                    <td>2024-07-01</td>
-                                                    <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <a href="AD_EditPromotion.jsp" class="btn btn-sm btn-dark">Edit</a>
-                                                    </td>
-                                                </tr>                                        
-
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td>Save50</td>
-                                                    <td>50%</td>
-                                                    <td>2024-06-01</td>
-                                                    <td>2024-07-01</td>
-                                                    <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <a href="AD_EditPromotion.jsp" class="btn btn-sm btn-dark">Edit</a>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>3</td>
-                                                    <td>Save50</td>
-                                                    <td>50%</td>
-                                                    <td>2024-06-01</td>
-                                                    <td>2024-07-01</td>
-                                                    <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <a href="AD_EditPromotion.jsp" class="btn btn-sm btn-dark">Edit</a>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>4</td>
-                                                    <td>Save50</td>
-                                                    <td>50%</td>
-                                                    <td>2024-01-22</td>
-                                                    <td>2024-04-11</td>
-                                                    <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <a href="AD_EditPromotion.jsp" class="btn btn-sm btn-dark">Edit</a>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>5</td>
-                                                    <td>Save50</td>
-                                                    <td>50%</td>
-                                                    <td>2024-06-01</td>
-                                                    <td>2024-07-01</td>
-                                                    <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <a href="AD_EditPromotion.jsp" class="btn btn-sm btn-dark">Edit</a>
-                                                    </td>
-                                                </tr>
-
-                                            </tbody>
-                                        </table>
-                                        <hr>
-
-                                        <!-- Pagination -->
-                                        <nav aria-label="Page navigation">
-                                            <ul class="pagination justify-content-center mt-3">
-                                                <li class="page-item">
-                                                    <a class="page-link" href="#" aria-label="Previous" style="color: #C43337">
-                                                        <span aria-hidden="true">&laquo;</span>
-                                                    </a>
-                                                </li>
-                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">1</a></li>
-                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">2</a></li>
-                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">3</a></li>
-                                                <li class="page-item" >
-                                                    <a class="page-link" href="#" aria-label="Next" style="color: #C43337">
-                                                        <span aria-hidden="true">&raquo;</span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                        <!-- End Pagination -->
-                                    </div>
-                                    <div class="card-footer"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--Row-->
-
-                        <!-- Modal Logout -->
-                        <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabelLogout">Ohh No!</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p>Are you sure you want to logout?</p>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
-                                        <a href="login.html" class="btn btn-primary">Logout</a>
+                                        <div class="card-footer"></div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                            <!--Row-->
 
-                        <!---Mode up delete item in voice -->
-                        <!-- Modal Xác nhận Xóa -->
-                        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="confirmDeleteModalLabel">Xác nhận Xóa</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        Bạn có chắc chắn muốn xóa mục này không?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                                        <button type="button" class="btn btn-danger" id="confirmDeleteButton">Xóa</button>
+                            <!-- Modal Logout -->
+                            <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabelLogout">Oh No!</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Are you sure you want to logout?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
+                                            <a href="US_SignIn.jsp" class="btn btn-primary">Logout</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+
+                            <!---Mode up delete item in voice -->
+                            <!-- Modal Xác nhận Xóa -->
+                            <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="confirmDeleteModalLabel">Xác nhận Xóa</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Bạn có chắc chắn muốn xóa mục này không?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                            <button type="button" class="btn btn-danger" id="confirmDeleteButton">Xóa</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
                         </div>
-
-
-                    </div>
+                    </form>
                     <!---Container Fluid-->
                 </div>
                 <!-- Footer -->

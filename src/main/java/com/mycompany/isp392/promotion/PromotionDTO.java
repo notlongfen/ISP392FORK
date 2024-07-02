@@ -18,27 +18,30 @@ public class PromotionDTO {
     private Date endDate;
     private int discountPer;
     private int condition;
+    private String description;
     private int status;
 
     public PromotionDTO() {
     }
 
-    public PromotionDTO(int promotionID, String promotionName, Date startDate, Date endDate, int discountPer, int condition, int status) {
+    public PromotionDTO(int promotionID, String promotionName, Date startDate, Date endDate, int discountPer, int condition, String description, int status) {
         this.promotionID = promotionID;
         this.promotionName = promotionName;
         this.startDate = startDate;
         this.endDate = endDate;
         this.discountPer = discountPer;
         this.condition = condition;
+        this.description = description;
         this.status = status;
     }
 
-    PromotionDTO(int promotionID, String promotionName, Date startDate, Date endDate, int discountPer, int condition) {
+    PromotionDTO(int promotionID, String promotionName, Date startDate, Date endDate, int discountPer, String description, int condition) {
         this.promotionID = promotionID;
         this.promotionName = promotionName;
         this.startDate = startDate;
         this.endDate = endDate;
         this.discountPer = discountPer;
+        this.description = description;
         this.condition = condition;
     }
 
@@ -64,6 +67,14 @@ public class PromotionDTO {
 
     public int getCondition() {
         return condition;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public int getStatus() {

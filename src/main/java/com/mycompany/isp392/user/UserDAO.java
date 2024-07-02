@@ -37,7 +37,10 @@ public class UserDAO {
             + "INNER JOIN Customers c ON s.CustID = c.CustID\n"
             + "INNER JOIN Users u ON c.CustID = u.UserID\n"
             + "WHERE s.SupportID = ?";
-
+    private static final String GET_ALL_USER_SUPPORT_INFO = "SELECT * FROM Supports s \n"
+            + "INNER JOIN Customers c ON s.CustID = c.CustID\n"
+            + "INNER JOIN Users u ON c.CustID = u.UserID\n";
+    private static final String GET_EMPLOYEE_INFO = "";
     public UserDTO checkLogin(String email, String password) throws SQLException {
         UserDTO user = null;
         Connection conn = null;
@@ -520,7 +523,7 @@ public class UserDAO {
         }
         return check;
     }
-    
+
     public boolean editEmployee(UserDTO user) throws SQLException {
         boolean check = false;
         Connection conn = null;
@@ -669,7 +672,7 @@ public class UserDAO {
                 ptm.setInt(1, supportID);
                 int id = supportID;
                 rs = ptm.executeQuery();
-                if (rs.next()) {
+                while (rs.next()) {
                     int userID = rs.getInt("UserID");
                     String userName = rs.getString("userName");
                     String email = rs.getString("email");
@@ -697,4 +700,51 @@ public class UserDAO {
         }
         return user;
     }
+
+    public List<UserDTO> getAllUserSupport() throws SQLException {
+        List<UserDTO> users = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_ALL_USER_SUPPORT_INFO);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    int userID = rs.getInt("UserID");
+                    String userName = rs.getString("userName");
+                    String email = rs.getString("email");
+                    int phone = rs.getInt("phone");
+                    users.add(new UserDTO(userID, userName, email, phone));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return users;
+    }
+    
+//    public EmployeeDTO getEmployeeInfo(int userID){
+//        Connection conn = null;
+//        PreparedStatement ptsm = null;
+//        ResultSet rs = null;
+//        try {
+//            conn = DbUtils.getConnection();
+//            ptsm = conn.prepareStatement();
+//        } catch (Exception e) {
+//            // TODO: handle exception
+//            e.printStackTrace();
+//        }
+//    }
 }

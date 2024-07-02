@@ -1,8 +1,12 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ */
 package com.mycompany.isp392.controllers;
 
-import com.mycompany.isp392.promotion.PromotionDAO;
-import com.mycompany.isp392.promotion.PromotionDTO;
+import com.mycompany.isp392.promotion.*;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -10,29 +14,28 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "SearchPromotionController", urlPatterns = {"/SearchPromotionController"})
-public class SearchPromotionController extends HttpServlet {
+/**
+ *
+ * @author Oscar
+ */
+@WebServlet(name = "GetPromotionListController", urlPatterns = {"/GetPromotionListController"})
+public class GetPromotionListController extends HttpServlet {
 
     private static final String ERROR = "AD_PromotionList.jsp";
     private static final String SUCCESS = "AD_PromotionList.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            String searchText = request.getParameter("search");
             PromotionDAO promotionDAO = new PromotionDAO();
-            List<PromotionDTO> promotionList = promotionDAO.searchPromotion(searchText);
-            if (promotionList.size() > 0) {
+            if (request.getParameter("promotionID") == null) {
+                List<PromotionDTO> promotionList = promotionDAO.getAllPromotion();
                 request.setAttribute("LIST_PROMOTION", promotionList);
-                request.setAttribute("MESSAGE", "PROMOTION FOUND !");
                 url = SUCCESS;
-            } else {
-                request.setAttribute("MESSAGE", "NO PROMOTION FOUND !");
             }
-        } catch (Exception e) {
-            log("Error at SearchPromotionController: " + e.toString());
+        } catch (SQLException e) {
+            log("Error at GetPromotionListController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

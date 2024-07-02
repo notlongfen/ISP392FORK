@@ -1,38 +1,52 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ */
 package com.mycompany.isp392.controllers;
 
-import com.mycompany.isp392.promotion.PromotionDAO;
-import com.mycompany.isp392.promotion.PromotionDTO;
+import com.mycompany.isp392.support.*;
+import com.mycompany.isp392.user.*;
 import java.io.IOException;
-import java.util.List;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "SearchPromotionController", urlPatterns = {"/SearchPromotionController"})
-public class SearchPromotionController extends HttpServlet {
 
-    private static final String ERROR = "AD_PromotionList.jsp";
-    private static final String SUCCESS = "AD_PromotionList.jsp";
+/**
+ *
+ * @author Oscar
+ */
+@WebServlet(name = "GetSupportInfoController", urlPatterns = {"/GetSupportInfoController"})
+public class GetSupportInfoController extends HttpServlet {
+
+    private static final String ERROR = "AD_SupportList.jsp";
+    private static final String SUCCESS = "AD_ReplySupport.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
+        SupportError error = new SupportError();
+        UserDAO userDao = new UserDAO();
+        SupportDAO supportDao = new SupportDAO();
         try {
-            String searchText = request.getParameter("search");
-            PromotionDAO promotionDAO = new PromotionDAO();
-            List<PromotionDTO> promotionList = promotionDAO.searchPromotion(searchText);
-            if (promotionList.size() > 0) {
-                request.setAttribute("LIST_PROMOTION", promotionList);
-                request.setAttribute("MESSAGE", "PROMOTION FOUND !");
+            int supportID = Integer.parseInt(request.getParameter("supportID"));
+            UserDTO user = userDao.getUserInfo(supportID);
+            SupportDTO support = supportDao.getSupportInfo(supportID);
+            ProcessSupportDTO process = supportDao.getInfoProcessSupport(supportID);
+            if (user != null) {
+                request.setAttribute("USER_SUPPORT", user);
+                request.setAttribute("SUPPORT_DETAIL", support);
+                request.setAttribute("PROCESS_SUPPORT", process);
                 url = SUCCESS;
             } else {
-                request.setAttribute("MESSAGE", "NO PROMOTION FOUND !");
+                error.setError("UNABLE TO GET SUPPORT INFORMATION !");
+                request.setAttribute("SUPPORT_ERROR", error);
             }
         } catch (Exception e) {
-            log("Error at SearchPromotionController: " + e.toString());
+            log("Error at ViewSupportController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

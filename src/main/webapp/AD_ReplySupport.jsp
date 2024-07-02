@@ -5,6 +5,9 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="com.mycompany.isp392.support.SupportDTO" %>
+<%@ page import="com.mycompany.isp392.user.UserDTO" %>
+<%@ page import="com.mycompany.isp392.support.ProcessSupportDTO" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -28,6 +31,20 @@
         </style>
     </head>
     <body id="page-top">
+        <%
+            UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
+            if ((loginUser == null || 2!=loginUser.getRoleID()) && (loginUser == null || 3!=loginUser.getRoleID()) ) {
+                response.sendRedirect("US_SignIn.jsp");
+                return;
+            }
+            SupportDTO support = (SupportDTO) request.getAttribute("SUPPORT_DETAIL");
+            UserDTO user = (UserDTO) request.getAttribute("USER_SUPPORT");
+            ProcessSupportDTO process = (ProcessSupportDTO) request.getAttribute("PROCESS_SUPPORT");
+            if (support == null) {
+                response.sendRedirect("AD_SupportList.jsp");
+                return;
+            }
+        %>
         <div id="wrapper">
             <!-- Sidebar -->
             <%@include file="AD_sidebar.jsp" %>
@@ -46,23 +63,25 @@
                                 <form action="MainController" method="POST" >
                                     <div class="form-group">
                                         <label for="brandName">To</label>
-                                        <input type="text" class="form-control" id="to" placeholder="Enter receiver email" name="toEmail">
+                                        <input type="text" class="form-control readonly-input" id="from" name="toEmail" value="<%= user.getEmail()%>" readonly="">
                                     </div>
                                     <div class="form-group">
                                         <label for="brandName">Title</label>
-                                        <input type="text" class="form-control" id="title" placeholder="Enter title" name="subject">
+                                        <input class="form-control" id="textDescriptipn" rows="5" name="subject" placeholder="Enter Title Here">
                                     </div>
                                     <div class="form-group">
                                         <label for="brandName" class="form-label">Content</label>
-                                        <textarea class="form-control" id="textDescriptipn" rows="5" name="content" placeholder="Enter Email Content Here">
-                                            
-                                        </textarea>
+                                        <input type="text" class="form-control" id="content" rows="5" name="content" value="<%= support.getRequestMessage()%>" readonly="">
                                     </div>
-
+                                    <div class="form-group">
+                                        <label for="brandName" class="form-label">Reply Message</label>
+                                        <input class="form-control" id="textDescriptipn" rows="5" name="replyMessage" placeholder="Enter Reply Message Here">
+                                    </div>
                                     <div class="form-group text-center">
-                                        <button type="submit" class="btn btn-primary btn-danger" name="action" value="Send_Email">Submit</button>
+                                        <button type="submit" class="btn btn-primary btn-danger" name="action" value="Reply_Support">Submit</button>
                                         <button type="reset" class="btn btn-secondary btn-custom">Reset</button>
                                     </div>
+                                    <input type="hidden" name="supportID" value="<%= support.getSupportID() %>">
                                 </form>
                             </div>
                         </div>

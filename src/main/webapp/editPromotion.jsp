@@ -11,7 +11,7 @@
         <%
             UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
             if (loginUser == null || 2 != loginUser.getRoleID()) {
-                response.sendRedirect("login.jsp");
+                response.sendRedirect("US_SignIn.jsp");
                 return;
             }
             PromotionDTO promotion = (PromotionDTO) request.getAttribute("PROMOTION");

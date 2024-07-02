@@ -5,6 +5,8 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="com.mycompany.isp392.user.UserDTO"%>
+<%@page import="com.mycompany.isp392.promotion.PromotionDTO"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -29,7 +31,18 @@
         </style>
     </head>
     <body id="page-top">
-
+        <%
+                    UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
+                    if (loginUser == null || 2 != loginUser.getRoleID()) {
+                        response.sendRedirect("US_SignIn.jsp");
+                        return;
+                    }
+                    PromotionDTO promotion = (PromotionDTO) request.getAttribute("PROMOTION");
+                    if (promotion == null) {
+                        response.sendRedirect("AD_PromotionList.jsp");
+                        return;
+                    }
+        %>
         <div id="wrapper">
             <!-- Sidebar -->
             <%@include file="AD_sidebar.jsp" %>
@@ -45,33 +58,50 @@
 
                         <div class="form-container">
                             <h2 class="text-center" style="color: #000; font-weight: bold;">Edit Promotion</h2>
-                            <form>
+                            <form action="MainController">
                                 <div class="form-row">
+                                    <input type="hidden" name="promotionID" value="<%= promotion.getPromotionID() %>" readonly=""/>
                                     <div class="form-group col-md-6">
                                         <label for="productName">Code Name</label>
-                                        <input type="text" class="form-control" id="productName" value="Save50">
+                                        <input type="text" class="form-control" id="productName" name="promotionName" value="<%= promotion.getPromotionName() %>" required=""/>
                                     </div>
-                                    
+
                                     <div class="form-group col-md-6">
                                         <label for="productName">Percentage</label>
-                                        <input type="text" class="form-control" id="percentage" value="50%">
+                                        <input type="text" class="form-control" id="percentage"  name="discountPer" value="<%= promotion.getDiscountPer() %>" required=""/>
                                     </div>
-                                   
+
                                 </div>
                                 <div class="form-row">
-                                   
-                                    <div class="form-group col-md-6">
+
+                                    <div class="form-group col-sm-4">
                                         <label for="importDate">Start Date</label>
-                                        <input type="date" class="form-control" id="startDate" value="2024-06-01">
+                                        <input type="date" class="form-control" id="startDate" name="startDate" value="<%= promotion.getStartDate() %>" required=""/>
                                     </div>
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-sm-4">
                                         <label for="importDate">End Date</label>
-                                        <input type="date" class="form-control" id="endDate" value="2024-07-01">
+                                        <input type="date" class="form-control" id="endDate" name="endDate" value="<%= promotion.getEndDate() %>" required=""/>
                                     </div>
-                                </div> 
+                                    <div class="form-group col-sm-4">
+                                        <label for="status">Status</label>
+                                        <input type="int" class="form-control" id="status" name="status" value="<%= promotion.getStatus() %>" required=""/>
+                                    </div>
+                                </div > 
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="description">Description</label>
+                                        <input type="text" class="form-control" id="description" name="description" value="<%= promotion.getDescription() %>" required=""/>
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label for="condition">Condition</label>
+                                        <input type="int" class="form-control" id="condition" name="condition" value="<%= promotion.getCondition() %>" required=""/>
+                                    </div>
+                                </div>
 
                                 <div class="form-group text-center">
-                                    <button type="submit" class="btn btn-danger btn-custom">Submit</button>
+                                    <button type="submit" class="btn btn-danger btn-custom" name="action" value="SaveEditPromotion">Submit</button>
                                     <button type="reset" class="btn btn-secondary btn-custom">Reset</button>
                                 </div>
                             </form>

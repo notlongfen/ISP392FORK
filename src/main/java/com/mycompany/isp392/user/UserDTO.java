@@ -1,6 +1,7 @@
 package com.mycompany.isp392.user;
 
 public class UserDTO {
+
     private int UserID;
     private String userName;
     private String email;
@@ -21,7 +22,7 @@ public class UserDTO {
         this.phone = phone;
         this.status = status;
     }
-    
+
     public UserDTO(String userName, String email, String password, int roleID, int phone, int status) {
         this.userName = userName;
         this.email = email;
@@ -45,6 +46,15 @@ public class UserDTO {
         this.roleID = roleID;
         this.phone = phone;
         this.status = status;
+    }
+
+    UserDTO(int userID, String userName, int phone, int roleID, int status) {
+        this.UserID = UserID;
+        this.userName = userName;
+        this.phone = phone;
+        this.roleID = roleID;
+        this.status = status;
+
     }
 
     public int getUserID() {
@@ -86,7 +96,7 @@ public class UserDTO {
     public void setRoleID(int roleID) {
         this.roleID = roleID;
     }
-                                                                 
+
     public int getPhone() {
         return phone;
     }

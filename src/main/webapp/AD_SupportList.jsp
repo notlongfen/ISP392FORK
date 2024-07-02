@@ -118,15 +118,11 @@
                                                 </div>
                                             </div>
                                         </form>
-                                        <%
-                                            List<SupportDTO> supportList = (List<SupportDTO>) request.getAttribute("SUPPORT_LIST");
-                                            int count = 1;
-                                            if (supportList != null && !supportList.isEmpty()) {
-                                        %>
+
                                         <table class="table align-items-center table-flush">
                                             <thead class="thead-light">
                                                 <tr>
-                                                    <th>#</th>
+                                                    <th>No</th>
                                                     <th>
                                                         <button class="btn p-0" onclick="sortTable()">Name <span id="sortIconProduct">▲</span></button>
                                                     </th>
@@ -143,11 +139,16 @@
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
+                                            <%
+                                               List<SupportDTO> supportList = (List<SupportDTO>) request.getAttribute("LIST_SUPPORT");
+                                               List<UserDTO> userSupportList = (List<UserDTO>) request.getAttribute("LIST_USER_SUPPORT");
+                                               if (supportList != null) {
+                                                    for (SupportDTO support : supportList) {
+                                                        for (UserDTO user : userSupportList) {
+                                            %>
                                             <tbody id="tableBody">
                                                 <%
-                for (SupportDTO support : supportList) {
-                    UserDTO user = (UserDTO) request.getAttribute("user_" + support.getSupportID());
-                    if (user != null) {
+                                                    int count = 1;
                                                 %>
 
                                                 <tr>
@@ -156,32 +157,35 @@
                                                     <td><%= user.getEmail() %></td>
                                                     <td><%= user.getPhone() %></td>
                                                     <td><%= support.getRequestDate() %></td>
-                                                    <!--<td><%= support.getStatus() %></td>-->
-                                                    <td><span class="badge badge-success">Done</span></td>
-                                                    <td><a href="MainController?action=ViewSupport&email=<%= user.getEmail() %>&supportID=<%=support.getSupportID()%>" class="btn btn-sm " style="background: green ; color: #FFF">View</a></td>
+                                                    <td class="text-center"><span class="badge <%= support.getStatus() == 1 ? "badge-success" : "badge-warning" %>"><%= support.getStatus() == 1 ? "Done" : "Not yet" %></span></td>
                                                     <td>
                                                         <% if (support.getStatus() == 1) { %>
-                                                        <form action="ViewSupportDetailsController" method="GET">
-                                                            <input type="hidden" name="supportID" value="<%= support.getSupportID() %>"/>
-                                                            <input type="submit" value="ViewSupport" name="action"/>
-                                                        </form>
-                                                        <% } else { %>
-                                                        <form action="AD_ReplySupport.jsp" method="POST">
-                                                            <input type="hidden" name="supportID" value="<%= support.getSupportID() %>"/>
-                                                            <input type="submit" value="ReplySupport" name="action"/>
-                                                        </form>
-                                                        <% } %>
-                                                    </td>
-                                                </tr>
-                                                <%
-                    }
-                }
-                                                %>
+                                                        <a href="MainController?action=ViewSupport&email=<%= user.getEmail() %>&supportID=<%=support.getSupportID()%>" class="btn btn-sm " style="background: green ; color: #FFF">View</a></td>
+
+                                                    <!--                                        <form action="ViewSupportDetailsController" method="GET">
+                                                                                                    <input type="hidden" name="supportID" value="<%= support.getSupportID() %>"/>
+                                                                                                    <input type="hidden" name="email" value="<%= user.getEmail() %>"/>
+                                                                                                    <input class="btn btn-sm " style="background: green ; color: #FFF" type="submit" value="ViewSupport" name="action"/>
+                                                                                                </form>-->
+                                                    <% } else { %>
+                                            <a href="MainController?action=ReplySupport&supportID=<%=support.getSupportID()%>" class="btn btn-sm " style="background: #528CE0 ; color: #FFF">Reply</a></td>
+
+<!--                                            <form action="MainController" method="POST">
+                                                <input type="hidden" name="supportID" value="<%= support.getSupportID() %>"/>
+                                                <input type="submit" value="ReplySupport" name="action"/>
+                                            </form>-->
+                                            <% } %>
+                                            </td>
+                                            </tr>
+
                                             </tbody>
+                                            <%
+                                                        }
+                                                    }
+                                                }
+                                            %>
                                         </table>
-                                        <%
-            }
-                                        %>
+
                                         <hr>
                                         <!-- Pagination -->
                                         <nav aria-label="Page navigation">

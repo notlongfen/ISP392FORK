@@ -1,10 +1,8 @@
-
 package com.mycompany.isp392.controllers;
 
-import com.mycompany.isp392.support.ProcessSupportDTO;
-import com.mycompany.isp392.support.SupportDAO;
-import com.mycompany.isp392.support.SupportDTO;
-import com.mycompany.isp392.user.EmployeeDTO;
+import com.mycompany.isp392.forgetpassword.*;
+import com.mycompany.isp392.support.*;
+import com.mycompany.isp392.user.*;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -24,136 +22,145 @@ import jakarta.mail.PasswordAuthentication;
 import jakarta.mail.Session;
 import jakarta.servlet.http.HttpSession;
 
-@WebServlet(name = "SendMailServlet", urlPatterns = { "/SendMailServlet" })
+@WebServlet(name = "SendMailServlet", urlPatterns = {"/SendMailServlet"})
 public class SendMailServlet extends HttpServlet {
-    private static final String ERROR = "ReplySupport.jsp";
-    private static final String SUCCESS = "support.jsp";
+
+    private static final String ERROR = "SendMailError.jsp";
+    private static final String ERROR_FORGOT_PASSWORD = "US_ForgotPassword.jsp";
+    private static final String SUCCESS_FORGOT_PASSWORD = "NotificationMail.jsp";
+    private static final String ERROR_REPLY_SUPPORT = "AD_ReplySupport.jsp";
+    private static final String SUCCESS_REPLY_SUPPORT = "GetSupportListController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet SendMailServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet SendMailServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+            HttpSession sessionCur = request.getSession();
+            String action = request.getParameter("action");
+            String url = ERROR;
+
+            if ("Forgot_Password".equals(action)) {
+                url = processForgotPassword(request, response);
+            } else if ("Reply_Support".equals(action)) {
+                url = processReplySupport(request, response, sessionCur);
+            }
+            response.sendRedirect(url);
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the
-    // + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request  servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
+        
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request  servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-        String url = ERROR;
-        HttpSession sessionCur = request.getSession();
-
-        String toEmail = request.getParameter("toEmail");
-        String subject = request.getParameter("subject");
-        String messageBody = request.getParameter("content");
-
-        // Sender's email and password
+    private boolean sendEmail(String toEmail, String subject, String messageBody) {
         final String fromEmail = "micomicomun@gmail.com";
         final String password = "ezox gkgv joqr mbwx";
 
-        // Set up mail server properties
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
 
-        // Get the Session object
         Session session = Session.getInstance(props,
                 new jakarta.mail.Authenticator() {
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(fromEmail, password);
-                    }
-                });
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(fromEmail, password);
+            }
+        });
 
         try {
-            // int custID = Integer.parseInt(request.getParameter("custID"));
-            EmployeeDTO edto = (EmployeeDTO) sessionCur.getAttribute("EMPLOYEE");
-            int supportID = Integer.parseInt(request.getParameter("supportID"));
-            // Create a default MimeMessage object
             Message message = new MimeMessage(session);
-
-            // Set From: header field of the header
             message.setFrom(new InternetAddress(fromEmail));
-
-            // Set To: header field of the header
-            message.setRecipients(Message.RecipientType.TO,
-                    InternetAddress.parse(toEmail));
-
-            // Set Subject: header field
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
             message.setSubject(subject);
-
-            // Now set the actual message
             message.setText(messageBody);
-
-            // Send message
             Transport.send(message);
-
-            sessionCur.setAttribute("MAIL", "We have recieved your request. Happy shopping!");
-            // Forward to a success page
-            // Support status update "Done"
-            SupportDAO spdao = new SupportDAO();
-            ProcessSupportDTO spdto = new ProcessSupportDTO(edto.getEmpID(), supportID, messageBody,
-                    (java.sql.Date) new java.util.Date());
-            String status = spdao.supportStatusUpdate(supportID);
-            if (status != "Not Yet") {
-                ProcessSupportDTO spdtos = spdao.addReplyHistory(spdto);
-                url = SUCCESS;
-
-                sessionCur.setAttribute("SUPPORT_STATUS", status);
-                sessionCur.setAttribute("PROCESS_SUPPORT", spdtos);
-            }
-
-        } catch (Exception e) {
+            return true;
+        } catch (MessagingException e) {
             e.printStackTrace();
-        } finally {
-            request.getRequestDispatcher(url).forward(request, response);
-
+            return false;
         }
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
+    private String processForgotPassword(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String toEmail = request.getParameter("toEmail");
+        String subject;
+        String messageBody;
+        ForgetPasswordErrors error = new ForgetPasswordErrors();
+        String url = ERROR_FORGOT_PASSWORD;
+        try {
+
+            UserDAO dao = new UserDAO();
+            ForgetPasswordDAO fpdao = new ForgetPasswordDAO();
+            int userID = dao.checkEmailExists(toEmail);
+            if (userID != -1) {
+                request.setAttribute("USER_ID", userID);
+                boolean check = fpdao.insertToken(userID);
+                if (check) {
+                    ForgetPasswordDTO dto = fpdao.getAllInfoByUserID(userID);
+                    subject = "Reset Password";
+                    messageBody = "Click the link below to reset your password: http://localhost:8080/ISP392/US_CreateNewPassword.jsp?token="
+                            + dto.getToken();
+
+                    boolean result = sendEmail(toEmail, subject, messageBody);
+                    if (result) {
+                        url = SUCCESS_FORGOT_PASSWORD;
+                    }
+                } else {
+                    error.setError("Insert token failed.");
+                    request.setAttribute("ERROR", error);
+                }
+            } else {
+                error.setError("Email does not exist.");
+                request.setAttribute("ERROR", error);
+            }
+
+        } catch (Exception e) {
+            error.setError("FAIL TO SEND MAIL.");
+            e.printStackTrace();
+        } 
+        return url;
+    }
+
+    private String processReplySupport(HttpServletRequest request, HttpServletResponse response, HttpSession sessionCur) {
+        String toEmail = request.getParameter("toEmail");
+        String subject = request.getParameter("subject");
+        String messageBody = request.getParameter("replyMessage");
+        String url = ERROR_REPLY_SUPPORT;
+
+        boolean result = sendEmail(toEmail, subject, messageBody);
+        if (result) {
+            try {
+                UserDTO edto = (UserDTO) sessionCur.getAttribute("LOGIN_USER");
+
+                int supportID = Integer.parseInt(request.getParameter("supportID"));
+                SupportDAO spdao = new SupportDAO();
+                ProcessSupportDTO spdto = new ProcessSupportDTO(edto.getUserID(), supportID, messageBody, subject, new java.sql.Date(System.currentTimeMillis()));
+                String status = spdao.supportStatusUpdate(supportID);
+                if (!"Not Yet".equals(status)) {
+                    ProcessSupportDTO spdtos = spdao.addReplyHistory(spdto);
+                    sessionCur.setAttribute("SUPPORT_STATUS", status);
+                    sessionCur.setAttribute("PROCESS_SUPPORT", spdtos);
+                    url = SUCCESS_REPLY_SUPPORT;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return url;
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
-
+    }
 }

@@ -12,8 +12,8 @@ import jakarta.servlet.http.HttpServletResponse;
 public class DeletePromotionController extends HttpServlet {
 
     //temporary 
-    private static final String ERROR = "shopManager.jsp";
-    private static final String SUCCESS = "shopManager.jsp";
+    private static final String ERROR = "AD_PromotionList.jsp";
+    private static final String SUCCESS = "AD_PromotionList.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

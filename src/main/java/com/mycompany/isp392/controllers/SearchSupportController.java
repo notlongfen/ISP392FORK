@@ -16,7 +16,7 @@ import java.util.List;
 @WebServlet(name = "SearchSupportController", urlPatterns = {"/SearchSupportController"})
 public class SearchSupportController extends HttpServlet {
 
-    private static final String ERROR = "errorPage.jsp";
+    private static final String ERROR = "AD_SupportList.jsp";
     private static final String SUCCESS = "AD_SupportList.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -33,7 +33,7 @@ public class SearchSupportController extends HttpServlet {
                     UserDTO user = userDAO.getUserInfo(support.getSupportID());
                     request.setAttribute("user_" + support.getSupportID(), user);
                 }
-                request.setAttribute("SUPPORT_LIST", supportList);
+                request.setAttribute("LIST_SUPPORT", supportList);
                 request.setAttribute("MESSAGE", "SUPPORT FOUND !");
                 url = SUCCESS;
             } else {

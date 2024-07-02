@@ -58,9 +58,15 @@ public class MainController extends HttpServlet {
     private static final String SENDMAIL = "Send_Email";
     private static final String SEND_EMAIL_CONTROLLER = "SendMailServlet";
 
+    private static final String GET_SUPPORT_LIST = "Manage_Support";
+    private static final String GET_SUPPORT_LIST_CONTROLLER = "GetSupportListController";
+    
     private static final String VIEW_SUPPORT_PAGE = "ViewSupport";
     private static final String VIEW_SUPPORT_PAGE_CONTROLLER = "ViewSupportController";
-
+    
+    private static final String REPLY_SUPPORT_PAGE = "ReplySupport";
+    private static final String REPLY_SUPPORT_PAGE_VIEW = "AD_ReplySupport.jsp";
+    
     private static final String SEARCH_SUPPORT = "Search Support";
     private static final String SEARCH_SUPPORT_CONTROLLER = "SearchSupportController";
 
@@ -69,6 +75,7 @@ public class MainController extends HttpServlet {
 
     private static final String EDIT_PROMOTION = "EditPromotion";
     private static final String EDIT_PROMOTION_PAGE = "CopyPromotionController";
+    
     private static final String SAVE_EDIT_PROMOTION = "SaveEditPromotion";
     private static final String EDIT_PROMOTION_CONTROLLER = "EditPromotionController";
 
@@ -85,8 +92,6 @@ public class MainController extends HttpServlet {
     private static final String ADD_CHILDREN_CATEGORY = "Add_Children_Category";
     private static final String ADD_CHILDREN_CATEGORY_CONTROLLER = "AddChildrenCategoryController";
 
-    private static final String ADD_PROMOTION_PAGE = "Add_Promo_View";
-    private static final String ADD_PROMOTION_PAGE_VIEW = "addPromotion.jsp";
     private static final String ADD_PROMOTION = "Add_Promotion";
     private static final String ADD_PROMOTION_CONTROLLER = "AddPromotionController";
 
@@ -170,8 +175,8 @@ public class MainController extends HttpServlet {
     private static final String VIEW_PRIVACY_CONTROLLER = "ViewPrivacyController";
 
     private static final String MANAGE_PROMOTION_PAGE = "Manage promotions";
-    private static final String MANAGE_PROMOTION_PAGE_VIEW = "AD_PromotionList.jsp";
-
+    private static final String MANAGE_PROMOTION_PAGE_VIEW = "GetPromotionListController";
+    
     private static final String GET_PRODUCT_DETAIL = "Search_ProductDetail";
     private static final String GET_PRODUCT_DETAIL_CONTROLLER = "GetProductsController";
     private static final String CATEGORY = "Category";
@@ -201,8 +206,12 @@ public class MainController extends HttpServlet {
                 url = ADD_PRODUCT_CONTROLLER;
             } else if (VIEW_SUPPORT_PAGE.equals(action)) {
                 url = VIEW_SUPPORT_PAGE_CONTROLLER;
+            } else if (GET_SUPPORT_LIST.equals(action)) {
+                url = GET_SUPPORT_LIST_CONTROLLER;
             } else if (SEARCH_SUPPORT.equals(action)) {
                 url = SEARCH_SUPPORT_CONTROLLER;
+            } else if (REPLY_SUPPORT_PAGE.equals(action)) {
+                url = REPLY_SUPPORT_PAGE_VIEW;
             } else if (ADD_PRODUCT_PAGE.equals(action)) {
                 url = ADD_PRODUCT_PAGE_VIEW;
 
@@ -214,8 +223,6 @@ public class MainController extends HttpServlet {
                 url = DELETE_BRAND_CONTROLLER;
             } else if (EDIT_BRAND.equals(action)) {
                 url = EDIT_BRAND_CONTROLLER;
-            } else if (ADD_PROMOTION_PAGE.equals(action)) {
-                url = ADD_PROMOTION_PAGE_VIEW;
             } else if (ADD_PROMOTION.equals(action)) {
                 url = ADD_PROMOTION_CONTROLLER;
             } else if (SEARCH_PROMOTION.equals(action)) {

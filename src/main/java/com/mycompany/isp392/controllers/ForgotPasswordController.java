@@ -82,7 +82,6 @@ public class ForgotPasswordController extends HttpServlet {
                                 InternetAddress.parse(email));
                         message.setSubject(subject);
                         message.setText(messageBody);
-
                         Transport.send(message);
                     } catch (Exception e) {
                         error.setError("Send email failed.");

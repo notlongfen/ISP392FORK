@@ -12,6 +12,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 /**
  *
  * @author Oscar
@@ -19,24 +20,24 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet(name = "ViewSupportController", urlPatterns = {"/ViewSupportController"})
 public class ViewSupportController extends HttpServlet {
 
-     private static final String ERROR = "AD_SupportList.jsp";
+    private static final String ERROR = "AD_SupportList.jsp";
     private static final String SUCCESS = "AD_ViewSupport.jsp";
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         SupportError error = new SupportError();
+        UserDAO userDao = new UserDAO();
+        SupportDAO supportDao = new SupportDAO();
         try {
             int supportID = Integer.parseInt(request.getParameter("supportID"));
-            UserDAO userDao = new UserDAO();
-            SupportDAO supportDao = new SupportDAO();
             UserDTO user = userDao.getUserInfo(supportID);
             SupportDTO support = supportDao.getSupportInfo(supportID);
             ProcessSupportDTO process = supportDao.getInfoProcessSupport(supportID);
             if (user != null) {
-                request.setAttribute("USER", user);
-                request.setAttribute("SUPPORT", support);
+                request.setAttribute("USER_SUPPORT", user);
+                request.setAttribute("SUPPORT_DETAIL", support);
                 request.setAttribute("PROCESS_SUPPORT", process);
                 url = SUCCESS;
             } else {

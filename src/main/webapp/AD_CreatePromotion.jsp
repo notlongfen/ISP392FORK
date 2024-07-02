@@ -29,7 +29,13 @@
         </style>
     </head>
     <body id="page-top">
-
+        <%
+                    UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
+                    if (loginUser == null || 2 != loginUser.getRoleID()) {
+                        response.sendRedirect("US_SignIn.jsp");
+                        return;
+                    }
+        %>
         <div id="wrapper">
             <!-- Sidebar -->
             <%@include file="AD_sidebar.jsp" %>
@@ -45,33 +51,43 @@
 
                         <div class="form-container">
                             <h2 class="text-center" style="color: #000; font-weight: bold;">Create New Promotion</h2>
-                            <form>
+                            <form action="MainController">
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label for="productName">Code Name</label>
-                                        <input type="text" class="form-control" id="productName" placeholder="Enter Code Name">
+                                        <input type="text" class="form-control" id="productName" placeholder="Enter Code Name" name="promotionName">
                                     </div>
-                                    
+
                                     <div class="form-group col-md-6">
                                         <label for="productName">Percentage</label>
-                                        <input type="text" class="form-control" id="percentage" placeholder="Enter Percentage">
+                                        <input type="text" class="form-control" id="percentage" placeholder="Enter Percentage" name="discountPer">
                                     </div>
-                                   
+
                                 </div>
                                 <div class="form-row">
-                                   
+
                                     <div class="form-group col-md-6">
                                         <label for="importDate">Start Date</label>
-                                        <input type="date" class="form-control" id="startDate">
+                                        <input type="date" class="form-control" id="startDate" name="startDate">
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="importDate">End Date</label>
-                                        <input type="date" class="form-control" id="endDate">
+                                        <input type="date" class="form-control" id="endDate" name="endDate">
                                     </div>
                                 </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="productName">Description</label>
+                                        <input type="text" class="form-control" id="description" placeholder="Enter Description" name="description">
+                                    </div>
 
+                                    <div class="form-group col-md-6">
+                                        <label for="productName">Condition</label>
+                                        <input type="int" class="form-control" id="condition" placeholder="Enter Condition" name="condition">
+                                    </div>
+                                </div>
                                 <div class="form-group text-center">
-                                    <button type="submit" class="btn btn-danger btn-custom">Submit</button>
+                                    <button type="submit" class="btn btn-danger btn-custom" name="action" value="Add_Promotion">Submit</button>
                                     <button type="reset" class="btn btn-secondary btn-custom">Reset</button>
                                 </div>
                             </form>
