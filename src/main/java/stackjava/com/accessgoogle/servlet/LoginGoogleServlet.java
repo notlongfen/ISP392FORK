@@ -57,7 +57,7 @@ private static final long serialVersionUID = 1L;
       CustomerDTO customerDTO = null;
         try {
             if(dao.checkEmailExists(email) == -1){
-              userDTO = new UserDTO(dao.getLastUserId(),email, email, "***", 1, 0, 1);
+              userDTO = new UserDTO(dao.getLastUserId(),email, email, "***", 4, 0, 1);
               customerDTO = new CustomerDTO(dao.getLastUserId(), null, "", "", "", "");
               boolean checkAddUserAndCustomer = dao.addAccount(userDTO, customerDTO);
               if(checkAddUserAndCustomer){

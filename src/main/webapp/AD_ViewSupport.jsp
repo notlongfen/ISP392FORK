@@ -1,40 +1,76 @@
 <%-- 
-    Document   : viewSupport
-    Created on : Jun 27, 2024, 6:02:11 PM
-    Author     : Oscar
+    Document   : ReplySupport
+    Created on : Jun 5, 2024, 10:25:49 PM
+    Author     : jojo
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="com.mycompany.isp392.support.SupportDTO" %>
-<%@ page import="com.mycompany.isp392.user.UserDTO" %>
-<%@ page import="com.mycompany.isp392.support.ProcessSupportDTO" %>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>View Support</title>
-    </head>
-    <body>
-        <%
-//            UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
-//            if (loginUser == null || 3 != loginUser.getRoleID()) {
-//                response.sendRedirect("US_SignIn.jsp");
-//                return;
-//            }
-            SupportDTO support = (SupportDTO) request.getAttribute("SUPPORT");
-            UserDTO user = (UserDTO) request.getAttribute("USER");
-            ProcessSupportDTO process = (ProcessSupportDTO) request.getAttribute("PROCESS_SUPPORT");
-            if (support == null) {
-                response.sendRedirect("shopStaff.jsp");
-                return;
+        <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+        <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+        <title>Reply Support</title>
+        <style>
+            .form-container {
+                max-width: 600px;
+                margin: 50px auto;
+                padding: 20px;
+                border: 1px solid #dee2e6;
+                border-radius: 12px;
+                background-color: #f8f9fa;
             }
-        %>
-        From Email: 
-        <input type="email" name="email" value="<%= user.getEmail()%>"></br>
-        Content: 
-        <input type="text" name="content" value="<%= support.getRequestMessage()%>"></br>
-        Reply Message:
-        <input type="text" name="responseMessage" value="<%= process.getResponseMessage()%>"></br>
+            .form-group label {
+                font-weight: bold;
+            }
+            .readonly-input {
+                border: none;
+                background-color: transparent;
+                color: #000;
+            }
+        </style>
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <!-- Sidebar -->
+            <%@include file="AD_sidebar.jsp" %>
 
+            <!-- Sidebar -->
+            <div id="content-wrapper" class="d-flex flex-column">
+
+                <div id="content">
+                    <!-- Header -->
+                    <%@include file="AD_header.jsp" %>
+
+                    <div class="container-fluid" id="container-wrapper">
+                        <div class="container mt-4">
+                            <div class="form-container">
+                                <h2 class="text-center" style="color: #000; font-weight: bold">Reply Support</h2>
+                                <form>
+                                    <div class="form-group">
+                                        <label for="to">To</label>
+                                        <input type="text" class="form-control readonly-input" id="to" value="Customer" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="title">Title</label>
+                                        <input type="text" class="form-control readonly-input" id="title" value="Your product is good " readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="textDescriptipn" class="form-label">Content</label>
+                                        <textarea class="form-control readonly-input" id="textDescriptipn" rows="5" readonly>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                        </textarea>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bootstrap JS and dependencies -->
+            <script src="vendor/jquery/jquery.min.js"></script>
+            <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>

@@ -30,6 +30,8 @@ public class OrderDAO {
     private static final String DELETE_ORDER = "";
     private static final String SEARCH_ORDERS = "SELECT * FROM Orders WHERE orderID LIKE ? OR orderDate LIKE ? OR total LIKE ? OR CustID LIKE ? OR CartID LIKE ?";
     private static final String UPDATE_ORDER_STATUS = "UPDATE Orders SET status = ? WHERE orderID = ?";
+    
+
     public int getLastOrderId() throws SQLException {
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -59,7 +61,8 @@ public class OrderDAO {
         return lastOrderId + 1;
     }
 
-    public OrderDTO insertOrder(double total, int custId, int promotionId, int cartId, String userName, String city, String district, String ward, String address,int phone, String note) {
+    public OrderDTO insertOrder(double total, int custId, int promotionId, int cartId, String userName, String city,
+            String district, String ward, String address, int phone, String note) {
         OrderDTO orderDTO = null;
         Connection conn = null;
         PreparedStatement pstm = null;
@@ -84,12 +87,13 @@ public class OrderDAO {
             pstm.setString(13, note);
             int row = pstm.executeUpdate();
             if (row > 0) {
-                orderDTO = new OrderDTO(dao.getLastOrderId(), 1, total, init, custId, promotionId, cartId, userName, city, district, ward, address,phone, note);
+                orderDTO = new OrderDTO(dao.getLastOrderId(), 1, total, init, custId, promotionId, cartId, userName,
+                        city, district, ward, address, phone, note);
             }
         } catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();
-        } finally{
+        } finally {
             try {
                 if (pstm != null) {
                     pstm.close();
@@ -123,7 +127,7 @@ public class OrderDAO {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }finally{
+        } finally {
             try {
                 if (pstm != null) {
                     pstm.close();
@@ -137,8 +141,8 @@ public class OrderDAO {
         }
         return orderDetailsDTO;
     }
-    
-    public boolean updateOrderStatus(int orderID,int status){
+
+    public boolean updateOrderStatus(int orderID, int status) {
         Connection conn = null;
         PreparedStatement pstm = null;
         boolean check = false;
@@ -150,10 +154,10 @@ public class OrderDAO {
             int row = pstm.executeUpdate();
             if (row > 0) {
                 check = true;
-            } 
+            }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally{
+        } finally {
             try {
                 if (pstm != null) {
                     pstm.close();
@@ -167,10 +171,8 @@ public class OrderDAO {
         }
         return check;
     }
-    
-    
 
-   public List<OrderDTO> searchOrders(String searchText) throws SQLException, ClassNotFoundException {
+    public List<OrderDTO> searchOrders(String searchText) throws SQLException, ClassNotFoundException {
         List<OrderDTO> orders = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -200,7 +202,8 @@ public class OrderDAO {
                     String address = rs.getString("address");
                     int phone = rs.getInt("phone");
                     String note = rs.getString(phone);
-                    orders.add(new OrderDTO(orderID, status, total, orderDate, custID, promotionID, cartID, userName, city, district, ward, address, phone, note));
+                    orders.add(new OrderDTO(orderID, status, total, orderDate, custID, promotionID, cartID, userName,
+                            city, district, ward, address, phone, note));
                 }
             }
         } catch (SQLException e) {
@@ -219,8 +222,8 @@ public class OrderDAO {
         }
         return orders;
     }
-     
-    public List<OrderDetailsDTO> getListOrderDetailsByOrderID(int orderID){
+
+    public List<OrderDetailsDTO> getListOrderDetailsByOrderID(int orderID) {
         Connection conn = null;
         PreparedStatement pstm = null;
         ResultSet rs = null;
@@ -238,7 +241,7 @@ public class OrderDAO {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }finally{
+        } finally {
             try {
                 if (rs != null) {
                     rs.close();
@@ -255,4 +258,6 @@ public class OrderDAO {
         }
         return listOrderDetails;
     }
+
+    
 }

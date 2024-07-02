@@ -45,7 +45,7 @@ public class CartDTO {
         this.cartID = cartID;
     }
 
-    public void setTotalPrice(int totalPrice) {
+    public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
     }
 
