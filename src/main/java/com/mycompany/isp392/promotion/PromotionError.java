@@ -27,7 +27,7 @@ public class PromotionError {
         this.discountPerError = "";
         this.conditionError = "";
         this.statusError = "";
-        this.error = error;
+        this.error = "";
     }
 
     public PromotionError(String promotionIDError, String promotionNameError, String startDateError, String endDateError, String discountPerError, String conditionError, String statusError, String error) {

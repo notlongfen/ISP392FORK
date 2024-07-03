@@ -40,7 +40,7 @@ public class UserDAO {
     private static final String GET_ALL_USER_SUPPORT_INFO = "SELECT * FROM Supports s \n"
             + "INNER JOIN Customers c ON s.CustID = c.CustID\n"
             + "INNER JOIN Users u ON c.CustID = u.UserID\n";
-    private static final String GET_EMPLOYEE_INFO = "";
+    private static final String GET_CUSTOMER_INFO = "SELECT * FROM Customers WHERE CustID = ?";
     public UserDTO checkLogin(String email, String password) throws SQLException {
         UserDTO user = null;
         Connection conn = null;
@@ -734,6 +734,43 @@ public class UserDAO {
         }
         return users;
     }
+
+    // public CustomerDTO getCustomerInfo(int CustID) throws SQLException {
+    //     CustomerDTO customer = null;
+    //     Connection conn = null;
+    //     PreparedStatement ptm = null;
+    //     ResultSet rs = null;
+    //     try {
+    //         conn = DbUtils.getConnection();
+    //         if (conn != null) {
+    //             ptm = conn.prepareStatement(GET_CUSTOMER_INFO);
+    //             ptm.setInt(1, CustID);
+    //             rs = ptm.executeQuery();
+    //             if (rs.next()) {
+    //                 int points = rs.getInt("points");
+    //                 Date birthday = rs.getDate("birthday");
+    //                 String city = rs.getString("province_city");
+    //                 String district = rs.getString("district");
+    //                 String ward = rs.getString("ward");
+    //                 String address = rs.getString("detailAddress");
+    //                 customer = new CustomerDTO(CustID, points, birthday, city, district, ward, address);
+    //             }
+    //         }
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //     } finally {
+    //         if (rs != null) {
+    //             rs.close();
+    //         }
+    //         if (ptm != null) {
+    //             ptm.close();
+    //         }
+    //         if (conn != null) {
+    //             conn.close();
+    //         }
+    //     }
+    //     return customer;
+    // }
     
 //    public EmployeeDTO getEmployeeInfo(int userID){
 //        Connection conn = null;
@@ -747,4 +784,29 @@ public class UserDAO {
 //            e.printStackTrace();
 //        }
 //    }
+
+    public int updateUserPoint(int userID, int point) throws SQLException {
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        int result = 0;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement("UPDATE Customers SET points = ? WHERE CustID = ?");
+                ptm.setInt(1, point);
+                ptm.setInt(2, userID);
+                result = ptm.executeUpdate();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return result;
+    }
 }

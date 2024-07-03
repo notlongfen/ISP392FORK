@@ -810,4 +810,30 @@ public class ProductDAO {
         }
         return latestImportDates;
     }
+    public boolean updateQuantittyAfterCheckout(int productID, int quantity) throws SQLException {
+        boolean result = false;
+        Connection conn = null;
+        PreparedStatement stm = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                String query = "UPDATE ProductDetails SET stockQuantity = stockQuantity - ? WHERE ProductID = ?";
+                stm = conn.prepareStatement(query);
+                stm.setInt(1, quantity);
+                stm.setInt(2, productID);
+                int value = stm.executeUpdate();
+                result = value > 0 ? true : false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return result;
+    }
 }
