@@ -194,6 +194,12 @@ public class MainController extends HttpServlet {
     
     private static final String DELETE_WISHLIST = "deleteWishlist";
     private static final String DELETE_WISHLIST_CONTROLLER = "DeleteWishlistController";
+    
+    private static final String ADD_WISHLIST = "AddToWishlist";
+    private static final String ADD_WISHLIST_CONTROLLER = "AddWishlistController";
+    
+    private static final String HISTORY= "History";
+    private static final String HISTORY_CONTROLLER = "ShowHistoryBrandController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -329,6 +335,10 @@ public class MainController extends HttpServlet {
                 url = EDIT_PRODUCT_PAGE_VIEW;
             }else if (EDIT_PRODUCT_DETAIL_PAGE.equals(action)) {
                 url = EDIT_PRODUCT_DETAIL_PAGE_VIEW;
+            } else if (ADD_WISHLIST.equals(action)){
+                url = ADD_WISHLIST_CONTROLLER;
+            } else if (HISTORY.equals(action)){
+                url = HISTORY_CONTROLLER;
             }
         } catch (Exception e) {
             log("error at MainController: " + e.toString());

@@ -36,7 +36,7 @@
             .price-button:hover {
                 background-color: #f0f0f0;
             }
-            .button-container {               
+            .button-container {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
@@ -74,11 +74,13 @@
                 position: relative;
                 z-index: 1;
             }
-            .product-grid .product-image a.image{
-                display: block;
+           .resized-image {
+                width: 1280px;
+                height: 1280px;
+                object-fit: contain;
             }
-            .product-grid .product-image img{
-                width: 100%;
+            .img-fluid {
+                max-width: 100%;
                 height: auto;
             }
             .product-grid .product-discount-label{
@@ -104,24 +106,25 @@
             .product-grid:hover .product-links{
                 right: 10px;
             }
-            .product-grid .product-links li a{
+            .product-grid .product-links li button{
+                border: none;
                 color: #333;
                 background: transparent;
                 font-size: 17px;
                 line-height: 38px;
                 width: 38px;
                 height: 38px;
-/*                border: 1px solid #333;*/
-/*                border-bottom: none;*/
+                /*                border: 1px solid #333;*/
+                /*                border-bottom: none;*/
                 display: block;
                 transition: all 0.3s;
             }
-            .product-grid .product-links li:last-child a{
-/*                border-bottom: 1px solid #333;*/
+            .product-grid .product-links li:last-child button{
+                /*                border-bottom: 1px solid #333;*/
             }
-            .product-grid .product-links li a:hover{
+            .product-grid .product-links li button:hover{
                 color: #c53337;
-/*                background: #333;*/
+                /*                background: #333;*/
             }
             .product-grid .add-to-cart{
                 background: black;
@@ -145,7 +148,7 @@
                 bottom: 0;
             }
             .product-grid .add-to-cart:hover{
-/*                text-shadow: 4px 4px rgba(0,0,0,0.2);*/
+                /*                text-shadow: 4px 4px rgba(0,0,0,0.2);*/
                 background: rgb(199, 30, 61);
             }
             .product-grid .product-content{
@@ -265,30 +268,37 @@
                     <!--                    <hr>-->
                     <div class="row">
                         <%
-                        List<ProductDetailsDTO> listProduct = (List<ProductDetailsDTO>) request.getAttribute("menProduct");
+                        List<ProductDetailsDTO> listProduct = (List<ProductDetailsDTO>) session.getAttribute("menProduct");
                         if (listProduct != null && listProduct.size() > 0) {
                         for (ProductDetailsDTO list : listProduct) {
                         %>
+
                         <div class="col-md-3 col-sm-6">
                             <div class="product-grid">
-                                <div class="product-image">
-                                    <a href="#" class="image">
-                                        <img src="<%= list.getImage() %>">
-                                    </a>
-                                    <!--<span class="product-discount-label">-23%</span>-->
-                                    <ul class="product-links">
+                                <form action="MainController">
+                                    <div class="product-image">
+                                        <a href="#" class="image">
+                                            <img src="<%= list.getImage() %>" alt="Image" class="img-fluid resized-image">
+                                            <input type="hidden" name="image" value="<%= list.getImage() %>"/>
+                                            <input type="hidden" name="productID" value="<%= list.getProductID() %>"/>
+                                        </a>
+                                        <!--<span class="product-discount-label">-23%</span>-->
+                                        <ul class="product-links">
+                                            <li><button type="submit" name="action" value="AddToWishlist"><i class="fa fa-heart"></i></button></li>
+                                        </ul>
+                                        <a href="" class="add-to-cart">Add to Cart</a>
+                                    </div>
+                                    <div class="product-content">
+                                        <h3 class="title"><a href="#"><%= list.getProductName() %></a></h3>
+                                        <input type="hidden" name="productName" value="<%= list.getProductName() %>"/>
 
-                                        <li><a href="#"><i class="fa fa-heart"></i></a></li>
-
-                                    </ul>
-                                    <a href="" class="add-to-cart">Add to Cart</a>
-                                </div>
-                                <div class="product-content">
-                                    <h3 class="title"><a href="#"><%= list.getProductName() %></a></h3>
-                                    <div class="price"><%= list.getPrice() %></div>
-                                </div>
+                                        <div class="price"><%= list.getPrice() %></div>
+                                        <input type="hidden" name="price" value="<%= list.getPrice() %>"/>
+                                    </div>
+                                </form>
                             </div>
                         </div>
+
 
                         <%
                             }

@@ -48,9 +48,13 @@
                                             BrandDTO brand = (BrandDTO) request.getAttribute("BRAND");
                                             if (brand != null) {
                                         %>
-                                        <input type="text" class="form-control" name="brandName" value="<%= brand.getBrandName() %>" 
+                                        <input type="text" class="form-control" name="newBrandName" value="<%= brand.getBrandName() %>" 
+                                               style="width: 550px">
+                                        <input type="hidden" class="form-control" name="oldBrandName" value="<%= brand.getBrandName() %>" 
                                                style="width: 550px">
                                         <input type="hidden" name="brandID" value="<%= brand.getBrandID() %>">
+                                        
+                                        <input type="hidden" name="edit" value="Edit">
                                         <% } %>
                                     </div>
                                     <div class="form-group col-md-8 mt-xl-5" style="margin-left: 100px;">

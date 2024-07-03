@@ -72,7 +72,7 @@
                                                     <select id="brandSelect" class="custom-select">
                                                         <option value="Select Brand">Select Brand</option>
                                                         <% 
-                                                        List<BrandDTO> brands = (List<BrandDTO>) request.getAttribute("BRAND_LIST");
+                                                        List<BrandDTO> brands = (List<BrandDTO>) session.getAttribute("BRAND_LIST");
                                                         if (brands != null) {
                                                             for (BrandDTO brand : brands) {
                                                         %>
@@ -124,12 +124,15 @@
                                                     <td class="text-center"><%= brand.getBrandName() %></td>
                                                     <td class="text-center"><img src="<%= brand.getImage() %>" alt="Brand Image" style="max-width: 100px; max-height: 100px;"></td>
                                                     <td class="text-center"><span class="badge <%= brand.getStatus() == 1 ? "badge-success" : "badge-warning" %>"><%= brand.getStatus() == 1 ? "Available" : "Deleted" %></span></td>
+                                                    
                                                     <td class="text-center action-buttons">
                                                         <form action="MainController" method="post" style="display:inline;">
+                                                            <input type="hidden" name="status" value="<%= brand.getStatus() %>">
                                                             <input type="hidden" name="brandID" value="<%= brand.getBrandID() %>">
                                                             <button type="submit" class="btn btn-sm btn-danger" name="action" value="Delete_Brand">Delete</button>
-                                                            <input type="hidden" name="brandID" value="<%= brand.getBrandID() %>">
+                                                            <input type="hidden" name="delete" value="Delete">
                                                             <button type="submit" class="btn btn-sm btn-dark" name="action" value="Edit_Brand_Page">Edit</button>
+                                                            
                                                         </form>
                                                     </td>
                                                 </tr>

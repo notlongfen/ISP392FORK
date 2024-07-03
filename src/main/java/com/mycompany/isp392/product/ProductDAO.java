@@ -11,6 +11,9 @@ import utils.DbUtils;
 import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
+import com.mycompany.isp392.brand.BrandDTO;
+import com.mycompany.isp392.wishlist.WishlistDTO;
 
 public class ProductDAO {
 
@@ -42,17 +45,28 @@ public class ProductDAO {
     private static final String CHECK_PRODUCT = "SELECT productID FROM Products WHERE productName LIKE ? and productID != ?";
     private static final String CHECK_PRODUCT_NAME = "SELECT productID FROM Products WHERE productName LIKE ?";
     private static final String SEARCH_BRAND_BY_ID = "SELECT * FROM Brands WHERE brandID LIKE ?";
+
+    private static final String SELECT_CATEGORY_PRODUCT = "SELECT * FROM Products p JOIN ProductDetails pd ON p.ProductID = pd.ProductID JOIN ProductBelongtoCategories pbc ON p.ProductID = pbc.ProductID "
+            + "JOIN Categories c ON pbc.Categories = c.CategoryID WHERE c.CategoriesName = ?";
+
     private static final String SELECT__WISHLIST = "SELECT wd.ProductID, p.productName, pd.image, b.BrandName, pd.price "
             + "FROM Wishlists w JOIN WishlistDetails wd ON w.WishlistID = wd.WishlistID JOIN Products p ON wd.ProductID = p.ProductID JOIN ProductDetails pd ON p.ProductID = pd.ProductID JOIN  Brands b ON p.BrandID = b.BrandID "
             + "WHERE w.CustID = ? ";
     private static final String DELETE__WISHLIST = "DELETE FROM WishlistDetails "
             + "WHERE WishlistID = (SELECT WishlistID FROM Wishlists WHERE CustID = ?) "
             + "AND ProductID = ?";
-    private static final String EDIT_PRODUCT = "UPDATE Products SET productName=?, description=?, numberOfPurchasing=?, brandID=?, status = ? WHERE productID=?";
+
+//    private static final String EDIT_PRODUCT = "UPDATE Products SET productName=?, description=?, numberOfPurchasing=?, brandID=?, status = ? WHERE productID=?";
+    private static final String EDIT_PRODUCT = "UPDATE Products SET productName=?, description=?, numberOfPurchasing=?, brandID=? WHERE productID=?";
+
     private static final String DELETE_PRODUCT_CATEGORIES = "DELETE FROM ProductBelongtoCDCategories WHERE ProductID=?";
     private static final String ADD_PRODUCT_CATEGORY = "INSERT INTO ProductBelongtoCDCategories (ProductID, CDCategoryID) VALUES (?, ?)";
     private static final String GET_CATEGORIES_BY_PRODUCT_ID = "SELECT c.* FROM Categories c INNER JOIN ProductBelongtoCDCategories pbc ON c.categoryID = pbc.CDCategoryID WHERE pbc.ProductID = ?";
     private static final String GET_PRODUCT_DETAILS_BY_ID = "SELECT * FROM ProductDetails WHERE ProductDetailsID LIKE ? AND status = 1";
+
+    private static final String ADD__WISHLIST = "insert into Wishlists(CustID) values (?)";
+    private static final String SHOW__WISHLIST = "select * from Wishlists where CustID = ?";
+    private static final String ADD__WISHLISTDETAIl = "insert into WishlistDetails (WishlistID,ProductID) values (?,?) ";
 
     public boolean addProduct(ProductDTO product) throws SQLException {
         boolean check = false;
@@ -613,13 +627,16 @@ public class ProductDAO {
         try {
             conn = DbUtils.getConnection();
             if (conn != null) {
+                ptm = conn.prepareStatement(SELECT_CATEGORY_PRODUCT);
+
                 ptm.setString(1, gender);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
+                    int productID = rs.getInt("ProductID");
                     String name = rs.getString("productName");
                     int price = rs.getInt("price");
                     String images = rs.getString("image");
-                    products.add(new ProductDetailsDTO(name, images, price));
+                    products.add(new ProductDetailsDTO(productID, name, images, price, ""));
                 }
             }
         } catch (Exception e) {
@@ -742,6 +759,31 @@ public class ProductDAO {
         return productDetail;
     }
 
+    public boolean addToWishlist(int custID) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(ADD__WISHLIST);
+                ptm.setInt(1, custID);
+                check = ptm.executeUpdate() > 0;
+
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+
     public boolean checkDuplicateProductDetail(int productID, String color, String size) throws SQLException {
         boolean isDuplicate = false;
         Connection conn = null;
@@ -794,6 +836,7 @@ public class ProductDAO {
                     Date latestImportDate = rs.getDate("latestImportDate");
                     latestImportDates.put(productID, latestImportDate);
                 }
+
             }
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
@@ -810,6 +853,40 @@ public class ProductDAO {
         }
         return latestImportDates;
     }
+
+    public WishlistDTO SelectWishlist(int custID) throws SQLException {
+        WishlistDTO wishlist = null;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(SHOW__WISHLIST);
+                ptm.setInt(1, custID);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    int wID = rs.getInt("WishlistID");
+//                    int cID = rs.getInt("CustID");
+                    wishlist = new WishlistDTO(wID, custID);
+                }
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return wishlist;
+    }
+
     public boolean updateQuantittyAfterCheckout(int productID, int quantity) throws SQLException {
         boolean result = false;
         Connection conn = null;
@@ -835,5 +912,33 @@ public class ProductDAO {
             }
         }
         return result;
+    }
+
+    public boolean addToWishlistDetail(int wishlistID, int productID) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(ADD__WISHLISTDETAIl);
+                ptm.setInt(1, wishlistID);
+                ptm.setInt(2, productID);
+                check = ptm.executeUpdate() > 0;
+
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+
+        return check;
     }
 }

@@ -21,6 +21,11 @@ public class WishlistDTO {
         this.custID = custID;
         this.productID = productID;
     }
+    
+    public WishlistDTO(int wishlistID, int custID) {
+        this.wishlistID = wishlistID;
+        this.custID = custID;
+    }
 
     public int getWishlistID() {
         return wishlistID;

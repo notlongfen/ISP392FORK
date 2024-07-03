@@ -2,6 +2,7 @@ package com.mycompany.isp392.controllers;
 
 import com.mycompany.isp392.brand.*;
 import java.io.File;
+import com.mycompany.isp392.user.UserDTO;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.sql.SQLException;
@@ -12,6 +13,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
+import jakarta.servlet.http.HttpSession;
+import java.sql.SQLException;
+import java.util.List;
 
 @MultipartConfig
 public class EditBrandController extends HttpServlet {
@@ -27,12 +31,15 @@ public class EditBrandController extends HttpServlet {
         BrandError brandError = new BrandError();
         boolean checkValidation = true;
         try {
+            HttpSession session = request.getSession();
             int brandID = Integer.parseInt(request.getParameter("brandID"));
-            String brandName = request.getParameter("brandName");
             Part filePart = request.getPart("brandImage");
-
+            String newBrandName = request.getParameter("newBrandName");
+            UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
+            int empID = user.getUserID();
+            String oldBrandName = request.getParameter("oldBrandName");
             BrandDAO brandDAO = new BrandDAO();
-            if (brandDAO.checkBrandExists(brandName)) {
+            if (brandDAO.checkBrandExists(newBrandName)) {
                 brandError.setBrandNameError("Brand already exists.");
                 checkValidation = false;
             }
@@ -51,8 +58,12 @@ public class EditBrandController extends HttpServlet {
             }
 
             if (checkValidation) {
-                boolean check = brandDAO.updateBrand(brandName, imagePath, brandID);
+                boolean check = brandDAO.updateBrand(newBrandName, imagePath, brandID);
+
                 if (check) {
+                    String action = request.getParameter("edit");
+                    ManageBrandDTO manage = new ManageBrandDTO(brandID, empID, oldBrandName, newBrandName, action);
+                    boolean checkAdd = brandDAO.addManageBrand(manage);
                     request.setAttribute("MESSAGE", "INFORMATION UPDATED SUCCESSFULLY !");
                     url = SUCCESS;
                 }

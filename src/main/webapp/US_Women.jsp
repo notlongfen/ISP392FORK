@@ -267,28 +267,33 @@
                     <!--                    <hr>-->
                     <div class="row">
                         <%
-                        List<ProductDetailsDTO> listProduct = (List<ProductDetailsDTO>) request.getAttribute("womenProduct");
+                        List<ProductDetailsDTO> listProduct = (List<ProductDetailsDTO>) session.getAttribute("womenProduct");
                         if (listProduct != null && listProduct.size() > 0) {
                         for (ProductDetailsDTO list : listProduct) {
                         %>
                         <div class="col-md-3 col-sm-6">
                             <div class="product-grid">
-                                <div class="product-image">
-                                    <a href="#" class="image">
-                                        <img src="<%= list.getImage() %>">
-                                    </a>
-                                    <!--<span class="product-discount-label">-23%</span>-->
-                                    <ul class="product-links">
+                                <form action="MainController">
+                                    <div class="product-image">
+                                        <a href="#" class="image">
+                                            <img src="<%= list.getImage() %>">
+                                            <input type="hidden" name="image" value="<%= list.getImage() %>"/>
+                                            <input type="hidden" name="productID" value="<%= list.getProductID() %>"/>
+                                        </a>
+                                        <!--<span class="product-discount-label">-23%</span>-->
+                                        <ul class="product-links">
+                                            <li><button type="submit" name="action" value="AddToWishlist"><i class="fa fa-heart"></i></button></li>
+                                        </ul>
+                                        <a href="" class="add-to-cart">Add to Cart</a>
+                                    </div>
+                                    <div class="product-content">
+                                        <h3 class="title"><a href="#"><%= list.getProductName() %></a></h3>
+                                        <input type="hidden" name="productName" value="<%= list.getProductName() %>"/>
 
-                                        <li><a href="#"><i class="fa fa-heart"></i></a></li>
-
-                                    </ul>
-                                    <a href="" class="add-to-cart">Add to Cart</a>
-                                </div>
-                                <div class="product-content">
-                                    <h3 class="title"><a href="#"><%= list.getProductName() %></a></h3>
-                                    <div class="price"> <%= list.getPrice() %></div>
-                                </div>
+                                        <div class="price"><%= list.getPrice() %></div>
+                                        <input type="hidden" name="price" value="<%= list.getPrice() %>"/>
+                                    </div>
+                                </form>
                             </div>
                         </div>
 

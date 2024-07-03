@@ -14,6 +14,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -32,19 +33,20 @@ public class CategoryController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
+            HttpSession session = request.getSession();
                 String category = request.getParameter("category");
             ProductDAO dao = new ProductDAO();
             if (category.equals("Men")) {
                 List<ProductDetailsDTO> product = dao.CateProducts("Men");
                 if(product.size() > 0 ) {
-                request.setAttribute("menProduct", product);
+                session.setAttribute("menProduct", product);
                 url = SUCCESS1;
                 } else {
                     url = ERROR;
                 }
             } else if (category.equals("Women")){
                 List<ProductDetailsDTO> product = dao.CateProducts(category);
-                request.setAttribute("womenProduct", product);
+                session.setAttribute("womenProduct", product);
                 url = SUCCESS2;
             }
         } catch (Exception e) {

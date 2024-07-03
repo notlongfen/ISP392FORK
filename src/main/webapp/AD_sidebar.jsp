@@ -100,6 +100,15 @@
                         </button>
                     </li>
                 <% } %>
+                
+                <% if (roleID == 2) { %> <!-- Shop Manager -->
+                    <li class="nav-item mt-3">
+                        <button type="submit" class="nav-link btn btn-link" name="action" value="History">
+                            <i class="fas fa-tags"></i>
+                            <span>View Update History</span>
+                        </button>
+                    </li>
+                <% } %>
 
                 <hr class="sidebar-divider">
 
