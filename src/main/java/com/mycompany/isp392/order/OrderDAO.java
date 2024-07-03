@@ -25,12 +25,12 @@ public class OrderDAO {
 
     private static final String ADD_ORDER = "INSERT INTO Orders (status, total, orderDate, CustID, promotionID, CartID, userName, city, district, ward, addresss, phone) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
     private static final String GET_LAST_ORDER_ID = "SELECT MAX(orderID) FROM Orders";
-    private static final String ADD_ORDER_DETAILS = "INSERT INTO OrderDetails (orderID, productID, quantity, unitPrice) VALUES (?,?,?,?)";
+    private static final String ADD_ORDER_DETAILS = "INSERT INTO OrderDetails (productDetailsID, orderID, productID, quantity, unitPrice) VALUES (?,?,?,?,?)";
     private static final String SET_ORDER_ORDER = "Update Orders SET status = ? WHERE OrderID = ?";
     private static final String DELETE_ORDER = "";
     private static final String SEARCH_ORDERS = "SELECT * FROM Orders WHERE orderID LIKE ? OR orderDate LIKE ? OR total LIKE ? OR CustID LIKE ? OR CartID LIKE ?";
     private static final String UPDATE_ORDER_STATUS = "UPDATE Orders SET status = ? WHERE orderID = ?";
-    
+    private static final String GET_ALL_ORDERS = "SELECT * FROM Orders";
 
     public int getLastOrderId() throws SQLException {
         Connection conn = null;
@@ -117,10 +117,11 @@ public class OrderDAO {
         try {
             conn = DbUtils.getConnection();
             pstm = conn.prepareStatement(ADD_ORDER_DETAILS);
-            pstm.setInt(1, orderDetails.getOrderID());
-            pstm.setInt(2, orderDetails.getProductID());
-            pstm.setInt(3, orderDetails.getQuantity());
-            pstm.setInt(4, orderDetails.getUnitPrice());
+            pstm.setInt(1, orderDetails.getProductDetailsID());
+            pstm.setInt(2, orderDetails.getOrderID());
+            pstm.setInt(3, orderDetails.getProductID());
+            pstm.setInt(4, orderDetails.getQuantity());
+            pstm.setInt(5, orderDetails.getUnitPrice());
             int row = pstm.executeUpdate();
             if (row > 0) {
                 orderDetailsDTO = orderDetails;
@@ -234,10 +235,11 @@ public class OrderDAO {
             pstm.setInt(1, orderID);
             rs = pstm.executeQuery();
             while (rs.next()) {
+                int productDetailsID = rs.getInt("productDetailsID");
                 int productID = rs.getInt("productID");
                 int quantity = rs.getInt("quantity");
                 int unitPrice = rs.getInt("unitPrice");
-                listOrderDetails.add(new OrderDetailsDTO(orderID, productID, quantity, unitPrice));
+                listOrderDetails.add(new OrderDetailsDTO(productDetailsID, orderID, productID, quantity, unitPrice));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -259,5 +261,40 @@ public class OrderDAO {
         return listOrderDetails;
     }
 
-    
+    public List<OrderDTO> getAllOrder() throws SQLException {
+        List<OrderDTO> orders = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_ALL_ORDERS);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    int orderID = rs.getInt("orderID");
+                    int status = rs.getInt("status");
+                    Date orderDate = rs.getDate("orderDate");
+                    int total = rs.getInt("total");
+                    int custID = rs.getInt("custID");
+                    orders.add(new OrderDTO(orderID, status, total, orderDate, custID));
+
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return orders;
+    }
+
 }

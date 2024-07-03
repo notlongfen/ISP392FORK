@@ -28,7 +28,7 @@ public class OrderDetailsDTO {
     }
 
     public int getProductDetailsID() {
-        return orderID;
+        return productDetailsID;
     }
 
     public void setProductDetailsID(int productDetailsID) {
