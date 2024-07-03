@@ -26,7 +26,7 @@ public class LoginController extends HttpServlet {
     private static final String SHOP_STAFF_PAGE = "GetProductsController";
     private String clientID;
     public void initClientID() throws ServletException{
-        Dotenv dotenv = Dotenv.configure().directory("C:\\Users\\TTNHAT\\Documents\\GitHub\\ISP392\\.env").load();
+        Dotenv dotenv = Dotenv.configure().directory("/home/notlongfen/code/java/ISP392/.env").load();
         clientID = dotenv.get("GOOGLE_CLIENT_ID");
     }
 

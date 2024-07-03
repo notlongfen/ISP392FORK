@@ -31,7 +31,8 @@ public class CartDAO {
             + "JOIN ProductDetails pd ON cd.ProductDetailsID = pd.ProductDetailsID "
             + "JOIN Products p ON cd.ProductID = p.ProductID "
             + "WHERE cd.CartID = ?";
-            private static final String UPDATE_CART_DETAILS_STATUS = "UPDATE CartDetails SET status = ? WHERE cartID = ? AND productID = ?";
+    private static final String UPDATE_CART_STATUS = "UPDATE Carts SET status = ? WHERE cartID = ?";
+
     public boolean createCart(CartDTO cart) throws SQLException {
         boolean check = false;
         Connection conn = null;
@@ -357,16 +358,15 @@ public class CartDAO {
         return check;
     }
 
-    public boolean updateCartDetailsStaus(int cartID, int productID, int status) {
+    public boolean updateCartStaus(int cartID, int status) {
         Connection conn = null;
         PreparedStatement pstm = null;
         boolean check = false;
         try {
             conn = DbUtils.getConnection();
-            pstm = conn.prepareStatement(UPDATE_CART_DETAILS_STATUS);
+            pstm = conn.prepareStatement(UPDATE_CART_STATUS);
             pstm.setInt(1, status);
             pstm.setInt(2, cartID);
-            pstm.setInt(3, productID);
             int row = pstm.executeUpdate();
             if (row > 0) {
                 check = true;

@@ -6,6 +6,7 @@ package com.mycompany.isp392.controllers;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.List;
 
 import jakarta.servlet.ServletException;
@@ -21,6 +22,7 @@ import com.mycompany.isp392.cart.CartDetailsDTO;
 import com.mycompany.isp392.order.OrderDAO;
 import com.mycompany.isp392.order.OrderDTO;
 import com.mycompany.isp392.order.OrderDetailsDTO;
+import com.mycompany.isp392.product.ProductDAO;
 import com.mycompany.isp392.product.ProductDTO;
 import com.mycompany.isp392.product.ProductDetailsDTO;
 import com.mycompany.isp392.promotion.PromotionDAO;
@@ -119,6 +121,7 @@ public class CheckoutController extends HttpServlet {
             cart.setTotalPrice(cart.getTotalPrice() - (cart.getTotalPrice() * percentage));
 
             OrderDAO orderDAO = new OrderDAO();
+            ProductDAO productDAO = new ProductDAO();
             OrderDTO order = orderDAO.insertOrder(cart.getTotalPrice(), user.getUserID(), promotionID, cart.getCartID(), name, city, district, ward, address, phone, note);
             if(order != null){
                 // OrderDetailsDTO odDTO = new OrderDetailsDTO(order.getOrderID(), cart.prod, promotionID, phone); //not done
@@ -126,9 +129,13 @@ public class CheckoutController extends HttpServlet {
                 for(CartDetailsDTO cartDetail : cartDetails){
                     OrderDetailsDTO orderDetailsDTO = new OrderDetailsDTO(order.getOrderID(), cartDetail.getProductID(), cartDetail.getQuantity(), cartDetail.getPrice());
                     orderDAO.insertOrderDetails(orderDetailsDTO);
+                    productDAO.updateQuantittyAfterCheckout(cartDetail.getProductID(), cartDetail.getQuantity());
                 }
                 session.removeAttribute("cart");
-                boolean check = cartDAO.updateCartDetails()
+                boolean check = cartDAO.updateCartStaus(cart.getCartID(), 1);
+                if(check){
+                    
+                }
             }
 
 
