@@ -37,7 +37,7 @@ public class MainController extends HttpServlet {
 
     private static final String ADD_BRAND = "Add_Brand";
     private static final String ADD_BRAND_CONTROLLER = "AddBrandController";
-    
+
     private static final String GET_BRANDS_PAGE = "Manage_Brands_Page";
     private static final String GET_BRANDS_PAGE_VIEW = "GetBrandsController";
 
@@ -60,13 +60,13 @@ public class MainController extends HttpServlet {
 
     private static final String GET_SUPPORT_LIST = "Manage_Support";
     private static final String GET_SUPPORT_LIST_CONTROLLER = "GetSupportListController";
-    
+
     private static final String VIEW_SUPPORT_PAGE = "ViewSupport";
     private static final String VIEW_SUPPORT_PAGE_CONTROLLER = "ViewSupportController";
-    
+
     private static final String REPLY_SUPPORT_PAGE = "ReplySupport";
     private static final String REPLY_SUPPORT_PAGE_VIEW = "AD_ReplySupport.jsp";
-    
+
     private static final String SEARCH_SUPPORT = "Search Support";
     private static final String SEARCH_SUPPORT_CONTROLLER = "SearchSupportController";
 
@@ -75,7 +75,7 @@ public class MainController extends HttpServlet {
 
     private static final String EDIT_PROMOTION = "EditPromotion";
     private static final String EDIT_PROMOTION_PAGE = "CopyPromotionController";
-    
+
     private static final String SAVE_EDIT_PROMOTION = "SaveEditPromotion";
     private static final String EDIT_PROMOTION_CONTROLLER = "EditPromotionController";
 
@@ -114,19 +114,21 @@ public class MainController extends HttpServlet {
     private static final String SEARCH_PAGE_VIEW = "SearchCategory.jsp";
     private static final String SEARCH_CATEGORY = "Search_Category";
     private static final String SEARCH_CATEGORY_CONTROLLER = "SearchCategoryController";
-    
+    private static final String SEARCH_CHILDREN_CATEGORY = "Search_Children_Category";
+    private static final String SEARCH_CHILDREN_CATEGORY_CONTROLLER = "SearchChildrenCategoryController";
+
     private static final String GET_ORDER_LIST = "Manage_Order";
     private static final String GET_ORDER_LIST_CONTROLLER = "GetOrderListController";
 
     private static final String SEARCH_ORDER = "Search_Order";
     private static final String SEARCH_ORDER_CONTROLLER = "SearchOrderController";
-    
+
     private static final String VIEW_ORDER_DETAIL = "ViewOrderDetail";
     private static final String VIEW_ORDER_DETAIL_CONTROLLER = "ViewOrderDetailController";
 
     private static final String EDIT_ORDER = "Edit_Order";
     private static final String EDIT_ORDER_CONTROLLER = "UpdateOrderController";
-    
+
     private static final String FORGOT_PASSWORD_CONTROLLER = "ForgotPasswordController";
     private static final String FORGOT_PASSWORD_PAGE = "Forgot_Password";
 
@@ -168,7 +170,7 @@ public class MainController extends HttpServlet {
 
     private static final String EDIT_PRODUCT_DETAIL_PAGE = "Edit_Product_Detail_Page";
     private static final String EDIT_PRODUCT_DETAIL_PAGE_VIEW = "GetSpecificProductController";
-    
+
     private static final String EDIT_PRODUCT_DETAILS = "Edit_Product_Details";
     private static final String EDIT_PRODUCT_DETAILS_CONTROLLER = "EditProductDetailsController";
 
@@ -183,7 +185,7 @@ public class MainController extends HttpServlet {
 
     private static final String MANAGE_PROMOTION_PAGE = "Manage promotions";
     private static final String MANAGE_PROMOTION_PAGE_VIEW = "GetPromotionListController";
-    
+
     private static final String GET_PRODUCT_DETAIL = "Search_ProductDetail";
     private static final String GET_PRODUCT_DETAIL_CONTROLLER = "GetProductsController";
     private static final String CATEGORY = "Category";
@@ -191,14 +193,14 @@ public class MainController extends HttpServlet {
 
     private static final String WISHLIST = "wishlist";
     private static final String WISHLIST_CONTROLLER = "WishlistController";
-    
+
     private static final String DELETE_WISHLIST = "deleteWishlist";
     private static final String DELETE_WISHLIST_CONTROLLER = "DeleteWishlistController";
-    
+
     private static final String ADD_WISHLIST = "AddToWishlist";
     private static final String ADD_WISHLIST_CONTROLLER = "AddWishlistController";
-    
-    private static final String HISTORY= "History";
+
+    private static final String HISTORY = "History";
     private static final String HISTORY_CONTROLLER = "ShowHistoryBrandController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -323,22 +325,24 @@ public class MainController extends HttpServlet {
                 url = GET_PRODUCT_DETAIL_CONTROLLER;
             } else if (ADD_PRODUCT_DETAIL_PAGE.equals(action)) {
                 url = ADD_PRODUCT_DETAIL_PAGE_VIEW;
-            } else if (CATEGORY.equals(action)){
+            } else if (CATEGORY.equals(action)) {
                 url = CATEGORY_CONTROLLER;
-            } else if (WISHLIST.equals(action)){
+            } else if (WISHLIST.equals(action)) {
                 url = WISHLIST_CONTROLLER;
-            } else if (DELETE_WISHLIST.equals(action)){
+            } else if (DELETE_WISHLIST.equals(action)) {
                 url = DELETE_WISHLIST_CONTROLLER;
             } else if (ADD_BRANDS_PAGE.equals(action)) {
                 url = ADD_BRANDS_PAGE_VIEW;
             } else if (EDIT_PRODUCT_PAGE.equals(action)) {
                 url = EDIT_PRODUCT_PAGE_VIEW;
-            }else if (EDIT_PRODUCT_DETAIL_PAGE.equals(action)) {
+            } else if (EDIT_PRODUCT_DETAIL_PAGE.equals(action)) {
                 url = EDIT_PRODUCT_DETAIL_PAGE_VIEW;
-            } else if (ADD_WISHLIST.equals(action)){
+            } else if (ADD_WISHLIST.equals(action)) {
                 url = ADD_WISHLIST_CONTROLLER;
-            } else if (HISTORY.equals(action)){
+            } else if (HISTORY.equals(action)) {
                 url = HISTORY_CONTROLLER;
+            } else if (SEARCH_CHILDREN_CATEGORY.equals(action)) {
+                url = SEARCH_CHILDREN_CATEGORY_CONTROLLER;
             }
         } catch (Exception e) {
             log("error at MainController: " + e.toString());

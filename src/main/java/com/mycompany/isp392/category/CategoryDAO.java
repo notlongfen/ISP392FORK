@@ -38,6 +38,10 @@ public class CategoryDAO {
     private static final String GET_CHILDREN_CATEGORIES = "SELECT * FROM ChildrenCategories WHERE status = 1 AND ParentID LIKE ?";
     private static final String ADD_PRODUCT_CATEGORY = "INSERT INTO ProductBelongtoCDCategories(ProductID, CDCategoryID) VALUES(?, ?)";
     private static final String GET_LIST_CDCATEGORY = "SELECT * FROM ChildrenCategories where status = 1";
+    private static final String SEARCH_CHILDREN_CATEGORIES_TEXT = "SELECT * FROM ChildrenCategories WHERE CategoriesName LIKE ? AND parentID = ?";
+    private static final String GET_PARENT_CATEGORY_STATUS = "SELECT status FROM Categories WHERE CategoryID = ?";
+    private static final String DELETE_ALL_CHILDREN = "UPDATE ChildrenCategories SET status = 0 WHERE ParentID = ?";
+    private static final String GET_PARENT_ID = "SELECT ParentID FROM ChildrenCategories WHERE CDCategoryID = ?";
 
     public boolean addCategory(CategoryDTO category) throws SQLException {
         Connection conn = null;
@@ -113,20 +117,37 @@ public class CategoryDAO {
 
     public boolean deleteCategory(int categoryID) throws SQLException {
         Connection conn = null;
-        PreparedStatement ptm = null;
+        PreparedStatement ptmCategory = null;
+        PreparedStatement ptmChildren = null;
         boolean check = false;
         try {
             conn = DbUtils.getConnection();
             if (conn != null) {
-                ptm = conn.prepareStatement(DELETE_CATEGORY);
-                ptm.setInt(1, categoryID);
-                check = ptm.executeUpdate() > 0;
+                conn.setAutoCommit(false);
+
+                ptmChildren = conn.prepareStatement(DELETE_ALL_CHILDREN);
+                ptmChildren.setInt(1, categoryID);
+                boolean checkChildren = ptmChildren.executeUpdate() > 0;
+
+                ptmCategory = conn.prepareStatement(DELETE_CATEGORY);
+                ptmCategory.setInt(1, categoryID);
+                boolean checkCategory = ptmCategory.executeUpdate() > 0;
+
+                if (checkChildren && checkCategory) {
+                    conn.commit();
+                    check = true;
+                } else {
+                    conn.rollback();
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (ptm != null) {
-                ptm.close();
+            if (ptmChildren != null) {
+                ptmChildren.close();
+            }
+            if (ptmCategory != null) {
+                ptmCategory.close();
             }
             if (conn != null) {
                 conn.close();
@@ -233,7 +254,8 @@ public class CategoryDAO {
                     int categoryID = rs.getInt("CategoryID");
                     String categoryName = rs.getString("CategoriesName");
                     String description = rs.getString("Description");
-                    list.add(new CategoryDTO(categoryID, categoryName, description, 1));
+                    int status = rs.getInt("status");
+                    list.add(new CategoryDTO(categoryID, categoryName, description, status));
                 }
             }
         } catch (Exception e) {
@@ -392,6 +414,41 @@ public class CategoryDAO {
             }
         }
         return childrenCategories;
+    }
+    
+    public List<ChildrenCategoryDTO> searchChildrenCategoriesByText(String searchText, int parentID) throws SQLException {
+        List<ChildrenCategoryDTO> list = new ArrayList<ChildrenCategoryDTO>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(SEARCH_CHILDREN_CATEGORIES_TEXT);
+                ptm.setString(1, "%" + searchText + "%");
+                ptm.setInt(2, parentID);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    int cdCategoryID = rs.getInt("CDCategoryID");
+                    String categoryName = rs.getString("CategoriesName");
+                    int status = rs.getInt("status");
+                    list.add(new ChildrenCategoryDTO(cdCategoryID, categoryName, parentID, status));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return list;
     }
 
     public boolean updateCategory(int categoryID, String newName, String newDescription) throws SQLException, ClassNotFoundException {
@@ -603,6 +660,93 @@ public class CategoryDAO {
             }
         }
         return categories;
+    }
+    
+    public boolean deleteAllChildren(int parentID) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        ResultSet rs = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(DELETE_ALL_CHILDREN);
+                ptm.setInt(1, parentID);
+                check = ptm.executeUpdate() > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+    
+    public int getParentCategoryStatus(int parentID) throws SQLException {
+        int status = -1;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_PARENT_CATEGORY_STATUS);
+                ptm.setInt(1, parentID);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    status = rs.getInt("status");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return status;
+    }
+    
+    public int getParentID(int cdCategoryID) throws SQLException {
+        int parentID = -1;
+        ResultSet rs = null;
+        PreparedStatement ptm = null;
+        Connection conn = null;
+        try {
+            conn = DbUtils.getConnection();
+            if(conn != null){
+                ptm = conn.prepareStatement(GET_PARENT_ID);
+                ptm.setInt(1, cdCategoryID);
+                rs = ptm.executeQuery();
+                if(rs.next()){
+                    parentID = rs.getInt("ParentID");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return parentID;
     }
 
 }

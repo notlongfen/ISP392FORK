@@ -49,7 +49,7 @@
 
                 <% if (roleID == 2) { %> <!-- Shop Manager -->
                     <li class="nav-item mt-3">
-                        <button type="submit" class="nav-link btn btn-link" name="action" value="Categories_List">
+                        <button type="submit" class="nav-link btn btn-link" name="action" value="Search_Category">
                             <i class="fa fa-pie-chart"></i>
                             <span>Categories</span>
                         </button>
@@ -94,7 +94,7 @@
 
                 <% if (roleID == 1) { %> <!-- System Manager -->
                     <li class="nav-item mt-3">
-                        <button type="submit" class="nav-link btn btn-link" name="action" value="Manage_Users">
+                        <button type="submit" class="nav-link btn btn-link" name="action" value="Search_User">
                             <i class="fas fa-users"></i>
                             <span>Users</span>
                         </button>

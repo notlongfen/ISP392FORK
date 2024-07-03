@@ -164,6 +164,17 @@
                                             <div class="row mb-4 mx-2 justify-content-between">
                                                 <div class="col-md-3">
                                                     <div class="input-group">
+                                                        <select id="entriesSelect" class="custom-select">
+                                                            <option value="Select Entries">Select Entries</option>
+                                                            <option value="5">5</option>
+                                                            <option value="10">10</option>
+                                                            <option value="15">15</option>
+                                                            <option value="20">20</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="input-group">
                                                         <select id="roleSelect" class="custom-select">
                                                             <option value="Select role">Select role</option>
                                                             <option value="System Manager">System Manager</option>
@@ -515,6 +526,22 @@
                     if (name === "Select role") {
                         row.style.display = '';
                     } else if (rowRole === name) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+            
+            document.getElementById('entriesSelect').addEventListener('change', function () {
+                const numEntries = parseInt(this.value);
+                const tableBody = document.getElementById('tableBody');
+                const rows = Array.from(tableBody.rows);
+
+                rows.forEach((row, index) => {
+                    if (isNaN(numEntries) || this.value === "Select Entries") {
+                        row.style.display = '';
+                    } else if (index < numEntries) {
                         row.style.display = '';
                     } else {
                         row.style.display = 'none';
