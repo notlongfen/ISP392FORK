@@ -1,19 +1,16 @@
 package com.mycompany.isp392.order;
 
-
-
-
-
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 /**
  *
  * @author TTNHAT
  */
 public class OrderDetailsDTO {
+
+    private int productDetailsID;
     private int orderID;
     private int productID;
     private int quantity;
@@ -22,11 +19,20 @@ public class OrderDetailsDTO {
     public OrderDetailsDTO() {
     }
 
-    public OrderDetailsDTO(int orderID, int productID, int quantity, int unitPrice) {
+    public OrderDetailsDTO(int productDetailsID, int orderID, int productID, int quantity, int unitPrice) {
+        this.productDetailsID = productDetailsID;
         this.orderID = orderID;
         this.productID = productID;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
+    }
+
+    public int getProductDetailsID() {
+        return orderID;
+    }
+
+    public void setProductDetailsID(int productDetailsID) {
+        this.productDetailsID = productDetailsID;
     }
 
     public int getOrderID() {
@@ -65,5 +71,5 @@ public class OrderDetailsDTO {
     public String toString() {
         return "OrderDetailsDTO{" + "orderID=" + orderID + ", productID=" + productID + ", quantity=" + quantity + ", unitPrice=" + unitPrice + '}';
     }
-    
+
 }

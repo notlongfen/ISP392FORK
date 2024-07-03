@@ -5,6 +5,10 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="java.util.List" %>
+<%@ page import="com.mycompany.isp392.order.*" %>
+<%@ page import="com.mycompany.isp392.user.*" %>
+<%@ page import="java.sql.Date" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -48,7 +52,13 @@
     </head>
 
     <body id="page-top">
-
+        <%
+                    UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
+                    if (loginUser == null || 2!=loginUser.getRoleID() ) {
+                        response.sendRedirect("US_SignIn.jsp");
+                        return;
+                    }
+        %>
         <div id="wrapper">
             <!-- Sidebar -->
             <%@include file="AD_sidebar.jsp" %>
@@ -64,7 +74,7 @@
 
                     <div class="container-fluid" id="container-wrapper">
                         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                            <h1 class="h3 mb-0 text-gray-900"><b>Order</b></h1>
+                            <h1 class="h3 mb-0 text-gray-900"><b>Orders</b></h1>
                         </div>
 
                         <div class="row mb-3" style="margin-left: 200px; margin-top: 100px;">
@@ -96,94 +106,84 @@
                                                         <option value="False">False</option>
                                                     </select>
                                                 </div>
-                                                <div class="col-md-3">
-                                                    <form>
+                                                <%
+                                                 String search = request.getParameter("search");
+                                                 if (search == null) {
+                                                     search = "";
+                                                     }
+                                                %>
+                                                <form action="MainController" >
+                                                    <div class="col-md-3">
                                                         <div class="input-group">
-                                                            <input type="text" class="form-control" placeholder="Search...">
+                                                            <input type="text" class="form-control" placeholder="Search..." name="search" value="<%= search%>">
                                                             <div class="input-group-append">
-                                                                <button class="btn btn-outline-secondary" type="button">Search</button>
+                                                                <button class="btn btn-outline-secondary" type="submit" name="action" value="Search Order">Search</button> 
                                                             </div>
                                                         </div>
-                                                    </form>
-                                                </div>
+                                                    </div>
+                                                </form>
                                             </div>
                                         </form>
 
                                         <table class="table align-items-center table-flush">
                                             <thead class="thead-light">
                                                 <tr>
-                                                    <th>OrderID </th>
-                                                    <th>Order Date</th>
-                                                    <th>Total</th>
-                                                    <th>Status</th>
-                                                    <th>Action</th>
+                                                    <th class="text-center">Order ID</th>
+                                                    <th class="text-center">Customer ID</th>
+                                                    <th class="text-center">Order Date</th>
+                                                    <th class="text-center">Total</th>
+                                                    <th class="text-left">Status</th>
+                                                    <th class="text-center">Action</th>
                                                 </tr>
                                             </thead>
+                                            <%
+                                               List<OrderDTO> orderList = (List<OrderDTO>) request.getAttribute("LIST_ORDER");
+                                               if (orderList != null) {
+                                                   for (OrderDTO order : orderList) {
+                                            %>
                                             <tbody id="tableBody">
                                                 <tr>
-                                                    <td>1</td>
-                                                    <td>2024-06-01</td>
-                                                    <td>5000$</td>
-                                                    <td><span class="badge badge-success">True</span></td>
-                                                    <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <a href="AD_EditOrder.jsp" class="btn btn-sm btn-dark">Edit</a>
+                                                    <td class="text-center"><%= order.getOrderID() %></td>
+                                                    <td class="text-center"><%= order.getCustID() %></td>
+                                                    <td class="text-center"><%= order.getOrderDate() %></td>
+                                                    <td class="text-center"><%= order.getTotal() %></td>
+                                                    <td class="text-left">
+                                                        <span class="badge 
+                                                              <%= order.getStatus() == 0 ? "badge-danger" : 
+                                                                  order.getStatus() == 1 ? "badge-warning" : 
+                                                                  order.getStatus() == 2 ? "badge-info" : 
+                                                                  order.getStatus() == 3 ? "badge-success" : "" %>">
+                                                            <%= order.getStatus() == 0 ? "Canceled" : 
+                                                                order.getStatus() == 1 ? "In processing" : 
+                                                                order.getStatus() == 2 ? "Delivering" : 
+                                                                order.getStatus() == 3 ? "Completed" : "" %>
+                                                        </span>
+                                                    </td>  
+                                                    <td> 
+                                                        <!-- VIEW DETAIL -->
+                                                        <a href="MainController?action=ViewOrderDetail&orderID=<%= order.getOrderID()%>" class="btn btn-sm btn-light">View Detail</a> 
+                                                        <!-- DELETE -->
+                                                        <% 
+                                                            if (order.getStatus() == 0 || order.getStatus() == 3){  
+                                                        %>
+                                                        <a href="#" class="btn btn-sm btn-danger disabled" aria-disabled="true">Delete</a> 
+                                                        <% 
+                                                            } else {  
+                                                        %>
+                                                        <a href="MainController?action=DeleteOrder&orderID=<%= order.getOrderID()%>" class="btn btn-sm btn-danger">Delete</a> 
+                                                        <% 
+                                                            }
+                                                        %>
+                                                        <!-- EDIT -->
+                                                        <a href="MainController?action=EditOrder&orderID=<%= order.getOrderID()%>" class="btn btn-sm btn-dark">Edit</a>
+
                                                     </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>2024-06-01</td>
-                                                    <td>5000$</td>
-                                                    <td><span class="badge badge-success">True</span></td>
-                                                    <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <a href="AD_EditOrder.jsp" class="btn btn-sm btn-dark">Edit</a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td>2024-06-01</td>
-                                                    <td>5000$</td>
-                                                    <td><span class="badge badge-success">True</span></td>
-                                                    <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <a href="AD_EditOrder.jsp" class="btn btn-sm btn-dark">Edit</a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>3</td>
-                                                    <td>2024-06-01</td>
-                                                    <td>5000$</td>
-                                                    <td><span class="badge badge-success">True</span></td>
-                                                    <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <a href="AD_EditOrder.jsp" class="btn btn-sm btn-dark">Edit</a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>4</td>
-                                                    <td>2024-06-01</td>
-                                                    <td>5000$</td>
-                                                    <td><span class="badge badge-success">True</span></td>
-                                                    <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <a href="AD_EditOrder.jsp" class="btn btn-sm btn-dark">Edit</a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>5</td>
-                                                    <td>2024-06-01</td>
-                                                    <td>5000$</td>
-                                                    <td><span class="badge badge-warning">False</span></td>
-                                                    <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <a href="AD_EditOrder.jsp" class="btn btn-sm btn-dark">Edit</a>
-                                                    </td>
-                                                </tr>
-                                                
-                                                
-                                                
+                                                </tr>                                        
                                             </tbody>
+                                            <% 
+                                                    }
+                                                }
+                                            %>
                                         </table>
                                         <hr>
                                         <!-- Pagination -->
@@ -239,15 +239,14 @@
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="confirmDeleteModalLabel">Xác nhận Xóa</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Delete</h5>
                                     </div>
                                     <div class="modal-body">
-                                        Bạn có chắc chắn muốn xóa mục này không?
+                                        Are you sure you want to delete this user?
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                                        <button type="button" class="btn btn-danger" id="confirmDeleteButton">Xóa</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="button" class="btn btn-danger" id="confirmDeleteButton">Confirm</button>
                                     </div>
                                 </div>
                             </div>
@@ -269,9 +268,6 @@
 
         <script>
             let ascending = true;
-
-
-
 
             document.getElementById('entriesSelect').addEventListener('change', function () {
                 const numEntries = parseInt(this.value);
@@ -341,8 +337,8 @@
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    
-                                       
+
+
     </body>
-    
+
 </html>

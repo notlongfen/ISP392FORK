@@ -47,6 +47,16 @@ public class OrderDTO {
         this.note = note;
     }
 
+    public OrderDTO(int orderID, int status, double total, Date orderDate, int custID) {
+        this.orderID = orderID;
+        this.status = status;
+        this.total = total;
+        this.orderDate = orderDate;
+        this.custID = custID;
+    }
+    
+    
+
     public int getOrderID() {
         return orderID;
     }
