@@ -510,37 +510,6 @@ public class CategoryDAO {
         return check;
     }
 
-    public boolean checkParentID(int parentID) throws SQLException {
-        boolean check = false;
-        Connection conn = null;
-        PreparedStatement ptm = null;
-        ResultSet rs = null;
-        try {
-            conn = DbUtils.getConnection();
-            if (conn != null) {
-                ptm = conn.prepareStatement(CHECK_PARENT_ID);
-                ptm.setInt(1, parentID);
-                rs = ptm.executeQuery();
-                if (rs.next()) {
-                    check = true;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (rs != null) {
-                rs.close();
-            }
-            if (ptm != null) {
-                ptm.close();
-            }
-            if (conn != null) {
-                conn.close();
-            }
-        }
-        return check;
-    }
-
     public List<ChildrenCategoryDTO> getChildrenCategories(int parentID) throws SQLException {
         List<ChildrenCategoryDTO> list = new ArrayList<ChildrenCategoryDTO>();
         Connection conn = null;

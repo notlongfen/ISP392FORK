@@ -114,17 +114,21 @@ public class MainController extends HttpServlet {
     private static final String SEARCH_PAGE_VIEW = "SearchCategory.jsp";
     private static final String SEARCH_CATEGORY = "Search_Category";
     private static final String SEARCH_CATEGORY_CONTROLLER = "SearchCategoryController";
+    
+    private static final String GET_ORDER_LIST = "Manage_Order";
+    private static final String GET_ORDER_LIST_CONTROLLER = "GetOrderListController";
 
-    private static final String SEARCH_ORDER_PAGE = "Search_Order_View";
-    private static final String SEARCH_ORDER_VIEW = "order.jsp";
     private static final String SEARCH_ORDER = "Search_Order";
     private static final String SEARCH_ORDER_CONTROLLER = "SearchOrderController";
-
-    private static final String FORGOT_PASSWORD_CONTROLLER = "ForgotPasswordController";
-    private static final String FORGOT_PASSWORD_PAGE = "Forgot_Password";
+    
+    private static final String VIEW_ORDER_DETAIL = "ViewOrderDetail";
+    private static final String VIEW_ORDER_DETAIL_CONTROLLER = "ViewOrderDetailController";
 
     private static final String EDIT_ORDER = "Edit_Order";
     private static final String EDIT_ORDER_CONTROLLER = "UpdateOrderController";
+    
+    private static final String FORGOT_PASSWORD_CONTROLLER = "ForgotPasswordController";
+    private static final String FORGOT_PASSWORD_PAGE = "Forgot_Password";
 
     private static final String VERIFY_TOKEN = "Verify_Token";
     private static final String VERIFY_TOKEN_CONTROLLER = "VerifyToken";
@@ -217,7 +221,6 @@ public class MainController extends HttpServlet {
                 url = REPLY_SUPPORT_PAGE_VIEW;
             } else if (ADD_PRODUCT_PAGE.equals(action)) {
                 url = ADD_PRODUCT_PAGE_VIEW;
-
             } else if (ADD_BRAND.equals(action)) {
                 url = ADD_BRAND_CONTROLLER;
             } else if (SEARCH_BRAND.equals(action)) {
@@ -256,8 +259,10 @@ public class MainController extends HttpServlet {
                 url = EDIT_CHILDRENCATEGORY_CONTROLLER;
             } else if (EDIT_CATEGORY.equals(action)) {
                 url = EDIT_CATEGORY_CONTROLLER;
-            } else if (SEARCH_ORDER_PAGE.equals(action)) {
-                url = SEARCH_ORDER_VIEW;
+            } else if (GET_ORDER_LIST.equals(action)) {
+                url = GET_ORDER_LIST_CONTROLLER;
+            } else if (VIEW_ORDER_DETAIL.equals(action)) {
+                url = VIEW_ORDER_DETAIL_CONTROLLER;
             } else if (SEARCH_ORDER.equals(action)) {
                 url = SEARCH_ORDER_CONTROLLER;
             } else if (DELETE_CATEGORY.equals(action)) {

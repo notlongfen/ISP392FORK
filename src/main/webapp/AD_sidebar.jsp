@@ -76,7 +76,7 @@
 
                 <% if (roleID == 2) { %> <!-- Shop Manager -->
                     <li class="nav-item mt-3">
-                        <button type="submit" class="nav-link btn btn-link" name="action" value="Order_List">
+                        <button type="submit" class="nav-link btn btn-link" name="action" value="Manage_Order">
                             <i class="fas fa-cash-register"></i>
                             <span>Orders</span>
                         </button>

@@ -51,7 +51,7 @@ public class ProductDAO {
     private static final String ADD_PRODUCT_CATEGORY = "INSERT INTO ProductBelongtoCDCategories (ProductID, CDCategoryID) VALUES (?, ?)";
     private static final String GET_CATEGORIES_BY_PRODUCT_ID = "SELECT c.* FROM Categories c INNER JOIN ProductBelongtoCDCategories pbc ON c.categoryID = pbc.CDCategoryID WHERE pbc.ProductID = ?";
     private static final String GET_PRODUCT_DETAILS_BY_ID = "SELECT * FROM ProductDetails WHERE ProductDetailsID LIKE ? AND status = 1";
-    
+
     public boolean addProduct(ProductDTO product) throws SQLException {
         boolean check = false;
         Connection conn = null;
@@ -110,7 +110,7 @@ public class ProductDAO {
         }
         return check;
     }
-    
+
     public ProductDetailsDTO getProductDetailsByID(int productDetailsID) throws SQLException {
         ProductDetailsDTO details = null;
         Connection conn = null;
@@ -118,11 +118,11 @@ public class ProductDAO {
         ResultSet rs = null;
         try {
             conn = DbUtils.getConnection();
-            if(conn!=null){
+            if (conn != null) {
                 ptm = conn.prepareStatement(GET_PRODUCT_DETAILS_BY_ID);
                 ptm.setInt(1, productDetailsID);
                 rs = ptm.executeQuery();
-                if(rs.next()){
+                if (rs.next()) {
                     int productID = rs.getInt("ProductID");
                     String color = rs.getString("color");
                     String size = rs.getString("size");
@@ -150,55 +150,54 @@ public class ProductDAO {
         return details;
     }
 
-  public boolean editProduct(int productID, String productName, String description, int numberOfPurchasing, int brandID, String[] categoryIDs, int status) throws SQLException, Exception {
-    Connection conn = null;
-    PreparedStatement ptm = null;
-    boolean check = false;
-    try {
-        conn = DbUtils.getConnection();
-        if (conn != null) {
-            conn.setAutoCommit(false);
-            ptm = conn.prepareStatement(EDIT_PRODUCT);
-            ptm.setString(1, productName);
-            ptm.setString(2, description);
-            ptm.setInt(3, numberOfPurchasing);
-            ptm.setInt(4, brandID);
-            ptm.setInt(5, status);
-            ptm.setInt(6, productID);
-            check = ptm.executeUpdate() > 0;
+    public boolean editProduct(int productID, String productName, String description, int numberOfPurchasing, int brandID, String[] categoryIDs, int status) throws SQLException, Exception {
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        boolean check = false;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                conn.setAutoCommit(false);
+                ptm = conn.prepareStatement(EDIT_PRODUCT);
+                ptm.setString(1, productName);
+                ptm.setString(2, description);
+                ptm.setInt(3, numberOfPurchasing);
+                ptm.setInt(4, brandID);
+                ptm.setInt(5, status);
+                ptm.setInt(6, productID);
+                check = ptm.executeUpdate() > 0;
 
-            if (check) {
-                ptm = conn.prepareStatement(DELETE_PRODUCT_CATEGORIES);
-                ptm.setInt(1, productID);
-                ptm.executeUpdate();
+                if (check) {
+                    ptm = conn.prepareStatement(DELETE_PRODUCT_CATEGORIES);
+                    ptm.setInt(1, productID);
+                    ptm.executeUpdate();
 
-                if (categoryIDs != null) {
-                    ptm = conn.prepareStatement(ADD_PRODUCT_CATEGORY);
-                    for (String categoryID : categoryIDs) {
-                        ptm.setInt(1, productID);
-                        ptm.setInt(2, Integer.parseInt(categoryID));
-                        ptm.executeUpdate();
+                    if (categoryIDs != null) {
+                        ptm = conn.prepareStatement(ADD_PRODUCT_CATEGORY);
+                        for (String categoryID : categoryIDs) {
+                            ptm.setInt(1, productID);
+                            ptm.setInt(2, Integer.parseInt(categoryID));
+                            ptm.executeUpdate();
+                        }
                     }
                 }
+                conn.commit();
             }
-            conn.commit();
+        } catch (Exception e) {
+            if (conn != null) {
+                conn.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
         }
-    } catch (Exception e) {
-        if (conn != null) {
-            conn.rollback();
-        }
-        e.printStackTrace();
-    } finally {
-        if (ptm != null) {
-            ptm.close();
-        }
-        if (conn != null) {
-            conn.close();
-        }
+        return check;
     }
-    return check;
-}
-
 
     public boolean deleteProduct(int productID) throws SQLException {
         boolean check = false;
@@ -733,38 +732,40 @@ public class ProductDAO {
         }
         return productDetail;
     }
+
     public boolean checkDuplicateProductDetail(int productID, String color, String size) throws SQLException {
-    boolean isDuplicate = false;
-    Connection conn = null;
-    PreparedStatement ptm = null;
-    ResultSet rs = null;
-    String query = "SELECT 1 FROM ProductDetails WHERE ProductID = ? AND color = ? AND size = ?";
-    try {
-        conn = DbUtils.getConnection();
-        if (conn != null) {
-            ptm = conn.prepareStatement(query);
-            ptm.setInt(1, productID);
-            ptm.setString(2, color);
-            ptm.setString(3, size);
-            rs = ptm.executeQuery();
-            if (rs.next()) {
-                isDuplicate = true;
+        boolean isDuplicate = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        String query = "SELECT 1 FROM ProductDetails WHERE ProductID = ? AND color = ? AND size = ?";
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(query);
+                ptm.setInt(1, productID);
+                ptm.setString(2, color);
+                ptm.setString(3, size);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    isDuplicate = true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
             }
         }
-    } catch (Exception e) {
-        e.printStackTrace();
-    } finally {
-        if (rs != null) {
-            rs.close();
-        }
-        if (ptm != null) {
-            ptm.close();
-        }
-        if (conn != null) {
-            conn.close();
-        }
+        return isDuplicate;
     }
-    return isDuplicate;
 
     public boolean updateQuantittyAfterCheckout(int productID, int quantity) throws SQLException {
         boolean result = false;
@@ -792,6 +793,4 @@ public class ProductDAO {
         }
         return result;
     }
-}
-
 }

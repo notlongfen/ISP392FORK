@@ -68,6 +68,7 @@ public class EditEmployeeController extends HttpServlet {
                 }
                 UserDTO user = new UserDTO(userID, userName, email, hashedPassword, roleID, phone, status);
                 boolean checkUpdate = dao.editEmployee(user);
+
                 if (checkUpdate) {
                     if(loginUser!=null && loginUser.getUserID() == userID){
                         loginUser.setUserName(userName);

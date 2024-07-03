@@ -52,7 +52,13 @@
     </head>
 
     <body id="page-top">
-
+        <%
+                    UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
+                    if ((loginUser == null || 2!=loginUser.getRoleID()) && (loginUser == null || 3!=loginUser.getRoleID()) ) {
+                        response.sendRedirect("US_SignIn.jsp");
+                        return;
+                    }
+        %>
         <div id="wrapper">
             <!-- Sidebar -->
             <%@include file="AD_sidebar.jsp" %>
@@ -106,15 +112,12 @@
                                                     }
                                                 %>
                                                 <div class="col-md-3">
-
                                                     <div class="input-group">
                                                         <input type="text" class="form-control" placeholder="Search..." name="search" value="<%= search%>">
                                                         <div class="input-group-append">
-                                                            <!-- <button class="btn btn-outline-secondary" type="submit" name="action" value="Search Support">Search</button> -->
-                                                            <input type="submit" name="action" value="Search Support">
+                                                             <button class="btn btn-outline-secondary" type="submit" name="action" value="Search Support">Search</button> 
                                                         </div>
                                                     </div>
-
                                                 </div>
                                             </div>
                                         </form>
@@ -170,10 +173,10 @@
                                                     <% } else { %>
                                             <a href="MainController?action=ReplySupport&supportID=<%=support.getSupportID()%>" class="btn btn-sm " style="background: #528CE0 ; color: #FFF">Reply</a></td>
 
-<!--                                            <form action="MainController" method="POST">
-                                                <input type="hidden" name="supportID" value="<%= support.getSupportID() %>"/>
-                                                <input type="submit" value="ReplySupport" name="action"/>
-                                            </form>-->
+                                            <!--                                            <form action="MainController" method="POST">
+                                                                                            <input type="hidden" name="supportID" value="<%= support.getSupportID() %>"/>
+                                                                                            <input type="submit" value="ReplySupport" name="action"/>
+                                                                                        </form>-->
                                             <% } %>
                                             </td>
                                             </tr>
@@ -330,7 +333,7 @@
             });
 
 
-//Select theo status
+    //Select theo status
             document.getElementById('statusSelect').addEventListener('change', function () {
                 const status = this.value;
                 const tableBody = document.getElementById('tableBody');
@@ -359,7 +362,7 @@
                 });
             });
 
-// Thêm sự kiện click vào nút xác nhận xóa trong modal
+    // Thêm sự kiện click vào nút xác nhận xóa trong modal
             document.getElementById('confirmDeleteButton').addEventListener('click', function () {
                 // Ẩn modal xác nhận xóa
                 $('#confirmDeleteModal').modal('hide');
