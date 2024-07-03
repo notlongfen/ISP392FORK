@@ -133,7 +133,8 @@ public class ProductDAO {
                     Date importDate = rs.getDate("importDate");
                     String image = rs.getString("image");
                     int status = rs.getInt("status");
-                    details = new ProductDetailsDTO(productDetailsID, productID, color, size, stockQuantity, price, importDate, image, status);
+                    details = new ProductDetailsDTO(productDetailsID, productID, color, size, stockQuantity, price,
+                            importDate, image, status);
                 }
             }
         } catch (Exception e) {
@@ -286,7 +287,8 @@ public class ProductDAO {
         return list;
     }
 
-    public boolean editProductDetails(int productDetailID, int stockQuantity, int price, Date importDate, String image, int detailStatus) throws SQLException {
+    public boolean editProductDetails(int productDetailID, int stockQuantity, int price, Date importDate, String image,
+            int detailStatus) throws SQLException {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -355,7 +357,8 @@ public class ProductDAO {
                 rs = ptm.executeQuery();
 
                 if (!rs.next()) {
-                    // No product details found for the given productID, so no need to delete anything
+                    // No product details found for the given productID, so no need to delete
+                    // anything
                     return true; // Consider this a successful operation
                 }
 
@@ -402,7 +405,8 @@ public class ProductDAO {
                     Date importDate = rs.getDate("importDate");
                     String image = rs.getString("image");
                     int status = rs.getInt("status");
-                    productDetailsList.add(new ProductDetailsDTO(productDetailID, productID, color, size, stockQuantity, price, importDate, image, status));
+                    productDetailsList.add(new ProductDetailsDTO(productDetailID, productID, color, size, stockQuantity,
+                            price, importDate, image, status));
                 }
             }
         } catch (Exception e) {
@@ -469,7 +473,8 @@ public class ProductDAO {
                     int numberOfPurchasing = rs.getInt("numberOfPurchasing");
                     int status = rs.getInt("status");
                     int brandID = rs.getInt("brandID");
-                    products.add(new ProductDTO(productID, productName, description, numberOfPurchasing, status, brandID));
+                    products.add(
+                            new ProductDTO(productID, productName, description, numberOfPurchasing, status, brandID));
                 }
             }
         } catch (Exception e) {
@@ -579,7 +584,8 @@ public class ProductDAO {
                     int status = rs.getInt("status");
                     int brandID = rs.getInt("BrandID");
 
-                    ProductDTO product = new ProductDTO(productID, productName, description, numberOfPurchasing, status, brandID);
+                    ProductDTO product = new ProductDTO(productID, productName, description, numberOfPurchasing, status,
+                            brandID);
                     products.add(product);
                 }
             }
@@ -715,7 +721,8 @@ public class ProductDAO {
                     Date importDate = rs.getDate("importDate");
                     String image = rs.getString("image");
                     int status = rs.getInt("status");
-                    productDetail = new ProductDetailsDTO(productID, color, size, stockQuantity, price, importDate, image, status);
+                    productDetail = new ProductDetailsDTO(productID, color, size, stockQuantity, price, importDate,
+                            image, status);
                     productDetail.setProductDetailsID(productDetailID);
                 }
             }

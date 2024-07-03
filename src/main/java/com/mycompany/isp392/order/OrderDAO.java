@@ -239,7 +239,7 @@ public class OrderDAO {
                 int productID = rs.getInt("productID");
                 int quantity = rs.getInt("quantity");
                 int unitPrice = rs.getInt("unitPrice");
-                listOrderDetails.add(new OrderDetailsDTO(productDetailsID, orderID, productID, quantity, unitPrice));
+                listOrderDetails.add(new OrderDetailsDTO(productDetailsID,orderID, productID, quantity, unitPrice));
             }
         } catch (Exception e) {
             e.printStackTrace();
