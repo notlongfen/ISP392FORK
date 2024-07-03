@@ -38,9 +38,9 @@
 
                     <div class="container-fluid" id="container-wrapper">
 
-                        <div class="form-container" style="height: 300px">
+                        <div class="form-container">
                             <h2 class="text-center" style="color: #000; font-weight: bold;">Edit Brand</h2>
-                            <form action="MainController" method="post">
+                            <form action="MainController" method="post" enctype="multipart/form-data">
                                 <div class="form-row">
                                     <div class="form-group col-md-8 mt-xl-5" style="margin-left: 100px;">
                                         <label for="brand">Brand Name</label>
@@ -53,7 +53,10 @@
                                         <input type="hidden" name="brandID" value="<%= brand.getBrandID() %>">
                                         <% } %>
                                     </div>
-
+                                    <div class="form-group col-md-8 mt-xl-5" style="margin-left: 100px;">
+                                        <label for="brandImage">Brand Image</label>
+                                        <input type="file" class="form-control" id="brandImage" name="brandImage" style="width: 550px">
+                                    </div>
                                 </div>
                                 <div class="form-group text-center">
                                     <button type="submit" class="btn btn-danger btn-custom" name="action" value="Edit_Brand">Submit</button>

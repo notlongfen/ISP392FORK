@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import utils.DbUtils;
 import java.sql.ResultSet;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProductDAO {
 
@@ -273,8 +275,8 @@ public class ProductDAO {
                 while (rs.next()) {
                     String Name = rs.getString("brandName");
                     int status = rs.getInt("status");
-
-                    list.add(new BrandDTO(brandID, Name, status));
+                    String image = rs.getString("image");
+                    list.add(new BrandDTO(brandID, Name, image, status));
                 }
             }
 
@@ -767,30 +769,38 @@ public class ProductDAO {
         return isDuplicate;
     }
 
-    public boolean updateQuantittyAfterCheckout(int productID, int quantity) throws SQLException {
-        boolean result = false;
+    public Map<Integer, Date> getLatestImportDates() throws SQLException {
+        Map<Integer, Date> latestImportDates = new HashMap<>();
         Connection conn = null;
-        PreparedStatement stm = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+
+        String sql = "SELECT productID, MAX(importDate) AS latestImportDate FROM ProductDetails GROUP BY productID";
+
         try {
             conn = DbUtils.getConnection();
             if (conn != null) {
-                String query = "UPDATE ProductDetails SET stockQuantity = stockQuantity - ? WHERE ProductID = ?";
-                stm = conn.prepareStatement(query);
-                stm.setInt(1, quantity);
-                stm.setInt(2, productID);
-                int value = stm.executeUpdate();
-                result = value > 0 ? true : false;
+                ptm = conn.prepareStatement(sql);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    int productID = rs.getInt("productID");
+                    Date latestImportDate = rs.getDate("latestImportDate");
+                    latestImportDates.put(productID, latestImportDate);
+                }
             }
-        } catch (Exception e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         } finally {
-            if (stm != null) {
-                stm.close();
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
             }
             if (conn != null) {
                 conn.close();
             }
         }
-        return result;
+        return latestImportDates;
     }
 }

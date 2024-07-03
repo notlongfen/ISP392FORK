@@ -109,6 +109,7 @@
                                                     <th class="text-center">
                                                         <button class="btn p-0" onclick="sortTable()">Brand Name <span id="sortIconProduct">▲</span></button>
                                                     </th>
+                                                    <th class="text-center">Image</th>
                                                     <th class="text-center">Status</th>
                                                     <th class="text-center">Action</th>
                                                 </tr>
@@ -121,6 +122,7 @@
                                                 <tr>
                                                     <td class="text-center"><%= brand.getBrandID() %></td>
                                                     <td class="text-center"><%= brand.getBrandName() %></td>
+                                                    <td class="text-center"><img src="<%= brand.getImage() %>" alt="Brand Image" style="max-width: 100px; max-height: 100px;"></td>
                                                     <td class="text-center"><span class="badge <%= brand.getStatus() == 1 ? "badge-success" : "badge-warning" %>"><%= brand.getStatus() == 1 ? "Available" : "Deleted" %></span></td>
                                                     <td class="text-center action-buttons">
                                                         <form action="MainController" method="post" style="display:inline;">
@@ -136,7 +138,7 @@
                                                 } else {
                                                 %>
                                                 <tr>
-                                                    <td colspan="4" class="text-center">No brands found</td>
+                                                    <td colspan="5" class="text-center">No brands found</td>
                                                 </tr>
                                                 <% 
                                                 }
@@ -265,7 +267,7 @@
                 const rows = Array.from(tableBody.rows);
 
                 rows.forEach(row => {
-                    const rowStatus = row.querySelector('td:nth-child(3) .badge').textContent.trim();
+                    const rowStatus = row.querySelector('td:nth-child(4) .badge').textContent.trim();
                     if (status === "Select Status") {
                         row.style.display = '';
                     } else if (rowStatus === status) {

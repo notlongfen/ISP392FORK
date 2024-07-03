@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public class MainController extends HttpServlet {
 
-    private static final String WELCOME = "US_SignIn.jsp";
+    private static final String WELCOME = "HomePageController";
 
     private static final String LOGIN = "Login";
     private static final String LOGIN_CONTROLLER = "LoginController";

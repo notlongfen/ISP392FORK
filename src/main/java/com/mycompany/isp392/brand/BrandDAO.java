@@ -1,35 +1,23 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.isp392.brand;
 
 import java.util.List;
-
 import utils.DbUtils;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-/**
- *
- * @author notlongfen
- */
 public class BrandDAO {
 
     private static final String SEARCH_BRAND = "SELECT * FROM Brands WHERE brandName LIKE ?";
     private static final String SEARCH_BRAND_BY_ID = "SELECT * FROM Brands WHERE brandID LIKE ?";
-    private static final String INSERT_BRAND = "INSERT INTO Brands(BrandName, status) VALUES(?,1)";
-    private static final String UPDATE_BRAND = "UPDATE Brands SET BrandName=? WHERE BrandID=?";
-    private static final String DELETE_BRAND = "UPDATE Brands SET status = 0 WHERE BrandID=?";
-    private static final String CHECK_BRAND = "SELECT BrandID FROM Brands WHERE brandName LIKE ?";
+    private static final String INSERT_BRAND = "INSERT INTO Brands(brandName, image, status) VALUES(?,?,1)";
+    private static final String UPDATE_BRAND = "UPDATE Brands SET brandName=?,Image=? WHERE brandID=?";
+    private static final String DELETE_BRAND = "UPDATE Brands SET status = 0 WHERE brandID=?";
+    private static final String CHECK_BRAND = "SELECT brandID FROM Brands WHERE brandName LIKE ?";
     private static final String GET_ALL_BRANDS = "SELECT * FROM Brands";
-    private static final String GET_BRAND = "SELECT * FROM Brands WHERE BrandID=?";
+    private static final String GET_BRAND = "SELECT * FROM Brands WHERE brandID=?";
 
     public List<BrandDTO> searchForBrand(String brandName) {
         List<BrandDTO> list = new ArrayList<>();
@@ -43,17 +31,37 @@ public class BrandDAO {
                 ptm.setString(1, "%" + brandName + "%");
                 rs = ptm.executeQuery();
                 while (rs.next()) {
-                    String Name = rs.getString("brandName");
                     int brandID = rs.getInt("brandID");
+                    String name = rs.getString("brandName");
+                    String image = rs.getString("image");
                     int status = rs.getInt("status");
-
-                    list.add(new BrandDTO(brandID, Name, status));
+                    list.add(new BrandDTO(brandID, name, image, status));
                 }
             }
-
         } catch (Exception e) {
-            // TODO: handle exception
             e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (ptm != null) {
+                try {
+                    ptm.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return list;
     }
@@ -67,24 +75,44 @@ public class BrandDAO {
             conn = DbUtils.getConnection();
             if (conn != null) {
                 ptm = conn.prepareStatement(SEARCH_BRAND_BY_ID);
-                // FIXME: Should I add the "%" here at the end of the brandID?
                 ptm.setInt(1, brandID);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
-                    String Name = rs.getString("brandName");
+                    String name = rs.getString("brandName");
+                    String image = rs.getString("image");
                     int status = rs.getInt("status");
-
-                    list.add(new BrandDTO(brandID, Name, status));
+                    list.add(new BrandDTO(brandID, name, image, status));
                 }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (ptm != null) {
+                try {
+                    ptm.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return list;
     }
 
-    public boolean addBrand(String brandName) throws SQLException {
+    public boolean addBrand(String brandName, String brandImage) throws SQLException {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -93,12 +121,11 @@ public class BrandDAO {
             if (conn != null) {
                 ptm = conn.prepareStatement(INSERT_BRAND);
                 ptm.setString(1, brandName);
+                ptm.setString(2, brandImage);
                 check = ptm.executeUpdate() > 0;
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(BrandDAO.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             if (ptm != null) {
                 ptm.close();
@@ -110,7 +137,7 @@ public class BrandDAO {
         return check;
     }
 
-    public boolean updateBrand(String brandName, int brandID) throws SQLException {
+    public boolean updateBrand(String brandName, String brandImage, int brandID) throws SQLException {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -119,13 +146,12 @@ public class BrandDAO {
             if (conn != null) {
                 ptm = conn.prepareStatement(UPDATE_BRAND);
                 ptm.setString(1, brandName);
-                ptm.setInt(2, brandID);
+                ptm.setString(2, brandImage);
+                ptm.setInt(3, brandID);
                 check = ptm.executeUpdate() > 0;
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(BrandDAO.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             if (ptm != null) {
                 ptm.close();
@@ -148,10 +174,8 @@ public class BrandDAO {
                 ptm.setInt(1, brandID);
                 check = ptm.executeUpdate() > 0;
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(BrandDAO.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             if (ptm != null) {
                 ptm.close();
@@ -183,13 +207,25 @@ public class BrandDAO {
             e.printStackTrace();
         } finally {
             if (rs != null) {
-                rs.close();
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
             if (ptm != null) {
-                ptm.close();
+                try {
+                    ptm.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
             if (conn != null) {
-                conn.close();
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return check;
@@ -209,27 +245,40 @@ public class BrandDAO {
                 while (rs.next()) {
                     int brandID = rs.getInt("brandID");
                     String brandName = rs.getString("brandName");
+                    String brandImage = rs.getString("image");
                     int status = rs.getInt("status");
-                    brands.add(new BrandDTO(brandID, brandName, status));
+                    brands.add(new BrandDTO(brandID, brandName, brandImage, status));
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             if (rs != null) {
-                rs.close();
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
             if (ptm != null) {
-                ptm.close();
+                try {
+                    ptm.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
             if (conn != null) {
-                conn.close();
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return brands;
     }
 
-    public BrandDTO getSpecificBrand(String brandID) throws SQLException {
+     public BrandDTO getSpecificBrand(String brandID) throws SQLException {
         BrandDTO brand = null;
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -243,21 +292,34 @@ public class BrandDAO {
                 rs = ptm.executeQuery();
                 if (rs.next()) {
                     String brandName = rs.getString("brandName");
+                    String brandImage = rs.getString("brandImage");
                     int status = rs.getInt("status");
-                    brand = new BrandDTO(Integer.parseInt(brandID), brandName, status);
+                    brand = new BrandDTO(Integer.parseInt(brandID), brandName, brandImage, status);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             if (rs != null) {
-                rs.close();
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
             if (ptm != null) {
-                ptm.close();
+                try {
+                    ptm.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
             if (conn != null) {
-                conn.close();
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return brand;

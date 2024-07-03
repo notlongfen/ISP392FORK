@@ -37,7 +37,20 @@
                     <input type="hidden" name="parentProductName" value="<%= parentProductName %>">
                     <div class="form-group">
                         <label for="color">Color</label>
-                        <input type="text" class="form-control" id="color" name="color" required>
+                        <select class="form-control" id="color" name="color" required>
+                            <option value="">Select Color</option>
+                            <option value="blue">Blue</option>
+                            <option value="green">Green</option>
+                            <option value="brown">Brown</option>
+                            <option value="gray">Gray</option>
+                            <option value="red">Red</option>
+                            <option value="white">White</option>
+                            <option value="pink">Pink</option>
+                            <option value="yellow">Yellow</option>
+                            <option value="black">Black</option>
+                            <option value="orange">Orange</option>
+                            <option value="navy">Navy</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="sizes">Size</label>

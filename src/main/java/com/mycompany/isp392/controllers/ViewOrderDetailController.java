@@ -27,7 +27,7 @@ public class ViewOrderDetailController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
-        OrderError error = new SupportError();
+        //OrderError error = new SupportError();
         UserDAO userDao = new UserDAO();
         SupportDAO supportDao = new SupportDAO();
         try {
@@ -41,8 +41,8 @@ public class ViewOrderDetailController extends HttpServlet {
                 request.setAttribute("PROCESS_SUPPORT", process);
                 url = SUCCESS;
             } else {
-                error.setError("UNABLE TO GET SUPPORT INFORMATION !");
-                request.setAttribute("SUPPORT_ERROR", error);
+              //  error.setError("UNABLE TO GET SUPPORT INFORMATION !");
+               // request.setAttribute("SUPPORT_ERROR", error);
             }
         } catch (Exception e) {
             log("Error at ViewSupportController: " + e.toString());
