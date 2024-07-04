@@ -115,6 +115,8 @@ public class MainController extends HttpServlet {
     private static final String SEARCH_PAGE_VIEW = "SearchCategory.jsp";
     private static final String SEARCH_CATEGORY = "Search_Category";
     private static final String SEARCH_CATEGORY_CONTROLLER = "SearchCategoryController";
+    private static final String SEARCH_CHILDREN_CATEGORY = "Search_Children_Category";
+    private static final String SEARCH_CHILDREN_CATEGORY_CONTROLLER = "SearchChildrenCategoryController";
 
     private static final String GET_ORDER_LIST = "Manage_Order";
     private static final String BACK_ORDER_LIST = "Back_To_OrderList";
