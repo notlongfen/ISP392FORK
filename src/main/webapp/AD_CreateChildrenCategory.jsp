@@ -4,6 +4,8 @@
     Author     : jojo
 --%>
 
+<%@page import="com.mycompany.isp392.category.*"%>
+<%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -26,10 +28,16 @@
             .form-group label {
                 font-weight: bold;
             }
+            .form-row {
+                display: flex;
+                align-items: center; /* This line centers elements vertically */
+            }
         </style>
     </head>
     <body id="page-top">
-
+        <%
+            Integer parentID = (Integer) session.getAttribute("PARENT_CATEGORY_ID");
+        %>
         <div id="wrapper">
             <!-- Sidebar -->
             <%@include file="AD_sidebar.jsp" %>
@@ -44,17 +52,39 @@
                     <div class="container-fluid" id="container-wrapper">
 
                         <div class="form-container">
-                            <h2 class="text-center" style="color: #000; font-weight: bold;">Create Category Children</h2>
-                            <form style="margin-top: 50px;">
-                                <div class="form-row">
-                                    <div class="form-group col-md-12">
-                                        <label for="productName" >Enter Category Children Name</label>
-                                        <input type="text" class="form-control" id="productName" style="margin-top: 10px;" placeholder="Enter Category Name">
+                            <h2 class="text-center" style="color: #000; font-weight: bold;">Create Child Category</h2>
+                            <form style="margin-top: 50px;" action="MainController" method="POST">
+                                <div class="form-row mb-3">
+                                    <div class="form-group col-md-6">
+                                        <label for="cdCategoryName" >Enter Child Category Name</label>
+                                        <input type="text" class="form-control" id="productName" name="cdCategoryName" style="margin-top: 10px;" placeholder="Enter Category Name" required="">
+                                        <input type="hidden" name="parentID" value="<%= parentID%>"/>
                                     </div>
-
                                 </div>
+<%--                                <div class="form-row mb-3">
+                                    <div class="form-group col-md-6">
+                                        <label for="parentID" >Select Parent Category</label>
+                                        <select class="form-select form-control" id="parentID" aria-label=".form-select-sm" 
+                                                style="width: 375px" name="parentID">
+                                            <%
+                                                CategoryDAO dao = new CategoryDAO();
+                                                List<CategoryDTO> list = (List<CategoryDTO>) dao.getActiveCategory();
+                                                if (list != null) {
+                                                    if (list.size() > 0) {
+                                                        for (CategoryDTO category : list) {
+
+                                            %>
+                                            <option value = <%=category.getCategoryID()%>><%=category.getCategoryName()%></option>
+                                            <%                                
+                                                        }
+                                                    }
+                                                }
+                                            %>
+                                        </select>
+                                    </div>
+                                </div>--%>
                                 <div class="form-group text-center" style="margin-top: 30px;">
-                                    <button type="submit" class="btn btn-danger btn-custom">Submit</button>
+                                    <button type="submit" name="action" value="Add_Children_Category" class="btn btn-danger btn-custom">Submit</button>
                                     <button type="reset" class="btn btn-secondary btn-custom">Reset</button>
                                 </div>
                             </form>

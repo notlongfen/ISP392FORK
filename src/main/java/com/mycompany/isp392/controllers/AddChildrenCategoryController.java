@@ -11,8 +11,8 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet(name = "AddChildrenCategoryController", urlPatterns = {"/AddChildrenCategoryController"})
 public class AddChildrenCategoryController extends HttpServlet {
 
-    private static final String ERROR = "addChildrenCategory.jsp";
-    private static final String SUCCESS = "login.jsp";
+    private static final String ERROR = "AD_CreateChildrenCategory.jsp";
+    private static final String SUCCESS = "SearchChildrenCategoryController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -24,7 +24,7 @@ public class AddChildrenCategoryController extends HttpServlet {
         try {
             String cdCategoryName = request.getParameter("cdCategoryName");
             int parentID = Integer.parseInt(request.getParameter("parentID"));
-
+            
             if (dao.checkChildrenCategoryDuplicate(cdCategoryName, parentID)) {
                 error.setCdCategoryNameError("This children category already exists.");
                 checkValidation = false;
@@ -35,7 +35,7 @@ public class AddChildrenCategoryController extends HttpServlet {
                 ChildrenCategoryDTO cdCategory = new ChildrenCategoryDTO(categoryID, cdCategoryName, parentID, 1);
                 boolean checkChildCategory = dao.addChildrenCategory(cdCategory);
                 if (checkChildCategory) {
-                    request.setAttribute("MESSAGE", "BRAND ADDED SUCCESSFULLY !");
+                    request.setAttribute("SUCCESS_MESSAGE", "CHILDREN CATEGORY ADDED SUCCESSFULLY !");
                     url = SUCCESS;
                 } else {
                     error.setError("UNABLE TO ADD CHILDREN CATEGORY TO DATABASE !");

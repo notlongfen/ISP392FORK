@@ -13,8 +13,8 @@ import jakarta.servlet.http.HttpServletResponse;
 public class AddCategoryController extends HttpServlet {
 
     //temp
-    private static final String ERROR = "addCategory.jsp";
-    private static final String SUCCESS = "login.jsp";
+    private static final String ERROR = "AD_CreateCategories.jsp";
+    private static final String SUCCESS = "SearchCategoryController";
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -37,7 +37,7 @@ public class AddCategoryController extends HttpServlet {
                 CategoryDTO category = new CategoryDTO(categoryID, categoryName, description, 1);
                 boolean checkCategory = dao.addCategory(category);
                 if(checkCategory){
-                   request.setAttribute("MESSAGE", "BRAND ADDED SUCCESSFULLY !");
+                   request.setAttribute("SUCCESS_MESSAGE", "CATEGORY ADDED SUCCESSFULLY !");
                     url = SUCCESS;
                 }else {
                     categoryError.setError("UNABLE TO ADD CATEGORY TO DATABASE !");

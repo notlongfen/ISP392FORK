@@ -58,7 +58,7 @@ public class AddEmployeeController extends HttpServlet {
                 boolean checkAddManager = dao.addEmployee(newUser);
 
                 if (checkAddManager) {
-                    request.setAttribute("MESSAGE", "EMPLOYEE ADDED SUCCESSFULLY !");
+                    request.setAttribute("SUCCESS_MESSAGE", "EMPLOYEE ADDED SUCCESSFULLY !");
                     url = SUCCESS;
                 } else {
                     userError.setError("UNABLE TO ADD EMPLOYEE TO DATABASE !");

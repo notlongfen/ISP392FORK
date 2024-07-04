@@ -6,46 +6,41 @@ package com.mycompany.isp392.controllers;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import com.mycompany.isp392.category.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.Date;
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.format.DateTimeFormatter;
-import com.mycompany.isp392.user.*;
 
 /**
  *
  * @author TTNHAT
  */
-@WebServlet(name = "EditCustomerController", urlPatterns = {"/EditCustomerController"})
-public class EditCustomerController extends HttpServlet {
+@WebServlet(name = "GetChildrenCategoryInfoController", urlPatterns = {"/GetChildrenCategoryInfoController"})
+public class GetChildrenCategoryInfoController extends HttpServlet {
 
-    private static final String ERROR = "AD_EditCustomer.jsp";
-    private static final String SUCCESS = "SearchUserController";
-
+    private static final String ERROR = "AD_ChildrenCategory.jsp";
+    private static final String SUCCESS = "AD_EditChildrenCategory.jsp";
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
-        UserError error = new UserError();
-        UserDAO dao = new UserDAO();
-        try { 
-            int userID = Integer.parseInt(request.getParameter("userID"));
-            int status = Integer.parseInt(request.getParameter("status"));
-            boolean checkUpdate = dao.updateCustomerStatus(userID, status);
-            if(checkUpdate){
-                request.setAttribute("SUCCESS_MESSAGE", "CUSTOMER EDITED SUCCESSFULLY !");
+        CategoryDAO dao = new CategoryDAO();
+        CategoryError error = new CategoryError();
+        try {
+            int cdCategoryID = Integer.parseInt(request.getParameter("cdCategoryID"));
+            ChildrenCategoryDTO cdCategory = dao.getChildrenCategoryInfoByID(cdCategoryID);
+            if (cdCategory != null) {
+                request.setAttribute("CHILDREN_CATEGORY", cdCategory);                
                 url = SUCCESS;
             } else {
-                error.setError("Unable to update database");
-                request.setAttribute("EDIT_ERROR", error);
+                error.setError("UNABLE TO GET CATEGORY INFO FROM DATABASE !");
+                request.setAttribute("CATEGORY_ERROR", error);
             }
         } catch (Exception e) {
-            log("Error at EditCustomerController: " + e.toString());
+            log("Error at GetChildrenCategoryInfoController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

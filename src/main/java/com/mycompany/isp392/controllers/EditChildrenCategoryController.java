@@ -6,11 +6,12 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 public class EditChildrenCategoryController extends HttpServlet {
 
-    private static final String ERROR = "SearchCategory.jsp";
-    private static final String SUCCESS = "SearchCategory.jsp";
+    private static final String ERROR = "AD_EditChildrenCategory.jsp";
+    private static final String SUCCESS = "SearchChildrenCategoryController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -19,13 +20,17 @@ public class EditChildrenCategoryController extends HttpServlet {
         CategoryError categoryError = new CategoryError();
 
         try {
+            HttpSession session = request.getSession();
             int cdCategoryID = Integer.parseInt(request.getParameter("cdCategoryID"));
             String newName = request.getParameter("categoryName");
+            int parentID = Integer.parseInt(request.getParameter("parentID"));
+            int newStatus = Integer.parseInt(request.getParameter("status"));
 
             CategoryDAO categoryDAO = new CategoryDAO();
-            boolean check = categoryDAO.updateChildrenCategory(cdCategoryID, newName);
+            boolean check = categoryDAO.updateChildrenCategory(cdCategoryID, newName, newStatus);
             if (check) {
-                request.setAttribute("MESSAGE", "INFORMATION UPDATED SUCCESSFULLY !");
+                session.setAttribute("PARENT_CATEGORY_ID", parentID);
+                request.setAttribute("SUCCESS_MESSAGE", "CHILDREN CATEGORY UPDATED SUCCESSFULLY !");
                 url = SUCCESS;
             } else {
                 categoryError.setError("UNABLE TO UPDATE INFORMATION !");

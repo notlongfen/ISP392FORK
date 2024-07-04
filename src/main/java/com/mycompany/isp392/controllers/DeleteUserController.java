@@ -35,7 +35,7 @@ public class DeleteUserController extends HttpServlet {
                     loginUser.setStatus(0);
                     session.setAttribute("LOGIN_USER", loginUser);
                 }
-                request.setAttribute("MESSAGE", "USER DELETED SUCCESSFULLY !");
+                request.setAttribute("SUCCESS_MESSAGE", "USER DELETED SUCCESSFULLY !");
                 url = SUCCESS;
             } else {
                 userError.setError("UNABLE TO DELETE USER !");

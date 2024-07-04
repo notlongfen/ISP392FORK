@@ -45,21 +45,21 @@
 
                         <div class="form-container">
                             <h2 class="text-center" style="color: #000; font-weight: bold;">Create Category</h2>
-                            <form>
+                            <form action="MainController" method="POST">
                                 <div class="form-row">
                                     <div class="form-group col-md-8">
-                                        <label for="productName">Enter Category Name</label>
-                                        <input type="text" class="form-control" id="productName" placeholder="Enter Category Name" style="width: 755px;">
+                                        <label for="categoryName">Enter Category Name</label>
+                                        <input type="text" class="form-control" id="categoryName" name="categoryName" required="" placeholder="Enter Category Name" style="width: 755px;">
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="description">Description</label>
-                                    <textarea class="form-control" id="description" rows="3" placeholder="Enter Description"></textarea>
+                                    <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter Description" required=""></textarea>
                                 </div>
 
                                 <div class="form-group text-center">
-                                    <button type="submit" class="btn btn-danger btn-custom">Submit</button>
+                                    <button type="submit" name="action" value="Add_Category" class="btn btn-danger btn-custom">Submit</button>
                                     <button type="reset" class="btn btn-secondary btn-custom">Reset</button>
                                 </div>
                             </form>

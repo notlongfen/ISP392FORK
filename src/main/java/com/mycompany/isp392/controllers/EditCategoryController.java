@@ -10,8 +10,8 @@ import java.sql.SQLException;
 
 public class EditCategoryController extends HttpServlet {
 
-    private static final String ERROR = "SearchCategory.jsp";
-    private static final String SUCCESS = "SearchCategory.jsp";
+    private static final String ERROR = "AD_EditCategories.jsp";
+    private static final String SUCCESS = "SearchCategoryController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -23,11 +23,23 @@ public class EditCategoryController extends HttpServlet {
             int categoryID = Integer.parseInt(request.getParameter("categoryID"));
             String newName = request.getParameter("categoryName");
             String newDescription = request.getParameter("description");
+            int newStatus = Integer.parseInt(request.getParameter("status"));
 
-            boolean check = categoryDAO.updateCategory(categoryID, newName, newDescription);
-            if (check) {
-                request.setAttribute("MESSAGE", "INFORMATION UPDATED SUCCESSFULLY !");
-                url = SUCCESS;
+            boolean checkCategory = categoryDAO.updateCategory(categoryID, newName, newDescription, newStatus);
+            if (checkCategory) {
+                if (newStatus == 0) {
+                    boolean checkChildren = categoryDAO.deleteAllChildren(categoryID);
+                    if (checkChildren) {
+                        request.setAttribute("SUCCESS_MESSAGE", "CATEGORY UPDATED SUCCESSFULLY !");
+                        url = SUCCESS;
+                    } else {
+                        categoryError.setError("UNABLE TO UPDATE INFORMATION !");
+                        request.setAttribute("CATEGORY_ERROR", categoryError);
+                    }
+                } else {
+                    request.setAttribute("SUCCESS_MESSAGE", "CATEGORY UPDATED SUCCESSFULLY !");
+                    url = SUCCESS;
+                }
             } else {
                 categoryError.setError("UNABLE TO UPDATE INFORMATION !");
                 request.setAttribute("CATEGORY_ERROR", categoryError);

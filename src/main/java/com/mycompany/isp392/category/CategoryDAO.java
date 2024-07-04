@@ -31,7 +31,7 @@ public class CategoryDAO {
     private static final String SEARCH_CATEGORIES = "SELECT * FROM Categories WHERE CategoriesName LIKE ? OR description LIKE ?";
     private static final String SEARCH_CHILDREN_CATEGORIES = "SELECT * FROM ChildrenCategories WHERE parentID = ?";
     private static final String UPDATE_CATEGORY = "UPDATE Categories SET CategoriesName = ?, Description = ?, status = ? WHERE CategoryID = ?";
-    private static final String UPDATE_CHILDREN_CATEGORY = "UPDATE ChildrenCategories SET CategoriesName = ? WHERE CDCategoryID = ?";
+    private static final String UPDATE_CHILDREN_CATEGORY = "UPDATE ChildrenCategories SET CategoriesName = ?, status = ? WHERE CDCategoryID = ?";
     private static final String CHECK_CATEGORY_DUPLICATE = "SELECT * FROM Categories WHERE CategoriesName LIKE ?";
     private static final String CHECK_CHILDREN_CATEGORY_DUPLICATE = "SELECT * FROM ChildrenCategories WHERE CategoriesName LIKE ? AND ParentID LIKE ?";
     private static final String CHECK_PARENT_ID = "SELECT * FROM  Categories WHERE CategoryID LIKE ? AND status = 1";
@@ -43,7 +43,9 @@ public class CategoryDAO {
     private static final String DELETE_ALL_CHILDREN = "UPDATE ChildrenCategories SET status = 0 WHERE ParentID = ?";
     private static final String GET_PARENT_ID = "SELECT ParentID FROM ChildrenCategories WHERE CDCategoryID = ?";
     private static final String GET_CATEGORY_INFO = "SELECT * FROM Categories WHERE CategoryID = ?";
-
+    private static final String GET_CHILDREN_CATEGORY_INFO = "SELECT * FROM ChildrenCategories WHERE CDCategoryID = ?";
+    private static final String CHECK_CHILDREN_COUNT = "SELECT COUNT(*) FROM ChildrenCategories WHERE ParentID = ?";
+    
     public boolean addCategory(CategoryDTO category) throws SQLException {
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -120,21 +122,38 @@ public class CategoryDAO {
         Connection conn = null;
         PreparedStatement ptmCategory = null;
         PreparedStatement ptmChildren = null;
+        PreparedStatement ptmCheckChildren = null;
+        ResultSet rs = null;
         boolean check = false;
         try {
             conn = DbUtils.getConnection();
             if (conn != null) {
                 conn.setAutoCommit(false);
 
-                ptmChildren = conn.prepareStatement(DELETE_ALL_CHILDREN);
-                ptmChildren.setInt(1, categoryID);
-                boolean checkChildren = ptmChildren.executeUpdate() > 0;
+                ptmCheckChildren = conn.prepareStatement(CHECK_CHILDREN_COUNT);
+                ptmCheckChildren.setInt(1, categoryID);
+                rs = ptmCheckChildren.executeQuery();
+                rs.next();
+                int oldChildCount = rs.getInt(1);
+            
+                if (oldChildCount > 0) {
+                    // If there are children, delete them first
+                    ptmChildren = conn.prepareStatement(DELETE_ALL_CHILDREN);
+                    ptmChildren.setInt(1, categoryID);
+                    ptmChildren.executeUpdate();
+                }
+                
+                ptmCheckChildren = conn.prepareStatement(CHECK_CHILDREN_COUNT);
+                ptmCheckChildren.setInt(1, categoryID);
+                rs = ptmCheckChildren.executeQuery();
+                rs.next();
+                int newChildCount = rs.getInt(1);
 
                 ptmCategory = conn.prepareStatement(DELETE_CATEGORY);
                 ptmCategory.setInt(1, categoryID);
                 boolean checkCategory = ptmCategory.executeUpdate() > 0;
 
-                if (checkChildren && checkCategory) {
+                if (newChildCount == 0 && checkCategory) {
                     conn.commit();
                     check = true;
                 } else {
@@ -416,7 +435,7 @@ public class CategoryDAO {
         }
         return childrenCategories;
     }
-    
+
     public List<ChildrenCategoryDTO> searchChildrenCategoriesByText(String searchText, int parentID) throws SQLException {
         List<ChildrenCategoryDTO> list = new ArrayList<ChildrenCategoryDTO>();
         Connection conn = null;
@@ -480,7 +499,7 @@ public class CategoryDAO {
         return check;
     }
 
-    public boolean updateChildrenCategory(int cdCategoryID, String newName) throws SQLException, ClassNotFoundException {
+    public boolean updateChildrenCategory(int cdCategoryID, String newName, int newStatus) throws SQLException, ClassNotFoundException {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -489,7 +508,8 @@ public class CategoryDAO {
             if (conn != null) {
                 ptm = conn.prepareStatement(UPDATE_CHILDREN_CATEGORY);
                 ptm.setString(1, newName);
-                ptm.setInt(2, cdCategoryID);
+                ptm.setInt(2, newStatus);
+                ptm.setInt(3, cdCategoryID);
                 check = ptm.executeUpdate() > 0;
             }
         } catch (SQLException e) {
@@ -627,7 +647,7 @@ public class CategoryDAO {
         return check;
     }
 
-     private static final String GET_CATEGORIES_BY_PRODUCT_ID_1= "SELECT cc.CDCategoryID, cc.CategoriesName, c.CategoriesName AS ParentName, c.categoryID AS ParentID FROM ChildrenCategories cc "
+    private static final String GET_CATEGORIES_BY_PRODUCT_ID_1 = "SELECT cc.CDCategoryID, cc.CategoriesName, c.CategoriesName AS ParentName, c.categoryID AS ParentID FROM ChildrenCategories cc "
             + "INNER JOIN ProductBelongtoCDCategories pbc ON cc.CDCategoryID = pbc.CDCategoryID "
             + "INNER JOIN Categories c ON cc.ParentID = c.CategoryID "
             + "WHERE pbc.ProductID = ?";
@@ -666,7 +686,7 @@ public class CategoryDAO {
         }
         return categories;
     }
-    
+
     public boolean deleteAllChildren(int parentID) throws SQLException {
         boolean check = false;
         Connection conn = null;
@@ -691,7 +711,7 @@ public class CategoryDAO {
         }
         return check;
     }
-    
+
     public int getParentCategoryStatus(int parentID) throws SQLException {
         int status = -1;
         Connection conn = null;
@@ -722,7 +742,7 @@ public class CategoryDAO {
         }
         return status;
     }
-    
+
     public int getParentID(int cdCategoryID) throws SQLException {
         int parentID = -1;
         ResultSet rs = null;
@@ -730,11 +750,11 @@ public class CategoryDAO {
         Connection conn = null;
         try {
             conn = DbUtils.getConnection();
-            if(conn != null){
+            if (conn != null) {
                 ptm = conn.prepareStatement(GET_PARENT_ID);
                 ptm.setInt(1, cdCategoryID);
                 rs = ptm.executeQuery();
-                if(rs.next()){
+                if (rs.next()) {
                     parentID = rs.getInt("ParentID");
                 }
             }
@@ -753,7 +773,7 @@ public class CategoryDAO {
         }
         return parentID;
     }
-       private static final String GET_CATEGORIES_BY_PRODUCT_ID = "SELECT c.CDCategoryID, c.CategoriesName FROM ChildrenCategories c "
+    private static final String GET_CATEGORIES_BY_PRODUCT_ID = "SELECT c.CDCategoryID, c.CategoriesName FROM ChildrenCategories c "
             + "INNER JOIN ProductBelongtoCDCategories pbc ON c.CDCategoryID = pbc.CDCategoryID "
             + "WHERE pbc.ProductID = ?";
 
@@ -789,22 +809,22 @@ public class CategoryDAO {
         }
         return categories;
     }
-    
-    public CategoryDTO getCategoryInfoByID(int categoryID) throws SQLException{
+
+    public CategoryDTO getCategoryInfoByID(int categoryID) throws SQLException {
         CategoryDTO category = null;
         ResultSet rs = null;
         PreparedStatement ptm = null;
         Connection conn = null;
-        try{
+        try {
             conn = DbUtils.getConnection();
-            if(conn!=null){
+            if (conn != null) {
                 ptm = conn.prepareStatement(GET_CATEGORY_INFO);
                 ptm.setInt(1, categoryID);
                 rs = ptm.executeQuery();
-                if(rs.next()){
+                if (rs.next()) {
                     String categoryName = rs.getString("CategoriesName");
                     String description = rs.getString("Description");
-                    int status = rs. getInt("status");
+                    int status = rs.getInt("status");
                     category = new CategoryDTO(categoryID, categoryName, description, status);
                 }
             }
@@ -822,5 +842,39 @@ public class CategoryDAO {
             }
         }
         return category;
+    }
+
+    public ChildrenCategoryDTO getChildrenCategoryInfoByID(int cdCategoryID) throws SQLException {
+        ChildrenCategoryDTO cdCategory = null;
+        ResultSet rs = null;
+        PreparedStatement ptm = null;
+        Connection conn = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_CHILDREN_CATEGORY_INFO);
+                ptm.setInt(1, cdCategoryID);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    String categoryName = rs.getString("CategoriesName");
+                    int parentID = rs.getInt("ParentID");
+                    int status = rs.getInt("status");
+                    cdCategory = new ChildrenCategoryDTO(cdCategoryID, categoryName, parentID, status);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return cdCategory;
     }
 }

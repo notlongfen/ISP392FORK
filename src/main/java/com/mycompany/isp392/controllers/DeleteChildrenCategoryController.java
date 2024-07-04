@@ -12,6 +12,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
@@ -21,8 +22,8 @@ import jakarta.servlet.http.HttpServletResponse;
 public class DeleteChildrenCategoryController extends HttpServlet {
 
     //fill out
-    private static final String ERROR = "SearchCategory.jsp";
-    private static final String SUCCESS = "SearchCategory.jsp";
+    private static final String ERROR = "AD_ChildrenCategory.jsp";
+    private static final String SUCCESS = "SearchChildrenCategoryController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -32,9 +33,13 @@ public class DeleteChildrenCategoryController extends HttpServlet {
         CategoryError error = new CategoryError();
         try {
             int cdCategoryID = Integer.parseInt(request.getParameter("cdCategoryID"));
+            int parentID = dao.getParentID(cdCategoryID);
+            
+            HttpSession session = request.getSession();
+            session.setAttribute("PARENT_CATEGORY_ID", parentID);
             boolean checkDelete = dao.deleteChildrenCategory(cdCategoryID);
             if (checkDelete) {
-                request.setAttribute("MESSAGE", "CHILDREN CATEGORY DELETED SUCCESSFULLY !");
+                request.setAttribute("SUCCESS_MESSAGE", "CHILDREN CATEGORY DELETED SUCCESSFULLY !");
                 url = SUCCESS;
             } else {
                 error.setError("UNABLE TO DELETE CHILDREN CATEGORY !");

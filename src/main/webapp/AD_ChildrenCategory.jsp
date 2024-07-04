@@ -4,12 +4,15 @@
     Author     : jojo
 --%>
 
+<%@page import="java.util.List"%>
+<%@page import="com.mycompany.isp392.user.*"%>
+<%@page import="com.mycompany.isp392.category.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Children Category</title>
+        <title>Children Categories</title>
         <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
         <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
         <link href="css/ruang-admin.min.css" rel="stylesheet">
@@ -43,7 +46,20 @@
         </style>
     </head>
     <body id="page-top">
-
+        <%
+           UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
+           if (loginUser == null || 2 != loginUser.getRoleID() || loginUser.getStatus() == 0) {
+                response.sendRedirect("US_SignIn.jsp");
+                return;
+            }
+            String search = request.getParameter("searchText");
+            if (search == null) {
+                search = "";
+            }
+            int parentID = (int) request.getAttribute("PARENT_CATEGORY_ID");
+            int parentStatus = (int) request.getAttribute("PARENT_CATEGORY_STATUS");
+            session.setAttribute("PARENT_CATEGORY_ID", parentID);
+        %>
         <div id="wrapper">
             <!-- Sidebar -->
             <%@include file="AD_sidebar.jsp" %>
@@ -59,11 +75,20 @@
 
                     <div class="container-fluid" id="container-wrapper">
                         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                            <h1 class="h3 mb-0 text-gray-900">Category Children</h1>
+                            <h1 class="h3 mb-0 text-gray-900">Children Categories</h1>
                         </div>
                         <div class="d-flex justify-content-end mb-4">
-                            <a href="AD_CreateChildrenCategory.jsp" class="btn btn-danger" style="background: #C43337;">Create Children Category</a>
-                            <!--<a href="CreateProduct.jsp" class="btn btn-danger" style="margin-left: 20px; background: #C43337; ">View products detail</a>-->
+                            <%
+                                if(parentStatus == 1){
+                            %>
+                            <a href="AD_CreateChildrenCategory.jsp" class="btn btn-danger" style="background: #C43337;">Add new Children Category</a>
+                            <%
+                                } else {
+                            %>
+                            <a href="#" class="btn btn-danger disabled" aria-disabled="true" style="background: #C43337;">Add new Children Category</a>
+                             <%
+                                }
+                            %>
                         </div>
                         <div class="row mb-3">
                             <!-- Invoice Example -->
@@ -73,7 +98,7 @@
                                         <!--<h6 class="m-0 font-weight-bold text-primary">Invoice</h6>-->
                                     </div>
                                     <div class="table-responsive">
-                                        <form>
+                                        <form action="MainController" method="POST">
                                             <div class="row mb-4 mx-2 justify-content-between">
                                                 <div class="col-md-3">
                                                     <div class="input-group">
@@ -90,29 +115,32 @@
                                                 <div class="col-md-3">
                                                     <select id="statusSelect" class="custom-select">
                                                         <option value="Select Status">Select Status</option>
-                                                        <option value="True">True</option>
-                                                        <option value="False">False</option>
+                                                        <option value="Active">Active</option>
+                                                        <option value="Inactive">Inactive</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <form>
-                                                        <div class="input-group">
-                                                            <input type="text" class="form-control" placeholder="Search...">
-                                                            <div class="input-group-append">
-                                                                <button class="btn btn-outline-secondary" type="button">Search</button>
-                                                            </div>
+                                                    <div class="input-group">
+                                                        <input type="hidden" name="parentID" value="<%= parentID%>" readonly=""/>
+                                                        <input type="text" name="searchText" value="<%= search%>"class="form-control" placeholder="Search...">
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-outline-secondary" type="submit" name="action" value="Search_Children_Category">Search</button>
                                                         </div>
-                                                    </form>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </form>
-
+                                        <%
+                                                List<ChildrenCategoryDTO> listChildCategory = (List<ChildrenCategoryDTO>) request.getAttribute("CHILD_CATEGORY_LIST");
+                                                if (listChildCategory != null) {
+                                                    if (listChildCategory.size() > 0){
+                                        %>   
                                         <table class="table align-items-center table-flush">
                                             <thead class="thead-light">
                                                 <tr>
                                                     <th>ID</th>
                                                     <th>
-                                                        <button class="btn p-0"  onclick="sortTable()">CD Category Name <span id="sortIconProduct">▲</span></button>
+                                                        <button class="btn p-0"  onclick="sortTable()">Name<span id="sortIconProduct">▲</span></button>
                                                     </th>
                                                     <th>Status</th>
                                                     <th>Action</th>
@@ -120,53 +148,53 @@
                                                 
                                             </thead>
                                             <tbody id="tableBody">
+                                                <%
+                                                    for (ChildrenCategoryDTO cdCategory : listChildCategory) {
+                                                %>
                                                 <tr>
-                                                    <td>C1</td>
-                                                    <td>Air Jordan 1 Low OG "Silver"</td>
-                                                    <td><span class="badge badge-warning">False</span></td>
+                                                    <td><%= cdCategory.getCdCategoryID()%></td>
+                                                    <td><%= cdCategory.getCategoryName()%></td>
                                                     <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <a href="EditProduct.jsp" class="btn btn-sm btn-dark">Edit</a>
+                                                        <span class="badge <%= (cdCategory.getStatus() == 1) ? "badge-success" : "badge-danger" %>">
+                                                            <%= (cdCategory.getStatus() == 1) ? "Active" : "Inactive" %>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                       <%
+                                                           if(cdCategory.getStatus() == 0){
+                                                       %>
+                                                       <a href="#" class="btn btn-sm btn-danger disabled" aria-disabled="true">Delete</a>
+                                                       <%
+                                                           } else {
+                                                       %>
+                                                       <a href="#" class="btn btn-sm btn-danger" onclick="showConfirmDeleteModal(<%= cdCategory.getCdCategoryID() %>)">Delete</a>
+                                                       <%
+                                                           }
+                                                            if(parentStatus == 1){
+                                                       %>
+                                                        <form action="MainController" method="POST" style="display:inline;">
+                                                            <input type="hidden" name="cdCategoryID" value="<%= cdCategory.getCdCategoryID()%>"/>
+                                                            <input type="hidden" name="action" value="GetChildrenCategoryInfo"/>
+                                                            <button type="submit" class="btn btn-sm btn-dark">Edit</button>
+                                                        </form>
+                                                        <%
+                                                            } else {
+                                                        %>
+                                                            <button type="" class="btn btn-sm btn-dark disabled" aria-disabled="true" style="pointer-events: none;">Edit</button>
+                                                        <%
+                                                            }
+                                                        %>
                                                     </td>
                                                 </tr>
-                                                <tr>
-                                                    <td>C2</td>
-                                                    <td>Air Jordan 1 Low OG "Silver"</td>
-                                                    <td><span class="badge badge-success">True</span></td>
-                                                    <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <a href="EditProduct.jsp" class="btn btn-sm btn-dark">Edit</a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>C3</td>
-                                                    <td>Air Jordan 1 Low OG "Silver"</td>
-                                                    <td><span class="badge badge-success">True</span></td>
-                                                    <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <a href="EditProduct.jsp" class="btn btn-sm btn-dark">Edit</a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>C4</td>
-                                                    <td>Air Jordan 1 Low OG "Silver"</td>
-                                                    <td><span class="badge badge-warning">False</span></td>
-                                                    <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <a href="EditProduct.jsp" class="btn btn-sm btn-dark">Edit</a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>C5</td>
-                                                    <td>Air Jordan 1 Low OG "Silver"</td>
-                                                    <td><span class="badge badge-success">True</span></td>
-                                                    <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <a href="EditProduct.jsp" class="btn btn-sm btn-dark">Edit</a>
-                                                    </td>
-                                                </tr>
+                                                <%
+                                                    }
+                                                %>
                                             </tbody>
                                         </table>
+                                            <%
+                                                    }
+                                                }
+                                            %>
                                         <hr>
                                         <!-- Pagination -->
                                         <nav aria-label="Page navigation">
@@ -221,15 +249,15 @@
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="confirmDeleteModalLabel">Xác nhận Xóa</h5>
+                                        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Delete</h5>
                                         <!--<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>-->
                                     </div>
                                     <div class="modal-body">
-                                        Bạn có chắc chắn muốn xóa mục này không?
+                                        Are you sure you want to delete this child category?
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                                        <button type="button" class="btn btn-danger" id="confirmDeleteButton">Xóa</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        <button type="button" class="btn btn-danger" id="confirmDeleteButton">Confirm</button>
                                     </div>
                                 </div>
                             </div>
@@ -240,6 +268,28 @@
             </div>
         </div>
 
+        <!-- Success Modal -->
+        <% if (request.getAttribute("SUCCESS_MESSAGE") != null) { %>
+        <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-success text-white">
+                        <h5 class="modal-title" id="successModalLabel">Success</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <span id="successMessage"></span>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% } %>
+                                        
         <!-- Scroll to top -->
         <a class="scroll-to-top rounded" href="#page-top">
             <i class="fas fa-angle-up"></i>
@@ -303,28 +353,49 @@
                     }
                 });
             });
-            document.querySelectorAll('.btn-danger').forEach(btn => {
-                btn.addEventListener('click', function () {
-                    // Hiển thị modal xác nhận xóa
-                    $('#confirmDeleteModal').modal('show');
+//            document.querySelectorAll('.btn-danger').forEach(btn => {
+//                btn.addEventListener('click', function () {
+//                    // Hiển thị modal xác nhận xóa
+//                    $('#confirmDeleteModal').modal('show');
+//
+//                    // Lưu trữ thông tin dòng cần xóa vào một thuộc tính data để sử dụng sau này
+//                    const rowToDelete = this.closest('tr');
+//                    $('#confirmDeleteButton').data('rowToDelete', rowToDelete);
+//                });
+//            });
+//
+//            document.getElementById('confirmDeleteButton').addEventListener('click', function () {
+//                // Ẩn modal xác nhận xóa
+//                $('#confirmDeleteModal').modal('hide');
+//
+//                // Lấy thông tin dòng cần xóa từ thuộc tính data đã lưu trữ
+//                const rowToDelete = $('#confirmDeleteButton').data('rowToDelete');
+//
+//                // Xóa dòng
+//                rowToDelete.remove();
+//            });
+             function showConfirmDeleteModal(cdCategoryID) {
+                // Store the user ID in a global variable or data attribute
+                document.getElementById('confirmDeleteButton').setAttribute('data-cdcategory-id', cdCategoryID);
+                // Show the modal
+                var confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+                confirmDeleteModal.show();
+            }
 
-                    // Lưu trữ thông tin dòng cần xóa vào một thuộc tính data để sử dụng sau này
-                    const rowToDelete = this.closest('tr');
-                    $('#confirmDeleteButton').data('rowToDelete', rowToDelete);
-                });
+            document.getElementById('confirmDeleteButton').addEventListener('click', function() {
+                var cdCategoryID = this.getAttribute('data-cdcategory-id');
+                var url = "MainController?action=Delete_ChildrenCategory&cdCategoryID=" + cdCategoryID;
+                window.location.href = url;
             });
-
-            document.getElementById('confirmDeleteButton').addEventListener('click', function () {
-                // Ẩn modal xác nhận xóa
-                $('#confirmDeleteModal').modal('hide');
-
-                // Lấy thông tin dòng cần xóa từ thuộc tính data đã lưu trữ
-                const rowToDelete = $('#confirmDeleteButton').data('rowToDelete');
-
-                // Xóa dòng
-                rowToDelete.remove();
+            
+            // Display success modal if message exists
+            $(document).ready(function () {
+                const successMessage = '<%= request.getAttribute("SUCCESS_MESSAGE") %>';
+                if (successMessage) {
+                    document.getElementById('successMessage').innerText = successMessage;
+                    $('#successModal').modal('show');
+                }
             });
-
         </script>
         <script src="vendor/jquery/jquery.min.js"></script>
         <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -335,5 +406,7 @@
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>

@@ -4,6 +4,7 @@
     Author     : jojo
 --%>
 
+<%@page import="com.mycompany.isp392.category.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -39,7 +40,9 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     </head>
     <body id="page-top">
-
+    <%
+        CategoryDTO category = (CategoryDTO) request.getAttribute("CATEGORY"); 
+    %>
         <div id="wrapper">
             <!-- Sidebar -->
             <%@include file="AD_sidebar.jsp" %>
@@ -54,23 +57,31 @@
                     <div class="container-fluid" id="container-wrapper">
                         <div class="form-container">
                             <h2 class="text-center mb-5" style="color: #000; font-weight: bold;">Edit Categories</h2>
-                            <form id="categoryForm">
+                            <form id="categoryForm" action="MainController" method="POST">
+                                <input type="hidden" name="categoryID" value="<%= category.getCategoryID()%>" readonly=""/>
                                 <div class="form-row">
                                     <div class="form-group col-md-8">
-                                        <label for="productName">Enter Category Name</label>
-                                        <input type="text" class="form-control" id="categoryName" value="Category Name Example" style="width: 755px;">
+                                        <label for="productName">Category Name</label>
+                                        <input type="text" class="form-control" id="categoryName" name="categoryName" value="<%= category.getCategoryName()%>" style="width: 755px;" required="">
                                     </div>
-
                                 </div>
 
                                 <div class="form-group">
                                     <label for="description">Description</label>
                                     <!-- Sử dụng defaultValue để lấy giá trị mặc định của textarea -->
-                                    <textarea class="form-control" id="description" rows="3" >This category is used for...</textarea>
+                                    <textarea class="form-control" name="description"  id="description" rows="3" required=""><%= category.getDescription()%></textarea>
+                                </div>
+                                
+                                <div class="form-group">
+                                        <label for="status">Status</label>
+                                        <select name="status" style="width: 375px" class="form-select form-control" id="status" aria-label=".form-select-sm">
+                                            <option value="0" <%= category.getStatus() == 0 ? "selected" : "" %>>Inactive</option>
+                                            <option value="1" <%= category.getStatus() == 1 ? "selected" : "" %>>Active</option>
+                                        </select>
                                 </div>
 
                                 <div class="form-group text-center">
-                                    <button type="submit" class="btn btn-danger btn-custom">Submit</button>
+                                    <button type="submit" class="btn btn-danger btn-custom" name="action"  value="Edit_Category">Submit</button>
                                     <button type="button" class="btn btn-secondary btn-custom" onclick="resetForm()">Reset</button>
                                 </div>
                             </form>

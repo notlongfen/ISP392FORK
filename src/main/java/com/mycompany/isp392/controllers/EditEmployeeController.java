@@ -78,6 +78,7 @@ public class EditEmployeeController extends HttpServlet {
                         loginUser.setStatus(status);
                         session.setAttribute("LOGIN_USER", loginUser);
                     }
+                    request.setAttribute("SUCCESS_MESSAGE", "EMPLOYEE EDITED SUCCESSFULLY !");
                     url = SUCCESS;
                 } else {
                     error.setError("Unable to update database");

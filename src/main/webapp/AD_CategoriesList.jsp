@@ -4,6 +4,9 @@
     Author     : jojo
 --%>
 
+<%@page import="java.util.List"%>
+<%@page import="com.mycompany.isp392.user.*"%>
+<%@page import="com.mycompany.isp392.category.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,7 +16,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="">
         <meta name="author" content="">
-        <title>CategoriesList</title>
+        <title>Categories List</title>
         <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
         <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
         <link href="css/ruang-admin.min.css" rel="stylesheet">
@@ -54,7 +57,18 @@
     </head>
 
     <body id="page-top">
-
+        <%
+           UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
+           if (loginUser == null || 2 != loginUser.getRoleID() || loginUser.getStatus() == 0) {
+                response.sendRedirect("US_SignIn.jsp");
+                return;
+            }
+            String search = request.getParameter("searchText");
+            if (search == null) {
+                search = "";
+            }
+            CategoryDAO dao = new CategoryDAO();
+        %>
         <div id="wrapper">
             <!-- Sidebar -->
             <%@include file="AD_sidebar.jsp" %>
@@ -73,7 +87,7 @@
                             <h1 class="h3 mb-0 text-gray-900">Categories</h1>
                         </div>
                         <div class="d-flex justify-content-end mb-4">
-                            <a href="CreateCategrories.jsp" class="btn btn-danger" style="background: #C43337;">Add Category</a>
+                            <a href="AD_CreateCategories.jsp" class="btn btn-danger" style="background: #C43337;">Add new Category</a>
                             <!--<a href="CreateProduct.jsp" class="btn btn-danger" style="margin-left: 20px; background: #C43337; ">View products detail</a>-->
                         </div>
                         <div class="row mb-3">
@@ -84,7 +98,7 @@
                                         <!--<h6 class="m-0 font-weight-bold text-primary">Invoice</h6>-->
                                     </div>
                                     <div class="table-responsive">
-                                        <form>
+                                        <form action="MainController" method="POST">
                                             <div class="row mb-4 mx-2 justify-content-between">
                                                 <div class="col-md-3">
                                                     <div class="input-group">
@@ -101,23 +115,25 @@
                                                 <div class="col-md-3">
                                                     <select id="statusSelect" class="custom-select">
                                                         <option value="Select Status">Select Status</option>
-                                                        <option value="True">True</option>
-                                                        <option value="False">False</option>
+                                                        <option value="Active">Active</option>
+                                                        <option value="Inactive">Inactive</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <form>
-                                                        <div class="input-group">
-                                                            <input type="text" class="form-control" placeholder="Search...">
-                                                            <div class="input-group-append">
-                                                                <button class="btn btn-outline-secondary" type="button">Search</button>
-                                                            </div>
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" name="searchText" value="<%= search%>" placeholder="Search...">
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-outline-secondary" type="submit" name="action" value="Search_Category">Search</button>
                                                         </div>
-                                                    </form>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </form>
-
+                                        <%
+                                                List<CategoryDTO> listCategory = (List<CategoryDTO>) request.getAttribute("CATEGORY_LIST");
+                                                if (listCategory != null) {
+                                                    if (listCategory.size() > 0){
+                                        %>    
                                         <table class="table align-items-center table-flush">
                                             <thead class="thead-light">
                                                 <tr>
@@ -135,108 +151,52 @@
                                                 </tr>
                                             </thead>
                                             <tbody id="tableBody">
+                                                <%
+                                                    for (CategoryDTO category : listCategory) {
+                                                %>
                                                 <tr>
-                                                    <td>1</td>
-                                                    <td>Men's Fashion</td>
-                                                    <td class="description">Clothing and accessories for men, including formal and casual wear.</td>
-                                                    <td><span class="badge badge-success">True</span></td>
+                                                    <td><%= category.getCategoryID()%></td>
                                                     <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <a href="EditProduct.jsp" class="btn btn-sm btn-dark">Edit</a>
+                                                        <form action="MainController" method="POST" style="display:inline;">
+                                                            <input type="hidden" name="action" value="Search_Children_Category">
+                                                            <input type="hidden" name="parentID" value="<%= category.getCategoryID()%>"/>
+                                                            <a href="javascript:void(0)" onclick="this.parentNode.submit();"><%= category.getCategoryName() %></a>
+                                                        </form>
                                                     </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td>Women's Fashion</td>
-                                                    <td class="description">Clothing and accessories for women, ranging from elegant dresses to everyday wear.</td>
-                                                    <td><span class="badge badge-success">True</span></td>
+                                                    <td class="description"><%= category.getDescription()%></td>
                                                     <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <a href="EditProduct.jsp" class="btn btn-sm btn-dark">Edit</a>
+                                                        <span class="badge <%= (category.getStatus() == 1) ? "badge-success" : "badge-danger" %>">
+                                                            <%= (category.getStatus() == 1) ? "Active" : "Inactive" %>
+                                                        </span>
                                                     </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>3</td>
-                                                    <td>Electronics</td>
-                                                    <td class="description">Gadgets and devices including smartphones, laptops, and home appliances.</td>
-                                                    <td><span class="badge badge-success">True</span></td>
-                                                   <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <a href="EditProduct.jsp" class="btn btn-sm btn-dark">Edit</a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>4</td>
-                                                    <td>Home Appliances</td>
-                                                    <td class="description">Essential home appliances like refrigerators, washing machines, and microwaves.</td>
-                                                    <td><span class="badge badge-success">True</span></td>
                                                     <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <a href="EditProduct.jsp" class="btn btn-sm btn-dark">Edit</a>
+                                                       <%
+                                                           if(category.getStatus() == 0){
+                                                       %>
+                                                       <a href="#" class="btn btn-sm btn-danger disabled" aria-disabled="true">Delete</a>
+                                                       <%
+                                                           } else {
+                                                       %>
+                                                       <a href="#" class="btn btn-sm btn-danger" onclick="showConfirmDeleteModal(<%= category.getCategoryID() %>)">Delete</a>
+                                                       <%
+                                                           }
+                                                       %>
+                                                       <form action="MainController" method="POST" style="display:inline;">
+                                                            <input type="hidden" name="categoryID" value="<%= category.getCategoryID()%>"/>
+                                                            <input type="hidden" name="action" value="GetCategoryInfo"/>
+                                                            <button type="submit" class="btn btn-sm btn-dark">Edit</button>
+                                                       </form>
                                                     </td>
                                                 </tr>
-                                                <tr>
-                                                    <td>5</td>
-                                                    <td>Sports Equipment</td>
-                                                    <td class="description">Gear and equipment for various sports and fitness activities.</td>
-                                                    <td><span class="badge badge-success">True</span></td>
-                                                    <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <a href="EditProduct.jsp" class="btn btn-sm btn-dark">Edit</a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>6</td>
-                                                    <td>Men</td>
-                                                    <td class="description">A wide selection of books across different genres and authors.</td>
-                                                    <td><span class="badge badge-warning">False</span></td>
-                                                    <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <a href="EditProduct.jsp" class="btn btn-sm btn-dark">Edit</a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>7</td>
-                                                    <td>Beauty & Personal Care</td>
-                                                    <td class="description">Products for skincare, haircare, and personal grooming.</td>
-                                                    <td><span class="badge badge-warning">False</span></td>
-                                                   <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <a href="EditProduct.jsp" class="btn btn-sm btn-dark">Edit</a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>8</td>
-                                                    <td>Toys & Games</td>
-                                                    <td class="description">Toys and games for children of all ages.</td>
-                                                    <td><span class="badge badge-warning">False</span></td>
-                                                    <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <a href="EditProduct.jsp" class="btn btn-sm btn-dark">Edit</a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>9</td>
-                                                    <td>Automotive</td>
-                                                    <td class="description">Car accessories and automotive parts for maintenance and upgrades.</td>
-                                                    <td><span class="badge badge-warning">False</span></td>
-                                                    <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <a href="EditProduct.jsp" class="btn btn-sm btn-dark">Edit</a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>10</td>
-                                                    <td>Groceries</td>
-                                                    <td class="description">Everyday grocery items including fresh produce, snacks, and beverages.</td>
-                                                    <td><span class="badge badge-warning">False</span></td>
-                                                    <td>
-                                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                                        <a href="EditProduct.jsp" class="btn btn-sm btn-dark">Edit</a>
-                                                    </td>
-                                                </tr>
+                                                <%
+                                                    }
+                                                %>
                                             </tbody>
                                         </table>
+                                            <%
+                                                    }
+                                                }
+                                            %>
                                         <hr>
                                         <!-- Pagination -->
                                         <nav aria-label="Page navigation">
@@ -291,15 +251,15 @@
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="confirmDeleteModalLabel">Xác nhận Xóa</h5>
+                                        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Delete</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        Bạn có chắc chắn muốn xóa mục này không?
+                                        Are you sure you want to delete this category?
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                                        <button type="button" class="btn btn-danger" id="confirmDeleteButton">Xóa</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="button" class="btn btn-danger" id="confirmDeleteButton">Confirm</button>
                                     </div>
                                 </div>
                             </div>
@@ -314,6 +274,28 @@
             </div>
         </div>
 
+        <!-- Success Modal -->
+        <% if (request.getAttribute("SUCCESS_MESSAGE") != null) { %>
+        <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-success text-white">
+                        <h5 class="modal-title" id="successModalLabel">Success</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <span id="successMessage"></span>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% } %>
+                                        
         <!-- Scroll to top -->
         <a class="scroll-to-top rounded" href="#page-top">
             <i class="fas fa-angle-up"></i>
@@ -376,29 +358,51 @@
                 });
             });
             // Thêm sự kiện click vào nút xóa trong mỗi dòng
-            document.querySelectorAll('.btn-danger').forEach(btn => {
-                btn.addEventListener('click', function () {
-                    // Hiển thị modal xác nhận xóa
-                    $('#confirmDeleteModal').modal('show');
-
-                    // Lưu trữ thông tin dòng cần xóa vào một thuộc tính data để sử dụng sau này
-                    const rowToDelete = this.closest('tr');
-                    $('#confirmDeleteButton').data('rowToDelete', rowToDelete);
-                });
-            });
+//            document.querySelectorAll('.btn-danger').forEach(btn => {
+//                btn.addEventListener('click', function () {
+//                    // Hiển thị modal xác nhận xóa
+//                    $('#confirmDeleteModal').modal('show');
+//
+//                    // Lưu trữ thông tin dòng cần xóa vào một thuộc tính data để sử dụng sau này
+//                    const rowToDelete = this.closest('tr');
+//                    $('#confirmDeleteButton').data('rowToDelete', rowToDelete);
+//                });
+//            });
 
 // Thêm sự kiện click vào nút xác nhận xóa trong modal
-            document.getElementById('confirmDeleteButton').addEventListener('click', function () {
-                // Ẩn modal xác nhận xóa
-                $('#confirmDeleteModal').modal('hide');
+//            document.getElementById('confirmDeleteButton').addEventListener('click', function () {
+//                // Ẩn modal xác nhận xóa
+//                $('#confirmDeleteModal').modal('hide');
+//
+//                // Lấy thông tin dòng cần xóa từ thuộc tính data đã lưu trữ
+//                const rowToDelete = $('#confirmDeleteButton').data('rowToDelete');
+//
+//                // Xóa dòng
+//                rowToDelete.remove();
+//            });
 
-                // Lấy thông tin dòng cần xóa từ thuộc tính data đã lưu trữ
-                const rowToDelete = $('#confirmDeleteButton').data('rowToDelete');
+            function showConfirmDeleteModal(categoryID) {
+                // Store the user ID in a global variable or data attribute
+                document.getElementById('confirmDeleteButton').setAttribute('data-category-id', categoryID);
+                // Show the modal
+                var confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+                confirmDeleteModal.show();
+            }
 
-                // Xóa dòng
-                rowToDelete.remove();
+            document.getElementById('confirmDeleteButton').addEventListener('click', function() {
+                var categoryID = this.getAttribute('data-category-id');
+                var url = "MainController?action=Delete_Category&categoryID=" + categoryID;
+                window.location.href = url;
             });
-
+            
+            // Display success modal if message exists
+            $(document).ready(function () {
+                const successMessage = '<%= request.getAttribute("SUCCESS_MESSAGE") %>';
+                if (successMessage) {
+                    document.getElementById('successMessage').innerText = successMessage;
+                    $('#successModal').modal('show');
+                }
+            });
         </script>
         <script src="vendor/jquery/jquery.min.js"></script>
         <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -409,5 +413,7 @@
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>
