@@ -49,12 +49,12 @@ public class AddToCartController extends HttpServlet {
             int unitPrice = Integer.parseInt(request.getParameter("unitPrice"));
             int quantity = Integer.parseInt(request.getParameter("quantity"));
             int price = quantity * unitPrice;
-            int cartID = cartDao.getCartByCustomer(custID);
+            int cartID = cartDao.getCartIDByCustomer(custID);
             
             //check if customer have cart already, if not, create new one
             if(cartID ==-1){
                 cartID = cartDao.getLatestCartID() + 1;
-                CartDTO cart = new CartDTO(cartID, 0, custID);
+                CartDTO cart = new CartDTO(cartID, 0, custID, 1);
                 boolean checkCart = cartDao.createCart(cart);
                 if(!checkCart){
                     error.setError("Unable to create new cart");

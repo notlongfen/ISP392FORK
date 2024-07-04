@@ -72,38 +72,38 @@
                 <div class="col-md-6">
                     <h2>Billing Info</h2>
                     <hr >
-                    <form id="billing-form">
+                    <form id="billing-form" action="MainController" method="POST">
                         <div class="mb-3">
                             <label for="name" class="form-label">Name*</label>
-                            <input type="text" style="color: black;" class="form-control" id="name" required>
+                            <input type="text" style="color: black;" class="form-control" id="name" name="name" required>
                         </div>
                         <div class="mb-3">
                             <label for="phone" class="form-label">Phone*</label>
-                            <input type="text" style="color: black;" class="form-control" id="phone" required>
+                            <input type="text" style="color: black;" class="form-control" id="phone" name="phone" required>
                         </div>
                         <div class="mb-3">
                             <label for="address" class="form-label">Address*</label>
-                            <input type="text" style="color: black;" class="form-control" name="" id="address" required>
+                            <input type="text" style="color: black;" class="form-control" name="" id="address" name="address" required>
                         </div>
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <label for="ward" class="form-label">Ward</label>
-                                <input type="text" style="color: black;" class="form-control" id="ward" value="Phường 13">
+                                <input type="text" style="color: black;" class="form-control" id="ward" value="Phường 13" name="ward">
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="district" class="form-label">District</label>
-                                <input type="text" style="color: black;" class="form-control" id="district" value="Quận 1">
+                                <input type="text" style="color: black;" class="form-control" id="district" value="Quận 1" name="district">
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="city" class="form-label">City</label>
-                                <input type="text" style="color: black;" class="form-control" id="city" value="Hồ Chí Minh">
+                                <input type="text" style="color: black;" class="form-control" id="city" value="Hồ Chí Minh" name="city">
                             </div>
                         </div>
                         <div class="mb-3">
                             <label for="note" class="form-label">Note</label>
-                            <textarea class="form-control" id="note" style="color: black;"></textarea>
+                            <textarea class="form-control" id="note" style="color: black;" name="note"></textarea>
                         </div>
-                    </form>
+                    
                 </div>
                 <div class="col-md-6 ">
                     <h2>Your Payment Detail</h2>
@@ -168,8 +168,10 @@
                     </div>
 
                     <div class="mb-3" >
+                        
                         <label for="coupon" class="form-label" >You have a coupon? Click here to enter your code</label>
-                        <input type="text" class="form-control" id="coupon">
+                        <input type="text" class="form-control" id="coupon" name="promotionID">
+                        
                     </div>
                     <ul class="list-group mb-3 no-borders">
                         <li class="list-group-item d-flex justify-content-between">
@@ -195,8 +197,9 @@
                     </div>
                     <div class="row justify-content-center">
                         <div class="col-auto">
-                            <button type="submit" form="billing-form" class="btn mb-5">Place Order</button>
+                            <button type="submit" form="billing-form" class="btn mb-5" name="action" value="Checkout">Place Order</button>
                         </div>
+                    </form>
                     </div>
                 </div>
             </div>

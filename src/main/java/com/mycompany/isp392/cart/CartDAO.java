@@ -32,6 +32,8 @@ public class CartDAO {
             + "JOIN Products p ON cd.ProductID = p.ProductID "
             + "WHERE cd.CartID = ?";
     private static final String UPDATE_CART_STATUS = "UPDATE Carts SET status = ? WHERE cartID = ?";
+    private static final String GET_CART_INFO_BY_CUSTOMER_ID = "SELECT * FROM Carts WHERE CustID = ?";
+    
 
     public boolean createCart(CartDTO cart) throws SQLException {
         boolean check = false;
@@ -255,7 +257,7 @@ public class CartDAO {
         return list;
     }
 
-    public int getCartByCustomer(int custID) throws SQLException {
+    public int getCartIDByCustomer(int custID) throws SQLException {
         int cartID = -1;
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -386,5 +388,41 @@ public class CartDAO {
             }
         }
         return check;
+    }
+
+    public CartDTO getCartByCustomerID(int custID) {
+        CartDTO cart = null;
+        Connection conn = null;
+        PreparedStatement pstm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            pstm = conn.prepareStatement(GET_CART_INFO_BY_CUSTOMER_ID);
+            pstm.setInt(1, custID);
+            rs = pstm.executeQuery();
+            if (rs.next()) {
+                int cartID = rs.getInt("CartID");
+                double totalPrice = rs.getDouble("totalPrice");
+                int status = rs.getInt("status");
+                cart = new CartDTO(cartID, totalPrice, custID, status);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pstm != null) {
+                    pstm.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return cart;
     }
 }

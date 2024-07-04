@@ -17,16 +17,17 @@ public class CartDTO {
     private int cartID;
     private double totalPrice;
     private int custID;
-
+    private int status;
     public CartDTO() {
         
     }
     
 
-    public CartDTO(int cartID, double totalPrice, int custID) {
+    public CartDTO(int cartID, double totalPrice, int custID, int status) {
         this.cartID = cartID;
         this.totalPrice = totalPrice;
         this.custID = custID;
+        this.status = status;
     }
 
     public int getCartID() {
@@ -41,6 +42,10 @@ public class CartDTO {
         return custID;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
     public void setCartID(int cartID) {
         this.cartID = cartID;
     }
@@ -53,6 +58,9 @@ public class CartDTO {
         this.custID = custID;
     }
 
+    public void setStatus(int status) {
+        this.status = status;
+    }
 
     @Override
     public String toString() {

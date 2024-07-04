@@ -16,7 +16,7 @@ public class CartError {
     public CartError() {
         this.quantityError = "";
         this.productError = "";
-        this.error = error; 
+        this.error = ""; 
     }
 
     public CartError(String quantityError, String productError, String error) {

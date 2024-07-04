@@ -6,6 +6,8 @@ package com.mycompany.isp392.controllers;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 
 import jakarta.servlet.ServletException;
@@ -18,6 +20,7 @@ import jakarta.servlet.http.HttpSession;
 import com.mycompany.isp392.cart.CartDAO;
 import com.mycompany.isp392.cart.CartDTO;
 import com.mycompany.isp392.cart.CartDetailsDTO;
+import com.mycompany.isp392.cart.CartError;
 import com.mycompany.isp392.order.OrderDAO;
 import com.mycompany.isp392.order.OrderDTO;
 import com.mycompany.isp392.order.OrderDetailsDTO;
@@ -93,9 +96,19 @@ public class CheckoutController extends HttpServlet {
         String url = ERROR;
         HttpSession session = request.getSession();
         CartDTO cart = (CartDTO) session.getAttribute("cart");
-        UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
         CartDAO cartDAO = new CartDAO();
-        // List<ProductDetailsDTO> products = (List<ProductDetailsDTO>) session.getAttribute("LIST_PRODUCT");
+        UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
+        if(cart == null){
+                cart = cartDAO.getCartByCustomerID(user.getUserID());
+                if(cart == null){
+                    url = ERROR;
+                    request.getRequestDispatcher(url).forward(request, response);
+                    CartError error = new CartError();
+                    error.setError("Your cart is empty");
+                }
+        }
+        // List<ProductDetailsDTO> products = (List<ProductDetailsDTO>)
+        // session.getAttribute("LIST_PRODUCT");
         String promotionIDS = request.getParameter("promotionID");
         int promotionID = 0;
         if(promotionIDS != null){

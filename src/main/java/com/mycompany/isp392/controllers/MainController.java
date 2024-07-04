@@ -204,6 +204,8 @@ public class MainController extends HttpServlet {
 
     private static final String DELETE_WISHLIST = "deleteWishlist";
     private static final String DELETE_WISHLIST_CONTROLLER = "DeleteWishlistController";
+    
+    private static final String CHECKOUT = "Checkout";
 
     private static final String ADD_WISHLIST = "AddToWishlist";
     private static final String ADD_WISHLIST_CONTROLLER = "AddWishlistController";

@@ -45,7 +45,7 @@ public class ViewCartController extends HttpServlet {
 int custID= 1;
         CartDAO dao = new CartDAO();
         try {
-            int cartID = dao.getCartByCustomer(custID);
+            int cartID = dao.getCartIDByCustomer(custID);
             if (cartID != -1) {
                 List<CartDetailsDTO> cartDetails = dao.getCartItems(cartID);
                 request.setAttribute("CART", cartDetails);
