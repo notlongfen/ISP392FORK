@@ -1,5 +1,8 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="java.util.List" %>
+<%@ page import="com.mycompany.isp392.promotion.PromotionDTO" %>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -40,7 +43,7 @@
             }
 
             .main_slider_content_r {
-                text-align: right; 
+                text-align: right;
                 top: 50px; /* ?i?u ch?nh v? trí c?a toàn b? n?i dung */
                 left: 80px; /* ?i?u ch?nh kho?ng cách t? l? trái */
 
@@ -63,18 +66,6 @@
                 margin-bottom: 5px;
             }
 
-            .red a {
-                background-color: #c53337; /* Màu nền nút đỏ */
-                color: white; /* Màu chữ trắng */
-                padding: 10px 20px; /* Khoảng cách bên trong nút */
-                text-decoration: none; /* Loại bỏ gạch chân */
-                border-radius: 5px;  /* Bo góc cho nút */
-                margin-top: 0px; /* Khoảng cách phía trên nút */
-                display: inline-block; /* Đảm bảo nút hiển thị như một khối */
-                width: 200px; /* Đặt chiều rộng cố định cho nút */
-                text-align: center; /* Canh giữa chữ trong nút */
-            }
-
             .grey a {
                 background-color: #D5D5D5; /* Màu nền nút đỏ */
                 color: black;
@@ -85,6 +76,19 @@
                 display: inline-block; /* Đảm bảo nút hiển thị như một khối */
                 width: 200px; /* Đặt chiều rộng cố định cho nút */
                 text-align: center; /* Canh giữa chữ trong nút */
+            }
+            button.red {
+                background-color: #c53337; /* Assuming this is the color used for "Summer Sale" */
+                color: white;
+                padding: 10px 20px;
+                text-decoration: none;
+                border-radius: 5px;
+                margin-top: 10px;
+                display: inline-block;
+                width: 200px;
+                text-align: center;
+                border: none; /* Adding border for similar look */
+                cursor: pointer; /* Adding cursor to indicate clickable button */
             }
 
 
@@ -98,61 +102,50 @@
             <%@include file="US_header.jsp" %>
 
             <!-- Slider -->
+            <%
+               List<PromotionDTO> promotionList = (List<PromotionDTO>) request.getAttribute("PROMOTION_LIST");
+               if (promotionList != null && !promotionList.isEmpty()) {
+                   for (PromotionDTO promotion : promotionList) {
+            %>
 
-            <div class="main_slider mt-1" style="background-image:url(images/s6.jpg)">
+            <div class="main_slider mt-1" style="background-image:images/<%= promotion.getImage() %>">
                 <div class="container fill_height">
                     <div class="row align-items-center fill_height">
                         <div class="col">
                             <div class="main_slider_content">
-                                <p class="collection_text">YOUR POINTS MUST BE HIGHER THAN 100 🌟</p>
-                                <h1 style="color: #FFF; font-size: 90px; margin-bottom: 40px;">SALE UP TO 50%</h1>
-                                <h8 class="detail_text">View detail product below</h8>
-                                <div class="grey shop_now_button"><a href="#" style="font-size: 20px;"><b>SAVE50</b></a></div>
-                                <div class="red shop_now_button"><a href="#">Get coupon</a></div>
+                                <p class="collection_text">YOUR POINTS MUST BE HIGHER THAN <%= promotion.getCondition()%> 🌟</p>
+                                <h1 style="color: #FFF; font-size: 90px; margin-bottom: 40px;">SALE UP TO <%= promotion.getDiscountPer()%>%</h1>
+                                <h8 class="detail_text"><%= promotion.getDescription() %></h8>
+                                <div class="grey shop_now_button"><a href="#" style="font-size: 20px;"><b><%= promotion.getPromotionName()%></b></a></div>
+                                <button onclick="copyPromotionName('<%= promotion.getPromotionName() %>')" class="red shop_now_button" id="copyPromotionName" style="font-size: 20px; margin-top: 20px;">Get Coupon</button>
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="main_slider mt-1" style="background-image:url(images/s7.jpg)">
-                <div class="container fill_height">
-                    <div class="row align-items-center fill_height">
-                        <div class="col">
-                            <div class="main_slider_content_r">
-                                <p class="collection_text">YOUR POINTS MUST BE HIGHER THAN 100 🌟</p>
-                                <h1 style="color: #FFF; font-size: 90px; margin-bottom: 40px; max-width: 500px; margin-left: 600px;">SALE UP TO 50%</h1>
-                                <h8 class="detail_text">Please redeem this coupon code on any product  </h8>
-                                <div class="grey shop_now_button" style="margin-left: 900px;"><a href="#" style="font-size: 20px; "><b>SAVE50</b></a></div>
-                                <div class="red shop_now_button" style="margin-left: 900px;"><a href="#">Get coupon</a></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="main_slider mt-1" style="background-image:url(images/s8.jpg)">
-                <div class="container fill_height">
-                    <div class="row align-items-center fill_height">
-                        <div class="col">
-                            <div class="main_slider_content">
-                                <h8 class="collection_text">Spring / Summer Collection 2024</h8>
-                                <h1 style="color: #FFF; font-size: 90px; margin-bottom: 40px;">SALE UP TO 50%</h1>
-                                <h8 class="detail_text">View detail product below</h8>
-                                <div class="grey shop_now_button"><a href="#" style="font-size: 20px;"><b>SAVE50</b></a></div>
-                                <div class="red shop_now_button"><a href="#">Get coupon</a></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <%
+                }
+            } else {
+            %>
+            <p>No promotions available at the moment.</p>
+            <% 
+                }
+            %> 
             <%@include file="US_footer.jsp" %>
         </div>
 
-
-
-
-
+        <script>
+            function copyPromotionName(promotionName) {
+                navigator.clipboard.writeText(promotionName).then(function () {
+                    alert('Promotion name copied to clipboard: ' + promotionName);
+                }, function (err) {
+                    console.error('Could not copy text: ', err);
+                });
+            }
+        </script>
 
         <script src="js/jquery-3.2.1.min.js"></script>
         <script src="styles/bootstrap4/popper.js"></script>

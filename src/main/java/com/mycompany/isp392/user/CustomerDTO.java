@@ -6,7 +6,7 @@ package com.mycompany.isp392.user;
 
 import java.util.Date;
 
-public class CustomerDTO{
+public class CustomerDTO extends UserDTO{
     private int CustID;
     private int points;
     private Date birthday;
@@ -27,6 +27,28 @@ public class CustomerDTO{
         this.ward = ward;
         this.address = address;
     }
+    
+    
+
+    public CustomerDTO(String userName, String email, int phone, int points, Date birthday, String city, String district, String ward, String address) {
+        super(userName, email, phone);
+        this.points = points;
+        this.birthday = birthday;
+        this.city = city;
+        this.district = district;
+        this.ward = ward;
+        this.address = address;    
+    }
+    
+    public CustomerDTO(int userID, String userName, String email, String address, String ward, String district, String city, Date birthday, int phone){
+        super(userID, userName, email, phone);
+        this.birthday = birthday;
+        this.city = city;
+        this.district = district;
+        this.ward = ward;
+        this.address = address;    
+    }
+    
 
     public CustomerDTO(int points, Date birthday, String city, String district, String ward, String address) {
         this.points = points;
@@ -36,6 +58,7 @@ public class CustomerDTO{
         this.ward = ward;
         this.address = address;
     }
+    
     
     public int getCustID() {
         return CustID;
@@ -92,4 +115,5 @@ public class CustomerDTO{
     public void setAddress(String address) {
         this.address = address;
     }
+
 }

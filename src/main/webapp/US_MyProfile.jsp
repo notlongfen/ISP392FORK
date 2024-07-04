@@ -3,7 +3,7 @@
     Created on : May 27, 2024, 7:56:56 PM
     Author     : jojo
 --%>
-
+<%@page import="com.mycompany.isp392.user.CustomerDTO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -102,7 +102,15 @@
     <body>
         <%@include file="US_header.jsp" %>
 
+
         <div class="container-fluid ">
+            <%
+                       CustomerDTO loginUser = (CustomerDTO) session.getAttribute("cust");   
+                       int custID = (int) session.getAttribute("custID");
+                       if (loginUser == null) {
+                           return;
+                   }
+            %>
             <div class="row ">
                 <!<!-- Profile Sidebar -->
                 <div class="col-lg-3 profile-sidebar " style="margin-top: 7rem;" >
@@ -110,7 +118,7 @@
                         <div>
                             <div class="user-side-bar" style="padding-left: 30px">
                                 <h5 class="card-title" style="padding-top: 20px" >Hello 🌟</h5>
-                                <h2 class="card-text" style="font-size: medium; font-weight: bold">Nguyen Van A</h2>
+                                <h2 class="card-text" style="font-size: medium; font-weight: bold"><%= loginUser.getUserName()%></h2>
                             </div>
                             <hr>
                             <div >
@@ -136,11 +144,13 @@
                             <h1 class="mb-4" left-element>My Profile</h1>
                         </div>
                         <div class="btn-format right-element btn-format.right-element button" >
-                            <a href="US_EditUserProfile.jsp"><button type="button" class="btn middle bg-white" style="border: 2px solid black;">
+                            
+                            <a href="MainController?action=Edit profile&id=<%=custID%>"><button type="button" class="btn middle bg-white" style="border: 2px solid black;">
                                     <h5 style="color: black">Edit Profile</h5>
                                 </button></a>
                             <button type="button" class="btn middle bg-white" style="border: 2px solid black;">
-                                <h5 style="color: black">🌟 Your points</h5></button>
+                                <h5 style="color: black">🌟<%= loginUser.getPoints()%> </h5>
+                            </button>
                         </div>
                         <div class="col-sm-6"></div>
                     </div>
@@ -148,7 +158,7 @@
                         <div class="mb-3">
                             <label for="fullName" class="form-label">FullName</label>
                             <div class="input-group">
-                                <input type="text" style="color: black; background-color: #fff" class="form-control" id="fullName" value="Nguyen Van A" disabled>
+                                <input type="text" style="color: black; background-color: #fff" class="form-control" id="fullName" value="<%= loginUser.getUserName()%>" disabled>
                                 <!--                            <span class="input-group-text edit-icon btn-sm" style="background-color: #fff"><i class="fas fa-pencil-alt"></i></span>-->
                             </div>
                         </div>
@@ -156,7 +166,7 @@
                         <div class="mb-3">
                             <label for="email" class="form-label">Email Address</label>
                             <div class="input-group">
-                                <input type="text" style="color: black; background-color: #fff" class="form-control" id="email" value="ABC@gmail.com" disabled>
+                                <input type="text" style="color: black; background-color: #fff" class="form-control" id="email" value="<%= loginUser.getEmail()%>" disabled>
                                 <!--                            <span class="input-group-text edit-icon btn-sm" style="background-color: #fff"><i class="fas fa-pencil-alt"></i></span>-->
                             </div>
                         </div>
@@ -164,7 +174,7 @@
                         <div class="mb-3">
                             <label for="address" class="form-label">Address</label>
                             <div class="input-group">
-                                <input type="text" style="color: black; background-color: #fff"class="form-control" id="address" value="123 Đường DEF, Quận 1, Thành phố Hồ Chí Minh" disabled>
+                                <input type="text" style="color: black; background-color: #fff"class="form-control" id="address" value="<%= loginUser.getAddress()%>" disabled>
                                 <!--                            <span class="input-group-text edit-icon btn-sm"style="background-color: #fff"><i class="fas fa-pencil-alt"></i></span>-->
                             </div>
                         </div>
@@ -174,21 +184,21 @@
                             <div class="col-sm-4">
                                 <label for="ward" class="form-label">Ward</label>
                                 <div style="display: flex; align-content: center;">
-                                    <input type="text" style="color: black; background-color: #fff" class="form-control" id="ward" value="Phường 13" disabled="">
+                                    <input type="text" style="color: black; background-color: #fff" class="form-control" id="ward" value="<%= loginUser.getWard()%>" disabled>
                                     <!--                                <span class="input-group-text edit-icon btn-sm"style="background-color: #fff"><i class="fas fa-pencil-alt"></i></span>-->
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <label for="district" class="form-label">District</label>
                                 <div style="display: flex; align-content: center;">
-                                    <input type="text"style="color: black; background-color: #fff" class="form-control" id="district" value="Quận 1" disabled="">
+                                    <input type="text"style="color: black; background-color: #fff" class="form-control" id="district" value="<%= loginUser.getDistrict()%>" disabled>
                                     <!--                                <span class="input-group-text edit-icon btn-sm"style="background-color: #fff"><i class="fas fa-pencil-alt"></i></span>-->
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <label for="city" class="form-label">City</label>
                                 <div style="display: flex; align-content: center;">
-                                    <input type="text"style="color: black;  background-color: #fff" class="form-control" id="city" value="Hồ Chí Minh" disabled="">
+                                    <input type="text"style="color: black;  background-color: #fff" class="form-control" id="city" value="<%= loginUser.getCity()%>" disabled>
                                     <!--                                <span class="input-group-text edit-icon btn-sm"style="background-color: #fff"><i class="fas fa-pencil-alt"></i></span>-->
                                 </div>
                             </div>
@@ -197,7 +207,7 @@
                         <div class="mb-3">
                             <label for="birthday" class="form-label">Birthday</label>
                             <div class="input-group">
-                                <input type="text"style="color: black; background-color: #fff" class="form-control" id="birthday" value="04/11/2004" disabled="">
+                                <input type="date"style="color: black; background-color: #fff" class="form-control" id="birthday" value="<%= loginUser.getBirthday()%>" disabled>
                                 <!--                            <span class="input-group-text edit-icon btn-sm"style="background-color: #fff"><i class="fas fa-pencil-alt"></i></span>-->
                             </div>
                         </div>
@@ -205,11 +215,10 @@
                         <div class="mb-3">
                             <label for="phoneNumber" class="form-label">Phone Number</label>
                             <div class="input-group">
-                                <input type="text" style="color: black; background-color: #fff"class="form-control" id="phoneNumber" value="0901234567" disabled=""> 
+                                <input type="int" style="color: black; background-color: #fff"class="form-control" id="phoneNumber" value="<%= loginUser.getPhone()%>" disabled> 
                                 <!--                            <span class="input-group-text edit-icon btn-sm"style="background-color: #fff"><i class="fas fa-pencil-alt"></i></span>-->
                             </div>
                         </div>
-
                     </form>
                 </div>
             </div>

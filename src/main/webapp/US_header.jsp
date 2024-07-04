@@ -127,7 +127,7 @@
                                     <ul class="navbar_menu" >
                                         <li><a href="US_index.jsp">home</a></li>
                                         <li><a href="US_AllProducts.jsp">shop</a></li>
-                                        <li><a href="US_PromotionPage.jsp">promotion</a></li>
+                                        <li><a href="MainController?action=View promotion">promotion</a></li>
                                         <li><a href="contact.html">contact</a></li>
                                     </ul>
                                     <ul class="navbar_user">
@@ -139,7 +139,7 @@
                                                 </form>
                                             </div>
                                         </li>
-                                        <li><a href="US_MyProfile.jsp"><i class="fa fa-user" aria-hidden="true"></i></a></li>
+                                        <li><a href="MainController?action=View profile"><i class="fa fa-user" aria-hidden="true"></i></a></li>
                                         <li class="checkout">
                                             <a href="#">
                                                 <i class="fa fa-shopping-cart" aria-hidden="true"></i>
