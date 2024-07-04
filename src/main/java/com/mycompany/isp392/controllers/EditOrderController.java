@@ -10,9 +10,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
 
-public class UpdateOrderController extends HttpServlet {
-    private static final String ERROR = "order.jsp";
-    private static final String SUCCESS = "order.jsp";
+public class EditOrderController extends HttpServlet {
+    private static final String ERROR = "AD_EditOrder.jsp";
+    private static final String SUCCESS = "AD_OrderList.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -22,7 +22,7 @@ public class UpdateOrderController extends HttpServlet {
             int orderID = Integer.parseInt(request.getParameter("orderID"));
             int status = Integer.parseInt(request.getParameter("status"));
             OrderDAO orderDAO = new OrderDAO();
-            boolean check = orderDAO.updateOrderStatus(orderID, status);
+            boolean check = orderDAO.editOrderStatus(orderID, status);
             if (check) {
                 url = "SendMailServlet";
                 request.setAttribute("REQFROM", "UpdateOrderController");

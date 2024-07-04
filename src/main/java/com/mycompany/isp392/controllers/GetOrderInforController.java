@@ -4,66 +4,51 @@
  */
 package com.mycompany.isp392.controllers;
 
+import com.mycompany.isp392.user.*;
+import com.mycompany.isp392.order.*;
 import java.io.IOException;
-import java.io.PrintWriter;
-
-import com.mycompany.isp392.order.OrderDAO;
-import com.mycompany.isp392.order.OrderDTO;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  *
- * @author notlongfen
+ * @author Oscar
  */
-@WebServlet(name = "UpdateOrderStatus", urlPatterns = {"/UpdateOrderStatus"})
-public class UpdateOrderStatus extends HttpServlet {
-    private static final String ERROR = "order.jsp";
-    private static final String SUCCESS = "order.jsp";
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+@WebServlet(name = "GetOrderInforController", urlPatterns = {"/GetOrderInforController"})
+public class GetOrderInforController extends HttpServlet {
+
+    private static final String ERROR = "AD_OrderList.jsp";
+    private static final String SUCCESS = "AD_EditOrder.jsp";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
+        OrderError error = new OrderError();
+        OrderDAO orderDao = new OrderDAO();
         try {
             int orderID = Integer.parseInt(request.getParameter("orderID"));
-            int status = Integer.parseInt(request.getParameter("status"));
-            OrderDAO orderDAO = new OrderDAO();
-            boolean check = orderDAO.updateOrderStatus(status, orderID);
-            if (check) {
-                request.setAttribute("MESSAGE", "Order Updated successfully!");
+            OrderDTO order = orderDao.getOrderInfoByID(orderID);
+            List<OrderDetailsDTO> orderDetailsList = orderDao.getListOrderDetailsByOrderID(orderID);
+            if (order != null) {
+                request.setAttribute("ORDER_INFOR", order);
+                request.setAttribute("ORDER_DETAIL_LIST", orderDetailsList);
                 url = SUCCESS;
+            } else {
+                error.setError("UNABLE TO GET ORDER INFORMATION !");
+                request.setAttribute("ORDER_ERROR", order);
             }
         } catch (Exception e) {
-            // TODO: handle exception
-        }finally{
+            log("Error at GetOrderInforController: " + e.toString());
+        } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet UpdateOrderStatus</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet UpdateOrderStatus at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
     }
+
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

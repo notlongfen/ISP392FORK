@@ -77,7 +77,7 @@
                             <h1 class="h3 mb-0 text-gray-900"><b>Orders</b></h1>
                         </div>
 
-                        <div class="row mb-3" style="margin-left: 200px; margin-top: 100px;">
+                        <div class="row mb-3" style="margin-left: 70px; margin-top: 70px;">
                             <!-- Invoice Example -->
                             <div class="col-xl-11">
                                 <div class="card">
@@ -128,12 +128,12 @@
                                         <table class="table align-items-center table-flush">
                                             <thead class="thead-light">
                                                 <tr>
-                                                    <th class="text-center">Order ID</th>
+                                                    <th class="text-center" >Order ID</th>
                                                     <th class="text-center">Customer ID</th>
                                                     <th class="text-center">Order Date</th>
                                                     <th class="text-center">Total</th>
                                                     <th class="text-left">Status</th>
-                                                    <th class="text-center">Action</th>
+                                                    <th class="text-left">Action</th>
                                                 </tr>
                                             </thead>
                                             <%
@@ -143,7 +143,7 @@
                                             %>
                                             <tbody id="tableBody">
                                                 <tr>
-                                                    <td class="text-center"><%= order.getOrderID() %></td>
+                                                    <td class="text-center"><a href="MainController?action=ViewOrderDetail&orderID=<%= order.getOrderID()%>"><%= order.getOrderID() %></a></td>
                                                     <td class="text-center"><%= order.getCustID() %></td>
                                                     <td class="text-center"><%= order.getOrderDate() %></td>
                                                     <td class="text-center"><%= order.getTotal() %></td>
@@ -160,11 +160,9 @@
                                                         </span>
                                                     </td>  
                                                     <td> 
-                                                        <!-- VIEW DETAIL -->
-                                                        <a href="MainController?action=ViewOrderDetail&orderID=<%= order.getOrderID()%>" class="btn btn-sm btn-light">View Detail</a> 
                                                         <!-- DELETE -->
                                                         <% 
-                                                            if (order.getStatus() == 0 || order.getStatus() == 3){  
+                                                            if (order.getStatus() == 0 || order.getStatus() == 3 || order.getStatus() == 2){  
                                                         %>
                                                         <a href="#" class="btn btn-sm btn-danger disabled" aria-disabled="true">Delete</a> 
                                                         <% 

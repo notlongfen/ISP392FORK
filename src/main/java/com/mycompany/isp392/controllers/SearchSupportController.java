@@ -1,7 +1,6 @@
 package com.mycompany.isp392.controllers;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import com.mycompany.isp392.support.SupportDAO;
 import com.mycompany.isp392.support.SupportDTO;
@@ -11,6 +10,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "SearchSupportController", urlPatterns = {"/SearchSupportController"})
@@ -27,12 +27,14 @@ public class SearchSupportController extends HttpServlet {
             String search = request.getParameter("search");
             UserDAO userDAO = new UserDAO();
             SupportDAO supportDAO = new SupportDAO();
+            List<UserDTO> userList = new ArrayList<>();
             List<SupportDTO> supportList = supportDAO.searchSupport(search);
             if (supportList.size() > 0) {
                 for (SupportDTO support : supportList) {
                     UserDTO user = userDAO.getUserInfo(support.getSupportID());
-                    request.setAttribute("user_" + support.getSupportID(), user);
+                    userList.add(user);
                 }
+                request.setAttribute("USER_LIST", userList);
                 request.setAttribute("LIST_SUPPORT", supportList);
                 request.setAttribute("MESSAGE", "SUPPORT FOUND !");
                 url = SUCCESS;

@@ -27,6 +27,14 @@ public class OrderDetailsDTO {
         this.unitPrice = unitPrice;
     }
     
+    public OrderDetailsDTO(int productDetailsID, int orderID, int quantity, int unitPrice) {
+        this.productDetailsID = productDetailsID;
+        this.orderID = orderID;
+        this.productID = productID;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+    }
+
     public int getProductDetailsID() {
         return productDetailsID;
     }

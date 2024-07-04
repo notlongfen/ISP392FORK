@@ -4,20 +4,21 @@
  */
 package com.mycompany.isp392.controllers;
 
-import com.mycompany.isp392.support.*;
 import com.mycompany.isp392.user.*;
+import com.mycompany.isp392.order.*;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  *
  * @author Oscar
  */
-@WebServlet(name = "ViewSupportController", urlPatterns = {"/ViewSupportController"})
+@WebServlet(name = "ViewOrderDetailController", urlPatterns = {"/ViewOrderDetailController"})
 public class ViewOrderDetailController extends HttpServlet {
 
     private static final String ERROR = "AD_OrderList.jsp";
@@ -27,25 +28,22 @@ public class ViewOrderDetailController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
-        //OrderError error = new SupportError();
-        UserDAO userDao = new UserDAO();
-        SupportDAO supportDao = new SupportDAO();
+        OrderError error = new OrderError();
+        OrderDAO orderDao = new OrderDAO();
         try {
-            int supportID = Integer.parseInt(request.getParameter("supportID"));
-            UserDTO user = userDao.getUserInfo(supportID);
-            SupportDTO support = supportDao.getSupportInfo(supportID);
-            ProcessSupportDTO process = supportDao.getInfoProcessSupport(supportID);
-            if (user != null) {
-                request.setAttribute("USER_SUPPORT", user);
-                request.setAttribute("SUPPORT_DETAIL", support);
-                request.setAttribute("PROCESS_SUPPORT", process);
+            int orderID = Integer.parseInt(request.getParameter("orderID"));
+            OrderDTO order = orderDao.getOrderInfo(orderID);
+            List<OrderDetailsDTO> orderDetailsList = orderDao.getListOrderDetailsByOrderID(orderID);
+            if (order != null) {
+                request.setAttribute("ORDER", order);
+                request.setAttribute("ORDER_DETAIL_LIST", orderDetailsList);
                 url = SUCCESS;
             } else {
-              //  error.setError("UNABLE TO GET SUPPORT INFORMATION !");
-               // request.setAttribute("SUPPORT_ERROR", error);
+                error.setError("UNABLE TO GET ORDER INFORMATION !");
+                request.setAttribute("ORDER_ERROR", order);
             }
         } catch (Exception e) {
-            log("Error at ViewSupportController: " + e.toString());
+            log("Error at ViewOrderDetailController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

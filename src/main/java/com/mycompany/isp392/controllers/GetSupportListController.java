@@ -39,7 +39,7 @@ public class GetSupportListController extends HttpServlet {
                 List<SupportDTO> supportList = supportDAO.getAllSupport();
                 List<UserDTO> userSupportList = userDAO.getAllUserSupport();
                 request.setAttribute("LIST_SUPPORT", supportList);
-                session.setAttribute("LIST_USER_SUPPORT", userSupportList);
+                request.setAttribute("LIST_USER_SUPPORT", userSupportList);
                 url = SUCCESS;
             }
         } catch (SQLException e) {

@@ -54,8 +54,29 @@ public class OrderDTO {
         this.orderDate = orderDate;
         this.custID = custID;
     }
+
+    public OrderDTO(int promotionID, String userName, String city, String district, String ward, String address, int phone, String note) {
+        this.promotionID = promotionID;
+        this.userName = userName;
+        this.city = city;
+        this.district = district;
+        this.ward = ward;
+        this.address = address;
+        this.phone = phone;
+        this.note = note;
+    }
     
-    
+    public OrderDTO(int promotionID, String userName, String city, String district, String ward, String address, int phone, String note, int status) {
+        this.promotionID = promotionID;
+        this.userName = userName;
+        this.city = city;
+        this.district = district;
+        this.ward = ward;
+        this.address = address;
+        this.phone = phone;
+        this.note = note;
+        this.status = status;
+    }
 
     public int getOrderID() {
         return orderID;
@@ -107,7 +128,7 @@ public class OrderDTO {
 
     public int getPhone() {
         return phone;
-    }   
+    }
 
     public String getNote() {
         return note;

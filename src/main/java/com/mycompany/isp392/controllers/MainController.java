@@ -59,13 +59,14 @@ public class MainController extends HttpServlet {
     private static final String SEND_EMAIL_CONTROLLER = "SendMailServlet";
 
     private static final String GET_SUPPORT_LIST = "Manage_Support";
+    private static final String BACK_SUPPORT_PAGE = "Back_To_SupportList";
     private static final String GET_SUPPORT_LIST_CONTROLLER = "GetSupportListController";
 
     private static final String VIEW_SUPPORT_PAGE = "ViewSupport";
     private static final String VIEW_SUPPORT_PAGE_CONTROLLER = "ViewSupportController";
 
     private static final String REPLY_SUPPORT_PAGE = "ReplySupport";
-    private static final String REPLY_SUPPORT_PAGE_VIEW = "AD_ReplySupport.jsp";
+    private static final String REPLY_SUPPORT_PAGE_VIEW = "GetSupportInfoController";
 
     private static final String SEARCH_SUPPORT = "Search Support";
     private static final String SEARCH_SUPPORT_CONTROLLER = "SearchSupportController";
@@ -114,10 +115,9 @@ public class MainController extends HttpServlet {
     private static final String SEARCH_PAGE_VIEW = "SearchCategory.jsp";
     private static final String SEARCH_CATEGORY = "Search_Category";
     private static final String SEARCH_CATEGORY_CONTROLLER = "SearchCategoryController";
-    private static final String SEARCH_CHILDREN_CATEGORY = "Search_Children_Category";
-    private static final String SEARCH_CHILDREN_CATEGORY_CONTROLLER = "SearchChildrenCategoryController";
 
     private static final String GET_ORDER_LIST = "Manage_Order";
+    private static final String BACK_ORDER_LIST = "Back_To_OrderList";
     private static final String GET_ORDER_LIST_CONTROLLER = "GetOrderListController";
 
     private static final String SEARCH_ORDER = "Search_Order";
@@ -126,8 +126,14 @@ public class MainController extends HttpServlet {
     private static final String VIEW_ORDER_DETAIL = "ViewOrderDetail";
     private static final String VIEW_ORDER_DETAIL_CONTROLLER = "ViewOrderDetailController";
 
-    private static final String EDIT_ORDER = "Edit_Order";
-    private static final String EDIT_ORDER_CONTROLLER = "UpdateOrderController";
+    private static final String EDIT_ORDER_PAGE = "EditOrder";
+    private static final String EDIT_ORDER_PAGE_VIEW = "GetOrderInforController";
+
+    private static final String EDIT_ORDER = "Send_Mail";
+    private static final String EDIT_ORDER_CONTROLLER = "SendMailServlet";
+
+    private static final String DELETE_ORDER = "DeleteOrder";
+    private static final String DELETE_ORDER_CONTROLLER = "DeleteOrderController";
 
     private static final String FORGOT_PASSWORD_CONTROLLER = "ForgotPasswordController";
     private static final String FORGOT_PASSWORD_PAGE = "Forgot_Password";
@@ -229,6 +235,8 @@ public class MainController extends HttpServlet {
                 url = VIEW_SUPPORT_PAGE_CONTROLLER;
             } else if (GET_SUPPORT_LIST.equals(action)) {
                 url = GET_SUPPORT_LIST_CONTROLLER;
+            } else if (BACK_SUPPORT_PAGE.equals(action)) {
+                url = GET_SUPPORT_LIST_CONTROLLER;
             } else if (SEARCH_SUPPORT.equals(action)) {
                 url = SEARCH_SUPPORT_CONTROLLER;
             } else if (REPLY_SUPPORT_PAGE.equals(action)) {
@@ -275,6 +283,8 @@ public class MainController extends HttpServlet {
                 url = EDIT_CATEGORY_CONTROLLER;
             } else if (GET_ORDER_LIST.equals(action)) {
                 url = GET_ORDER_LIST_CONTROLLER;
+            } else if (BACK_ORDER_LIST.equals(action)) {
+                url = GET_ORDER_LIST_CONTROLLER;
             } else if (VIEW_ORDER_DETAIL.equals(action)) {
                 url = VIEW_ORDER_DETAIL_CONTROLLER;
             } else if (SEARCH_ORDER.equals(action)) {
@@ -283,8 +293,8 @@ public class MainController extends HttpServlet {
                 url = DELETE_CATEGORY_CONTROLLER;
             } else if (DELETE_CHILDREN_CATEGORY.equals(action)) {
                 url = DELETE_CHILDREN_CATEGORY_CONTROLLER;
-            } else if (EDIT_ORDER.equals(action)) {
-                url = EDIT_ORDER_CONTROLLER;
+            } else if (EDIT_ORDER_PAGE.equals(action)) {
+                url = EDIT_ORDER_PAGE_VIEW;
             } else if (FORGOT_PASSWORD_PAGE.equals(action)) {
                 url = FORGOT_PASSWORD_CONTROLLER;
             } else if (VERIFY_TOKEN.equals(action)) {

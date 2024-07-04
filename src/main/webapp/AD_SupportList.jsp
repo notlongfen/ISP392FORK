@@ -74,9 +74,9 @@
 
                     <div class="container-fluid" id="container-wrapper">
                         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                            <h1 class="h3 mb-0 text-gray-900">All Support </h1>
+                            <h1 class="h3 mb-0 text-gray-900"><b>Supports</b></h1>
                         </div>
-                        <div class="row mb-3">
+                        <div class="row mb-3" style="margin-left: 10px; margin-top: 70px;">
                             <!-- Invoice Example -->
                             <div class="col-xl-12 mb-4">
                                 <div class="card">
@@ -115,7 +115,7 @@
                                                     <div class="input-group">
                                                         <input type="text" class="form-control" placeholder="Search..." name="search" value="<%= search%>">
                                                         <div class="input-group-append">
-                                                             <button class="btn btn-outline-secondary" type="submit" name="action" value="Search Support">Search</button> 
+                                                            <button class="btn btn-outline-secondary" type="submit" name="action" value="Search Support">Search</button> 
                                                         </div>
                                                     </div>
                                                 </div>
@@ -125,67 +125,68 @@
                                         <table class="table align-items-center table-flush">
                                             <thead class="thead-light">
                                                 <tr>
-                                                    <th>No</th>
-                                                    <th>
-                                                        <button class="btn p-0" onclick="sortTable()">Name <span id="sortIconProduct">▲</span></button>
-                                                    </th>
-                                                    <th>
-                                                        <button class="btn p-0">Email</button>
-                                                    </th>
-                                                    <th>
-                                                        <button class="btn p-0">Contact</button>
-                                                    </th>
-                                                    <th>
-                                                        <button class="btn p-0">Import Date</button>
-                                                    </th>
-                                                    <th>Status</th>
-                                                    <th>Action</th>
+                                                    <th class="text-center">Support ID</th>
+                                                    <th class="text-center">Name</th>
+                                                    <th class="text-center">Email</th>
+                                                    <th class="text-center">Contact</th>
+                                                    <th class="text-center">Import Date</th>
+                                                    <th class="text-center">Status</th>
+                                                    <th class="text-left">Action</th>
                                                 </tr>
                                             </thead>
                                             <%
                                                List<SupportDTO> supportList = (List<SupportDTO>) request.getAttribute("LIST_SUPPORT");
                                                List<UserDTO> userSupportList = (List<UserDTO>) request.getAttribute("LIST_USER_SUPPORT");
+                                               List<UserDTO> user = (List<UserDTO>) request.getAttribute("USER_LIST");
                                                if (supportList != null) {
-                                                    for (SupportDTO support : supportList) {
-                                                        for (UserDTO user : userSupportList) {
-                                            %>
-                                            <tbody id="tableBody">
-                                                <%
+                                                    for (int i=0;i<supportList.size();i++) {
+                                                
                                                     int count = 1;
-                                                %>
+                                                
+                                                       if(user != null){ %>
+                                            <tr>
+                                                <td class="text-center"><%= supportList.get(i).getSupportID()%></td>
+                                                <td class="text-center"><%= user.get(i).getUserName() %></td> 
+                                                <td class="text-center"><%= user.get(i).getEmail() %></td>
+                                                <td class="text-center"><%= user.get(i).getPhone() %></td>
+                                                <td class="text-center"><%= supportList.get(i).getRequestDate() %></td>
+                                                <td class="text-center"><span class="badge <%= supportList.get(i).getStatus() == 1 ? "badge-success" : "badge-warning" %>"><%= supportList.get(i).getStatus() == 1 ? "Done" : "Not yet" %></span></td>
+                                                <td class="text-center">
+                                                    <% if (supportList.get(i).getStatus() == 1) { %>
+                                                    <a href="MainController?action=ViewSupport&email=<%= user.get(i).getEmail() %>&supportID=<%=supportList.get(i).getSupportID()%>" class="btn btn-sm " style="background: green ; color: #FFF">View</a>
+                                                    <% 
+                                                        } else { 
+                                                    %>
+                                                    <a href="MainController?action=ReplySupport&supportID=<%=supportList.get(i).getSupportID()%>" class="btn btn-sm " style="background: #528CE0 ; color: #FFF">Reply</a>
+                                                </td>
+                                            </tr>
+                                            <% } %>
+                                            <% }else{ %>
+                                            <tbody id="tableBody">
 
                                                 <tr>
-                                                    <td><%= count++ %></td>
-                                                    <td><%= user.getUserName() %></td> 
-                                                    <td><%= user.getEmail() %></td>
-                                                    <td><%= user.getPhone() %></td>
-                                                    <td><%= support.getRequestDate() %></td>
-                                                    <td class="text-center"><span class="badge <%= support.getStatus() == 1 ? "badge-success" : "badge-warning" %>"><%= support.getStatus() == 1 ? "Done" : "Not yet" %></span></td>
+                                                    <td class="text-center"><%= count++ %></td>
+                                                    <td class="text-center"><%= userSupportList.get(i).getUserName() %></td> 
+                                                    <td class="text-center"><%= userSupportList.get(i).getEmail() %></td>
+                                                    <td class="text-center"><%= userSupportList.get(i).getPhone() %></td>
+                                                    <td class="text-center"><%= supportList.get(i).getRequestDate() %></td>
+                                                    <td class="text-center"><span class="badge <%= supportList.get(i).getStatus() == 1 ? "badge-success" : "badge-warning" %>"><%= supportList.get(i).getStatus() == 1 ? "Done" : "Not yet" %></span></td>
                                                     <td>
-                                                        <% if (support.getStatus() == 1) { %>
-                                                        <a href="MainController?action=ViewSupport&email=<%= user.getEmail() %>&supportID=<%=support.getSupportID()%>" class="btn btn-sm " style="background: green ; color: #FFF">View</a></td>
-
-                                                    <!--                                        <form action="ViewSupportDetailsController" method="GET">
-                                                                                                    <input type="hidden" name="supportID" value="<%= support.getSupportID() %>"/>
-                                                                                                    <input type="hidden" name="email" value="<%= user.getEmail() %>"/>
-                                                                                                    <input class="btn btn-sm " style="background: green ; color: #FFF" type="submit" value="ViewSupport" name="action"/>
-                                                                                                </form>-->
-                                                    <% } else { %>
-                                            <a href="MainController?action=ReplySupport&supportID=<%=support.getSupportID()%>" class="btn btn-sm " style="background: #528CE0 ; color: #FFF">Reply</a></td>
-
-                                            <!--                                            <form action="MainController" method="POST">
-                                                                                            <input type="hidden" name="supportID" value="<%= support.getSupportID() %>"/>
-                                                                                            <input type="submit" value="ReplySupport" name="action"/>
-                                                                                        </form>-->
-                                            <% } %>
-                                            </td>
-                                            </tr>
+                                                        <% if (supportList.get(i).getStatus() == 1) { %>
+                                                        <a href="MainController?action=ViewSupport&email=<%= userSupportList.get(i).getEmail() %>&supportID=<%=supportList.get(i).getSupportID()%>" class="btn btn-sm " style="background: green ; color: #FFF">View</a>
+                                                        <% } else { %>
+                                                        <a href="MainController?action=ReplySupport&supportID=<%=supportList.get(i).getSupportID()%>" class="btn btn-sm " style="background: #528CE0 ; color: #FFF">Reply</a>
+                                                        <% } %>
+                                                    </td>
+                                                </tr>
+                                                <%}
+    }
+                                                %>
 
                                             </tbody>
                                             <%
                                                         }
-                                                    }
-                                                }
+                                                    
                                             %>
                                         </table>
 
@@ -333,7 +334,7 @@
             });
 
 
-    //Select theo status
+            //Select theo status
             document.getElementById('statusSelect').addEventListener('change', function () {
                 const status = this.value;
                 const tableBody = document.getElementById('tableBody');
@@ -362,7 +363,7 @@
                 });
             });
 
-    // Thêm sự kiện click vào nút xác nhận xóa trong modal
+            // Thêm sự kiện click vào nút xác nhận xóa trong modal
             document.getElementById('confirmDeleteButton').addEventListener('click', function () {
                 // Ẩn modal xác nhận xóa
                 $('#confirmDeleteModal').modal('hide');

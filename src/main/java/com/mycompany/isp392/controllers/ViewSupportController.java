@@ -12,6 +12,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
@@ -30,6 +31,7 @@ public class ViewSupportController extends HttpServlet {
         SupportError error = new SupportError();
         UserDAO userDao = new UserDAO();
         SupportDAO supportDao = new SupportDAO();
+        HttpSession session = request.getSession();
         try {
             int supportID = Integer.parseInt(request.getParameter("supportID"));
             UserDTO user = userDao.getUserInfo(supportID);

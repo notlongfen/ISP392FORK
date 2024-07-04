@@ -124,8 +124,9 @@ public class CheckoutController extends HttpServlet {
                 // OrderDetailsDTO odDTO = new OrderDetailsDTO(order.getOrderID(), cart.prod, promotionID, phone); //not done
                 // OrderDetailsDTO orderDetailsDTO = orderDAO.insertOrderDetails()
                 for(CartDetailsDTO cartDetail : cartDetails){
-                   // OrderDetailsDTO orderDetailsDTO = new OrderDetailsDTO(order.getOrderID(), cartDetail.getProductID(), cartDetail.getQuantity(), cartDetail.getPrice());
-                    //orderDAO.insertOrderDetails(orderDetailsDTO);
+//                    OrderDetailsDTO orderDetailsDTO = new OrderDetailsDTO(order.getOrderID(), cartDetail.getProductID(), cartDetail.getQuantity(), cartDetail.getPrice());
+//                    orderDAO.insertOrderDetails(orderDetailsDTO);
+                    productDAO.updateQuantittyAfterCheckout(cartDetail.getProductID(), cartDetail.getQuantity());
                 }
                 session.removeAttribute("cart");
                 //boolean check = cartDAO.updateCartDetails();

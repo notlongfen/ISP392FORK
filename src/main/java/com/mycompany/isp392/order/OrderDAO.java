@@ -12,8 +12,8 @@ import java.sql.ResultSet;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.mycompany.isp392.user.UserDTO;
+import com.mycompany.isp392.order.*;
 
 import utils.DbUtils;
 
@@ -26,10 +26,10 @@ public class OrderDAO {
     private static final String ADD_ORDER = "INSERT INTO Orders (status, total, orderDate, CustID, promotionID, CartID, userName, city, district, ward, addresss, phone) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
     private static final String GET_LAST_ORDER_ID = "SELECT MAX(orderID) FROM Orders";
     private static final String ADD_ORDER_DETAILS = "INSERT INTO OrderDetails (productDetailsID, orderID, productID, quantity, unitPrice) VALUES (?,?,?,?,?)";
-    private static final String SET_ORDER_ORDER = "Update Orders SET status = ? WHERE OrderID = ?";
-    private static final String DELETE_ORDER = "";
     private static final String SEARCH_ORDERS = "SELECT * FROM Orders WHERE orderID LIKE ? OR orderDate LIKE ? OR total LIKE ? OR CustID LIKE ? OR CartID LIKE ?";
-    private static final String UPDATE_ORDER_STATUS = "UPDATE Orders SET status = ? WHERE orderID = ?";
+    private static final String EDIT_ORDER_STATUS = "UPDATE Orders SET status = ? WHERE orderID = ?";
+    private static final String GET_ORDER_INFO_BY_ORDERID = "SELECT * FROM Orders WHERE orderID = ?";
+    private static final String GET_LIST_ORDER_DETAIL_INFO_BY_ORDERID = "SELECT * FROM OrderDetails WHERE orderID = ?";
     private static final String GET_ALL_ORDERS = "SELECT * FROM Orders";
 
     public int getLastOrderId() throws SQLException {
@@ -143,13 +143,13 @@ public class OrderDAO {
         return orderDetailsDTO;
     }
 
-    public boolean updateOrderStatus(int orderID, int status) {
+    public boolean editOrderStatus(int orderID, int status) {
         Connection conn = null;
         PreparedStatement pstm = null;
         boolean check = false;
         try {
             conn = DbUtils.getConnection();
-            pstm = conn.prepareStatement(SET_ORDER_ORDER);
+            pstm = conn.prepareStatement(EDIT_ORDER_STATUS);
             pstm.setInt(1, status);
             pstm.setInt(2, orderID);
             int row = pstm.executeUpdate();
@@ -231,7 +231,7 @@ public class OrderDAO {
         List<OrderDetailsDTO> listOrderDetails = new ArrayList<>();
         try {
             conn = DbUtils.getConnection();
-            pstm = conn.prepareStatement("SELECT * FROM OrderDetails WHERE orderID = ?");
+            pstm = conn.prepareStatement(GET_LIST_ORDER_DETAIL_INFO_BY_ORDERID);
             pstm.setInt(1, orderID);
             rs = pstm.executeQuery();
             while (rs.next()) {
@@ -295,6 +295,97 @@ public class OrderDAO {
             }
         }
         return orders;
+    }
+
+    public OrderDTO getOrderInfo(int orderID) {
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        OrderDTO order = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_ORDER_INFO_BY_ORDERID);
+                ptm.setInt(1, orderID);
+                int id = orderID;
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    int promotionID = rs.getInt("promotionID");
+                    String userName = rs.getString("userName");
+                    String city = rs.getString("city");
+                    String district = rs.getString("district");
+                    String ward = rs.getString("ward");
+                    String address = rs.getString("address");
+                    int phone = rs.getInt("phone");
+                    String note = rs.getString("note");
+                    order = new OrderDTO(id, userName, city, district, ward, address, phone, note);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ptm != null) {
+                    ptm.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return order;
+    }
+
+    public OrderDTO getOrderInfoByID(int orderID) {
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        OrderDTO order = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_ORDER_INFO_BY_ORDERID);
+                ptm.setInt(1, orderID);
+                int id = orderID;
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    int promotionID = rs.getInt("promotionID");
+                    String userName = rs.getString("userName");
+                    String city = rs.getString("city");
+                    String district = rs.getString("district");
+                    String ward = rs.getString("ward");
+                    String address = rs.getString("address");
+                    int phone = rs.getInt("phone");
+                    String note = rs.getString("note");
+                    int status = rs.getInt("status");
+                    order = new OrderDTO(id, userName, city, district, ward, address, phone, note, status);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ptm != null) {
+                    ptm.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return order;
     }
 
 }
