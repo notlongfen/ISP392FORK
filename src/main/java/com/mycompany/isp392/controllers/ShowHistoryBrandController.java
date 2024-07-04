@@ -36,8 +36,8 @@ public class ShowHistoryBrandController extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             BrandDAO dao = new BrandDAO();
-            List<ManageBrandDTO> manage = dao.getManageBrand();
-            session.setAttribute("manageBrand", manage);
+//            List<ManageBrandDTO> manage = dao.getManageBrand();
+//            session.setAttribute("manageBrand", manage);
         } catch (Exception e) {
             log("Error at SearchController: " + e.toString());
         } finally {

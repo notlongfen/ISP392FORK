@@ -29,12 +29,12 @@
                 background-color: #ffffff;
             }
 
-            button.btn:hover {
+            input.btn:hover {
                 background: grey;
                 color: white;
             }
 
-            input, textarea, button.btn {
+            input, textarea, input.btn {
                 color: white;
                 background-color: black;
                 border-color: black;
@@ -197,7 +197,7 @@
                     </div>
                     <div class="row justify-content-center">
                         <div class="col-auto">
-                            <button type="submit" form="billing-form" class="btn mb-5" name="action" value="Checkout">Place Order</button>
+                            <input type="submit" form="billing-form" class="btn mb-5" name="action" value="Place Order"></input>
                         </div>
                     </form>
                     </div>
