@@ -1,407 +1,264 @@
-<%-- 
-    Document   : index
-    Created on : May 30, 2024, 3:36:41 PM
-    Author     : jojo
---%>
-
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="com.mycompany.isp392.brand.BrandDTO"%>
+<%@page import="com.mycompany.isp392.product.ProductDTO"%>
+<%@page import="com.mycompany.isp392.category.ChildrenCategoryDTO"%>
+<%@page import="com.mycompany.isp392.category.CategoryDTO"%>
+<%@page import="java.util.List"%>
+<%@page import="com.mycompany.isp392.product.ProductDetailsDTO"%>
 <html lang="en">
+<head>
+    <title>ISP392Shop</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Colo Shop Template">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="styles/bootstrap4/bootstrap.min.css">
+    <link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/owl.carousel.css">
+    <link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/owl.theme.default.css">
+    <link rel="stylesheet" type="text/css" href="styles/main_styles.css">
+    <link rel="stylesheet" type="text/css" href="styles/responsive.css">
+</head>
+<body>
 
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta name="description" content="">
-        <meta name="author" content="">
-        <title>Dashboard</title>
-        <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-        <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-        <link href="css/ruang-admin.min.css" rel="stylesheet">
-    </head>
+<div class="super_container">
+    <%@include file="US_header.jsp" %>
 
-    <body id="page-top">
-        <div id="wrapper">
-            <!-- Sidebar -->
-            <%@include file="sidebar.jsp" %>
-            <!-- Sidebar -->
-            <div id="content-wrapper" class="d-flex flex-column">
-                <div id="content">
-                    <!---Header --->
-                    <%@include file="header.jsp" %>
-                    <!-- Container Fluid-->
-                    <div class="container-fluid" id="container-wrapper">
-                        <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                            <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="./">Home</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
-                            </ol>
-                        </div>
-
-                        <div class="row mb-3">
-                            <!-- Earnings (Monthly) Card Example -->
-                            <div class="col-xl-3 col-md-6 mb-4">
-                                <div class="card h-100">
-                                    <div class="card-body">
-                                        <div class="row align-items-center">
-                                            <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-uppercase mb-1">Earnings (Monthly)</div>
-                                                <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
-                                                <div class="mt-2 mb-0 text-muted text-xs">
-
-                                                </div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <i class="fas fa-calendar fa-2x text-primary"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Earnings (Annual) Card Example -->
-                            <div class="col-xl-3 col-md-6 mb-4">
-                                <div class="card h-100">
-                                    <div class="card-body">
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-uppercase mb-1">Sales</div>
-                                                <div class="h5 mb-0 font-weight-bold text-gray-800">650</div>
-                                                <div class="mt-2 mb-0 text-muted text-xs">
-                                                </div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <i class="fas fa-shopping-cart fa-2x text-success"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- New User Card Example -->
-                            <div class="col-xl-3 col-md-6 mb-4">
-                                <div class="card h-100">
-                                    <div class="card-body">
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-uppercase mb-1">All User</div>
-                                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">366</div>
-                                                <div class="mt-2 mb-0 text-muted text-xs">
-                                                </div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <i class="fas fa-users fa-2x text-info"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Pending Requests Card Example -->
-
-                            <!-- All Product Card Example -->
-                            <div class="col-xl-3 col-md-6 mb-4">
-                                <div class="card h-100">
-                                    <div class="card-body">
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-uppercase mb-1">All Product</div>
-                                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">20</div>
-                                                <div class="mt-2 mb-0 text-muted text-xs">
-                                                </div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <i class="fas fa-cubes fa-2x text-success"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- All invoice Card Example -->
-                            <div class="col-xl-3 col-md-6 mb-4">
-                                <div class="card h-100">
-                                    <div class="card-body">
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-uppercase mb-1">Invoice</div>
-                                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50</div>
-                                                <div class="mt-2 mb-0 text-muted text-xs">
-                                                </div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <i class="far fa-file-alt fa-2x text-warning"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Pending Requests Card Example -->
-                            <div class="col-xl-3 col-md-6 mb-4">
-                                <div class="card h-100">
-                                    <div class="card-body">
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-uppercase mb-1">Pending Requests</div>
-                                                <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
-                                                <div class="mt-2 mb-0 text-muted text-xs">
-                                                </div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <i class="fas fa-comments fa-2x text-warning"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Area Chart -->
-                            <div class="col-xl-8 col-lg-7">
-                                <div class="card mb-4">
-                                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                        <h6 class="m-0 font-weight-bold text-primary">Monthly Recap Report</h6>
-                                        <div class="dropdown no-arrow">
-                                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-                                               aria-haspopup="true" aria-expanded="false">
-                                                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                            </a>
-                                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                                 aria-labelledby="dropdownMenuLink">
-                                                <div class="dropdown-header">Dropdown Header:</div>
-                                                <a class="dropdown-item" href="#">Action</a>
-                                                <a class="dropdown-item" href="#">Another action</a>
-                                                <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" href="#">Something else here</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="chart-area">
-                                            <canvas id="myAreaChart"></canvas>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Pie Chart -->
-                            <div class="col-xl-4 col-lg-5">
-                                <div class="card mb-4">
-                                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                        <h6 class="m-0 font-weight-bold text-primary">Products Sold</h6>
-                                        <div class="dropdown no-arrow">
-                                            <a class="dropdown-toggle btn btn-primary btn-sm" href="#" role="button" id="dropdownMenuLink"
-                                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                Month <i class="fas fa-chevron-down"></i>
-                                            </a>
-                                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                                 aria-labelledby="dropdownMenuLink">
-                                                <div class="dropdown-header">Select Periode</div>
-                                                <a class="dropdown-item" href="#">Today</a>
-                                                <a class="dropdown-item" href="#">Week</a>
-                                                <a class="dropdown-item active" href="#">Month</a>
-                                                <a class="dropdown-item" href="#">This Year</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="mb-3">
-                                            <div class="small text-gray-500">Oblong T-Shirt
-                                                <div class="small float-right"><b>600 of 800 Items</b></div>
-                                            </div>
-                                            <div class="progress" style="height: 12px;">
-                                                <div class="progress-bar bg-warning" role="progressbar" style="width: 80%" aria-valuenow="80"
-                                                     aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                        <div class="mb-3">
-                                            <div class="small text-gray-500">Gundam 90'Editions
-                                                <div class="small float-right"><b>500 of 800 Items</b></div>
-                                            </div>
-                                            <div class="progress" style="height: 12px;">
-                                                <div class="progress-bar bg-success" role="progressbar" style="width: 70%" aria-valuenow="70"
-                                                     aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                        <div class="mb-3">
-                                            <div class="small text-gray-500">Rounded Hat
-                                                <div class="small float-right"><b>455 of 800 Items</b></div>
-                                            </div>
-                                            <div class="progress" style="height: 12px;">
-                                                <div class="progress-bar bg-danger" role="progressbar" style="width: 55%" aria-valuenow="55"
-                                                     aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                        <div class="mb-3">
-                                            <div class="small text-gray-500">Indomie Goreng
-                                                <div class="small float-right"><b>400 of 800 Items</b></div>
-                                            </div>
-                                            <div class="progress" style="height: 12px;">
-                                                <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50"
-                                                     aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                        <div class="mb-3">
-                                            <div class="small text-gray-500">Remote Control Car Racing
-                                                <div class="small float-right"><b>200 of 800 Items</b></div>
-                                            </div>
-                                            <div class="progress" style="height: 12px;">
-                                                <div class="progress-bar bg-success" role="progressbar" style="width: 30%" aria-valuenow="30"
-                                                     aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card-footer text-center">
-                                        <a class="m-0 small text-primary card-link" href="#">View More <i
-                                                class="fas fa-chevron-right"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Invoice Example -->
-                            <div class="col-xl-8 col-lg-7 mb-4">
-                                <div class="card">
-                                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                        <h6 class="m-0 font-weight-bold text-primary">Invoice</h6>
-                                        <a class="m-0 float-right btn btn-danger btn-sm" href="#">View More <i class="fas fa-chevron-right"></i></a>
-                                    </div>
-                                    <div class="table-responsive">
-                                        <table class="table align-items-center table-flush">
-                                            <thead class="thead-light">
-                                                <tr>
-                                                    <th>Order ID</th>
-                                                    <th>Customer</th>
-                                                    <th>Item</th>
-                                                    <th>Status</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td><a href="#">RA0449</a></td>
-                                                    <td>Udin Wayang</td>
-                                                    <td>Nasi Padang</td>
-                                                    <td><span class="badge badge-success">Delivered</span></td>
-                                                    <td><a href="#" class="btn btn-sm btn-primary">Detail</a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><a href="#">RA5324</a></td>
-                                                    <td>Jaenab Bajigur</td>
-                                                    <td>Gundam 90' Edition</td>
-                                                    <td><span class="badge badge-warning">Shipping</span></td>
-                                                    <td><a href="#" class="btn btn-sm btn-primary">Detail</a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><a href="#">RA8568</a></td>
-                                                    <td>Rivat Mahesa</td>
-                                                    <td>Oblong T-Shirt</td>
-                                                    <td><span class="badge badge-danger">Pending</span></td>
-                                                    <td><a href="#" class="btn btn-sm btn-primary">Detail</a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><a href="#">RA1453</a></td>
-                                                    <td>Indri Junanda</td>
-                                                    <td>Hat Rounded</td>
-                                                    <td><span class="badge badge-info">Processing</span></td>
-                                                    <td><a href="#" class="btn btn-sm btn-primary">Detail</a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><a href="#">RA1998</a></td>
-                                                    <td>Udin Cilok</td>
-                                                    <td>Baby Powder</td>
-                                                    <td><span class="badge badge-success">Delivered</span></td>
-                                                    <td><a href="#" class="btn btn-sm btn-primary">Detail</a></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="card-footer"></div>
-                                </div>
-                            </div>
-                            <!-- Message From Customer-->
-                            <div class="col-xl-4 col-lg-5 ">
-                                <div class="card">
-                                    <div class="card-header py-4 bg-primary d-flex flex-row align-items-center justify-content-between">
-                                        <h6 class="m-0 font-weight-bold text-light">Message From Customer</h6>
-                                    </div>
-                                    <div>
-                                        <div class="customer-message align-items-center">
-                                            <a class="font-weight-bold" href="#">
-                                                <div class="text-truncate message-title">Hi there! I am wondering if you can help me with a
-                                                    problem I've been having.</div>
-                                                <div class="small text-gray-500 message-time font-weight-bold">Udin Cilok · 58m</div>
-                                            </a>
-                                        </div>
-                                        <div class="customer-message align-items-center">
-                                            <a href="#">
-                                                <div class="text-truncate message-title">But I must explain to you how all this mistaken idea
-                                                </div>
-                                                <div class="small text-gray-500 message-time">Nana Haminah · 58m</div>
-                                            </a>
-                                        </div>
-                                        <div class="customer-message align-items-center">
-                                            <a class="font-weight-bold" href="#">
-                                                <div class="text-truncate message-title">Lorem ipsum dolor sit amet, consectetur adipiscing elit
-                                                </div>
-                                                <div class="small text-gray-500 message-time font-weight-bold">Jajang Cincau · 25m</div>
-                                            </a>
-                                        </div>
-                                        <div class="customer-message align-items-center">
-                                            <a class="font-weight-bold" href="#">
-                                                <div class="text-truncate message-title">At vero eos et accusamus et iusto odio dignissimos
-                                                    ducimus qui blanditiis
-                                                </div>
-                                                <div class="small text-gray-500 message-time font-weight-bold">Udin Wayang · 54m</div>
-                                            </a>
-                                        </div>
-                                        <div class="card-footer text-center">
-                                            <a class="m-0 small text-primary card-link" href="#">View More <i
-                                                    class="fas fa-chevron-right"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--Row-->
-
-
-
-                        <!-- Modal Logout -->
-                        <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout"
-                             aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabelLogout">Ohh No!</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p>Are you sure you want to logout?</p>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
-                                        <a href="login.html" class="btn btn-primary">Logout</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
+    <!-- Slider -->
+    <div class="main_slider mt-1" style="background-image:url(images/s1.png)">
+        <div class="container fill_height">
+            <div class="row align-items-center fill_height">
+                <div class="col">
+                    <div class="main_slider_content">
+                        <h8 class="collection_text">Spring / Summer Collection 2024</h8>
+                        <h1 style="color: #FFF; font-size: 90px; margin-bottom: 40px;">SALE UP TO 50%</h1>
+                        <h8 class="detail_text">View detail product below</h8>
+                        <div class="red_button shop_now_button"><a href="US_AllProducts.jsp">Shop now</a></div>
                     </div>
-                    <!---Container Fluid-->
                 </div>
-                <!-- Footer -->
-
-                <!-- Footer -->
             </div>
         </div>
+    </div>
 
-        <!-- Scroll to top -->
-        <a class="scroll-to-top rounded" href="#page-top">
-            <i class="fas fa-angle-up"></i>
-        </a>
+    <!-- New Arrivals -->
+    <div class="new_arrivals">
+        <div class="container">
+            <div class="row">
+                <div class="col text-center">
+                    <div class="section_title new_arrivals_title">
+                        <h2>New Arrivals</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row align-items-center">
+                <div class="col text-center">
+                    <div class="new_arrivals_sorting">
+                        <ul class="arrivals_grid_sorting clearfix button-group filters-button-group">
+                            <li class="grid_sorting_button button d-flex flex-column justify-content-center align-items-center active is-checked" data-filter="*">All</li>
+                            <%
+                                List<CategoryDTO> categoriesList = (List<CategoryDTO>) request.getAttribute("CATEGORIES_LIST");
+                                if (categoriesList != null) {
+                                    for (CategoryDTO category : categoriesList) {
+                            %>
+                            <li class="grid_sorting_button button d-flex flex-column justify-content-center align-items-center" data-filter=".category<%= category.getCategoryID() %>"><%= category.getCategoryName() %></li>
+                            <%
+                                    }
+                                }
+                            %>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="product-grid" data-isotope='{ "itemSelector": ".product-item", "layoutMode": "fitRows" }'>
+                        <!-- Loop through New Arrivals -->
+                        <%
+                            List<ProductDTO> newArrivalsList = (List<ProductDTO>) request.getAttribute("NEW_ARRIVALS_LIST");
+                            if (newArrivalsList != null) {
+                                for (ProductDTO product : newArrivalsList) {
+                                    String categoryClass = "";
+                                    List<ChildrenCategoryDTO> categories = (List<ChildrenCategoryDTO>) request.getAttribute("CATEGORY_LIST_" + product.getProductID());
+                                    if (categories != null) {
+                                        for (ChildrenCategoryDTO category : categories) {
+                                            categoryClass += "category" + category.getParentID() + " ";
+                                        }
+                                    }
+                                    List<ProductDetailsDTO> productDetailsList = (List<ProductDetailsDTO>) request.getAttribute("PRODUCT_DETAILS_LIST_" + product.getProductID());
+                                    if (productDetailsList != null && !productDetailsList.isEmpty()) {
+                                        ProductDetailsDTO firstDetail = productDetailsList.get(0);
+                        %>
+                        <div class="product-item <%= categoryClass.trim() %>">
+                            <div class="product discount product_filter">
+                                <div class="product_image">
+                                    <img src="<%= firstDetail.getImage().split(";")[0] %>" alt="<%= product.getProductName() %>">
+                                </div>
+                                <div class="favorite favorite_left"></div>
+                                <div class="product_info">
+                                    <h6 class="product_name"><a href="single.html"><%= product.getProductName() %></a></h6>
+                                    <div class="product_price" style="color: #C53337">$<%= firstDetail.getPrice() %></div>
+                                </div>
+                            </div>
+                        </div>
+                        <% 
+                                    }
+                                }
+                            }
+                        %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        <script src="vendor/jquery/jquery.min.js"></script>
-        <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-        <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-        <script src="js/ruang-admin.min.js"></script>
-        <script src="vendor/chart.js/Chart.min.js"></script>
-        <script src="js/demo/chart-area-demo.js"></script>  
-    </body>
+    <!-- Best Sellers -->
+    <div class="best_sellers">
+        <div class="container">
+            <div class="row">
+                <div class="col text-center">
+                    <div class="section_title new_arrivals_title">
+                        <h2>Best Sellers</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="product_slider_container">
+                        <div class="owl-carousel owl-theme product_slider">
+                            <!-- Loop through Best Sellers -->
+                            <%
+                                List<ProductDTO> bestSellersList = (List<ProductDTO>) request.getAttribute("BEST_SELLERS_LIST");
+                                if (bestSellersList != null) {
+                                    for (ProductDTO product : bestSellersList) {
+                                        String categoryClass = "";
+                                        List<ChildrenCategoryDTO> categories = (List<ChildrenCategoryDTO>) request.getAttribute("CATEGORY_LIST_" + product.getProductID());
+                                        if (categories != null) {
+                                            for (ChildrenCategoryDTO category : categories) {
+                                                categoryClass += "category" + category.getParentID() + " ";
+                                            }
+                                        }
+                                        List<ProductDetailsDTO> productDetailsList = (List<ProductDetailsDTO>) request.getAttribute("PRODUCT_DETAILS_LIST_" + product.getProductID());
+                                        if (productDetailsList != null && !productDetailsList.isEmpty()) {
+                                            ProductDetailsDTO firstDetail = productDetailsList.get(0);
+                            %>
+                            <div class="owl-item product_slider_item <%= categoryClass.trim() %>">
+                                <div class="product-item">
+                                    <div class="product discount">
+                                        <div class="product_image">
+                                            <img src="<%= firstDetail.getImage().split(";")[0] %>" alt="<%= product.getProductName() %>">
+                                        </div>
+                                        <div class="favorite favorite_left"></div>
+                                        <div class="product_info">
+                                            <h6 class="product_name"><a href="single.html"><%= product.getProductName() %></a></h6>
+                                            <div class="product_price" style="color: #C53337">$<%= firstDetail.getPrice() %></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <% 
+                                        }
+                                    }
+                                }
+                            %>
+                        </div>
+                        <!-- Slider Navigation -->
+                        <div class="product_slider_nav_left product_slider_nav d-flex align-items-center justify-content-center flex-column">
+                            <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                        </div>
+                        <div class="product_slider_nav_right product_slider_nav d-flex align-items-center justify-content-center flex-column">
+                            <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Brand Section -->
+    <div class="brands">
+        <div class="container">
+            <div class="brands-inner">
+                <div class="brand-title">
+                    <span>Brands</span>
+                </div>
+                <div id="slider-home" class="brands">
+                    <div id="brand-carousel" class="owl-carousel owl-theme">
+                        <!-- Loop through Brands -->
+                        <%
+                            List<BrandDTO> brandList = (List<BrandDTO>) request.getAttribute("BRAND_LIST");
+                            if (brandList != null) {
+                                for (BrandDTO brand : brandList) {
+                        %>
+                        <div class="item">
+                            <img src="<%= brand.getImage() %>" alt="<%= brand.getBrandName() %>" class="img-responsive" style="width: 180px; height: 180px;">
+                        </div>
+                        <%
+                                }
+                            }
+                        %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%@include file="US_footer.jsp" %>
+    <button id="openFormButton"><i class='fas fa-pen'></i></button>
+
+    <div id="popupForm" class="form-popup">
+        <form class="form-container">
+            <h4 style="text-align: center">PLEASE FILL IN THE BLANKS TO REQUEST SUPPORT</h4>
+            <label for="email"><b>Email</b></label>
+            <input type="text" id="email" name="email" required>
+
+            <label for="content"><b>Content</b></label>
+            <textarea id="content" name="content" required></textarea>
+
+            <button type="submit" class="btn">Send</button>
+            <button type="button" class="btn cancel" id="closeFormButton">Close</button>
+        </form>
+    </div>
+</div>
+
+<!-- Initialize Owl Carousel -->
+<script>
+    $(document).ready(function () {
+        $("#brand-carousel").owlCarousel({
+            loop: true,
+            margin: 10,
+            nav: false,
+            dots: true,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                600: {
+                    items: 2
+                },
+                1000: {
+                    items: 4
+                }
+            }
+        });
+    });
+
+    document.getElementById('openFormButton').addEventListener('click', function () {
+        document.getElementById('popupForm').style.display = 'block';
+    });
+
+    document.getElementById('closeFormButton').addEventListener('click', function () {
+        document.getElementById('popupForm').style.display = 'none';
+    });
+</script>
+
+<script src="js/jquery-3.2.1.min.js"></script>
+<script src="styles/bootstrap4/popper.js"></script>
+<script src="styles/bootstrap4/bootstrap.min.js"></script>
+<script src="plugins/Isotope/isotope.pkgd.min.js"></script>
+<script src="plugins/OwlCarousel2-2.2.1/owl.carousel.js"></script>
+<script src="plugins/easing/easing.js"></script>
+<script src="US_js/custom.js"></script>
+<script src="US_js/brand.js"></script>
+</body>
 </html>

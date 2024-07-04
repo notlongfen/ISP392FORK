@@ -13,7 +13,7 @@ public class DeletePromotionController extends HttpServlet {
 
     //temporary 
     private static final String ERROR = "AD_PromotionList.jsp";
-    private static final String SUCCESS = "AD_PromotionList.jsp";
+    private static final String SUCCESS = "GetPromotionListController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -22,10 +22,10 @@ public class DeletePromotionController extends HttpServlet {
         PromotionDAO dao = new PromotionDAO();
         PromotionError error = new PromotionError();
         try {
-            int promotionID = Integer.parseInt(request.getParameter("promotionID"));
+            int promotionID = Integer.parseInt(request.getParameter("id"));
             boolean checkDelete = dao.deletePromotion(promotionID);
             if (checkDelete) {
-                request.setAttribute("MESSAGE", "PROMOTION DELETED SUCCESSFULLY !");
+                request.setAttribute("SUCCESS_MESSAGE", "PROMOTION DELETED SUCCESSFULLY !");
                 url = SUCCESS;
             } else {
                 error.setError("UNABLE TO DELETE PROMOTION !");

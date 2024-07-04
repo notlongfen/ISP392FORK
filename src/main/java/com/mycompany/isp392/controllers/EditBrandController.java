@@ -2,22 +2,20 @@ package com.mycompany.isp392.controllers;
 
 import com.mycompany.isp392.brand.*;
 import java.io.File;
-import com.mycompany.isp392.user.UserDTO;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.UUID;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
-import jakarta.servlet.http.HttpSession;
-import java.sql.SQLException;
-import java.util.List;
 
 @MultipartConfig
+@WebServlet(name = "EditBrandController", urlPatterns = {"/EditBrandController"})
 public class EditBrandController extends HttpServlet {
 
     private static final String ERROR = "GetSpecificBrandController";
@@ -31,20 +29,18 @@ public class EditBrandController extends HttpServlet {
         BrandError brandError = new BrandError();
         boolean checkValidation = true;
         try {
-            HttpSession session = request.getSession();
             int brandID = Integer.parseInt(request.getParameter("brandID"));
+            String brandName = request.getParameter("brandName");
             Part filePart = request.getPart("brandImage");
-            String newBrandName = request.getParameter("newBrandName");
-            UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
-            int empID = user.getUserID();
-            String oldBrandName = request.getParameter("oldBrandName");
+            int status = Integer.parseInt(request.getParameter("status"));
+
             BrandDAO brandDAO = new BrandDAO();
-            if (brandDAO.checkBrandExists(newBrandName)) {
+            if (brandDAO.checkBrandExists(brandName, brandID)) {
                 brandError.setBrandNameError("Brand already exists.");
                 checkValidation = false;
             }
 
-            String imagePath = "";
+            String imagePath = brandDAO.getBrandImagePath(brandID); // Get current image path
             if (filePart != null && filePart.getSize() > 0) {
                 String path = getServletContext().getRealPath("") + File.separator + UPLOAD_DIRECTORY;
                 File uploadDir = new File(path);
@@ -58,13 +54,9 @@ public class EditBrandController extends HttpServlet {
             }
 
             if (checkValidation) {
-                boolean check = brandDAO.updateBrand(newBrandName, imagePath, brandID);
-
+                boolean check = brandDAO.updateBrand(brandName, imagePath, brandID, status);
                 if (check) {
-                    String action = request.getParameter("edit");
-                    ManageBrandDTO manage = new ManageBrandDTO(brandID, empID, oldBrandName, newBrandName, action);
-                    boolean checkAdd = brandDAO.addManageBrand(manage);
-                    request.setAttribute("MESSAGE", "INFORMATION UPDATED SUCCESSFULLY !");
+                    request.setAttribute("SUCCESS_MESSAGE", "INFORMATION UPDATED SUCCESSFULLY !");
                     url = SUCCESS;
                 }
             } else {

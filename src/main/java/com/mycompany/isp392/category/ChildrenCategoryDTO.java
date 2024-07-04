@@ -14,7 +14,7 @@ public class ChildrenCategoryDTO {
     private String categoryName;
     private int parentID;
     private int status;
-
+    private String parentName;
     public ChildrenCategoryDTO() {
     }
 
@@ -24,7 +24,12 @@ public class ChildrenCategoryDTO {
         this.parentID = parentID;
         this.status = status;
     }
-
+  public ChildrenCategoryDTO(int cdCategoryID, String categoryName, int parentID, String parentName) {
+        this.cdCategoryID = cdCategoryID;
+        this.categoryName = categoryName;
+        this.parentID = parentID;
+        this.parentName = parentName;
+    }
     public int getCdCategoryID() {
         return cdCategoryID;
     }
@@ -39,6 +44,14 @@ public class ChildrenCategoryDTO {
 
     public int getStatus() {
         return status;
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
     }
 
     public void setCdCategoryID(int cdCategoryID) {

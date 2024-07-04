@@ -14,7 +14,6 @@ import com.mycompany.isp392.promotion.*;
 @WebServlet(name = "AddPromotionController", urlPatterns = {"/AddPromotionController"})
 public class AddPromotionController extends HttpServlet {
 
-    //temp
     private static final String ERROR = "AD_CreatePromotion.jsp";
     private static final String SUCCESS = "GetPromotionListController";
 
@@ -32,7 +31,7 @@ public class AddPromotionController extends HttpServlet {
             int discountPer = Integer.parseInt(request.getParameter("discountPer"));
             int condition = Integer.parseInt(request.getParameter("condition"));
             String description = request.getParameter("description");
-            int status = 1; 
+            int status = 1;
 
             if (dao.checkPromotionDuplicate(promotionName, status)) {
                 error.setPromotionNameError("This promotion already exists.");
@@ -60,7 +59,7 @@ public class AddPromotionController extends HttpServlet {
                 PromotionDTO promotion = new PromotionDTO(promotionID, promotionName, startDate, endDate, discountPer, condition, description, status);
                 boolean checkPromotion = dao.addPromotion(promotion);
                 if (checkPromotion) {
-                    request.setAttribute("MESSAGE", "PROMOTION ADDED SUCCESSFULLY !");
+                    request.setAttribute("SUCCESS_MESSAGE", "PROMOTION ADDED SUCCESSFULLY !");
                     url = SUCCESS;
                 } else {
                     error.setError("UNABLE TO ADD PROMOTION TO DATABASE !");
@@ -73,47 +72,24 @@ public class AddPromotionController extends HttpServlet {
         } catch (Exception e) {
             log("Error at AddPromotionController: " + e.toString());
         } finally {
-            response.sendRedirect(url);
+             request.getRequestDispatcher(url).forward(request, response);
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
-
+    }
 }

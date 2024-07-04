@@ -2,6 +2,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="com.mycompany.isp392.brand.BrandDTO"%>
 <%@page import="com.mycompany.isp392.product.ProductDTO"%>
+<%@page import="com.mycompany.isp392.category.ChildrenCategoryDTO"%>
 <%@page import="com.mycompany.isp392.category.CategoryDTO"%>
 <%@page import="java.util.List"%>
 <%@page import="com.mycompany.isp392.product.ProductDetailsDTO"%>
@@ -54,9 +55,17 @@
                 <div class="col text-center">
                     <div class="new_arrivals_sorting">
                         <ul class="arrivals_grid_sorting clearfix button-group filters-button-group">
-                            <li class="grid_sorting_button button d-flex flex-column justify-content-center align-items-center active" data-filter="*">All</li>
-                            <li class="grid_sorting_button button d-flex flex-column justify-content-center align-items-center" data-filter=".women">Women's</li>
-                            <li class="grid_sorting_button button d-flex flex-column justify-content-center align-items-center" data-filter=".men">Men's</li>
+                            <li class="grid_sorting_button button d-flex flex-column justify-content-center align-items-center active is-checked" data-filter="*">All</li>
+                            <%
+                                List<CategoryDTO> categoriesList = (List<CategoryDTO>) request.getAttribute("CATEGORIES_LIST");
+                                if (categoriesList != null) {
+                                    for (CategoryDTO category : categoriesList) {
+                            %>
+                            <li class="grid_sorting_button button d-flex flex-column justify-content-center align-items-center" data-filter=".category<%= category.getCategoryID() %>"><%= category.getCategoryName() %></li>
+                            <%
+                                    }
+                                }
+                            %>
                         </ul>
                     </div>
                 </div>
@@ -70,10 +79,10 @@
                             if (newArrivalsList != null) {
                                 for (ProductDTO product : newArrivalsList) {
                                     String categoryClass = "";
-                                    List<CategoryDTO> categories = (List<CategoryDTO>) request.getAttribute("CATEGORY_LIST_" + product.getProductID());
+                                    List<ChildrenCategoryDTO> categories = (List<ChildrenCategoryDTO>) request.getAttribute("CATEGORY_LIST_" + product.getProductID());
                                     if (categories != null) {
-                                        for (CategoryDTO category : categories) {
-                                            categoryClass += category.getCategoryName().toLowerCase() + " ";
+                                        for (ChildrenCategoryDTO category : categories) {
+                                            categoryClass += "category" + category.getParentID() + " ";
                                         }
                                     }
                                     List<ProductDetailsDTO> productDetailsList = (List<ProductDetailsDTO>) request.getAttribute("PRODUCT_DETAILS_LIST_" + product.getProductID());
@@ -123,10 +132,10 @@
                                 if (bestSellersList != null) {
                                     for (ProductDTO product : bestSellersList) {
                                         String categoryClass = "";
-                                        List<CategoryDTO> categories = (List<CategoryDTO>) request.getAttribute("CATEGORY_LIST_" + product.getProductID());
+                                        List<ChildrenCategoryDTO> categories = (List<ChildrenCategoryDTO>) request.getAttribute("CATEGORY_LIST_" + product.getProductID());
                                         if (categories != null) {
-                                            for (CategoryDTO category : categories) {
-                                                categoryClass += category.getCategoryName().toLowerCase() + " ";
+                                            for (ChildrenCategoryDTO category : categories) {
+                                                categoryClass += "category" + category.getParentID() + " ";
                                             }
                                         }
                                         List<ProductDetailsDTO> productDetailsList = (List<ProductDetailsDTO>) request.getAttribute("PRODUCT_DETAILS_LIST_" + product.getProductID());
@@ -231,19 +240,6 @@
                     items: 4
                 }
             }
-        });
-
-        // Isotope filter
-        var $grid = $('.product-grid').isotope({
-            itemSelector: '.product-item',
-            layoutMode: 'fitRows'
-        });
-
-        $('.filters-button-group').on('click', 'li', function () {
-            var filterValue = $(this).attr('data-filter');
-            $grid.isotope({ filter: filterValue });
-            $('.filters-button-group li').removeClass('active');
-            $(this).addClass('active');
         });
     });
 

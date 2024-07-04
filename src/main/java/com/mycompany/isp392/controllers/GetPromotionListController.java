@@ -29,11 +29,10 @@ public class GetPromotionListController extends HttpServlet {
         String url = ERROR;
         try {
             PromotionDAO promotionDAO = new PromotionDAO();
-            if (request.getParameter("promotionID") == null) {
                 List<PromotionDTO> promotionList = promotionDAO.getAllPromotion();
                 request.setAttribute("LIST_PROMOTION", promotionList);
                 url = SUCCESS;
-            }
+            
         } catch (SQLException e) {
             log("Error at GetPromotionListController: " + e.toString());
         } finally {

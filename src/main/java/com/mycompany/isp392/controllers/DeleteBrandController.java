@@ -1,19 +1,16 @@
 package com.mycompany.isp392.controllers;
 
 import com.mycompany.isp392.brand.*;
-import com.mycompany.isp392.user.UserDTO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
-import java.util.List;
 
 public class DeleteBrandController extends HttpServlet {
 
-    private static final String ERROR = "AD_ManageBrands.jsp";
+    private static final String ERROR = "brand.jsp";
     private static final String SUCCESS = "GetBrandsController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -22,19 +19,11 @@ public class DeleteBrandController extends HttpServlet {
         String url = ERROR;
         BrandError brandError = new BrandError();
         try {
-            HttpSession session = request.getSession();
-            UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
-            int empID = user.getUserID();
-            int brandID = Integer.parseInt(request.getParameter("brandID"));
-            int oldStatus = Integer.parseInt(request.getParameter("status"));
-            String action = request.getParameter("delete");
+            int brandID = Integer.parseInt(request.getParameter("id"));
             BrandDAO brandDAO = new BrandDAO();
-            int newStatus = brandDAO.deleteBrand(brandID);
-
-            if (newStatus != -1) {
-                ManageBrandDTO manage = new ManageBrandDTO(brandID, empID, Integer.toString(oldStatus), Integer.toString(newStatus), action);
-                boolean checkAdd = brandDAO.addManageBrand(manage);
-                request.setAttribute("MESSAGE", "BRAND DELETED SUCCESSFULLY !");
+            boolean check = brandDAO.deleteBrand(brandID);
+            if (check) {
+                request.setAttribute("SUCCESS_MESSAGE", "BRAND DELETED SUCCESSFULLY !");
                 url = SUCCESS;
             } else {
                 brandError.setError("UNABLE TO DELETE BRAND !");

@@ -1,9 +1,3 @@
-<%-- 
-    Document   : ProductList
-    Created on : Jun 2, 2024, 4:31:06 PM
-    Author     : jojo
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="com.mycompany.isp392.user.UserDTO" %>
 <%@ page import="com.mycompany.isp392.promotion.PromotionDTO" %>
@@ -23,30 +17,24 @@
         <style>
             .pagination .page-link {
                 border-radius: 20px;
-
             }
-
             .pagination .page-item.active .page-link {
                 background-color: #007bff;
                 border-color: #007bff;
             }
-
             .pagination .page-link:focus,
             .pagination .page-link:hover {
                 background-color: #007bff;
                 border-color: #007bff;
             }
-
             .pagination .page-item:first-child .page-link {
                 border-top-left-radius: 15px;
                 border-bottom-left-radius: 15px;
             }
-
             .pagination .page-item:last-child .page-link {
                 border-top-right-radius: 15px;
                 border-bottom-right-radius: 15px;
             }
-
             .container {
                 display: flex;
                 align-items: center;
@@ -59,13 +47,11 @@
                 border: 1px solid #ccc;
                 border-radius: 5px;
                 width: 400px;
-
             }
             .container button:hover {
                 background-color: #0056b3;
             }
         </style>
-
     </head>
 
     <body id="page-top">
@@ -106,16 +92,12 @@
                                             <div class="container">
                                                 <input type="date" id="ngayBatDau" placeholder="Start Date">
                                                 <input type="date" id="ngayKetThuc" placeholder="End Date">
-<!--                                                <input type="text" name="search" value="<%= search%>"/>
-                                                <input type="submit" name="action" value ="Search promotion"/> -->
                                                 <div class="input-group">
                                                     <input type="text" class="form-control" placeholder="Search..." name="search" value="<%= search%>">
                                                     <div class="input-group-append">
                                                         <button class="btn btn-outline-secondary" type="submit" name="action" value="Search promotion">Search</button>
                                                     </div>
                                                 </div>
-                                                <!--<button class="btn btn-outline-secondary" onclick="locNgay()" style="padding: 10px 20px;">Search</button>-->
-
                                             </div>
 
                                             <table class="table align-items-center table-flush">
@@ -134,14 +116,12 @@
                                                     </tr>
                                                 </thead>
                                                 <%
-                                               List<PromotionDTO> promotionList = (List<PromotionDTO>) request.getAttribute("LIST_PROMOTION");
-                                               if (promotionList != null) {
-                                                   for (PromotionDTO promotion : promotionList) {
+                                                List<PromotionDTO> promotionList = (List<PromotionDTO>) request.getAttribute("LIST_PROMOTION");
+                                                if (promotionList != null) {
+                                                    int count = 1;
+                                                    for (PromotionDTO promotion : promotionList) {
                                                 %>
                                                 <tbody id="tableBody">
-                                                    <%
-                                                        int count = 1;
-                                                    %>
                                                     <tr>
                                                         <td><%= count++ %></td>
                                                         <td class="text-center"><%= promotion.getPromotionID() %></td>
@@ -153,23 +133,21 @@
                                                         <td class="text-center"><%= promotion.getDescription() %></td>
                                                         <td class="text-center"><span class="badge <%= promotion.getStatus() == 1 ? "badge-success" : "badge-warning" %>"><%= promotion.getStatus() == 1 ? "Available" : "Deleted" %></span></td>
                                                         <td>
-                                                            <a href="MainController?action=DeletePromotion&promotionID=<%= promotion.getPromotionID()%>" class="btn btn-sm btn-danger">Delete</a> 
+                                                            <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirmDeleteModal" data-id="<%= promotion.getPromotionID() %>">Delete</button>
                                                             <a href="MainController?action=EditPromotion&promotionID=<%= promotion.getPromotionID()%>" class="btn btn-sm btn-dark">Edit</a>
                                                         </td>
                                                     </tr>                                        
                                                 </tbody>
-
                                                 <% 
-                                                 }
-                                             } else {
+                                                    }
+                                                } else {
                                                 %>
                                                 <tr>
-                                                    <td colspan="7" class="text-center">No products found</td>
+                                                    <td colspan="10" class="text-center">No promotions found</td>
                                                 </tr>
                                                 <% 
                                                 }
                                                 %>
-
                                             </table>
                                             <hr>
 
@@ -184,7 +162,7 @@
                                                     <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">1</a></li>
                                                     <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">2</a></li>
                                                     <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">3</a></li>
-                                                    <li class="page-item" >
+                                                    <li class="page-item">
                                                         <a class="page-link" href="#" aria-label="Next" style="color: #C43337">
                                                             <span aria-hidden="true">&raquo;</span>
                                                         </a>
@@ -225,78 +203,104 @@
                             <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="confirmDeleteModalLabel">Xác nhận Xóa</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <div class="modal-header bg-danger text-white">
+                                            <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Delete</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
                                         </div>
                                         <div class="modal-body">
-                                            Bạn có chắc chắn muốn xóa mục này không?
+                                            Are you sure you want to delete this item?
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                                            <button type="button" class="btn btn-danger" id="confirmDeleteButton">Xóa</button>
+                                            <form id="deleteForm" method="post">
+                                                <input type="hidden" name="id" id="modalID" value="">
+                                                <input type="hidden" name="action" value="DeletePromotion">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
+                            <!-- Success Modal -->
+                            <% if (request.getAttribute("SUCCESS_MESSAGE") != null) { %>
+                            <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-success text-white">
+                                            <h5 class="modal-title" id="successModalLabel">Success</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <span id="successMessage"></span>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } %>
+                            <script>
+                                //Sort Date
+                                function locNgay() {
+                                    const ngayBatDau = document.getElementById('ngayBatDau').value;
+                                    const ngayKetThuc = document.getElementById('ngayKetThuc').value;
+                                    const tableBody = document.getElementById('tableBody');
+                                    const rows = tableBody.getElementsByTagName('tr');
 
-                        </div>
-                    </form>
-                    <!---Container Fluid-->
-                </div>
-                <!-- Footer -->
-                <!-- Footer -->
-            </div>
-        </div>
+                                    if (ngayBatDau && ngayKetThuc) {
+                                        const startDate = new Date(ngayBatDau);
+                                        const endDate = new Date(ngayKetThuc);
 
-        <!-- Scroll to top -->
-        <a class="scroll-to-top rounded" href="#page-top">
-            <i class="fas fa-angle-up"></i>
-        </a>
+                                        for (let i = 0; i < rows.length; i++) {
+                                            const cells = rows[i].getElementsByTagName('td');
+                                            const ngayBatDauRow = new Date(cells[3].textContent.trim());
+                                            const ngayKetThucRow = new Date(cells[4].textContent.trim());
 
-        <script>
-            //Sort Date
-            function locNgay() {
-                const ngayBatDau = document.getElementById('ngayBatDau').value;
-                const ngayKetThuc = document.getElementById('ngayKetThuc').value;
-                const tableBody = document.getElementById('tableBody');
-                const rows = tableBody.getElementsByTagName('tr');
+                                            if (ngayBatDauRow >= startDate && ngayKetThucRow <= endDate) {
+                                                rows[i].style.display = '';
+                                            } else {
+                                                rows[i].style.display = 'none';
+                                            }
+                                        }
+                                    } else {
+                                        for (let i = 0; i < rows.length; i++) {
+                                            rows[i].style.display = '';
+                                        }
+                                    }
+                                }
 
-                if (ngayBatDau && ngayKetThuc) {
-                    const startDate = new Date(ngayBatDau);
-                    const endDate = new Date(ngayKetThuc);
+                                // Handle delete modal
+                                document.querySelectorAll('.btn-danger[data-toggle="modal"]').forEach(btn => {
+                                    btn.addEventListener('click', function () {
+                                        const id = this.getAttribute('data-id');
+                                        document.getElementById('modalID').value = id;
+                                    });
+                                });
 
-                    for (let i = 0; i < rows.length; i++) {
-                        const cells = rows[i].getElementsByTagName('td');
-                        const ngayBatDauRow = new Date(cells[3].textContent.trim());
-                        const ngayKetThucRow = new Date(cells[4].textContent.trim());
+                                // Display success modal if message exists
+                                $(document).ready(function () {
+                                    const successMessage = '<%= request.getAttribute("SUCCESS_MESSAGE") %>';
+                                    if (successMessage) {
+                                        document.getElementById('successMessage').innerText = successMessage;
+                                        $('#successModal').modal('show');
+                                    }
+                                });
+                            </script>
 
-                        if (ngayBatDauRow >= startDate && ngayKetThucRow <= endDate) {
-                            rows[i].style.display = '';
-                        } else {
-                            rows[i].style.display = 'none';
-                        }
-                    }
-                } else {
-                    for (let i = 0; i < rows.length; i++) {
-                        rows[i].style.display = '';
-                    }
-                }
-            }
-
-        </script>
-        <script src="vendor/jquery/jquery.min.js"></script>
-        <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-        <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-        <script src="js/ruang-admin.min.js"></script>
-        <script src="vendor/chart.js/Chart.min.js"></script>
-        <script src="js/demo/chart-area-demo.js"></script>  
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
-
-    </body>
-
-</html>
+                            <script src="vendor/jquery/jquery.min.js"></script>
+                            <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+                            <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+                            <script src="js/ruang-admin.min.js"></script>
+                            <script src="vendor/chart.js/Chart.min.js"></script>
+                            <script src="js/demo/chart-area-demo.js"></script>  
+                            <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+                            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDzwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+                            <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+                            </body>
+                            </html>

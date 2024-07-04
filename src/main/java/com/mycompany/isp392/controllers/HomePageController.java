@@ -4,6 +4,7 @@ import com.mycompany.isp392.brand.BrandDAO;
 import com.mycompany.isp392.brand.BrandDTO;
 import com.mycompany.isp392.category.CategoryDAO;
 import com.mycompany.isp392.category.CategoryDTO;
+import com.mycompany.isp392.category.ChildrenCategoryDTO;
 import com.mycompany.isp392.product.ProductDAO;
 import com.mycompany.isp392.product.ProductDTO;
 import com.mycompany.isp392.product.ProductDetailsDTO;
@@ -13,7 +14,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -34,20 +35,41 @@ public class HomePageController extends HttpServlet {
             ProductDAO productDAO = new ProductDAO();
             CategoryDAO categoryDAO = new CategoryDAO();
 
-            List<ProductDTO> productList = productDAO.getAllProducts();
-             List<ProductDTO> productList1 = productDAO.getAllProducts();
+            // Fetch all products
+            List<ProductDTO> allProducts = productDAO.getAllProducts();
+            List<ProductDTO> allProducts1 = productDAO.getAllProducts();
+            List<ProductDTO> activeProducts = new ArrayList<>();
+             List<ProductDTO> activeProducts1 = new ArrayList<>();
             List<BrandDTO> brands = brandDAO.getAllBrands();
+            List<BrandDTO> activeBrands = new ArrayList<>();
+            List<CategoryDTO> categories = categoryDAO.getActiveCategory(); // Fetch active categories
 
-            for (ProductDTO product : productList) {
-                List<CategoryDTO> categories = categoryDAO.getCategoriesByProductID(product.getProductID());
+            // Filter active products
+            for (ProductDTO product : allProducts) {
+                if (product.getStatus() == 1) {
+                    activeProducts.add(product);
+                }
+            }
+              for (BrandDTO brand : brands) {
+                if (brand.getStatus() == 1) {
+                    activeBrands.add(brand);
+                }
+            }
+             for (ProductDTO product : allProducts1) {
+                if (product.getStatus() == 1) {
+                    activeProducts1.add(product);
+                }
+            }
+            for (ProductDTO product : activeProducts) {
+                List<ChildrenCategoryDTO> cdCategories = categoryDAO.getCdCategoriesByProductID(product.getProductID());
                 List<ProductDetailsDTO> productDetailsList = productDAO.getProductDetails(product.getProductID());
-                request.setAttribute("CATEGORY_LIST_" + product.getProductID(), categories);
+                request.setAttribute("CATEGORY_LIST_" + product.getProductID(), cdCategories);
                 request.setAttribute("PRODUCT_DETAILS_LIST_" + product.getProductID(), productDetailsList);
             }
-            for (ProductDTO product : productList1) {
-                List<CategoryDTO> categories = categoryDAO.getCategoriesByProductID(product.getProductID());
+             for (ProductDTO product : activeProducts1) {
+                List<ChildrenCategoryDTO> cdCategories = categoryDAO.getCdCategoriesByProductID(product.getProductID());
                 List<ProductDetailsDTO> productDetailsList = productDAO.getProductDetails(product.getProductID());
-                request.setAttribute("CATEGORY_LIST_" + product.getProductID(), categories);
+                request.setAttribute("CATEGORY_LIST_" + product.getProductID(), cdCategories);
                 request.setAttribute("PRODUCT_DETAILS_LIST_" + product.getProductID(), productDetailsList);
             }
 
@@ -55,7 +77,7 @@ public class HomePageController extends HttpServlet {
             Map<Integer, java.sql.Date> latestImportDates = productDAO.getLatestImportDates();
 
             // Sorting for new arrivals
-            Collections.sort(productList1, new Comparator<ProductDTO>() {
+            Collections.sort(activeProducts1, new Comparator<ProductDTO>() {
                 @Override
                 public int compare(ProductDTO p1, ProductDTO p2) {
                     Date date1 = latestImportDates.get(p1.getProductID());
@@ -71,22 +93,23 @@ public class HomePageController extends HttpServlet {
                 }
             });
 
-            request.setAttribute("NEW_ARRIVALS_LIST", productList1);
+            request.setAttribute("NEW_ARRIVALS_LIST", activeProducts1);
 
             // Sorting for best sellers
-            Collections.sort(productList, new Comparator<ProductDTO>() {
+            Collections.sort(activeProducts, new Comparator<ProductDTO>() {
                 @Override
                 public int compare(ProductDTO p1, ProductDTO p2) {
                     return Integer.compare(p2.getNumberOfPurchase(), p1.getNumberOfPurchase());
                 }
             });
 
-            request.setAttribute("BEST_SELLERS_LIST", productList);
+            request.setAttribute("BEST_SELLERS_LIST", activeProducts);
 
-            request.setAttribute("BRAND_LIST", brands);
+            request.setAttribute("BRAND_LIST", activeBrands);
+            request.setAttribute("CATEGORIES_LIST", categories); // Set categories as a request attribute
 
             url = INDEX_PAGE;
-        } catch (SQLException e) {
+        } catch (Exception e) {
             log("Error at HomePageController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
@@ -110,3 +133,4 @@ public class HomePageController extends HttpServlet {
         return "Home Page Controller";
     }
 }
+

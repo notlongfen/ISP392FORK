@@ -37,7 +37,7 @@ public class AddBrandController extends HttpServlet {
             }
 
             BrandDAO brandDAO = new BrandDAO();
-            if (brandDAO.checkBrandExists(brandName)) {
+            if (brandDAO.checkBrandNameExists(brandName)) {
                 brandError.setBrandNameError("Brand Name already exists.");
                 checkValidation = false;
             }
@@ -58,7 +58,7 @@ public class AddBrandController extends HttpServlet {
             if (checkValidation) {
                 boolean check = brandDAO.addBrand(brandName, imagePath);
                 if (check) {
-                    request.setAttribute("MESSAGE", "BRAND ADDED SUCCESSFULLY !");
+                    request.setAttribute("SUCCESS_MESSAGE", "BRAND ADDED SUCCESSFULLY !");
                     url = SUCCESS;
                 } else {
                     brandError.setError("UNABLE TO ADD BRAND TO DATABASE !");
