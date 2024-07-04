@@ -30,7 +30,7 @@ public class CategoryDAO {
     private static final String GET_ACTIVE_CATEGORY = "SELECT * FROM Categories WHERE status = 1";
     private static final String SEARCH_CATEGORIES = "SELECT * FROM Categories WHERE CategoriesName LIKE ? OR description LIKE ?";
     private static final String SEARCH_CHILDREN_CATEGORIES = "SELECT * FROM ChildrenCategories WHERE parentID = ?";
-    private static final String UPDATE_CATEGORY = "UPDATE Categories SET CategoriesName = ?, Description = ? WHERE CategoryID = ?";
+    private static final String UPDATE_CATEGORY = "UPDATE Categories SET CategoriesName = ?, Description = ?, status = ? WHERE CategoryID = ?";
     private static final String UPDATE_CHILDREN_CATEGORY = "UPDATE ChildrenCategories SET CategoriesName = ? WHERE CDCategoryID = ?";
     private static final String CHECK_CATEGORY_DUPLICATE = "SELECT * FROM Categories WHERE CategoriesName LIKE ?";
     private static final String CHECK_CHILDREN_CATEGORY_DUPLICATE = "SELECT * FROM ChildrenCategories WHERE CategoriesName LIKE ? AND ParentID LIKE ?";
@@ -42,6 +42,7 @@ public class CategoryDAO {
     private static final String GET_PARENT_CATEGORY_STATUS = "SELECT status FROM Categories WHERE CategoryID = ?";
     private static final String DELETE_ALL_CHILDREN = "UPDATE ChildrenCategories SET status = 0 WHERE ParentID = ?";
     private static final String GET_PARENT_ID = "SELECT ParentID FROM ChildrenCategories WHERE CDCategoryID = ?";
+    private static final String GET_CATEGORY_INFO = "SELECT * FROM Categories WHERE CategoryID = ?";
 
     public boolean addCategory(CategoryDTO category) throws SQLException {
         Connection conn = null;
@@ -451,7 +452,7 @@ public class CategoryDAO {
         return list;
     }
 
-    public boolean updateCategory(int categoryID, String newName, String newDescription) throws SQLException, ClassNotFoundException {
+    public boolean updateCategory(int categoryID, String newName, String newDescription, int newStatus) throws SQLException, ClassNotFoundException {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -461,7 +462,8 @@ public class CategoryDAO {
                 ptm = conn.prepareStatement(UPDATE_CATEGORY);
                 ptm.setString(1, newName);
                 ptm.setString(2, newDescription);
-                ptm.setInt(3, categoryID);
+                ptm.setInt(3, newStatus);
+                ptm.setInt(4, categoryID);
                 check = ptm.executeUpdate() > 0;
             }
         } catch (SQLException e) {
@@ -786,5 +788,39 @@ public class CategoryDAO {
             }
         }
         return categories;
+    }
+    
+    public CategoryDTO getCategoryInfoByID(int categoryID) throws SQLException{
+        CategoryDTO category = null;
+        ResultSet rs = null;
+        PreparedStatement ptm = null;
+        Connection conn = null;
+        try{
+            conn = DbUtils.getConnection();
+            if(conn!=null){
+                ptm = conn.prepareStatement(GET_CATEGORY_INFO);
+                ptm.setInt(1, categoryID);
+                rs = ptm.executeQuery();
+                if(rs.next()){
+                    String categoryName = rs.getString("CategoriesName");
+                    String description = rs.getString("Description");
+                    int status = rs. getInt("status");
+                    category = new CategoryDTO(categoryID, categoryName, description, status);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return category;
     }
 }

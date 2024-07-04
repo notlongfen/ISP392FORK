@@ -202,6 +202,12 @@ public class MainController extends HttpServlet {
 
     private static final String HISTORY = "History";
     private static final String HISTORY_CONTROLLER = "ShowHistoryBrandController";
+    
+    private static final String GET_CATEGORY_INFO = "GetCategoryInfo";
+    private static final String GET_CATEGORY_INFO_CONTROLLER = "GetCategoryInfoController";
+    
+    private static final String GET_CHILDREN_CATEGORY_INFO = "GetChildrenCategoryInfo";
+    private static final String GET_CHILDREN_CATEGORY_INFO_CONTROLLER = "GetChildrenCategoryInfoController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -343,7 +349,11 @@ public class MainController extends HttpServlet {
                 url = HISTORY_CONTROLLER;
             } else if (SEARCH_CHILDREN_CATEGORY.equals(action)) {
                 url = SEARCH_CHILDREN_CATEGORY_CONTROLLER;
-            }
+            } else if (GET_CATEGORY_INFO.equals(action)) {
+                url = GET_CATEGORY_INFO_CONTROLLER;
+            } else if (GET_CHILDREN_CATEGORY_INFO.equals(action)) {
+                url = GET_CHILDREN_CATEGORY_INFO_CONTROLLER;
+            } 
         } catch (Exception e) {
             log("error at MainController: " + e.toString());
         } finally {
