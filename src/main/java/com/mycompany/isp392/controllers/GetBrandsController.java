@@ -30,6 +30,7 @@ public class GetBrandsController extends HttpServlet {
             BrandDAO dao = new BrandDAO();
             List<BrandDTO> brands = dao.getAllBrands();
             session.setAttribute("BRAND_LIST", brands);
+            request.setAttribute("BRAND_LIST", brands);
             if ("AddProductPage".equals(request.getParameter("ProductPage")) || request.getAttribute("PRODUCT_ERROR") != null) {
                  CategoryDAO categoryDAO = new CategoryDAO();
                  List <ChildrenCategoryDTO> list = categoryDAO.getListCDCategory();

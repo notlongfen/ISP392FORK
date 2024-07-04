@@ -57,7 +57,7 @@ public class ProductDAO {
             + "AND ProductID = ?";
 
 //    private static final String EDIT_PRODUCT = "UPDATE Products SET productName=?, description=?, numberOfPurchasing=?, brandID=?, status = ? WHERE productID=?";
-    private static final String EDIT_PRODUCT = "UPDATE Products SET productName=?, description=?, numberOfPurchasing=?, brandID=? WHERE productID=?";
+    private static final String EDIT_PRODUCT = "UPDATE Products SET productName=?, description=?, numberOfPurchasing=?, brandID=?, status = ? WHERE productID=?";
 
     private static final String DELETE_PRODUCT_CATEGORIES = "DELETE FROM ProductBelongtoCDCategories WHERE ProductID=?";
     private static final String ADD_PRODUCT_CATEGORY = "INSERT INTO ProductBelongtoCDCategories (ProductID, CDCategoryID) VALUES (?, ?)";

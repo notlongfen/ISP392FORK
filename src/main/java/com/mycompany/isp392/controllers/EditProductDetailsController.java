@@ -19,7 +19,7 @@ import jakarta.servlet.http.Part;
 public class EditProductDetailsController extends HttpServlet {
 
     private static final String ERROR = "GetSpecificProductController";
-    private static final String SUCCESS = "GetSpecificProductController";
+    private static final String SUCCESS = "GetProductsController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -32,7 +32,7 @@ public class EditProductDetailsController extends HttpServlet {
             int price = Integer.parseInt(request.getParameter("price"));
             Date importDate = Date.valueOf(request.getParameter("importDate"));
             int detailStatus = Integer.parseInt(request.getParameter("detailStatus"));
-            
+
             ProductDAO productDAO = new ProductDAO();
             ProductDetailsDTO existingProductDetail = productDAO.selectProductDetailByID(productDetailID);
             String existingImage = existingProductDetail.getImage();
@@ -57,6 +57,7 @@ public class EditProductDetailsController extends HttpServlet {
 
             if (checkProductDetails) {
                 request.setAttribute("SUCCESS_MESSAGE", "Product details updated successfully!");
+                request.setAttribute("newProductID", existingProductDetail.getProductID());
                 url = SUCCESS;
             } else {
                 request.setAttribute("ERROR_MESSAGE", "Failed to update product details.");
