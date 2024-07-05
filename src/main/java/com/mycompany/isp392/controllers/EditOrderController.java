@@ -27,6 +27,8 @@ public class EditOrderController extends HttpServlet {
                 url = "SendMailServlet";
                 request.setAttribute("REQFROM", "UpdateOrderController");
                 request.setAttribute("MESSAGE", "Order status updated successfully! With status" + status);
+                request.setAttribute("status", status);
+                request.setAttribute("orderID", orderID);
                 request.getRequestDispatcher(url).include(request, response);
             }
             if (check) {

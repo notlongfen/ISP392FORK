@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.mindrot.jbcrypt.BCrypt;
 
+import jakarta.ws.rs.GET;
 import utils.DbUtils;
 
 public class UserDAO {
@@ -44,6 +45,10 @@ public class UserDAO {
     private static final String GET_FULL_CUSTOMER_BY_ID = "SELECT * FROM Users u JOIN Customers c ON u.UserID = c.CustID WHERE c.CustID=?";
     private static final String UPDATE_USER_PROFILE ="UPDATE Users SET userName = ?, email = ?, phone = ? WHERE UserID = ?";
     private static final String UPDATE_CUSTOMER_PROFILE ="UPDATE Customers SET birthday = ?, province_city = ?, district = ?, ward = ?, detailAddress = ? WHERE CustID = ?";
+    private static final String GET_USER_INFO_BASED_ON_ORDER_ID = "SELECT * FROM Orders o\n"
+                        + "INNER JOIN Customers c ON o.CustID = c.CustID\n"
+                        + "INNER JOIN Users u ON c.CustID = u.UserID\n"
+                        + "WHERE o.OrderID = ?";
     
     public UserDTO checkLogin(String email, String password) throws SQLException {
         UserDTO user = null;
@@ -906,5 +911,45 @@ public class UserDAO {
             }
         }
         return check;
+    }
+
+    public UserDTO getUserInfoBasedOnOrderID(int orderID){
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        UserDTO user = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_USER_INFO_BASED_ON_ORDER_ID);
+                ptm.setInt(1, orderID);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    int userID = rs.getInt("UserID");
+                    String userName = rs.getString("userName");
+                    String email = rs.getString("email");
+                    int phone = rs.getInt("phone");
+                    user = new UserDTO(userID, userName, email, phone);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ptm != null) {
+                    ptm.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return user;
     }
 }

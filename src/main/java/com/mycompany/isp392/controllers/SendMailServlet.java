@@ -30,6 +30,8 @@ public class SendMailServlet extends HttpServlet {
     private static final String SUCCESS_FORGOT_PASSWORD = "NotificationMail.jsp";
     private static final String ERROR_REPLY_SUPPORT = "AD_ReplySupport.jsp";
     private static final String SUCCESS_REPLY_SUPPORT = "GetSupportListController";
+    private static final String SUCCESS_SEND_EMAIL_UPDATE_ORDER_STATUS = "EditOrderController";
+    private static final String ERROR_SEND_EMAIL_UPDATE_ORDER_STATUS  = "AD_EditOrder.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -42,6 +44,8 @@ public class SendMailServlet extends HttpServlet {
                 url = processForgotPassword(request, response);
             } else if ("Reply_Support".equals(action)) {
                 url = processReplySupport(request, response, sessionCur);
+            } else if("UpdateOrderController".equals(action)){
+                url = updateOrderStatusFromAdmin(request, response);
             }
             response.sendRedirect(url);
     }
@@ -143,6 +147,19 @@ public class SendMailServlet extends HttpServlet {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+        return url;
+    }
+
+    private String updateOrderStatusFromAdmin(HttpServletRequest request, HttpServletResponse response) {
+        String status = request.getParameter("status");
+        String url = ERROR_SEND_EMAIL_UPDATE_ORDER_STATUS;
+        int orderID = Integer.parseInt(request.getParameter("orderID"));
+        UserDAO userDAO = new UserDAO();
+        UserDTO userDTO = userDAO.getUserInfoBasedOnOrderID(orderID);
+        boolean result = sendEmail(userDTO.getEmail(), "Your Order Status Just Got Updated", "Your order status has been updated to " + status);
+        if(result){
+            url = SUCCESS_SEND_EMAIL_UPDATE_ORDER_STATUS;
         }
         return url;
     }
