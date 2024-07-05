@@ -223,6 +223,9 @@ public class MainController extends HttpServlet {
 
     private static final String HISTORY = "History";
     private static final String HISTORY_CONTROLLER = "ShowHistoryBrandController";
+     
+    private static final String GET_USER_INFO = "GetUserInfo";
+    private static final String GET_USER_INFO_CONTROLLER = "GetUserInfoController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -380,6 +383,8 @@ public class MainController extends HttpServlet {
                 url = HISTORY_CONTROLLER;
             } else if (ADD_WISHLIST.equals(action)) {
                 url = ADD_WISHLIST_CONTROLLER;
+            } else if (GET_USER_INFO.equals(action)) {
+                url = GET_USER_INFO_CONTROLLER;
             }
 
         } catch (Exception e) {

@@ -274,21 +274,9 @@
                                                            }
                                                        %>
                                                        <form action="MainController" method="POST" style="display:inline;">
-                                                            <%
-                                                                if(roleID==4){
-                                                            %>
                                                             <input type="hidden" name="userID" value="<%= user.getUserID()%>"/>
-                                                            <input type="hidden" name="action" value="EditCustomerPage"/>
+                                                            <input type="hidden" name="action" value="GetUserInfo"/>
                                                             <button type="submit" class="btn btn-sm btn-dark">Edit</button>
-                                                            <%
-                                                                } else {
-                                                            %>
-                                                            <input type="hidden" name="userID" value="<%= user.getUserID()%>"/>
-                                                            <input type="hidden" name="action" value="EditEmployeePage"/>
-                                                            <button type="submit" class="btn btn-sm btn-dark">Edit</button>
-                                                            <%
-                                                                }
-                                                            %>
                                                         </form>
                                                     </td>
                                                 </tr>

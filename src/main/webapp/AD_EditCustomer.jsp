@@ -31,9 +31,7 @@
     </head>
     <body id="page-top">
         <%
-            UserDAO dao = new UserDAO();
-            int userID = Integer.parseInt(request.getParameter("userID"));
-            UserDTO user = dao.getUserByID(userID);
+            UserDTO user = (UserDTO) request.getAttribute("CUSTOMER");
         %>
         <div id="wrapper">
             <!-- Sidebar -->
