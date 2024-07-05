@@ -72,6 +72,7 @@
                                     <textarea class="form-control" name="description"  id="description" rows="3" required=""><%= category.getDescription()%></textarea>
                                 </div>
                                 
+                                <input type="hidden" name="oldStatus" value="<%= category.getStatus()%>" readonly=""/>
                                 <div class="form-group">
                                         <label for="status">Status</label>
                                         <select name="status" style="width: 375px" class="form-select form-control" id="status" aria-label=".form-select-sm">

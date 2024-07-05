@@ -23,11 +23,12 @@ public class EditCategoryController extends HttpServlet {
             int categoryID = Integer.parseInt(request.getParameter("categoryID"));
             String newName = request.getParameter("categoryName");
             String newDescription = request.getParameter("description");
+            int oldStatus = Integer.parseInt(request.getParameter("oldStatus"));
             int newStatus = Integer.parseInt(request.getParameter("status"));
 
             boolean checkCategory = categoryDAO.updateCategory(categoryID, newName, newDescription, newStatus);
             if (checkCategory) {
-                if (newStatus == 0) {
+                if (newStatus == 0 && oldStatus != newStatus) {
                     boolean checkChildren = categoryDAO.deleteAllChildren(categoryID);
                     if (checkChildren) {
                         request.setAttribute("SUCCESS_MESSAGE", "CATEGORY UPDATED SUCCESSFULLY !");

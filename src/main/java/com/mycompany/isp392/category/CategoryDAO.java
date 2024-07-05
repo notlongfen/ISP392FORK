@@ -44,7 +44,7 @@ public class CategoryDAO {
     private static final String GET_PARENT_ID = "SELECT ParentID FROM ChildrenCategories WHERE CDCategoryID = ?";
     private static final String GET_CATEGORY_INFO = "SELECT * FROM Categories WHERE CategoryID = ?";
     private static final String GET_CHILDREN_CATEGORY_INFO = "SELECT * FROM ChildrenCategories WHERE CDCategoryID = ?";
-    private static final String CHECK_CHILDREN_COUNT = "SELECT COUNT(*) FROM ChildrenCategories WHERE ParentID = ?";
+    private static final String CHECK_CHILDREN_COUNT = "SELECT COUNT(*) FROM ChildrenCategories WHERE ParentID = ? AND status = 1";
     
     public boolean addCategory(CategoryDTO category) throws SQLException {
         Connection conn = null;
@@ -691,19 +691,35 @@ public class CategoryDAO {
         boolean check = false;
         Connection conn = null;
         ResultSet rs = null;
-        PreparedStatement ptm = null;
+        PreparedStatement ptmCheck = null;
+        PreparedStatement ptmDelete = null;
         try {
             conn = DbUtils.getConnection();
             if (conn != null) {
-                ptm = conn.prepareStatement(DELETE_ALL_CHILDREN);
-                ptm.setInt(1, parentID);
-                check = ptm.executeUpdate() > 0;
+                
+                ptmCheck = conn.prepareStatement(CHECK_CHILDREN_COUNT);
+                ptmCheck.setInt(1, parentID);
+                rs = ptmCheck.executeQuery();
+                rs.next();
+                int childCount = rs.getInt(1);
+            
+                if (childCount > 0) {
+                    // If there are children, delete them first
+                    ptmDelete = conn.prepareStatement(DELETE_ALL_CHILDREN);
+                    ptmDelete.setInt(1, parentID);
+                    check = ptmDelete.executeUpdate()>0;
+                } else {
+                    check = true;
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (ptm != null) {
-                ptm.close();
+            if (ptmCheck != null) {
+                ptmCheck.close();
+            }
+            if (ptmDelete != null) {
+                ptmDelete.close();
             }
             if (conn != null) {
                 conn.close();
