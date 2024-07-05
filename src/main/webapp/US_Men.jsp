@@ -74,7 +74,7 @@
                 position: relative;
                 z-index: 1;
             }
-           .resized-image {
+            .resized-image {
                 width: 1280px;
                 height: 1280px;
                 object-fit: contain;
@@ -334,6 +334,8 @@
             </div>
         </div>
         <jsp:include page="US_footer.jsp" />
+        <%@include file="US_RequestSupport.jsp" %>
+
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>

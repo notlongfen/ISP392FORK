@@ -1,7 +1,7 @@
- <%-- 
-    Document   : ProductDetail2
-    Created on : May 21, 2024, 8:07:29 PM
-    Author     : jojo
+<%-- 
+   Document   : ProductDetail2
+   Created on : May 21, 2024, 8:07:29 PM
+   Author     : jojo
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -169,7 +169,7 @@
                                     <div class="d-grid gap-2">
                                         <button id="add_to_wishlist" class="btn btn-outline-dark" style="background: white; border: 2px solid black;">
                                             <b>Favorite</b></button>
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -243,6 +243,8 @@
             </div>
             <!-- Footer -->
             <%@include file="US_footer.jsp" %>
+            <%@include file="US_RequestSupport.jsp" %>
+
             <script src="javascript/jquery-3.2.1.min.js"></script>
             <script src="styles/bootstrap4/popper.js"></script>
             <script src="styles/bootstrap4/bootstrap.min.js"></script>

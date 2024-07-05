@@ -144,7 +144,7 @@
                         <form action="MainController" method="POST">
                             <input type="hidden" name="userID" value="<%= custID%>">
                             <div class="btn-format right-element btn-format.right-element button" >
-<!--                                <a href="MainController?action=Save profile">Save</a>-->
+                                <!--                                <a href="MainController?action=Save profile">Save</a>-->
                                 <input type="submit" name="action" value="Save profile"/>
                             </div>
                             <div class="col-sm-6"></div>
@@ -222,6 +222,8 @@
 
 
     <%@include file="US_footer.jsp" %>
+    <%@include file="US_RequestSupport.jsp" %>
+
     <script>
 
         document.addEventListener('DOMContentLoaded', function () {

@@ -103,7 +103,7 @@
                             <label for="note" class="form-label">Note</label>
                             <textarea class="form-control" id="note" style="color: black;" name="note"></textarea>
                         </div>
-                    
+
                 </div>
                 <div class="col-md-6 ">
                     <h2>Your Payment Detail</h2>
@@ -168,10 +168,10 @@
                     </div>
 
                     <div class="mb-3" >
-                        
+
                         <label for="coupon" class="form-label" >You have a coupon? Click here to enter your code</label>
                         <input type="text" class="form-control" id="coupon" name="promotionID">
-                        
+
                     </div>
                     <ul class="list-group mb-3 no-borders">
                         <li class="list-group-item d-flex justify-content-between">
@@ -199,12 +199,14 @@
                         <div class="col-auto">
                             <input type="submit" form="billing-form" class="btn mb-5" name="action" value="Place Order"></input>
                         </div>
-                    </form>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
         <%@include file="US_footer.jsp" %>
+        <%@include file="US_RequestSupport.jsp" %>
+
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
         <script>

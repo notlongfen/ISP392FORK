@@ -36,7 +36,7 @@
             .price-button:hover {
                 background-color: #f0f0f0;
             }
-            .button-container {               
+            .button-container {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
@@ -111,17 +111,17 @@
                 line-height: 38px;
                 width: 38px;
                 height: 38px;
-/*                border: 1px solid #333;*/
-/*                border-bottom: none;*/
+                /*                border: 1px solid #333;*/
+                /*                border-bottom: none;*/
                 display: block;
                 transition: all 0.3s;
             }
             .product-grid .product-links li:last-child a{
-/*                border-bottom: 1px solid #333;*/
+                /*                border-bottom: 1px solid #333;*/
             }
             .product-grid .product-links li a:hover{
                 color: #c53337;
-/*                background: #333;*/
+                /*                background: #333;*/
             }
             .product-grid .add-to-cart{
                 background: black;
@@ -145,7 +145,7 @@
                 bottom: 0;
             }
             .product-grid .add-to-cart:hover{
-/*                text-shadow: 4px 4px rgba(0,0,0,0.2);*/
+                /*                text-shadow: 4px 4px rgba(0,0,0,0.2);*/
                 background: rgb(199, 30, 61);
             }
             .product-grid .product-content{
@@ -210,7 +210,7 @@
                     margin-bottom: 30px;
                 }
             }
-                   </style>
+        </style>
     </head>
     <body>
 
@@ -331,6 +331,8 @@
             </div>
         </div>
         <jsp:include page="US_footer.jsp" />
+        <%@include file="US_RequestSupport.jsp" %>
+
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>

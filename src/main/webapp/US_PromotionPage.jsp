@@ -113,7 +113,7 @@
                     <div class="row align-items-center fill_height">
                         <div class="col">
                             <div class="main_slider_content">
-                                
+
                                 <p class="collection_text">YOUR POINTS MUST BE HIGHER THAN <%= promotion.getCondition()%> 🌟</p>
                                 <h1 style="color: #FFF; font-size: 90px; margin-bottom: 40px;">SALE UP TO <%= promotion.getDiscountPer()%>%</h1>
                                 <h8 class="detail_text"><%= promotion.getDescription() %></h8>
@@ -136,6 +136,8 @@
                 }
             %> 
             <%@include file="US_footer.jsp" %>
+            <%@include file="US_RequestSupport.jsp" %>
+
         </div>
 
         <script>

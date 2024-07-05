@@ -144,7 +144,7 @@
                             <h1 class="mb-4" left-element>My Profile</h1>
                         </div>
                         <div class="btn-format right-element btn-format.right-element button" >
-                            
+
                             <a href="MainController?action=Edit profile&id=<%=custID%>"><button type="button" class="btn middle bg-white" style="border: 2px solid black;">
                                     <h5 style="color: black">Edit Profile</h5>
                                 </button></a>
@@ -227,6 +227,8 @@
 
 
     <%@include file="US_footer.jsp" %>
+    <%@include file="US_RequestSupport.jsp" %>
+
     <script>
 
         document.addEventListener('DOMContentLoaded', function () {

@@ -286,6 +286,7 @@
             </button>
         </div>
         <%@include file="US_footer.jsp" %>
+        <%@include file="US_RequestSupport.jsp" %>
 
         <script>
             document.addEventListener('DOMContentLoaded', function () {

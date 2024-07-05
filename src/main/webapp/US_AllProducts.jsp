@@ -456,6 +456,8 @@
             </div>
         </div>
         <jsp:include page="US_footer.jsp" />
+        <%@include file="US_RequestSupport.jsp" %>
+
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>
