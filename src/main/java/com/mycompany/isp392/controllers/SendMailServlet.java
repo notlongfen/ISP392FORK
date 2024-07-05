@@ -32,6 +32,8 @@ public class SendMailServlet extends HttpServlet {
     private static final String SUCCESS_REPLY_SUPPORT = "GetSupportListController";
     private static final String SUCCESS_SEND_EMAIL_UPDATE_ORDER_STATUS = "EditOrderController";
     private static final String ERROR_SEND_EMAIL_UPDATE_ORDER_STATUS  = "AD_EditOrder.jsp";
+    private static final String SUCCESS_SEND_REQUEST = "RequestSupportController";
+    private static final String ERROR_SEND_REQUEST = "AD_RequestSupport.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -46,6 +48,8 @@ public class SendMailServlet extends HttpServlet {
                 url = processReplySupport(request, response, sessionCur);
             } else if("UpdateOrderController".equals(action)){
                 url = updateOrderStatusFromAdmin(request, response);
+            } else if("RequestSupportController".equals(action)){
+                url = requestForSupport(request, response);
             }
             response.sendRedirect(url);
     }
@@ -160,6 +164,19 @@ public class SendMailServlet extends HttpServlet {
         boolean result = sendEmail(userDTO.getEmail(), "Your Order Status Just Got Updated", "Your order status has been updated to " + status);
         if(result){
             url = SUCCESS_SEND_EMAIL_UPDATE_ORDER_STATUS;
+        }
+        return url;
+    }
+
+    private String requestForSupport(HttpServletRequest request, HttpServletResponse response) {
+        String toEmail = request.getParameter("email");
+        String subject = request.getParameter("title");
+        String messageBody = request.getParameter("content");
+        String url = ERROR_SEND_REQUEST;
+
+        boolean result = sendEmail(toEmail, subject, messageBody);
+        if (result) {
+            url = SUCCESS_SEND_REQUEST;
         }
         return url;
     }

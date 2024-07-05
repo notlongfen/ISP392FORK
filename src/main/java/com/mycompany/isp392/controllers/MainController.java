@@ -227,6 +227,10 @@ public class MainController extends HttpServlet {
     private static final String GET_USER_INFO = "GetUserInfo";
     private static final String GET_USER_INFO_CONTROLLER = "GetUserInfoController";
 
+    private static final String REQUEST_FOR_SUPPORT = "Request For Support";
+    private static final String REQUEST_FOR_SUPPORT_CONTROLLER = "SendMailServlet";
+
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -385,6 +389,8 @@ public class MainController extends HttpServlet {
                 url = ADD_WISHLIST_CONTROLLER;
             } else if (GET_USER_INFO.equals(action)) {
                 url = GET_USER_INFO_CONTROLLER;
+            } else if (REQUEST_FOR_SUPPORT.equals(action)) {
+                url = REQUEST_FOR_SUPPORT_CONTROLLER;
             }
 
         } catch (Exception e) {

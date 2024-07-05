@@ -32,6 +32,7 @@ public class SupportDAO {
     private static final String GET_ALL_SUPPORT_INFO = "SELECT * FROM Supports \n";
     private static final String ADD_SUPPORT_HISTORY = "INSERT INTO  ProcessSupports (EmpID, SupportID, responseMessage, title, responseDate) VALUES (?, ?, ?,?, GETDATE());";
     private static final String GET_SUPPORT_PROCESS_INFO_BY_SUPPORT_ID = "SELECT * FROM ProcessSupports WHERE SupportID = ?";
+    private static final String ADD_SUPPORT = "INSERT INTO Supports (status, requestDate, requestMessage, CustID, title) VALUES (1, GETDATE(), ?, (SELECT CustID FROM Customers WHERE CustID = (SELECT CustID FROM Users WHERE email = ?)), ?)";
 
     public int getLastSupportId() throws SQLException {
         int lastSupportId = 0;
@@ -172,13 +173,13 @@ public class SupportDAO {
             if (conn != null) {
                 ptm = conn.prepareStatement(GET_ALL_SUPPORT_INFO);
                 rs = ptm.executeQuery();
-                 while (rs.next()) {
+                while (rs.next()) {
                     int supportID = rs.getInt("supportID");
                     int status = rs.getInt("status");
                     Date requestDate = rs.getDate("requestDate");
                     String requestMessage = rs.getString("requestMessage");
                     int custID = rs.getInt("custID");
-                     supports.add( new SupportDTO(supportID, status, requestDate, requestMessage, custID));
+                    supports.add(new SupportDTO(supportID, status, requestDate, requestMessage, custID));
                 }
             }
         } catch (Exception e) {
@@ -257,5 +258,35 @@ public class SupportDAO {
             }
         }
         return pdto;
+    }
+
+    public boolean insertToSupport(String customerEmail, String title, String content) {
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        boolean result = false;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(ADD_SUPPORT);
+                ptm.setString(1, content);
+                ptm.setString(2, customerEmail);
+                ptm.setString(3, title);
+                result = ptm.executeUpdate() > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ptm != null) {
+                    ptm.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
     }
 }

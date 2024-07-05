@@ -15,15 +15,18 @@
         <button id="openFormButton"><i class='fas fa-pen'></i></button>
 
             <div id="popupForm" class="form-popup">
-                <form class="form-container">
+                <form class="form-container" action="MainController" method="POST">
                     <h4 style="text-align: center">PLEASE FILL IN THE BLANKS TO REQUEST SUPPORT</h4>
                     <label for="email"><b>Email</b></label>
                     <input type="text" id="email" name="email" required>
 
+                    <label for="title"><b>Title</b></label>
+                    <input type="text" id="title" name="title" required>
+
                     <label for="content"><b>Content</b></label>
                     <textarea id="content" name="content" required></textarea>
 
-                    <button type="submit" class="btn">Send</button>
+                    <input type="submit" class="btn" value="Request For Support">
                     <button type="button" class="btn cancel" id="closeFormButton">Close</button>
                 </form>
             </div>
