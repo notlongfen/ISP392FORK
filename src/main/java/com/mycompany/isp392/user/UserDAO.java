@@ -41,6 +41,10 @@ public class UserDAO {
             + "INNER JOIN Customers c ON s.CustID = c.CustID\n"
             + "INNER JOIN Users u ON c.CustID = u.UserID\n";
     private static final String GET_CUSTOMER_INFO = "SELECT * FROM Customers WHERE CustID = ?";
+    private static final String GET_FULL_CUSTOMER_BY_ID = "SELECT * FROM Users u JOIN Customers c ON u.UserID = c.CustID WHERE c.CustID=?";
+    private static final String UPDATE_USER_PROFILE ="UPDATE Users SET userName = ?, email = ?, phone = ? WHERE UserID = ?";
+    private static final String UPDATE_CUSTOMER_PROFILE ="UPDATE Customers SET birthday = ?, province_city = ?, district = ?, ward = ?, detailAddress = ? WHERE CustID = ?";
+    
     public UserDTO checkLogin(String email, String password) throws SQLException {
         UserDTO user = null;
         Connection conn = null;
@@ -808,5 +812,99 @@ public class UserDAO {
             }
         }
         return result;
+    }
+    
+    public CustomerDTO getFullCustomerByID(int CustID) throws SQLException {
+        CustomerDTO customer = null;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_FULL_CUSTOMER_BY_ID);
+                ptm.setInt(1, CustID);
+                rs = ptm.executeQuery();
+                if (rs.next()) { 
+                    String userName = rs.getString("userName");
+                    String email = rs.getString("email");
+                    int phone = rs.getInt("phone");
+                    int points = rs.getInt("points");
+                    Date birthday = rs.getDate("birthday");
+                    String city = rs.getString("province_city");
+                    String district = rs.getString("district");
+                    String ward = rs.getString("ward");
+                    String address = rs.getString("detailAddress");
+                    customer = new CustomerDTO(userName, email, phone, points, birthday, city, district, ward, address);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return customer;
+    }
+     public boolean updateUserAndCustomer(CustomerDTO customer) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptmUser = null;
+        PreparedStatement ptmCustomer = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                // Disable auto-commit mode
+                conn.setAutoCommit(false);
+
+                // Update User
+                ptmUser = conn.prepareStatement(UPDATE_USER_PROFILE);
+                ptmUser.setString(1, customer.getUserName());
+                ptmUser.setString(2, customer.getEmail());
+                ptmUser.setInt(3, customer.getPhone());
+                ptmUser.setInt(4, customer.getUserID());
+                boolean userUpdated = ptmUser.executeUpdate() > 0;
+
+                // Update Customer
+                ptmCustomer = conn.prepareStatement(UPDATE_CUSTOMER_PROFILE);
+                ptmCustomer.setDate(1, (Date) customer.getBirthday());
+                ptmCustomer.setString(2, customer.getCity());
+                ptmCustomer.setString(3, customer.getDistrict());
+                ptmCustomer.setString(4, customer.getWard());
+                ptmCustomer.setString(5, customer.getAddress());
+                ptmCustomer.setInt(6, customer.getUserID());   
+                boolean customerUpdated = ptmCustomer.executeUpdate() > 0;
+
+                // Check both updates
+                if (userUpdated && customerUpdated) {
+                    // Commit the transaction if both updates are successful
+                    conn.commit();
+                    check = true;
+                } else {
+                    // Rollback the transaction if any update fails
+                    conn.rollback();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ptmUser != null) {
+                ptmUser.close();
+            }
+            if (ptmCustomer != null) {
+                ptmCustomer.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
     }
 }
