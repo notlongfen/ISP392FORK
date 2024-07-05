@@ -7,6 +7,7 @@ package com.mycompany.isp392.controllers;
 
 import com.mycompany.isp392.cart.CartDAO;
 import com.mycompany.isp392.cart.CartDetailsDTO;
+import com.mycompany.isp392.user.UserDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -33,16 +34,15 @@ public class ViewCartController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-//        HttpSession session = request.getSession();
-//        UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
-//        if (loginUser == null) {
-//            response.sendRedirect("login.jsp");
-//            return;
-//        }
+        HttpSession session = request.getSession();
+        UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
+        if (loginUser == null) {
+            response.sendRedirect("US_SignIn.jsp");
+            return;
+        }
         
         String url = ERROR;
-//        int custID = loginUser.getUserID();
-int custID= 1;
+        int custID = loginUser.getUserID();
         CartDAO dao = new CartDAO();
         try {
             int cartID = dao.getCartIDByCustomer(custID);
