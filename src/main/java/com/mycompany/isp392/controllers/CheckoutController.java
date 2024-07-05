@@ -99,8 +99,9 @@ public class CheckoutController extends HttpServlet {
         String url = ERROR;
         HttpSession session = request.getSession();
         CartDTO cart = (CartDTO) session.getAttribute("cart");
-        UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
         CartDAO cartDAO = new CartDAO();
+        UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
+        
         // List<ProductDetailsDTO> products = (List<ProductDetailsDTO>)
         // session.getAttribute("LIST_PRODUCT");
         if (cart == null) {
