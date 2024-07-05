@@ -228,7 +228,7 @@ public class MainController extends HttpServlet {
     private static final String GET_USER_INFO_CONTROLLER = "GetUserInfoController";
 
     private static final String REQUEST_FOR_SUPPORT = "Request For Support";
-    private static final String REQUEST_FOR_SUPPORT_CONTROLLER = "SendMailServlet";
+    private static final String REQUEST_FOR_SUPPORT_CONTROLLER = "RequestSupportController";
 
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)

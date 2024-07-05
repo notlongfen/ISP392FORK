@@ -28,7 +28,7 @@ public class LoginController extends HttpServlet {
     public void initClientID() throws ServletException{
 
 
-        Dotenv dotenv = Dotenv.configure().directory("D:\\FPT\\K5\\ISP392\\ISP392").load();
+        Dotenv dotenv = Dotenv.configure().directory("/home/notlongfen/code/java/ISP392/.env").load();
         clientID = dotenv.get("GOOGLE_CLIENT_ID");
     }
 

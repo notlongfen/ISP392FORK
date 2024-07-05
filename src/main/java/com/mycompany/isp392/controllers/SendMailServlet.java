@@ -48,7 +48,7 @@ public class SendMailServlet extends HttpServlet {
                 url = processReplySupport(request, response, sessionCur);
             } else if("UpdateOrderController".equals(action)){
                 url = updateOrderStatusFromAdmin(request, response);
-            } else if("RequestSupportController".equals(action)){
+            } else if("Request For Support".equals(action)){
                 url = requestForSupport(request, response);
             }
             response.sendRedirect(url);

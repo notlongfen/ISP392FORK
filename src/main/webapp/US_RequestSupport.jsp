@@ -26,7 +26,7 @@
                     <label for="content"><b>Content</b></label>
                     <textarea id="content" name="content" required></textarea>
 
-                    <input type="submit" class="btn" value="Request For Support">
+                    <input type="submit" class="btn" value="Request For Support" name="action">
                     <button type="button" class="btn cancel" id="closeFormButton">Close</button>
                 </form>
             </div>
