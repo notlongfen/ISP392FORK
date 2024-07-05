@@ -17,7 +17,7 @@ public class LoginController extends HttpServlet {
 
     private static final String ERROR = "US_SignIn.jsp";
     private static final int CUSTOMER = 4;
-    private static final String CUSTOMER_PAGE = "WishlistController";
+    private static final String CUSTOMER_PAGE = "US_index.jsp";
     private static final int SYSTEM_MANAGER = 1;
     private static final int SHOP_MANAGER = 2;
     private static final int SHOP_STAFF = 3;
@@ -26,7 +26,9 @@ public class LoginController extends HttpServlet {
     private static final String SHOP_STAFF_PAGE = "GetProductsController";
     private String clientID;
     public void initClientID() throws ServletException{
-        Dotenv dotenv = Dotenv.configure().directory("/home/notlongfen/code/java/ISP392/.env").load();
+
+
+        Dotenv dotenv = Dotenv.configure().directory("D:\\FPT\\K5\\ISP392\\ISP392").load();
         clientID = dotenv.get("GOOGLE_CLIENT_ID");
     }
 

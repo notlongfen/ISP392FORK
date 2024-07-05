@@ -1,5 +1,6 @@
 package com.mycompany.isp392.brand;
 
+import java.sql.Date;
 import java.util.List;
 import utils.DbUtils;
 import java.sql.Connection;
@@ -7,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.sql.Timestamp;
 
 public class BrandDAO {
 
@@ -16,9 +18,12 @@ public class BrandDAO {
     private static final String UPDATE_BRAND = "UPDATE Brands SET brandName=?, image=?, status=? WHERE brandID=?";
     private static final String DELETE_BRAND = "UPDATE Brands SET status = 0 WHERE brandID=?";
     private static final String CHECK_BRAND = "SELECT brandID FROM Brands WHERE brandName LIKE ? AND brandID != ?";
-        private static final String CHECK_BRAND_NAME = "SELECT brandID FROM Brands WHERE brandName LIKE ? ";
+    private static final String CHECK_BRAND_NAME = "SELECT brandID FROM Brands WHERE brandName LIKE ? ";
     private static final String GET_ALL_BRANDS = "SELECT * FROM Brands";
-    private static final String GET_BRAND = "SELECT * FROM Brands WHERE brandID=?";
+//    private static final String GET_BRAND = "SELECT * FROM Brands WHERE brandID=?";
+    private static final String GET_BRAND = "SELECT * FROM Brands WHERE BrandID=?";
+    private static final String ADD_MANAGE_BRAND = "INSERT INTO ManageBrands(BrandID, EmpID, FieldNew, FieldOld, Action) values (?,?,?,?,?)";
+    private static final String GET_MANAGE_BRAND = "SELECT * FROM ManageBrands";
 
     public List<BrandDTO> searchForBrand(String brandName) {
         List<BrandDTO> list = new ArrayList<>();
@@ -93,32 +98,32 @@ public class BrandDAO {
         return check;
     }
 
-   public boolean updateBrand(String brandName, String brandImage, int brandID, int status) throws SQLException {
-    boolean check = false;
-    Connection conn = null;
-    PreparedStatement ptm = null;
-    try {
-        conn = DbUtils.getConnection();
-        if (conn != null) {
-            ptm = conn.prepareStatement(UPDATE_BRAND);
-            ptm.setString(1, brandName);
-            ptm.setString(2, brandImage);
-            ptm.setInt(3, status);
-            ptm.setInt(4, brandID);
-            check = ptm.executeUpdate() > 0;
+    public boolean updateBrand(String brandName, String brandImage, int brandID, int status) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(UPDATE_BRAND);
+                ptm.setString(1, brandName);
+                ptm.setString(2, brandImage);
+                ptm.setInt(3, status);
+                ptm.setInt(4, brandID);
+                check = ptm.executeUpdate() > 0;
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
         }
-    } catch (SQLException | ClassNotFoundException e) {
-        e.printStackTrace();
-    } finally {
-        if (ptm != null) {
-            ptm.close();
-        }
-        if (conn != null) {
-            conn.close();
-        }
+        return check;
     }
-    return check;
-}
 
     public boolean deleteBrand(int brandID) throws SQLException {
         boolean check = false;
@@ -137,6 +142,41 @@ public class BrandDAO {
             closeResources(conn, ptm, null);
         }
         return check;
+    }
+
+    public int deleteBrand1(int brandID) throws SQLException {
+        int newStatus = -1;
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(DELETE_BRAND);
+                ptm.setInt(1, brandID);
+                check = ptm.executeUpdate() > 0;
+                if (check) {
+                    ptm = conn.prepareStatement(GET_BRAND);
+                    ptm.setInt(1, brandID);
+                    rs = ptm.executeQuery();
+                    if (rs.next()) {
+                        newStatus = rs.getInt("status");
+                    }
+                }
+
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+        }
+        return newStatus;
     }
 
     public boolean checkBrandExists(String brandName, int brandID) throws SQLException {
@@ -163,7 +203,7 @@ public class BrandDAO {
         }
         return check;
     }
-    
+
     public boolean checkBrandNameExists(String brandName) throws SQLException {
         boolean check = false;
         Connection conn = null;
@@ -187,6 +227,7 @@ public class BrandDAO {
         }
         return check;
     }
+
     public List<BrandDTO> getAllBrands() throws SQLException {
         List<BrandDTO> brands = new ArrayList<>();
         Connection conn = null;
@@ -227,7 +268,7 @@ public class BrandDAO {
                 ptm.setString(1, brandID);
                 rs = ptm.executeQuery();
                 if (rs.next()) {
-                    String brandName = rs.getString("brandName");
+                    String brandName = rs.getString("BrandName");
                     String brandImage = rs.getString("image");
                     int status = rs.getInt("status");
                     brand = new BrandDTO(Integer.parseInt(brandID), brandName, brandImage, status);
@@ -264,36 +305,102 @@ public class BrandDAO {
             }
         }
     }
+
     public String getBrandImagePath(int brandID) throws SQLException {
-    String imagePath = null;
-    Connection conn = null;
-    PreparedStatement ptm = null;
-    ResultSet rs = null;
-    String query = "SELECT image FROM Brands WHERE brandID = ?";
-    try {
-        conn = DbUtils.getConnection();
-        if (conn != null) {
-            ptm = conn.prepareStatement(query);
-            ptm.setInt(1, brandID);
-            rs = ptm.executeQuery();
-            if (rs.next()) {
-                imagePath = rs.getString("image");
+        String imagePath = null;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        String query = "SELECT image FROM Brands WHERE brandID = ?";
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(query);
+                ptm.setInt(1, brandID);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    imagePath = rs.getString("image");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
             }
         }
-    } catch (Exception e) {
-        e.printStackTrace();
-    } finally {
-        if (rs != null) {
-            rs.close();
-        }
-        if (ptm != null) {
-            ptm.close();
-        }
-        if (conn != null) {
-            conn.close();
-        }
+        return imagePath;
     }
-    return imagePath;
-}
+
+    public boolean addManageBrand(ManageBrandDTO manage) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(ADD_MANAGE_BRAND);
+                ptm.setInt(1, manage.getBrandID());
+                ptm.setInt(2, manage.getEmpID());
+                ptm.setString(3, manage.getNewField());
+                ptm.setString(4, manage.getOldField());
+                ptm.setString(5, manage.getAction());
+                check = ptm.executeUpdate() > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+
+    public List<ManageBrandDTO> getManageBrand() throws SQLException {
+        List<ManageBrandDTO> list = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_MANAGE_BRAND);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    int brandID = rs.getInt("BrandID");
+                    int empID = rs.getInt("EmpID");
+                    String oldField = rs.getString("FieldOld");
+                    String newField = rs.getString("FieldNew");
+                    String action = rs.getString("Action");
+                    Timestamp changeDate = rs.getTimestamp("ChangeDate");
+                    list.add(new ManageBrandDTO(brandID, empID, oldField, newField, action, changeDate));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return list;
+    }
 
 }

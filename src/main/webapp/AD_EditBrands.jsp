@@ -49,9 +49,12 @@
                                             BrandDTO brand = (BrandDTO) request.getAttribute("BRAND");
                                             if (brand != null) {
                                         %>
-                                        <input type="text" class="form-control" name="brandName" value="<%= brand.getBrandName() %>" 
+
+                                        <input type="text" class="form-control" name="newBrandName" value="<%= brand.getBrandName() %>" 
                                                style="width: 550px">
+                                        <input type="hidden" class="form-control" name="oldBrandName" value="<%= brand.getBrandName() %>">
                                         <input type="hidden" name="brandID" value="<%= brand.getBrandID() %>">
+                                        <input type="hidden" name="edit" value="Edit">
                                     </div>
                                     <div class="form-group col-md-8 mt-xl-5" style="margin-left: 100px;">
                                         <label for="brandImage">Brand Image</label>
@@ -75,7 +78,7 @@
                     </div>
                 </div>
             </div>
-       <!-- Error Modal -->
+            <!-- Error Modal -->
             <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">

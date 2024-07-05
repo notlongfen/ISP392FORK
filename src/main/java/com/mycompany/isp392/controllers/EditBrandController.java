@@ -1,6 +1,7 @@
 package com.mycompany.isp392.controllers;
 
 import com.mycompany.isp392.brand.*;
+import com.mycompany.isp392.user.UserDTO;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -12,6 +13,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 
 @MultipartConfig
@@ -29,13 +31,20 @@ public class EditBrandController extends HttpServlet {
         BrandError brandError = new BrandError();
         boolean checkValidation = true;
         try {
+            HttpSession session = request.getSession();
+            String newBrandName = request.getParameter("newBrandName");
+//            int brandID = Integer.parseInt(request.getParameter("brandID"));
             int brandID = Integer.parseInt(request.getParameter("brandID"));
-            String brandName = request.getParameter("brandName");
+//            String brandName = request.getParameter("brandName");
+
+            UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
+            int empID = user.getUserID();
+            String oldBrandName = request.getParameter("oldBrandName");
             Part filePart = request.getPart("brandImage");
             int status = Integer.parseInt(request.getParameter("status"));
-
+            ManageBrandDTO manage = null;
             BrandDAO brandDAO = new BrandDAO();
-            if (brandDAO.checkBrandExists(brandName, brandID)) {
+            if (brandDAO.checkBrandExists(newBrandName, brandID)) {
                 brandError.setBrandNameError("Brand already exists.");
                 checkValidation = false;
             }
@@ -54,8 +63,13 @@ public class EditBrandController extends HttpServlet {
             }
 
             if (checkValidation) {
-                boolean check = brandDAO.updateBrand(brandName, imagePath, brandID, status);
+                boolean check = brandDAO.updateBrand(newBrandName, imagePath, brandID, status);
                 if (check) {
+                    if(!oldBrandName.equals(newBrandName)) {
+                    String action = request.getParameter("edit");
+                    manage = new ManageBrandDTO(brandID, empID, oldBrandName, newBrandName, action);
+                    }
+                    boolean checkAdd = brandDAO.addManageBrand(manage);
                     request.setAttribute("SUCCESS_MESSAGE", "INFORMATION UPDATED SUCCESSFULLY !");
                     url = SUCCESS;
                 }

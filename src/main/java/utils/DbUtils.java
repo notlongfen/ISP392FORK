@@ -12,7 +12,7 @@ import org.mindrot.jbcrypt.BCrypt;
 public class DbUtils {
 
 
-    private static Dotenv dotenv = Dotenv.configure().directory("/home/notlongfen/code/java/ISP392/.env").load();
+    private static Dotenv dotenv = Dotenv.configure().directory("D:\\FPT\\K5\\ISP392\\ISP392_Test").load();
 
     public static Connection getConnection() throws ClassNotFoundException, SQLException {
         Connection conn = null;

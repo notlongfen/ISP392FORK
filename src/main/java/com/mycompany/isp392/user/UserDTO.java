@@ -63,6 +63,14 @@ public class UserDTO {
 
     }
 
+    public UserDTO(String userName, String email, int phone) {
+        this.userName = userName;
+        this.email = email;
+        this.phone = phone;
+    }
+    
+    
+    
     public int getUserID() {
         return UserID;
     }

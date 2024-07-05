@@ -108,11 +108,12 @@
                    for (PromotionDTO promotion : promotionList) {
             %>
 
-            <div class="main_slider mt-1" style="background-image:images/<%= promotion.getImage() %>">
+            <div class="main_slider mt-1" style="background-image: url('<%= promotion.getImage() %>')">
                 <div class="container fill_height">
                     <div class="row align-items-center fill_height">
                         <div class="col">
                             <div class="main_slider_content">
+                                
                                 <p class="collection_text">YOUR POINTS MUST BE HIGHER THAN <%= promotion.getCondition()%> 🌟</p>
                                 <h1 style="color: #FFF; font-size: 90px; margin-bottom: 40px;">SALE UP TO <%= promotion.getDiscountPer()%>%</h1>
                                 <h8 class="detail_text"><%= promotion.getDescription() %></h8>
