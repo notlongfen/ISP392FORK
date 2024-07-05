@@ -28,6 +28,7 @@ public class PromotionDAO {
     private static final String CHECK_PROMOTION_DUPLICATE = "SELECT * FROM Promotions WHERE promotionName LIKE ? AND status = ?";
     private static final String GET_PROMOTION_BY_ID = "SELECT promotionID, promotionName, startDate, endDate, discountPer, condition, description, status FROM Promotions WHERE promotionID = ?";
     private static final String GET_ALL_PROMOTIONS = "SELECT * FROM Promotions";
+    private static final String VIEW_PROMOTION = "SELECT * FROM Promotions";
 
     
     public boolean addPromotion(PromotionDTO promotion) throws SQLException {
@@ -330,6 +331,34 @@ public class PromotionDAO {
             if (conn != null) {
                 conn.close();
             }
+        }
+        return promotions;
+    }
+    public List<PromotionDTO> selectAllPromotions() throws ClassNotFoundException {
+        List<PromotionDTO> promotions = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(VIEW_PROMOTION);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    int promotionID = rs.getInt("promotionID");
+                    String promotionName = rs.getString("promotionName");
+                    Date startDate = rs.getDate("startDate");
+                    Date endDate = rs.getDate("endDate");
+                    int discountPer = rs.getInt("discountPer");
+                    int condition = rs.getInt("condition");
+                    String description = rs.getString("description");
+                    int status = rs.getInt("status");
+                    String image = rs.getString("image");                 
+                    promotions.add(new PromotionDTO(promotionID, promotionName, startDate, endDate, discountPer, condition, description, status, image));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return promotions;
     }

@@ -21,7 +21,7 @@ public class MainController extends HttpServlet {
     private static final String ADD_EMPLOYEE_PAGE = "Add_Employee_View";
     private static final String ADD_EMPLOYEE_PAGE_VIEW = "AD_AddEmployees.jsp";
     private static final String ADD_EMPLOYEE_CONTROLLER = "AddEmployeeController";
-    private static final String ADD_EMPLOYEE = "Add Employee";
+    private static final String ADD_EMPLOYEE = "Add_Employee";
 
     private static final String ADD_PRODUCT_PAGE = "Add_Product_Page";
     private static final String ADD_PRODUCT_PAGE_VIEW = "GetBrandsController";
@@ -190,6 +190,18 @@ public class MainController extends HttpServlet {
     
     private static final String PLACE_ORDER = "Place Order";
     private static final String ORDER_DETAIL_PAGE = "US_OrderDetail.jsp";
+    
+    private static final String VIEW_PROFILE = "View profile";
+    private static final String VIEW_PROFILE_CONTROLLER = "ViewProfileController";
+    
+    private static final String EDIT_PROFILE = "Edit profile";
+    private static final String EDIT_PROFILE_CONTROLLER = "ViewEditProfileController";
+    
+    private static final String SAVE_PROFILE = "Save profile";
+    private static final String SAVE_PROFILE_CONTROLLER = "SaveProfileController";
+    
+    private static final String VIEW_PROMOTION = "View promotion";
+    private static final String VIEW_PROMOTION_CONTROLLER = "ViewPromotionController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -321,7 +333,16 @@ public class MainController extends HttpServlet {
                 url = DELETE_WISHLIST_CONTROLLER;
             } else if (PLACE_ORDER.equals(action)){
                 url = ORDER_DETAIL_PAGE;
+            } else if (VIEW_PROFILE.equals(action)){
+                url = VIEW_PROFILE_CONTROLLER;
+            } else if (EDIT_PROFILE.equals(action)){
+                url = EDIT_PROFILE_CONTROLLER;
+            } else if (SAVE_PROFILE.equals(action)){
+                url = SAVE_PROFILE_CONTROLLER;
+            } else if (VIEW_PROMOTION.equals(action)){
+                url = VIEW_PROMOTION_CONTROLLER;
             }
+            
         } catch (Exception e) {
             log("error at MainController: " + e.toString());
         } finally {

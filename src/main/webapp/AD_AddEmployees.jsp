@@ -66,8 +66,8 @@
                                         <label for="phone" style="margin-top: 10px">Phone</label>
                                         <input type="number" class="form-control" id="empPhone" placeholder="Enter phone number" 
                                                style="width: 550px" name="phone">
-                                        <label for="phone" style="margin-top: 10px">Password</label>
-                                        <input type="password" class="form-control" id="empPhone" placeholder="Enter password" 
+                                        <label for="password" style="margin-top: 10px">Password</label>
+                                        <input type="password" class="form-control" id="empPassword" placeholder="Enter password" 
                                                style="width: 550px" name="password">
                                     </div>
                                 </div>

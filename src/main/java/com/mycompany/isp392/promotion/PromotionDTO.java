@@ -20,6 +20,7 @@ public class PromotionDTO {
     private int condition;
     private String description;
     private int status;
+    private String image;
 
     public PromotionDTO() {
     }
@@ -35,7 +36,20 @@ public class PromotionDTO {
         this.status = status;
     }
 
-    PromotionDTO(int promotionID, String promotionName, Date startDate, Date endDate, int discountPer, String description, int condition) {
+    public PromotionDTO(int promotionID, String promotionName, Date startDate, Date endDate, int discountPer, int condition, String description, int status, String image) {
+        this.promotionID = promotionID;
+        this.promotionName = promotionName;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.discountPer = discountPer;
+        this.condition = condition;
+        this.description = description;
+        this.status = status;
+        this.image = image;
+    }
+    
+
+    public PromotionDTO(int promotionID, String promotionName, Date startDate, Date endDate, int discountPer, String description, int condition) {
         this.promotionID = promotionID;
         this.promotionName = promotionName;
         this.startDate = startDate;
@@ -109,6 +123,14 @@ public class PromotionDTO {
         this.status = status;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+    
     @Override
     public String toString() {
         return "PromotionDTO{" + "promotionID=" + promotionID + ", promotionName=" + promotionName + ", startDate=" + startDate + ", endDate=" + endDate + ", discountPer=" + discountPer + ", condition=" + condition + ", status=" + status + '}';
