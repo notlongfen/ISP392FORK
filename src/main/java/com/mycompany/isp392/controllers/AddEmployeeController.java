@@ -19,7 +19,7 @@ public class AddEmployeeController extends HttpServlet {
   
 
    private static final String ERROR = "AD_AddEmployees.jsp";
-   private static final String SUCCESS = "SearchUserController";
+   private static final String SUCCESS = "US_SignIn.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

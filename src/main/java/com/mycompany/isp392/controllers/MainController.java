@@ -21,7 +21,7 @@ public class MainController extends HttpServlet {
     private static final String ADD_EMPLOYEE_PAGE = "Add_Employee_View";
     private static final String ADD_EMPLOYEE_PAGE_VIEW = "AD_AddEmployees.jsp";
     private static final String ADD_EMPLOYEE_CONTROLLER = "AddEmployeeController";
-    private static final String ADD_EMPLOYEE = "Add Employee";
+    private static final String ADD_EMPLOYEE = "Add_Employee";
 
     private static final String ADD_PRODUCT_PAGE = "Add_Product_Page";
     private static final String ADD_PRODUCT_PAGE_VIEW = "GetBrandsController";
