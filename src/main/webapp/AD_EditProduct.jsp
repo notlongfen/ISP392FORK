@@ -40,6 +40,12 @@
                 <div id="content">
                     <!-- Header -->
                     <%@include file="AD_header.jsp" %>
+                    <%
+                   if ((loginUser == null || 2!=loginUser.getRoleID()) && (loginUser == null || 3!=loginUser.getRoleID()) ) {
+                       response.sendRedirect("US_SignIn.jsp");
+                       return;
+                   }
+                    %>
                     <div class="container-fluid" id="container-wrapper">
                         <div class="form-container">
                             <h2 class="text-center" style="color: #000; font-weight: bold;">Edit Product</h2>
@@ -123,11 +129,11 @@
         <a class="scroll-to-top rounded" href="#page-top">
             <i class="fas fa-angle-up"></i>
         </a>
-        
+
         <!-- Error Modal -->
-         <% if (request.getAttribute("PRODUCT_ERROR") != null) { %>
-                    <%@include file="errorModal.jsp" %>
-                    <% } %>
+        <% if (request.getAttribute("PRODUCT_ERROR") != null) { %>
+        <%@include file="errorModal.jsp" %>
+        <% } %>
         <% if (request.getAttribute("PRODUCT_ERROR") != null) { %>
         <script>
             $(document).ready(function () {
@@ -135,7 +141,7 @@
             });
         </script>
         <% } %>
-        
+
         <!-- Include necessary scripts -->
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDzwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

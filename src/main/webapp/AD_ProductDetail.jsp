@@ -51,6 +51,12 @@
                 <div id="content">
                     <!---Header --->
                     <%@include file="AD_header.jsp" %>
+                    <%
+                                       if ((loginUser == null || 2!=loginUser.getRoleID()) && (loginUser == null || 3!=loginUser.getRoleID()) ) {
+                                           response.sendRedirect("US_SignIn.jsp");
+                                           return;
+                                       }
+                    %>
                     <div class="container-fluid" id="container-wrapper">
                         <div class="d-sm-flex align-items-center justify-content-between mb-4">
                             <h1 class="h3 mb-0 text-gray-900">Product Details</h1>
@@ -174,13 +180,13 @@
         <a class="scroll-to-top rounded" href="#page-top">
             <i class="fas fa-angle-up"></i>
         </a>
-        
-          <!-- Include the Modals -->
-                        <%@include file="logoutModal.jsp" %>
-                        <%@include file="confirmDeleteModal.jsp" %>
-                        <% if (request.getAttribute("SUCCESS_MESSAGE") != null) { %>
-                        <%@include file="successModal.jsp" %>
-                        <% } %>
+
+        <!-- Include the Modals -->
+        <%@include file="logoutModal.jsp" %>
+        <%@include file="confirmDeleteModal.jsp" %>
+        <% if (request.getAttribute("SUCCESS_MESSAGE") != null) { %>
+        <%@include file="successModal.jsp" %>
+        <% } %>
         <script>
             // Sorting functionality
             let ascending = true;
@@ -204,9 +210,9 @@
             document.querySelectorAll('.btn-danger[data-toggle="modal"]').forEach(btn => {
                 btn.addEventListener('click', function () {
                     const productDetailID = this.getAttribute('data-productdetailid');
-                     const parentProductID = this.getAttribute('data-parentid');
+                    const parentProductID = this.getAttribute('data-parentid');
                     document.getElementById('modalProductDetailID').value = productDetailID;
-                     document.getElementById('modalParentProductID').value = parentProductID;
+                    document.getElementById('modalParentProductID').value = parentProductID;
                 });
             });
         </script>

@@ -50,6 +50,16 @@
                 <div id="content">
                     <!-- Header -->
                     <%@include file="AD_header.jsp" %>
+                    <%
+         if (loginUser == null || 2 != loginUser.getRoleID()) {
+             response.sendRedirect("US_SignIn.jsp");
+             return;
+         }
+         String search = request.getParameter("search");
+         if (search == null) {
+             search = "";
+         }
+                    %>
                     <!-- Container Fluid-->
                     <div class="container-fluid" id="container-wrapper">
                         <div class="d-sm-flex align-items-center justify-content-between mb-4">

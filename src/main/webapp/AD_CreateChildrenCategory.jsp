@@ -48,7 +48,12 @@
                 <div id="content">
                     <!-- Header -->
                     <%@include file="AD_header.jsp" %>
-
+                    <%
+                                                                        if (loginUser == null || 2 != loginUser.getRoleID()) {
+                                                                            response.sendRedirect("US_SignIn.jsp");
+                                                                            return;
+                                                                        }
+                    %>
                     <div class="container-fluid" id="container-wrapper">
 
                         <div class="form-container">
@@ -61,17 +66,17 @@
                                         <input type="hidden" name="parentID" value="<%= parentID%>"/>
                                     </div>
                                 </div>
-<%--                                <div class="form-row mb-3">
-                                    <div class="form-group col-md-6">
-                                        <label for="parentID" >Select Parent Category</label>
-                                        <select class="form-select form-control" id="parentID" aria-label=".form-select-sm" 
-                                                style="width: 375px" name="parentID">
-                                            <%
-                                                CategoryDAO dao = new CategoryDAO();
-                                                List<CategoryDTO> list = (List<CategoryDTO>) dao.getActiveCategory();
-                                                if (list != null) {
-                                                    if (list.size() > 0) {
-                                                        for (CategoryDTO category : list) {
+                                <%--                                <div class="form-row mb-3">
+                                                                    <div class="form-group col-md-6">
+                                                                        <label for="parentID" >Select Parent Category</label>
+                                                                        <select class="form-select form-control" id="parentID" aria-label=".form-select-sm" 
+                                                                                style="width: 375px" name="parentID">
+                                                                            <%
+                                                                                CategoryDAO dao = new CategoryDAO();
+                                                                                List<CategoryDTO> list = (List<CategoryDTO>) dao.getActiveCategory();
+                                                                                if (list != null) {
+                                                                                    if (list.size() > 0) {
+                                                                                        for (CategoryDTO category : list) {
 
                                             %>
                                             <option value = <%=category.getCategoryID()%>><%=category.getCategoryName()%></option>

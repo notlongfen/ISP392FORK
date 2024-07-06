@@ -35,9 +35,6 @@ public class MainController extends HttpServlet {
     private static final String SEARCH_PRODUCT = "Search_Product";
     private static final String SEARCH_PRODUCT_CONTROLLER = "SearchProductController";
 
-    private static final String ADD_BRAND_PAGE = "Add_Brand_View";
-    private static final String ADD_BRAND_PAGE_VIEW = "brand.jsp";
-
     private static final String ADD_BRAND = "Add_Brand";
     private static final String ADD_BRAND_CONTROLLER = "AddBrandController";
 
@@ -131,6 +128,9 @@ public class MainController extends HttpServlet {
     private static final String EDIT_ORDER = "Send_Mail";
     private static final String EDIT_ORDER_CONTROLLER = "SendMailServlet";
 
+    private static final String DELETE_ORDER = "DeleteOrder";
+    private static final String DELETE_ORDER_CONTROLLER = "DeleteOrderController";
+
     private static final String FORGOT_PASSWORD_CONTROLLER = "ForgotPasswordController";
     private static final String FORGOT_PASSWORD_PAGE = "Forgot_Password";
 
@@ -211,6 +211,9 @@ public class MainController extends HttpServlet {
 
     private static final String VIEW_PROMOTION = "View promotion";
     private static final String VIEW_PROMOTION_CONTROLLER = "ViewPromotionController";
+    
+    private static final String LOGOUT = "Logout";
+    private static final String LOGOUT_CONTROLLER = "LogoutController";
 
     private static final String GET_CATEGORY_INFO = "GetCategoryInfo";
     private static final String GET_CATEGORY_INFO_CONTROLLER = "GetCategoryInfoController";
@@ -315,6 +318,14 @@ public class MainController extends HttpServlet {
                 url = DELETE_CATEGORY_CONTROLLER;
             } else if (DELETE_CHILDREN_CATEGORY.equals(action)) {
                 url = DELETE_CHILDREN_CATEGORY_CONTROLLER;
+            } else if (EDIT_ORDER.equals(action)) {
+                url = EDIT_ORDER_CONTROLLER;
+            } else if (GET_ORDER_LIST.equals(action)) {
+                url = GET_ORDER_LIST_CONTROLLER;
+            } else if (BACK_ORDER_LIST.equals(action)) {
+                url = GET_ORDER_LIST_CONTROLLER;
+            } else if (EDIT_ORDER_PAGE.equals(action)) {
+                url = EDIT_ORDER_PAGE_VIEW;
             } else if (FORGOT_PASSWORD_PAGE.equals(action)) {
                 url = FORGOT_PASSWORD_CONTROLLER;
             } else if (VERIFY_TOKEN.equals(action)) {
@@ -345,10 +356,6 @@ public class MainController extends HttpServlet {
                 url = DELETE_DETAILS_CONTROLLER;
             } else if (EDIT_PRODUCT_DETAILS.equals(action)) {
                 url = EDIT_PRODUCT_DETAILS_CONTROLLER;
-            } else if (GET_BRANDS_PAGE.equals(action)) {
-                url = GET_BRANDS_PAGE_VIEW;
-            } else if (EDIT_BRAND_PAGE.equals(action)) {
-                url = EDIT_BRAND_PAGE_VIEW;
             } else if (DELETE_USER.equals(action)) {
                 url = DELETE_USER_CONTROLLER;
             } else if (VIEW_PRIVACY.equals(action)) {
@@ -391,6 +398,8 @@ public class MainController extends HttpServlet {
                 url = GET_USER_INFO_CONTROLLER;
             } else if (REQUEST_FOR_SUPPORT.equals(action)) {
                 url = REQUEST_FOR_SUPPORT_CONTROLLER;
+            } else if (LOGOUT.equals(action)) {
+                url = LOGOUT_CONTROLLER;
             }
 
         } catch (Exception e) {

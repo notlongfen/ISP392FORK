@@ -39,6 +39,7 @@
         </style>
     </head>
     <body id="page-top">
+
         <div id="wrapper">
             <!-- Sidebar -->
             <%@include file="AD_sidebar.jsp" %>
@@ -47,6 +48,12 @@
                 <div id="content">
                     <!-- Header -->
                     <%@include file="AD_header.jsp" %>
+                    <%
+                   if ((loginUser == null || 2!=loginUser.getRoleID()) && (loginUser == null || 3!=loginUser.getRoleID()) ) {
+                       response.sendRedirect("US_SignIn.jsp");
+                       return;
+                   }
+                    %>
                     <div class="container-fluid" id="container-wrapper">
                         <div class="d-sm-flex align-items-center justify-content-between mb-4">
                             <h1 class="h3 mb-0 text-gray-900">All Products</h1>
@@ -305,7 +312,7 @@
                                 });
                             });
                         <script>
-                                                            document.querySelectorAll('.btn-danger[data-toggle="modal"]').forEach(btn => {
+                                                        document.querySelectorAll('.btn-danger[data-toggle="modal"]').forEach(btn => {
                                     btn.addEventListener('click', function () {
                                         const id = this.getAttribute('data-id');
                                         const deleteType = this.getAttribute('data-delete-type');
@@ -313,8 +320,8 @@
                                         document.getElementById('modalDeleteType').value = deleteType;
                                         document.getElementById('deleteForm').action = deleteType === 'product' ? 'DeleteProductController' : 'DeleteProductDetailsController';
                                     });
-                                                                });
-                                            </script>
+                                                        });
+            </script>
 
                     </script>
                     <script src="vendor/jquery/jquery.min.js"></script>

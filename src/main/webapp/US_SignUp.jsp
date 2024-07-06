@@ -3,7 +3,6 @@
     Created on : May 31, 2024, 9:42:35 PM
     Author     : jojo
 --%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="com.mycompany.isp392.user.UserError" %>
 
@@ -44,7 +43,7 @@
                     </div>
 
                     <!--Form--->
-                    <form action="MainController" method="POST">
+                    <form action="RegisterController" method="POST">
                         <div class="mb-3">
                             <label for="fullName" class="form-label" >Enter your full name</label>
                             <input type="text" class="form-control" id="fullName" placeholder="Enter your full name" name="userName" required="">
@@ -55,33 +54,32 @@
                         </div>
                         <div class="mb-3">
                             <label for="phoneNumber" class="form-label">Phone number</label>
-                            <input type="tel" class="form-control" id="phoneNumber" placeholder="Phone number" name="phone" required="">
+                            <input type="number" class="form-control" id="phoneNumber" placeholder="Phone number" name="phone" required="">
                         </div>
                         <div class="mb-3">
                             <label class="form-label">City</label>
-                            <select class="form-select" id="city" aria-label = ".form-select-sm">
-                                <option value="" selected>Select your city</option>  
+                            <select class="form-select" id="city" name="city" aria-label = ".form-select-sm">
+                                <option value="" >Select your city</option>  
                             </select>
                         </div>
                         <div class="row mb-3 d-flex justify-content-between">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">District</label>
-                                <select class="form-select" id="district" aria-label=".form-select-sm">
-                                    <option value="" selected>Select District</option>
+                                <select class="form-select" id="district" name="district" aria-label=".form-select-sm">
+                                    <option value="" >Select District</option>
                                 </select>
                             </div>  
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Ward</label>
-                                <select class="form-select" id="ward" aria-label=".form-select-sm">
-                                    <option value="" selected>Select Ward</option>
+                                <select class="form-select" id="ward" name="ward" aria-label=".form-select-sm">
+                                    <option value="" >Select Ward</option>
                                 </select>
                             </div>
                         </div>
                         <div class="mb-3">
                             <label for="address" class="form-label">Address</label>
-                            <input type="text" class="form-control" id="address" placeholder="Address" name="address" required="">
+                            <input type="text" class="form-control" id="address" placeholder="Detail Address" name="address" required="">
                         </div>
-
                         <div class="mb-3">
                             <label for="dob" class="form-label">Date of birth</label>
                             <input type="date" class="form-control" id="dob" name="birthday" required="">
@@ -89,11 +87,17 @@
                         <div class="mb-3 position-relative">
                             <label for="password" class="form-label">Password</label>
                             <input type="password" class="form-control" id="password" placeholder="Password" name="password" required="">
+                            <i class="far fa-eye" id="togglePassword" style="cursor: pointer; position: absolute; right: 10px; top: 35px;"></i>
                         </div>
                         <div class="mb-3 position-relative">
                             <label for="confirmPassword" class="form-label">Confirm Password</label>
                             <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password" name="confirmPassword" required="">
+                            <i class="far fa-eye" id="toggleConfirmPassword" style="cursor: pointer; position: absolute; right: 10px; top: 35px;"></i>
                         </div>
+
+                        <input type="hidden" id="cityName" name="cityName">
+                        <input type="hidden" id="districtName" name="districtName">
+                        <input type="hidden" id="wardName" name="wardName">
 
                         <div class="mb-3 form-check">
                             <input type="checkbox" class="form-check-input" id="terms" required="">
@@ -101,7 +105,7 @@
                                 I confirm that I have read and accept the <a href="MainController?action=View_term_and_condition">Terms and Conditions</a> and the <a href="MainController?action=View_privacy">Privacy Policy</a>.
                             </label>
                         </div>
-                        <button type="submit" class="btn btn-dark w-100" name="action" value="Sign In">Sign In</button>
+                        <button type="submit" class="btn btn-dark w-100" name="action" value="Sign Up">Sign Up</button>
                     </form>
                 </div>
             </div>
@@ -116,6 +120,10 @@
             var citis = document.getElementById("city");
             var districts = document.getElementById("district");
             var wards = document.getElementById("ward");
+            var cityNameField = document.getElementById("cityName");
+            var districtNameField = document.getElementById("districtName");
+            var wardNameField = document.getElementById("wardName");
+
             var Parameter = {
                 url: "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json",
                 method: "GET",
@@ -131,48 +139,52 @@
                     citis.options[citis.options.length] = new Option(x.Name, x.Id);
                 }
                 citis.onchange = function () {
-                    district.length = 1;
-                    ward.length = 1;
+                    districts.length = 1;
+                    wards.length = 1;
+                    cityNameField.value = citis.options[citis.selectedIndex].text;
+                    districtNameField.value = '';
+                    wardNameField.value = '';
                     if (this.value != "") {
                         const result = data.filter(n => n.Id === this.value);
-
                         for (const k of result[0].Districts) {
-                            district.options[district.options.length] = new Option(k.Name, k.Id);
+                            districts.options[districts.options.length] = new Option(k.Name, k.Id);
                         }
                     }
                 };
-                district.onchange = function () {
-                    ward.length = 1;
+                districts.onchange = function () {
+                    wards.length = 1;
+                    districtNameField.value = districts.options[districts.selectedIndex].text;
+                    wardNameField.value = '';
                     const dataCity = data.filter((n) => n.Id === citis.value);
                     if (this.value != "") {
                         const dataWards = dataCity[0].Districts.filter(n => n.Id === this.value)[0].Wards;
-
                         for (const w of dataWards) {
                             wards.options[wards.options.length] = new Option(w.Name, w.Id);
                         }
                     }
                 };
+                wards.onchange = function () {
+                    wardNameField.value = wards.options[wards.selectedIndex].text;
+                };
             }
-        </script>
-        <script>
-            const togglePassword = document.querySelector('#togglePassword');
-            const password = document.querySelector('#password');
-            const toggleConfirmPassword = document.querySelector('#toggleConfirmPassword');
-            const confirmPassword = document.querySelector('#confirmPassword');
 
-            togglePassword.addEventListener('click', function (e) {
-                const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-                password.setAttribute('type', type);
-                this.classList.toggle('fa-eye-slash');
+            const togglePassword = document.querySelector("#togglePassword");
+            const password = document.querySelector("#password");
+            const toggleConfirmPassword = document.querySelector("#toggleConfirmPassword");
+            const confirmPassword = document.querySelector("#confirmPassword");
+
+            togglePassword.addEventListener("click", function () {
+                const type = password.getAttribute("type") === "password" ? "text" : "password";
+                password.setAttribute("type", type);
+                this.classList.toggle("fa-eye-slash");
             });
 
-            toggleConfirmPassword.addEventListener('click', function (e) {
-                const type = confirmPassword.getAttribute('type') === 'password' ? 'text' : 'password';
-                confirmPassword.setAttribute('type', type);
-                this.classList.toggle('fa-eye-slash');
+            toggleConfirmPassword.addEventListener("click", function () {
+                const type = confirmPassword.getAttribute("type") === "password" ? "text" : "password";
+                confirmPassword.setAttribute("type", type);
+                this.classList.toggle("fa-eye-slash");
             });
-        </script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
 
+        </script>
     </body>
 </html>

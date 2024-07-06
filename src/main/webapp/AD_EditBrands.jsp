@@ -36,7 +36,12 @@
                 <div id="content">
                     <!-- Header -->
                     <%@include file="AD_header.jsp" %>
-
+                    <%
+                                                                        if (loginUser == null || 2 != loginUser.getRoleID()) {
+                                                                            response.sendRedirect("US_SignIn.jsp");
+                                                                            return;
+                                                                        }
+                    %>
                     <div class="container-fluid" id="container-wrapper">
 
                         <div class="form-container">

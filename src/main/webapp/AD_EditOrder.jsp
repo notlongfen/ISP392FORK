@@ -52,13 +52,7 @@
     </head>
 
     <body id="page-top">
-        <%
-                    UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
-                    if (loginUser == null || 2!=loginUser.getRoleID() ) {
-                        response.sendRedirect("US_SignIn.jsp");
-                        return;
-                    }
-        %>
+
         <div id="wrapper">
             <!-- Sidebar -->
             <%@include file="AD_sidebar.jsp" %>
@@ -71,7 +65,12 @@
 
                     <!-- Container Fluid-->
                     <%@include file="AD_header.jsp" %>
-
+                    <%
+                                        if (loginUser == null || 2!=loginUser.getRoleID() ) {
+                                            response.sendRedirect("US_SignIn.jsp");
+                                            return;
+                                        }
+                    %>
                     <div class="container-fluid" id="container-wrapper">
                         <div class="d-sm-flex align-items-center justify-content-between mb-4">
                             <h1 class="h3 mb-0 text-gray-900"><b>Orders</b></h1>

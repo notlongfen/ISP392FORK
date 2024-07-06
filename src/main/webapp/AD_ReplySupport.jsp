@@ -31,20 +31,7 @@
         </style>
     </head>
     <body id="page-top">
-        <%
-            UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
-            if ((loginUser == null || 2!=loginUser.getRoleID()) && (loginUser == null || 3!=loginUser.getRoleID()) ) {
-                response.sendRedirect("US_SignIn.jsp");
-                return;
-            }
-            SupportDTO support = (SupportDTO) request.getAttribute("SUPPORT_DETAIL");
-            UserDTO user = (UserDTO) request.getAttribute("USER_SUPPORT");
-            ProcessSupportDTO process = (ProcessSupportDTO) request.getAttribute("PROCESS_SUPPORT");
-            if (support == null) {
-                response.sendRedirect("AD_SupportList.jsp");
-                return;
-            }
-        %>
+
         <div id="wrapper">
             <!-- Sidebar -->
             <%@include file="AD_sidebar.jsp" %>
@@ -55,7 +42,19 @@
                 <div id="content">
                     <!-- Header -->
                     <%@include file="AD_header.jsp" %>
-
+                    <%
+                                if ((loginUser == null || 2!=loginUser.getRoleID()) && (loginUser == null || 3!=loginUser.getRoleID()) ) {
+                                    response.sendRedirect("US_SignIn.jsp");
+                                    return;
+                                }
+                                SupportDTO support = (SupportDTO) request.getAttribute("SUPPORT_DETAIL");
+                                UserDTO user = (UserDTO) request.getAttribute("USER_SUPPORT");
+                                ProcessSupportDTO process = (ProcessSupportDTO) request.getAttribute("PROCESS_SUPPORT");
+                                if (support == null) {
+                                    response.sendRedirect("AD_SupportList.jsp");
+                                    return;
+                                }
+                    %>
                     <div class="container-fluid" id="container-wrapper">
                         <div class="container mt-4">
                             <div class="form-container">

@@ -49,7 +49,12 @@
                 <div id="content">
                     <!-- Header -->
                     <%@include file="AD_header.jsp" %>
-
+                    <%
+                                       if ((loginUser == null || 2!=loginUser.getRoleID()) && (loginUser == null || 3!=loginUser.getRoleID()) ) {
+                                           response.sendRedirect("US_SignIn.jsp");
+                                           return;
+                                       }
+                    %>
                     <div class="container-fluid" id="container-wrapper">
                         <div class="form-container">
                             <h2 class="text-center mb-5" style="color: #000; font-weight: bold;">Edit Product Detail</h2>
@@ -60,7 +65,7 @@
 
                             <form action="EditProductDetailsController" method="post" enctype="multipart/form-data">
                                 <input type="hidden" name="productDetailID" value="<%= productDetail.getProductDetailsID() %>">
-                                
+
                                 <div class="form-row mb-3">
                                     <div class="form-group col-md-4">
                                         <label for="color">Color</label>

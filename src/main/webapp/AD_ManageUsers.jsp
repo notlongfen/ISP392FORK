@@ -102,16 +102,16 @@
             form label {
                 margin-top: 10px;
             }
-            
-/*            form input {
-                padding: 5px;
-                margin-top: 5px;
-            }*/
 
-/*            form button {
-                margin-top: 20px;
-                padding: 10px;
-            }*/
+            /*            form input {
+                            padding: 5px;
+                            margin-top: 5px;
+                        }*/
+
+            /*            form button {
+                            margin-top: 20px;
+                            padding: 10px;
+                        }*/
 
 
         </style>
@@ -119,18 +119,7 @@
     </head>
 
     <body id="page-top">
-        <%
-           UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
-           if (loginUser == null || 1 != loginUser.getRoleID() || loginUser.getStatus() == 0) {
-                response.sendRedirect("US_SignIn.jsp");
-                return;
-            }
-            String search = request.getParameter("search");
-            if (search == null) {
-                search = "";
-            }
-            UserDAO dao = new UserDAO();
-        %>
+
         <div id="wrapper">
             <!-- Sidebar -->
             <%@include file="AD_sidebar.jsp" %>
@@ -143,7 +132,18 @@
 
                     <!-- Container Fluid-->
                     <%@include file="AD_header.jsp" %>
-
+                    <%
+                               UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
+                               if (loginUser == null || 1 != loginUser.getRoleID() || loginUser.getStatus() == 0) {
+                                    response.sendRedirect("US_SignIn.jsp");
+                                    return;
+                                }
+                                String search = request.getParameter("search");
+                                if (search == null) {
+                                    search = "";
+                                }
+                                UserDAO dao = new UserDAO();
+                    %>
                     <div class="container-fluid" id="container-wrapper">
                         <div class="d-sm-flex align-items-center justify-content-between mb-4">
                             <h1 class="h3 mb-0 text-gray-900" style="font-weight: bold">Users</h1>
@@ -262,18 +262,18 @@
                                                         </span>
                                                     </td>
                                                     <td>
-                                                       <%
-                                                           if(user.getStatus() == 0){
-                                                       %>
-                                                       <a href="#" class="btn btn-sm btn-danger disabled" aria-disabled="true">Delete</a>
-                                                       <%
-                                                           } else {
-                                                       %>
-                                                       <a href="#" class="btn btn-sm btn-danger" onclick="showConfirmDeleteModal(<%= user.getUserID() %>)">Delete</a>
-                                                       <%
-                                                           }
-                                                       %>
-                                                       <form action="MainController" method="POST" style="display:inline;">
+                                                        <%
+                                                            if(user.getStatus() == 0){
+                                                        %>
+                                                        <a href="#" class="btn btn-sm btn-danger disabled" aria-disabled="true">Delete</a>
+                                                        <%
+                                                            } else {
+                                                        %>
+                                                        <a href="#" class="btn btn-sm btn-danger" onclick="showConfirmDeleteModal(<%= user.getUserID() %>)">Delete</a>
+                                                        <%
+                                                            }
+                                                        %>
+                                                        <form action="MainController" method="POST" style="display:inline;">
                                                             <input type="hidden" name="userID" value="<%= user.getUserID()%>"/>
                                                             <input type="hidden" name="action" value="GetUserInfo"/>
                                                             <button type="submit" class="btn btn-sm btn-dark">Edit</button>
@@ -285,10 +285,10 @@
                                                 %>
                                             </tbody>
                                         </table>
-                                            <%
-                                                    }
+                                        <%
                                                 }
-                                            %>
+                                            }
+                                        %>
                                         <hr>
                                         <!-- Pagination -->
                                         <nav aria-label="Page navigation">
@@ -451,7 +451,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Success Modal -->
         <% if (request.getAttribute("SUCCESS_MESSAGE") != null) { %>
         <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
@@ -541,7 +541,7 @@
                     }
                 });
             });
-            
+
             document.getElementById('entriesSelect').addEventListener('change', function () {
                 const numEntries = parseInt(this.value);
                 const tableBody = document.getElementById('tableBody');
@@ -607,7 +607,7 @@
                 confirmDeleteModal.show();
             }
 
-            document.getElementById('confirmDeleteButton').addEventListener('click', function() {
+            document.getElementById('confirmDeleteButton').addEventListener('click', function () {
                 var userID = this.getAttribute('data-user-id');
                 var url = "MainController?action=DeleteUser&UserID=" + userID;
                 window.location.href = url;
@@ -631,7 +631,7 @@
                             popupEmp.style.display = "none";
                             // Access the userid input element
                             var userInputID = document.getElementById("userid");
-                           // Set the value of the input to the userID variable
+                            // Set the value of the input to the userID variable
                             userInputID.value = userID;
                         } else if (role === "Employee") {
                             popupEmp.style.display = "flex";
@@ -657,8 +657,8 @@
                     }
                 });
             });
-            
-             // Display success modal if message exists
+
+            // Display success modal if message exists
             $(document).ready(function () {
                 const successMessage = '<%= request.getAttribute("SUCCESS_MESSAGE") %>';
                 if (successMessage) {
@@ -680,7 +680,7 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-        
+
         <!-- Bootstrap CSS -->
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
 

@@ -43,14 +43,19 @@
                 <div id="content">
                     <!-- Header -->
                     <%@include file="AD_header.jsp" %>
-
+                    <%
+                                                                        if (loginUser == null || 1 != loginUser.getRoleID()) {
+                                                                            response.sendRedirect("US_SignIn.jsp");
+                                                                            return;
+                                                                        }
+                    %>
                     <div class="container-fluid" id="container-wrapper">
 
                         <div class="form-container">
                             <h2 class="text-center" style="color: #000; font-weight: bold;">Edit Employee</h2>
                             <form action="MainController" method="POST">
                                 <input type="hidden" name="userID" value="<%= user.getUserID()%>"/>
-                                
+
                                 <div class="form-row mb-3">         
                                     <div class="form-group col-md-6">
                                         <label for="userName">Employee Name</label>
@@ -67,7 +72,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                        
+
                                 <div class="form-row mb-3">
                                     <div class="form-group col-md-6">
                                         <input type="hidden" name="oldEmail" value="<%= user.getEmail()%>" readonly=""/>                                        
@@ -80,7 +85,7 @@
                                         <input type="number" class="form-control" id="phone" name="phone" value="<%= user.getPhone()%>" required=""/>
                                     </div>
                                 </div>
-                                    
+
                                 <div class="form-row mb-3">
                                     <div class="form-group col-md-6">
                                         <label for="status">Status</label>

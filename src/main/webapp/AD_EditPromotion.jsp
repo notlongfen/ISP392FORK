@@ -26,8 +26,16 @@
         </style>
     </head>
     <body id="page-top">
-        <%
-            UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
+
+        <div id="wrapper">
+            <!-- Sidebar -->
+            <%@include file="AD_sidebar.jsp" %>
+            <!-- Sidebar -->
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <!-- Header -->
+                    <%@include file="AD_header.jsp" %>
+                    <%
             if (loginUser == null || 2 != loginUser.getRoleID()) {
                 response.sendRedirect("US_SignIn.jsp");
                 return;
@@ -37,15 +45,7 @@
                 response.sendRedirect("AD_PromotionList.jsp");
                 return;
             }
-        %>
-        <div id="wrapper">
-            <!-- Sidebar -->
-            <%@include file="AD_sidebar.jsp" %>
-            <!-- Sidebar -->
-            <div id="content-wrapper" class="d-flex flex-column">
-                <div id="content">
-                    <!-- Header -->
-                    <%@include file="AD_header.jsp" %>
+                    %>
                     <div class="container-fluid" id="container-wrapper">
                         <div class="form-container">
                             <h2 class="text-center" style="color: #000; font-weight: bold;">Edit Promotion</h2>
@@ -72,7 +72,10 @@
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="status">Status</label>
-                                        <input type="text" class="form-control" id="status" name="status" value="<%= promotion.getStatus() %>" required=""/>
+                                        <select class="form-control" id="status" name="status">
+                                            <option value="1" <%= promotion.getStatus() == 1 ? "selected" : "" %>>Available</option>
+                                            <option value="0" <%= promotion.getStatus() == 0 ? "selected" : "" %>>Not available</option>
+                                        </select>
                                     </div>
                                 </div> 
                                 <div class="form-row">
@@ -113,35 +116,35 @@
                                         if (promotionError.getPromotionNameError() != null && !promotionError.getPromotionNameError().isEmpty()) {
                                 %>
                                 <li class="list-group-item list-group-item-danger"><%= promotionError.getPromotionNameError() %></li>
-                                <%
-                                        }
-                                        if (promotionError.getStartDateError() != null && !promotionError.getStartDateError().isEmpty()) {
-                                %>
+                                    <%
+                                            }
+                                            if (promotionError.getStartDateError() != null && !promotionError.getStartDateError().isEmpty()) {
+                                    %>
                                 <li class="list-group-item list-group-item-danger"><%= promotionError.getStartDateError() %></li>
-                                <%
-                                        }
-                                        if (promotionError.getEndDateError() != null && !promotionError.getEndDateError().isEmpty()) {
-                                %>
+                                    <%
+                                            }
+                                            if (promotionError.getEndDateError() != null && !promotionError.getEndDateError().isEmpty()) {
+                                    %>
                                 <li class="list-group-item list-group-item-danger"><%= promotionError.getEndDateError() %></li>
-                                <%
-                                        }
-                                        if (promotionError.getDiscountPerError() != null && !promotionError.getDiscountPerError().isEmpty()) {
-                                %>
+                                    <%
+                                            }
+                                            if (promotionError.getDiscountPerError() != null && !promotionError.getDiscountPerError().isEmpty()) {
+                                    %>
                                 <li class="list-group-item list-group-item-danger"><%= promotionError.getDiscountPerError() %></li>
-                                <%
-                                        }
-                                        if (promotionError.getConditionError() != null && !promotionError.getConditionError().isEmpty()) {
-                                %>
+                                    <%
+                                            }
+                                            if (promotionError.getConditionError() != null && !promotionError.getConditionError().isEmpty()) {
+                                    %>
                                 <li class="list-group-item list-group-item-danger"><%= promotionError.getConditionError() %></li>
-                                <%
-                                        }
-                                        if (promotionError.getError() != null && !promotionError.getError().isEmpty()) {
-                                %>
+                                    <%
+                                            }
+                                            if (promotionError.getError() != null && !promotionError.getError().isEmpty()) {
+                                    %>
                                 <li class="list-group-item list-group-item-danger"><%= promotionError.getError() %></li>
-                                <%
+                                    <%
+                                            }
                                         }
-                                    }
-                                %>
+                                    %>
                             </ul>
                         </div>
                         <div class="modal-footer">
@@ -152,11 +155,11 @@
             </div>
 
             <% if (request.getAttribute("PROMOTION_ERROR") != null) { %>
-                <script>
-                    $(document).ready(function () {
-                        $('#errorModal').modal('show');
-                    });
-                </script>
+            <script>
+                $(document).ready(function () {
+                    $('#errorModal').modal('show');
+                });
+            </script>
             <% } %>
 
             <!-- Include necessary scripts -->

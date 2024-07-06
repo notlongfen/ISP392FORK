@@ -46,20 +46,7 @@
         </style>
     </head>
     <body id="page-top">
-        <%
-           UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
-           if (loginUser == null || 2 != loginUser.getRoleID() || loginUser.getStatus() == 0) {
-                response.sendRedirect("US_SignIn.jsp");
-                return;
-            }
-            String search = request.getParameter("searchText");
-            if (search == null) {
-                search = "";
-            }
-            int parentID = (int) request.getAttribute("PARENT_CATEGORY_ID");
-            int parentStatus = (int) request.getAttribute("PARENT_CATEGORY_STATUS");
-            session.setAttribute("PARENT_CATEGORY_ID", parentID);
-        %>
+
         <div id="wrapper">
             <!-- Sidebar -->
             <%@include file="AD_sidebar.jsp" %>
@@ -72,7 +59,19 @@
 
                     <!-- Container Fluid-->
                     <%@include file="AD_header.jsp" %>
-
+                    <%
+                               if (loginUser == null || 2 != loginUser.getRoleID() || loginUser.getStatus() == 0) {
+                                    response.sendRedirect("US_SignIn.jsp");
+                                    return;
+                                }
+                                String search = request.getParameter("searchText");
+                                if (search == null) {
+                                    search = "";
+                                }
+                                int parentID = (int) request.getAttribute("PARENT_CATEGORY_ID");
+                                int parentStatus = (int) request.getAttribute("PARENT_CATEGORY_STATUS");
+                                session.setAttribute("PARENT_CATEGORY_ID", parentID);
+                    %>
                     <div class="container-fluid" id="container-wrapper">
                         <div class="d-sm-flex align-items-center justify-content-between mb-4">
                             <h1 class="h3 mb-0 text-gray-900">Children Categories</h1>
@@ -86,8 +85,8 @@
                                 } else {
                             %>
                             <a href="#" class="btn btn-danger disabled" aria-disabled="true" style="background: #C43337;">Add new Children Category</a>
-                             <%
-                                }
+                            <%
+                               }
                             %>
                         </div>
                         <div class="row mb-3">
@@ -145,7 +144,7 @@
                                                     <th>Status</th>
                                                     <th>Action</th>
                                                 </tr>
-                                                
+
                                             </thead>
                                             <tbody id="tableBody">
                                                 <%
@@ -160,18 +159,18 @@
                                                         </span>
                                                     </td>
                                                     <td>
-                                                       <%
-                                                           if(cdCategory.getStatus() == 0){
-                                                       %>
-                                                       <a href="#" class="btn btn-sm btn-danger disabled" aria-disabled="true">Delete</a>
-                                                       <%
-                                                           } else {
-                                                       %>
-                                                       <a href="#" class="btn btn-sm btn-danger" onclick="showConfirmDeleteModal(<%= cdCategory.getCdCategoryID() %>)">Delete</a>
-                                                       <%
-                                                           }
-                                                            if(parentStatus == 1){
-                                                       %>
+                                                        <%
+                                                            if(cdCategory.getStatus() == 0){
+                                                        %>
+                                                        <a href="#" class="btn btn-sm btn-danger disabled" aria-disabled="true">Delete</a>
+                                                        <%
+                                                            } else {
+                                                        %>
+                                                        <a href="#" class="btn btn-sm btn-danger" onclick="showConfirmDeleteModal(<%= cdCategory.getCdCategoryID() %>)">Delete</a>
+                                                        <%
+                                                            }
+                                                             if(parentStatus == 1){
+                                                        %>
                                                         <form action="MainController" method="POST" style="display:inline;">
                                                             <input type="hidden" name="cdCategoryID" value="<%= cdCategory.getCdCategoryID()%>"/>
                                                             <input type="hidden" name="action" value="GetChildrenCategoryInfo"/>
@@ -180,7 +179,7 @@
                                                         <%
                                                             } else {
                                                         %>
-                                                            <button type="" class="btn btn-sm btn-dark disabled" aria-disabled="true" style="pointer-events: none;">Edit</button>
+                                                        <button type="" class="btn btn-sm btn-dark disabled" aria-disabled="true" style="pointer-events: none;">Edit</button>
                                                         <%
                                                             }
                                                         %>
@@ -191,10 +190,10 @@
                                                 %>
                                             </tbody>
                                         </table>
-                                            <%
-                                                    }
+                                        <%
                                                 }
-                                            %>
+                                            }
+                                        %>
                                         <hr>
                                         <!-- Pagination -->
                                         <nav aria-label="Page navigation">
@@ -289,7 +288,7 @@
             </div>
         </div>
         <% } %>
-                                        
+
         <!-- Scroll to top -->
         <a class="scroll-to-top rounded" href="#page-top">
             <i class="fas fa-angle-up"></i>
@@ -374,7 +373,7 @@
 //                // Xóa dòng
 //                rowToDelete.remove();
 //            });
-             function showConfirmDeleteModal(cdCategoryID) {
+            function showConfirmDeleteModal(cdCategoryID) {
                 // Store the user ID in a global variable or data attribute
                 document.getElementById('confirmDeleteButton').setAttribute('data-cdcategory-id', cdCategoryID);
                 // Show the modal
@@ -382,12 +381,12 @@
                 confirmDeleteModal.show();
             }
 
-            document.getElementById('confirmDeleteButton').addEventListener('click', function() {
+            document.getElementById('confirmDeleteButton').addEventListener('click', function () {
                 var cdCategoryID = this.getAttribute('data-cdcategory-id');
                 var url = "MainController?action=Delete_ChildrenCategory&cdCategoryID=" + cdCategoryID;
                 window.location.href = url;
             });
-            
+
             // Display success modal if message exists
             $(document).ready(function () {
                 const successMessage = '<%= request.getAttribute("SUCCESS_MESSAGE") %>';

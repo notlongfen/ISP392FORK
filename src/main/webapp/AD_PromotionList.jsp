@@ -55,17 +55,7 @@
     </head>
 
     <body id="page-top">
-        <%
-            UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
-            if (loginUser == null || 2 != loginUser.getRoleID()) {
-                response.sendRedirect("US_SignIn.jsp");
-                return;
-            }
-            String search = request.getParameter("search");
-            if (search == null) {
-                search = "";
-            }
-        %>
+
         <div id="wrapper">
             <!-- Sidebar -->
             <%@include file="AD_sidebar.jsp" %>
@@ -75,6 +65,16 @@
                     <!---Header --->
                     <!-- Container Fluid-->
                     <%@include file="AD_header.jsp" %>
+                    <%
+           if (loginUser == null || 2 != loginUser.getRoleID()) {
+               response.sendRedirect("US_SignIn.jsp");
+               return;
+           }
+           String search = request.getParameter("search");
+           if (search == null) {
+               search = "";
+           }
+                    %>
                     <form action="MainController">
                         <div class="container-fluid" id="container-wrapper">
                             <div class="d-sm-flex align-items-center justify-content-between mb-4">

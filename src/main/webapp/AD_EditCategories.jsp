@@ -40,9 +40,9 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     </head>
     <body id="page-top">
-    <%
-        CategoryDTO category = (CategoryDTO) request.getAttribute("CATEGORY"); 
-    %>
+        <%
+            CategoryDTO category = (CategoryDTO) request.getAttribute("CATEGORY"); 
+        %>
         <div id="wrapper">
             <!-- Sidebar -->
             <%@include file="AD_sidebar.jsp" %>
@@ -53,7 +53,12 @@
                 <div id="content">
                     <!-- Header -->
                     <%@include file="AD_header.jsp" %>
-
+                    <%
+                                                                        if (loginUser == null || 2 != loginUser.getRoleID()) {
+                                                                            response.sendRedirect("US_SignIn.jsp");
+                                                                            return;
+                                                                        }
+                    %>
                     <div class="container-fluid" id="container-wrapper">
                         <div class="form-container">
                             <h2 class="text-center mb-5" style="color: #000; font-weight: bold;">Edit Categories</h2>
@@ -65,26 +70,26 @@
                                         <input type="text" class="form-control" id="categoryName" name="categoryName" value="<%= category.getCategoryName()%>" style="width: 755px;" required="">
                                     </div>
                                 </div>
-                                    
+
                                 <div class="form-group">
                                     <label for="description">Description</label>
                                     <!-- Sử dụng defaultValue để lấy giá trị mặc định của textarea -->
                                     <textarea class="form-control" name="description"  id="description" rows="3" required=""><%= category.getDescription()%></textarea>
                                 </div>
-                                
+
                                 <input type="hidden" name="oldImage" value="<%= category.getImage()%>" readonly=""/>
                                 <div class="form-group">
-                                        <label for="image">Category Image</label>
-                                        <input type="file" class="form-control" id="image" name="image" style="width: 550px">
+                                    <label for="image">Category Image</label>
+                                    <input type="file" class="form-control" id="image" name="image" style="width: 550px">
                                 </div>
-                                
+
                                 <input type="hidden" name="oldStatus" value="<%= category.getStatus()%>" readonly=""/>
                                 <div class="form-group">
-                                        <label for="status">Status</label>
-                                        <select name="status" style="width: 375px" class="form-select form-control" id="status" aria-label=".form-select-sm">
-                                            <option value="0" <%= category.getStatus() == 0 ? "selected" : "" %>>Inactive</option>
-                                            <option value="1" <%= category.getStatus() == 1 ? "selected" : "" %>>Active</option>
-                                        </select>
+                                    <label for="status">Status</label>
+                                    <select name="status" style="width: 375px" class="form-select form-control" id="status" aria-label=".form-select-sm">
+                                        <option value="0" <%= category.getStatus() == 0 ? "selected" : "" %>>Inactive</option>
+                                        <option value="1" <%= category.getStatus() == 1 ? "selected" : "" %>>Active</option>
+                                    </select>
                                 </div>
 
                                 <div class="form-group text-center">

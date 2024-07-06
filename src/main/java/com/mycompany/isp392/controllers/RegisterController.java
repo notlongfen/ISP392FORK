@@ -1,4 +1,3 @@
-
 package com.mycompany.isp392.controllers;
 
 import com.mycompany.isp392.user.*;
@@ -33,9 +32,9 @@ public class RegisterController extends HttpServlet {
             String password = request.getParameter("password");
             String confirmPassword = request.getParameter("confirmPassword");
             int phone = Integer.parseInt(request.getParameter("phone"));
-            String ward = request.getParameter("ward");
-            String district = request.getParameter("district");
-            String city = request.getParameter("city");
+            String city = request.getParameter("cityName").trim();
+            String district = request.getParameter("districtName").trim();
+            String ward = request.getParameter("wardName").trim();
             String address = request.getParameter("address");
             Date birthday = Date.valueOf(request.getParameter("birthday"));
             // Check email exists

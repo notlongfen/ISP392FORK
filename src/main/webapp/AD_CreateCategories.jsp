@@ -40,7 +40,12 @@
                 <div id="content">
                     <!-- Header -->
                     <%@include file="AD_header.jsp" %>
-
+                    <%
+                                                                        if (loginUser == null || 2 != loginUser.getRoleID()) {
+                                                                            response.sendRedirect("US_SignIn.jsp");
+                                                                            return;
+                                                                        }
+                    %>
                     <div class="container-fluid" id="container-wrapper">
 
                         <div class="form-container">
@@ -57,11 +62,11 @@
                                     <label for="description">Description</label>
                                     <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter Description" required=""></textarea>
                                 </div>
-                                
+
                                 <div class="form-group">
                                     <label for="image">Image</label>
                                     <input type="file" class="form-control" id="image" name="image" accept="image/*"
-                                               style="width: 550px" required="">
+                                           style="width: 550px" required="">
                                 </div>
 
                                 <div class="form-group text-center">

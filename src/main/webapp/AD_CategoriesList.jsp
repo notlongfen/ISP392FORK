@@ -57,18 +57,7 @@
     </head>
 
     <body id="page-top">
-        <%
-           UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
-           if (loginUser == null || 2 != loginUser.getRoleID() || loginUser.getStatus() == 0) {
-                response.sendRedirect("US_SignIn.jsp");
-                return;
-            }
-            String search = request.getParameter("searchText");
-            if (search == null) {
-                search = "";
-            }
-            CategoryDAO dao = new CategoryDAO();
-        %>
+
         <div id="wrapper">
             <!-- Sidebar -->
             <%@include file="AD_sidebar.jsp" %>
@@ -81,7 +70,17 @@
 
                     <!-- Container Fluid-->
                     <%@include file="AD_header.jsp" %>
-
+                    <%
+                               if (loginUser == null || 2 != loginUser.getRoleID() || loginUser.getStatus() == 0) {
+                                    response.sendRedirect("US_SignIn.jsp");
+                                    return;
+                                }
+                                String search = request.getParameter("searchText");
+                                if (search == null) {
+                                    search = "";
+                                }
+                                CategoryDAO dao = new CategoryDAO();
+                    %>
                     <div class="container-fluid" id="container-wrapper">
                         <div class="d-sm-flex align-items-center justify-content-between mb-4">
                             <h1 class="h3 mb-0 text-gray-900">Categories</h1>
@@ -174,22 +173,22 @@
                                                         </span>
                                                     </td>
                                                     <td>
-                                                       <%
-                                                           if(category.getStatus() == 0){
-                                                       %>
-                                                       <a href="#" class="btn btn-sm btn-danger disabled" aria-disabled="true">Delete</a>
-                                                       <%
-                                                           } else {
-                                                       %>
-                                                       <a href="#" class="btn btn-sm btn-danger" onclick="showConfirmDeleteModal(<%= category.getCategoryID() %>)">Delete</a>
-                                                       <%
-                                                           }
-                                                       %>
-                                                       <form action="MainController" method="POST" style="display:inline;">
+                                                        <%
+                                                            if(category.getStatus() == 0){
+                                                        %>
+                                                        <a href="#" class="btn btn-sm btn-danger disabled" aria-disabled="true">Delete</a>
+                                                        <%
+                                                            } else {
+                                                        %>
+                                                        <a href="#" class="btn btn-sm btn-danger" onclick="showConfirmDeleteModal(<%= category.getCategoryID() %>)">Delete</a>
+                                                        <%
+                                                            }
+                                                        %>
+                                                        <form action="MainController" method="POST" style="display:inline;">
                                                             <input type="hidden" name="categoryID" value="<%= category.getCategoryID()%>"/>
                                                             <input type="hidden" name="action" value="GetCategoryInfo"/>
                                                             <button type="submit" class="btn btn-sm btn-dark">Edit</button>
-                                                       </form>
+                                                        </form>
                                                     </td>
                                                 </tr>
                                                 <%
@@ -197,10 +196,10 @@
                                                 %>
                                             </tbody>
                                         </table>
-                                            <%
-                                                    }
+                                        <%
                                                 }
-                                            %>
+                                            }
+                                        %>
                                         <hr>
                                         <!-- Pagination -->
                                         <nav aria-label="Page navigation">
@@ -299,7 +298,7 @@
             </div>
         </div>
         <% } %>
-                                        
+
         <!-- Scroll to top -->
         <a class="scroll-to-top rounded" href="#page-top">
             <i class="fas fa-angle-up"></i>
@@ -393,12 +392,12 @@
                 confirmDeleteModal.show();
             }
 
-            document.getElementById('confirmDeleteButton').addEventListener('click', function() {
+            document.getElementById('confirmDeleteButton').addEventListener('click', function () {
                 var categoryID = this.getAttribute('data-category-id');
                 var url = "MainController?action=Delete_Category&categoryID=" + categoryID;
                 window.location.href = url;
             });
-            
+
             // Display success modal if message exists
             $(document).ready(function () {
                 const successMessage = '<%= request.getAttribute("SUCCESS_MESSAGE") %>';

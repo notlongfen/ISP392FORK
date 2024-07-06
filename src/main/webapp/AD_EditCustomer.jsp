@@ -43,7 +43,12 @@
                 <div id="content">
                     <!-- Header -->
                     <%@include file="AD_header.jsp" %>
-
+                    <%
+                                                                        if (loginUser == null || 1 != loginUser.getRoleID()) {
+                                                                            response.sendRedirect("US_SignIn.jsp");
+                                                                            return;
+                                                                        }
+                    %>
                     <div class="container-fluid" id="container-wrapper">
 
                         <div class="form-container">
@@ -59,7 +64,7 @@
                                         </select>
                                     </div>
                                 </div>     
-                                  
+
                                 <div class="form-group text-center">
                                     <button type="submit" name="action" value="EditCustomer" class="btn btn-danger btn-custom">Submit</button>
                                     <button type="reset" class="btn btn-secondary btn-custom">Reset</button>

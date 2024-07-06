@@ -43,7 +43,12 @@
                 <div id="content">
                     <!-- Header -->
                     <%@include file="AD_header.jsp" %>
-
+                    <%
+                                                                        if (loginUser == null || 2 != loginUser.getRoleID()) {
+                                                                            response.sendRedirect("US_SignIn.jsp");
+                                                                            return;
+                                                                        }
+                    %>
                     <div class="container-fluid" id="container-wrapper">
 
                         <div class="form-container">
@@ -58,11 +63,11 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                        <label for="status">Status</label>
-                                        <select name="status" style="width: 375px" class="form-select form-control" id="status" aria-label=".form-select-sm">
-                                            <option value="0" <%= cdCategory.getStatus() == 0 ? "selected" : "" %>>Inactive</option>
-                                            <option value="1" <%= cdCategory.getStatus() == 1 ? "selected" : "" %>>Active</option>
-                                        </select>
+                                    <label for="status">Status</label>
+                                    <select name="status" style="width: 375px" class="form-select form-control" id="status" aria-label=".form-select-sm">
+                                        <option value="0" <%= cdCategory.getStatus() == 0 ? "selected" : "" %>>Inactive</option>
+                                        <option value="1" <%= cdCategory.getStatus() == 1 ? "selected" : "" %>>Active</option>
+                                    </select>
                                 </div>
                                 <div class="form-group text-center" style="margin-top: 30px;">
                                     <button type="submit" class="btn btn-danger btn-custom" name="action" value="Edit_ChildrenCategory">Submit</button>
