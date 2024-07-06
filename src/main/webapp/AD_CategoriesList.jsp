@@ -145,6 +145,9 @@
                                                         <button class="btn p-0">Description</button>
                                                     </th>
                                                     <th>
+                                                        Image
+                                                    </th>
+                                                    <th>
                                                         Status
                                                     </th>
                                                     <th>Action</th>
@@ -164,6 +167,7 @@
                                                         </form>
                                                     </td>
                                                     <td class="description"><%= category.getDescription()%></td>
+                                                    <td><img src="<%= category.getImage() %>" alt="Category Image" style="max-width: 100px; max-height: 100px;"></td>
                                                     <td>
                                                         <span class="badge <%= (category.getStatus() == 1) ? "badge-success" : "badge-danger" %>">
                                                             <%= (category.getStatus() == 1) ? "Active" : "Inactive" %>

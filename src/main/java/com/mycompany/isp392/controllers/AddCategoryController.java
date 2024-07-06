@@ -2,17 +2,25 @@
 package com.mycompany.isp392.controllers;
 
 import com.mycompany.isp392.category.*;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
+import java.sql.SQLException;
+import java.util.UUID;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
+
 
 @WebServlet(name = "AddCategoryController", urlPatterns = {"/AddCategoryController"})
+@MultipartConfig
 public class AddCategoryController extends HttpServlet {
 
-    //temp
+    private static final String UPLOAD_DIRECTORY = "images";
     private static final String ERROR = "AD_CreateCategories.jsp";
     private static final String SUCCESS = "SearchCategoryController";
     
@@ -26,15 +34,33 @@ public class AddCategoryController extends HttpServlet {
         try {
             String categoryName = request.getParameter("categoryName");
             String description = request.getParameter("description");
-            
+            Part filePart = request.getPart("image");
+
+            if (filePart == null || filePart.getSize() == 0) {
+                categoryError.setError("Category image is required.");
+                checkValidation = false;
+            }
             if(dao.checkCategoryDuplicate(categoryName)){
                 categoryError.setCategoryNameError("This category already exists.");
                 checkValidation = false;
             }
             
+            String imagePath = "";
+            if (checkValidation) {
+                String path = getServletContext().getRealPath("") + File.separator + UPLOAD_DIRECTORY;
+                File uploadDir = new File(path);
+                if (!uploadDir.exists()) {
+                    uploadDir.mkdirs();
+                }
+
+                String fileName = UUID.randomUUID().toString() + "_" + Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+                imagePath = UPLOAD_DIRECTORY + File.separator + fileName;
+                filePart.write(path + File.separator + fileName);
+            }
+            
             if(checkValidation){
                 int categoryID = dao.getLatestCategoryID() + 1;
-                CategoryDTO category = new CategoryDTO(categoryID, categoryName, description, 1);
+                CategoryDTO category = new CategoryDTO(categoryID, categoryName, description, 1, imagePath);
                 boolean checkCategory = dao.addCategory(category);
                 if(checkCategory){
                    request.setAttribute("SUCCESS_MESSAGE", "CATEGORY ADDED SUCCESSFULLY !");
@@ -47,7 +73,7 @@ public class AddCategoryController extends HttpServlet {
                 request.setAttribute("CATEGORY_ERROR",categoryError);
             }
             
-        } catch (Exception e) {
+        } catch (SQLException e) {
             log("Error at AddCategoryController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
@@ -55,42 +81,22 @@ public class AddCategoryController extends HttpServlet {
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "AddCategoryController";
     }// </editor-fold>
 
 }

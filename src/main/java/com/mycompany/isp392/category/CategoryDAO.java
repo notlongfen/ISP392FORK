@@ -20,7 +20,7 @@ import utils.DbUtils;
  */
 public class CategoryDAO {
 
-    private static final String ADD_CATEGORY = "INSERT INTO Categories (CategoryID, CategoriesName, Description, status) VALUES (?, ?, ?, ?)";
+    private static final String ADD_CATEGORY = "INSERT INTO Categories (CategoryID, CategoriesName, Description, status, image) VALUES (?, ?, ?, ?, ?)";
     private static final String ADD_CHILDREN_CATEGORY = "INSERT INTO ChildrenCategories (CDCategoryID, CategoriesName, ParentID, status) VALUES (?,?,?,?)";
     private static final String DELETE_CATEGORY = "UPDATE Categories SET status = 0 WHERE status = 1 AND CategoryID LIKE ?";
     private static final String DELETE_CHILDREN_CATEGORY = "UPDATE ChildrenCategories SET status = 0 WHERE status = 1 AND CDCategoryID LIKE ?";
@@ -30,7 +30,7 @@ public class CategoryDAO {
     private static final String GET_ACTIVE_CATEGORY = "SELECT * FROM Categories WHERE status = 1";
     private static final String SEARCH_CATEGORIES = "SELECT * FROM Categories WHERE CategoriesName LIKE ? OR description LIKE ?";
     private static final String SEARCH_CHILDREN_CATEGORIES = "SELECT * FROM ChildrenCategories WHERE parentID = ?";
-    private static final String UPDATE_CATEGORY = "UPDATE Categories SET CategoriesName = ?, Description = ?, status = ? WHERE CategoryID = ?";
+    private static final String UPDATE_CATEGORY = "UPDATE Categories SET CategoriesName = ?, Description = ?, status = ?, image = ? WHERE CategoryID = ?";
     private static final String UPDATE_CHILDREN_CATEGORY = "UPDATE ChildrenCategories SET CategoriesName = ?, status = ? WHERE CDCategoryID = ?";
     private static final String CHECK_CATEGORY_DUPLICATE = "SELECT * FROM Categories WHERE CategoriesName LIKE ?";
     private static final String CHECK_CHILDREN_CATEGORY_DUPLICATE = "SELECT * FROM ChildrenCategories WHERE CategoriesName LIKE ? AND ParentID LIKE ?";
@@ -62,6 +62,7 @@ public class CategoryDAO {
                 ptm.setString(2, category.getCategoryName());
                 ptm.setString(3, category.getDescription());
                 ptm.setInt(4, category.getStatus());
+                ptm.setString(5, category.getImage());
                 check = ptm.executeUpdate() > 0;
 
                 stm.executeUpdate("SET IDENTITY_INSERT Categories OFF");
@@ -275,7 +276,8 @@ public class CategoryDAO {
                     String categoryName = rs.getString("CategoriesName");
                     String description = rs.getString("Description");
                     int status = rs.getInt("status");
-                    list.add(new CategoryDTO(categoryID, categoryName, description, status));
+                    String image = rs.getString("image");
+                    list.add(new CategoryDTO(categoryID, categoryName, description, status, image));
                 }
             }
         } catch (Exception e) {
@@ -309,7 +311,8 @@ public class CategoryDAO {
                     String categoryName = rs.getString("CategoriesName");
                     String description = rs.getString("Description");
                     int status = rs.getInt("status");
-                    list.add(new CategoryDTO(categoryID, categoryName, description, status));
+                    String image = rs.getString("image");
+                    list.add(new CategoryDTO(categoryID, categoryName, description, status, image));
                 }
             }
         } catch (Exception e) {
@@ -379,7 +382,8 @@ public class CategoryDAO {
                     String categoryName = rs.getString("CategoriesName");
                     String description = rs.getString("description");
                     int status = rs.getInt("status");
-                    categories.add(new CategoryDTO(categoryID, categoryName, description, status));
+                    String image = rs.getString("image");
+                    categories.add(new CategoryDTO(categoryID, categoryName, description, status, image));
                 }
             }
         } catch (SQLException e) {
@@ -471,7 +475,7 @@ public class CategoryDAO {
         return list;
     }
 
-    public boolean updateCategory(int categoryID, String newName, String newDescription, int newStatus) throws SQLException, ClassNotFoundException {
+    public boolean updateCategory(int categoryID, String newName, String newDescription, int newStatus, String image) throws SQLException, ClassNotFoundException {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -482,7 +486,8 @@ public class CategoryDAO {
                 ptm.setString(1, newName);
                 ptm.setString(2, newDescription);
                 ptm.setInt(3, newStatus);
-                ptm.setInt(4, categoryID);
+                ptm.setString(4, image);
+                ptm.setInt(5, categoryID);
                 check = ptm.executeUpdate() > 0;
             }
         } catch (SQLException e) {
@@ -841,7 +846,8 @@ public class CategoryDAO {
                     String categoryName = rs.getString("CategoriesName");
                     String description = rs.getString("Description");
                     int status = rs.getInt("status");
-                    category = new CategoryDTO(categoryID, categoryName, description, status);
+                    String image = rs.getString("image");
+                    category = new CategoryDTO(categoryID, categoryName, description, status, image);
                 }
             }
         } catch (Exception e) {

@@ -57,7 +57,7 @@
                     <div class="container-fluid" id="container-wrapper">
                         <div class="form-container">
                             <h2 class="text-center mb-5" style="color: #000; font-weight: bold;">Edit Categories</h2>
-                            <form id="categoryForm" action="MainController" method="POST">
+                            <form id="categoryForm" action="EditCategoryController" method="POST" enctype="multipart/form-data">
                                 <input type="hidden" name="categoryID" value="<%= category.getCategoryID()%>" readonly=""/>
                                 <div class="form-row">
                                     <div class="form-group col-md-8">
@@ -65,11 +65,17 @@
                                         <input type="text" class="form-control" id="categoryName" name="categoryName" value="<%= category.getCategoryName()%>" style="width: 755px;" required="">
                                     </div>
                                 </div>
-
+                                    
                                 <div class="form-group">
                                     <label for="description">Description</label>
                                     <!-- Sử dụng defaultValue để lấy giá trị mặc định của textarea -->
                                     <textarea class="form-control" name="description"  id="description" rows="3" required=""><%= category.getDescription()%></textarea>
+                                </div>
+                                
+                                <input type="hidden" name="oldImage" value="<%= category.getImage()%>" readonly=""/>
+                                <div class="form-group">
+                                        <label for="image">Category Image</label>
+                                        <input type="file" class="form-control" id="image" name="image" style="width: 550px">
                                 </div>
                                 
                                 <input type="hidden" name="oldStatus" value="<%= category.getStatus()%>" readonly=""/>

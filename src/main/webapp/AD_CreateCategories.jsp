@@ -45,7 +45,7 @@
 
                         <div class="form-container">
                             <h2 class="text-center" style="color: #000; font-weight: bold;">Create Category</h2>
-                            <form action="MainController" method="POST">
+                            <form action="AddCategoryController" method="POST" enctype="multipart/form-data">
                                 <div class="form-row">
                                     <div class="form-group col-md-8">
                                         <label for="categoryName">Enter Category Name</label>
@@ -56,6 +56,12 @@
                                 <div class="form-group">
                                     <label for="description">Description</label>
                                     <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter Description" required=""></textarea>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="image">Image</label>
+                                    <input type="file" class="form-control" id="image" name="image" accept="image/*"
+                                               style="width: 550px" required="">
                                 </div>
 
                                 <div class="form-group text-center">

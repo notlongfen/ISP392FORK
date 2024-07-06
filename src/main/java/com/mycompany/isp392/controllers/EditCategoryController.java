@@ -3,13 +3,20 @@ package com.mycompany.isp392.controllers;
 import com.mycompany.isp392.category.*;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
+import java.io.File;
+import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.util.UUID;
 
+@MultipartConfig
 public class EditCategoryController extends HttpServlet {
 
+    private static final String UPLOAD_DIRECTORY = "images";
     private static final String ERROR = "AD_EditCategories.jsp";
     private static final String SUCCESS = "SearchCategoryController";
 
@@ -25,8 +32,24 @@ public class EditCategoryController extends HttpServlet {
             String newDescription = request.getParameter("description");
             int oldStatus = Integer.parseInt(request.getParameter("oldStatus"));
             int newStatus = Integer.parseInt(request.getParameter("status"));
+            Part filePart = request.getPart("image");
+            
+            String imagePath;
+            if (filePart != null && filePart.getSize() > 0) {
+                String path = getServletContext().getRealPath("") + File.separator + UPLOAD_DIRECTORY;
+                File uploadDir = new File(path);
+                if (!uploadDir.exists()) {
+                    uploadDir.mkdirs();
+                }
 
-            boolean checkCategory = categoryDAO.updateCategory(categoryID, newName, newDescription, newStatus);
+                String fileName = UUID.randomUUID().toString() + "_" + Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+                imagePath = UPLOAD_DIRECTORY + File.separator + fileName;
+                filePart.write(path + File.separator + fileName);
+            } else {
+                imagePath = request.getParameter("oldImage");
+            }
+
+            boolean checkCategory = categoryDAO.updateCategory(categoryID, newName, newDescription, newStatus, imagePath);
             if (checkCategory) {
                 if (newStatus == 0 && oldStatus != newStatus) {
                     boolean checkChildren = categoryDAO.deleteAllChildren(categoryID);

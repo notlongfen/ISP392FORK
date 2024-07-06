@@ -14,6 +14,7 @@ public class CategoryDTO {
     private String categoryName;
     private String description;
     private int status;
+    private String image;
 
     public CategoryDTO() {
     }
@@ -26,6 +27,14 @@ public class CategoryDTO {
         this.categoryName = categoryName;
         this.description = description;
         this.status = status;
+    }
+    
+    public CategoryDTO(int categoryID, String categoryName, String description, int status, String image) {
+        this.categoryID = categoryID;
+        this.categoryName = categoryName;
+        this.description = description;
+        this.status = status;
+        this.image = image;
     }
 
     public int getCategoryID() {
@@ -44,6 +53,10 @@ public class CategoryDTO {
         return status;
     }
 
+    public String getImage() {
+        return image;
+    }
+
     public void setCategoryID(int categoryID) {
         this.categoryID = categoryID;
     }
@@ -60,8 +73,14 @@ public class CategoryDTO {
         this.status = status;
     }
 
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     @Override
     public String toString() {
-        return "CategoryDTO{" + "categoryID=" + categoryID + ", categoryName=" + categoryName + ", description=" + description + ", status=" + status + '}';
+        return "CategoryDTO{" + "categoryID=" + categoryID + ", categoryName=" + categoryName + ", description=" + description + ", status=" + status + ", image=" + image + '}';
     }
+
+   
 }
