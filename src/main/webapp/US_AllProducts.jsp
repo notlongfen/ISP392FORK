@@ -4,6 +4,13 @@
     Author     : jojo
 --%>
 
+<%@page import="java.util.Set"%>
+<%@page import="java.util.HashSet"%>
+<%@page import="java.util.HashSet"%>
+<%@page import="com.mycompany.isp392.product.ProductDetailsDTO"%>
+<%@page import="com.mycompany.isp392.product.ProductDTO"%>
+<%@page import="com.mycompany.isp392.brand.BrandDTO"%>
+<%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -208,13 +215,7 @@
                     margin-bottom: 30px;
                 }
             }
-            /*            .btn {
-                            text-decoration: none;
-                            background-color: #fff;
-                            border-color: #000;
-                            border-radius: 15px;
-                            border: 1px solid black;
-                        }*/
+
             a.btn {
                 padding: 5px 10px;
                 font-size: 15px;
@@ -240,6 +241,19 @@
             }
             .gender {
                 display: flex;
+            }
+            /* CSS để điều chỉnh màu sắc khi liên kết được chọn */
+            .list-unstyled li a.selected {
+                color: red; /* Chỉnh màu chữ khi liên kết được chọn */
+                font-weight: bold; /* Chỉnh kiểu chữ khi liên kết được chọn */
+            }
+
+            .list-unstyled li.selected {
+                background-color: #f0f0f0; /* Chỉnh màu nền của li khi liên kết được chọn */
+            }
+
+            .list-unstyled li a {
+                color: black; /* Thiết lập màu chữ đen cho tất cả các liên kết */
             }
         </style>
     </head>
@@ -272,154 +286,65 @@
                     <hr>
 
                     <div>
-                        <h4 style="color: #c53337 ">BRANDS</h4>
+                        <h4 style="color: #c53337">BRANDS</h4>
                         <ul class="list-unstyled">
-                            <li><input type="checkbox"> Nike</li>
-                            <li><input type="checkbox"> Adidas</li>
-                            <li><input type="checkbox"> Puma</li>
-                            <li><input type="checkbox"> Supreme</li>
-                            <li><input type="checkbox"> Gucci</li>
-                            <li><input type="checkbox"> Louis Vuitton</li>
-                            <li><input type="checkbox"> New Balance</li>
-                            <li><input type="checkbox"> Vans</li>
+                            <% List<BrandDTO> brands = (List<BrandDTO>) request.getAttribute("brands");
+                                Integer selectedBrandID = (Integer) request.getAttribute("brandID");
+                                if (brands != null) {
+                                    for (BrandDTO brand : brands) {
+                                        boolean isSelected = selectedBrandID != null && selectedBrandID.equals(brand.getBrandID());
+                            %>
+                            <li class="<%= isSelected ? "selected" : ""%>">
+                                <a href="MainController?action=Get_product_by_brand&brandID=<%= brand.getBrandID()%>" class="<%= isSelected ? "selected" : ""%>"><%= brand.getBrandName()%></a>
+                            </li>
+                            <%    }
+                                }%>
                         </ul>
                     </div>
+
+
                     <hr>
                     <div>
-                        <h4 style="color: #c53337">PRICE</h4>
-                        <ul class="list-unstyled col-sm-3">
-                            <li><a href="#" class="price-button">5$ - 10$</a></li>
-                            <li><a href="#" class="price-button">10$ - 20$</a></li>
-                            <li><a href="#" class="price-button">20$ - 30$</a></li>
-                            <li><a href="#" class="price-button">30$ - 40$</a></li>
+
+                        <h4 style="color: #c53337">FILTER BY PRICE</h4>
+
+                        <ul class="list-unstyled">
+                            <li><a href="MainController?action=Get_product_by_price&priceRange=0-100" class="<%= request.getParameter("priceRange") != null && request.getParameter("priceRange").equals("0-100") ? "selected" : ""%>">Below $100</a></li>
+                            <li><a href="MainController?action=Get_product_by_price&priceRange=100-200" class="<%= request.getParameter("priceRange") != null && request.getParameter("priceRange").equals("100-200") ? "selected" : ""%>">From $100 to $200</a></li>
+                            <li><a href="MainController?action=Get_product_by_price&priceRange=200plus" class="<%= request.getParameter("priceRange") != null && request.getParameter("priceRange").equals("200plus") ? "selected" : ""%>">Above $200</a></li>
                         </ul>
                     </div>
+
+                    <hr>
+                    <button onclick="location.href = 'ViewAllProductController'" class="btn btn-outline-secondary reset-button mt-3">Reset</button>
+
                 </div>
 
                 <!-- Main Content -->
                 <div class="col-md-9">
-                    <h5 style="color: grey;"><a style="color: grey; text-decoration: none" href="US_index.jsp">Home ></a> <a style="color: grey; text-decoration: none" href="AllProducts.jsp">All Products</a></h5>
-                    <!--                    <hr>-->
-                    <div class="row">
-                        <div class="col-md-3 col-sm-6">
-                            <div class="product-grid">
-                                <div class="product-image">
-                                    <a href="#" class="image">
-                                        <img src="images/product_8.png">
-                                    </a>
-                                    <span class="product-discount-label">-23%</span>
-                                    <ul class="product-links">
-                                        <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                    </ul>
-                                    <a href="" class="add-to-cart">Add to Cart</a>
-                                </div>
-                                <div class="product-content">
-                                    <h3 class="title"><a href="#">Women's Blouse Top</a></h3>
-                                    <div class="price">$53.55 <span>$68.88</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <div class="product-grid">
-                                <div class="product-image">
-                                    <a href="#" class="image">
-                                        <img src="images/product_9.png">
-                                    </a>
-                                    <span class="product-discount-label">-23%</span>
-                                    <ul class="product-links">
-                                        <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                    </ul>
-                                    <a href="" class="add-to-cart">Add to Cart</a>
-                                </div>
-                                <div class="product-content">
-                                    <h3 class="title"><a href="#">Women's Blouse Top</a></h3>
-                                    <div class="price">$53.55 <span>$68.88</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <div class="product-grid">
-                                <div class="product-image">
-                                    <a href="#" class="image">
-                                        <img src="images/product_5.png">
-                                    </a>
-                                    <span class="product-discount-label">-23%</span>
-                                    <ul class="product-links">
+                    <h5 style="color: grey;">
+                        <a style="color: grey; text-decoration: none" href="US_index.jsp">Home ></a>
+                        <a style="color: grey; text-decoration: none" href="AllProducts.jsp">All Products</a>
+                    </h5>
 
-                                        <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                    <div class="row" id="products-container">
+                        <%
+                            List<ProductDTO> products = (List<ProductDTO>) request.getAttribute("products");
+                            List<ProductDetailsDTO> productDetails = (List<ProductDetailsDTO>) request.getAttribute("productDetails");
+                            Set<String> seenImages = new HashSet<>(); // Create a HashSet to track unique images
 
-                                    </ul>
-                                    <a href="" class="add-to-cart">Add to Cart</a>
-                                </div>
-                                <div class="product-content">
-                                    <h3 class="title"><a href="#">Women's Blouse Top</a></h3>
-                                    <div class="price">$53.55 <span>$68.88</span></div>
-                                </div>
-                            </div>
-                        </div>
+                            for (ProductDTO product : products) {
+                                for (ProductDetailsDTO productDetail : productDetails) {
+                                    if (product.getProductID() == productDetail.getProductID()) {
+                                        String image = productDetail.getImage();
+                                        if (!seenImages.contains(image)) {
+                                            seenImages.add(image);
+                        %>
                         <div class="col-md-3 col-sm-6">
                             <div class="product-grid">
                                 <div class="product-image">
-                                    <a href="#" class="image">
-                                        <img src="images/product_7.png">
-                                    </a>
-                                    <span class="product-discount-label">-23%</span>
-                                    <ul class="product-links">
-
-                                        <li><a href="#"><i class="fa fa-heart"></i></a></li>
-
-                                    </ul>
-                                    <a href="" class="add-to-cart">Add to Cart</a>
-                                </div>
-                                <div class="product-content">
-                                    <h3 class="title"><a href="#">Women's Blouse Top</a></h3>
-                                    <div class="price">$53.55 <span>$68.88</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <div class="product-grid">
-                                <div class="product-image">
-                                    <a href="#" class="image">
-                                        <img src="images/product_2.png">
-                                    </a>
-                                    <span class="product-discount-label">-23%</span>
-                                    <ul class="product-links">
-                                        <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                    </ul>
-                                    <a href="" class="add-to-cart">Add to Cart</a>
-                                </div>
-                                <div class="product-content">
-                                    <h3 class="title"><a href="#">Women's Blouse Top</a></h3>
-                                    <div class="price">$53.55 <span>$68.88</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <div class="product-grid">
-                                <div class="product-image">
-                                    <a href="#" class="image">
-                                        <img src="images/product_8.png">
-                                    </a>
-                                    <span class="product-discount-label">-23%</span>
-                                    <ul class="product-links">
-
-                                        <li><a href="#"><i class="fa fa-heart"></i></a></li>
-
-                                    </ul>
-                                    <a href="" class="add-to-cart">Add to Cart</a>
-                                </div>
-                                <div class="product-content">
-                                    <h3 class="title"><a href="#">Women's Blouse Top</a></h3>
-                                    <div class="price">$53.55 <span>$68.88</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <div class="product-grid">
-                                <div class="product-image">
-                                    <a href="#" class="image">
-                                        <img src="images/product_10.png">
+                                    <a href="MainController?action=Get_product_detail&productID=<%= product.getProductID()%>" class="image">
+                                        <img src="images/newImage/<%= image%>" alt="<%= product.getProductName()%>">
                                     </a>
                                     <ul class="product-links">
                                         <li><a href="#"><i class="fa fa-heart"></i></a></li>
@@ -427,37 +352,87 @@
                                     <a href="" class="add-to-cart">Add to Cart</a>
                                 </div>
                                 <div class="product-content">
-                                    <h3 class="title"><a href="#">Men's Jacket</a></h3>
-                                    <div class="price">$75.55</div>
+                                    <h3 class="title"><a href="MainController?action=Get_product_detail&productID=<%= product.getProductID()%>"><%= product.getProductName()%></a></h3>
+                                    <div class="price"><%= productDetail.getPrice()%> <span></span></div>
                                 </div>
                             </div>
                         </div>
-                        <nav aria-label="Page navigation">
-                            <ul class="pagination justify-content-center mt-3">
-                                <li class="page-item">
-                                    <a class="page-link" href="#" aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                    </a>
-                                </li>
-                                <li class="page-item mx-1"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item mx-1"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item mx-1"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#" aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
+                        <%
+                                        }
+                                    }
+                                }
+                            }
+                        %>
                     </div>
 
-
                 </div>
+
+                <div id="pagination-container" class="mt-3">
+                    <%
+                        int currentPage = (int) request.getAttribute("currentPage");
+                    %>
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center mt-3">
+                            <li class="page-item <%= currentPage == 1 ? "disabled" : ""%>">
+                                <a class="page-link" href="?page=<%= currentPage - 1%>" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <%
+                                int totalPages = (Integer) request.getAttribute("totalPages");
+                                for (int i = 1; i <= totalPages; i++) {
+                            %>
+                            <li class="page-item <%= currentPage == i ? "active" : ""%>"><a class="page-link" href="?page=<%= i%>"><%= i%></a></li>
+                                <%
+                                    }
+                                %>
+                            <li class="page-item <%= currentPage == totalPages ? "disabled" : ""%>">
+                                <a class="page-link" href="?page=<%= currentPage + 1%>" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+
+
             </div>
         </div>
-        <jsp:include page="US_footer.jsp" />
-        <%@include file="US_RequestSupport.jsp" %>
+    </div>
+    <jsp:include page="US_footer.jsp" />
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript">
+                        $(document).ready(function () {
+                            // Function to handle pagination link clicks
+                            $('body').on('click', '.pagination a.page-link', function (e) {
+                                e.preventDefault();
+                                // Prevent default link behavior
+                                var url = $(this).attr('href');
+                                // Get the URL from the pagination link
 
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0/js/bootstrap.bundle.min.js"></script>
-    </body>
+                                $.ajax({
+                                    url: url, // Corrected: Use the URL from pagination link
+                                    type: 'GET',
+                                    success: function (data) {
+                                        // Update products container with new data
+                                        $('#products-container').html($(data).find('#products-container').html());
+                                        // Update pagination container with new pagination links
+                                        $('#pagination-container').html($(data).find('#pagination-container').html());
+                                    }
+                                    ,
+                                    error: function () {
+                                        alert('Error loading page. Please try again.');
+                                    }
+                                }
+                                );
+                            }
+                            );
+                        }
+                        );
+                        s
+    </script>
+
+
+</body>
 </html>

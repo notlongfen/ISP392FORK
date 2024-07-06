@@ -211,7 +211,7 @@ public class MainController extends HttpServlet {
 
     private static final String VIEW_PROMOTION = "View promotion";
     private static final String VIEW_PROMOTION_CONTROLLER = "ViewPromotionController";
-    
+
     private static final String LOGOUT = "Logout";
     private static final String LOGOUT_CONTROLLER = "LogoutController";
 
@@ -226,13 +226,21 @@ public class MainController extends HttpServlet {
 
     private static final String HISTORY = "History";
     private static final String HISTORY_CONTROLLER = "ShowHistoryBrandController";
-     
+
     private static final String GET_USER_INFO = "GetUserInfo";
     private static final String GET_USER_INFO_CONTROLLER = "GetUserInfoController";
 
     private static final String REQUEST_FOR_SUPPORT = "Request For Support";
     private static final String REQUEST_FOR_SUPPORT_CONTROLLER = "RequestSupportController";
 
+    private static final String GET_PRODUCTBYID = "Get_product_detail";
+    private static final String GET_PRODUCTBYID_CONTROLLER = "GetProductDetailByproductID";
+
+    private static final String GET_PRODUCT_BY_PRICES = "Get_product_by_price";
+    private static final String GET_PRODUCT_BY_PRICE_CONTROLLER = "FilterProductsByPriceController";
+
+    private static final String GET_PRODUCT_BY_BRAND = "Get_product_by_brand";
+    private static final String GET_PRODUCT_BY_BRAND_CONTROLLER = "FilterProductByBrandController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -400,6 +408,12 @@ public class MainController extends HttpServlet {
                 url = REQUEST_FOR_SUPPORT_CONTROLLER;
             } else if (LOGOUT.equals(action)) {
                 url = LOGOUT_CONTROLLER;
+            } else if (GET_PRODUCTBYID.equals(action)) {
+                url = GET_PRODUCTBYID_CONTROLLER;
+            } else if (GET_PRODUCT_BY_BRAND.equals(action)) {
+                url = GET_PRODUCT_BY_BRAND_CONTROLLER;
+            } else if (GET_PRODUCT_BY_PRICES.equals(action)) {
+                url = GET_PRODUCT_BY_PRICE_CONTROLLER;
             }
 
         } catch (Exception e) {

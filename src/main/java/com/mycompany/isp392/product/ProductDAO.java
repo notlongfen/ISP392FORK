@@ -941,4 +941,451 @@ public class ProductDAO {
 
         return check;
     }
+
+    public List<ProductDetailsDTO> getAllProductDetails() throws SQLException {
+        String sql = "SELECT * FROM ProductDetails";
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        List<ProductDetailsDTO> productDetailsList = new ArrayList<>();
+        try {
+            conn = DbUtils.getConnection();
+            ptm = conn.prepareStatement(sql);
+            rs = ptm.executeQuery();
+            while (rs.next()) {
+                int productDetailsID = rs.getInt("ProductDetailsID");
+                int productID = rs.getInt("ProductID");
+                String color = rs.getString("color");
+                String size = rs.getString("size");
+                int stockQuantity = rs.getInt("stockQuantity");
+                int price = rs.getInt("price");
+                Date importDate = rs.getDate("importDate");
+                String image = rs.getString("image");
+                int status = rs.getInt("status");
+                ProductDetailsDTO productDetails = new ProductDetailsDTO(productDetailsID, productID, color, size, stockQuantity, price, importDate, image, status);
+
+                productDetailsList.add(productDetails);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return productDetailsList;
+    }
+
+    public List<ProductDTO> getAllProductPags(int pageNumber, int rowsPerPage) throws SQLException {
+        List<ProductDTO> products = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                // Calculate the offset
+                int offset = (pageNumber - 1) * rowsPerPage;
+
+                // Prepare the SQL query with pagination
+                String sql = "SELECT * FROM ("
+                        + "  SELECT *, ROW_NUMBER() OVER (ORDER BY ProductID) AS RowNumber"
+                        + "  FROM Products"
+                        + ") AS OrderedProducts"
+                        + " WHERE RowNumber BETWEEN ? AND ?";
+
+                ptm = conn.prepareStatement(sql);
+                ptm.setInt(1, offset + 1); // Start row number
+                ptm.setInt(2, offset + rowsPerPage + offset); // End row number
+
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    int productID = rs.getInt("ProductID");
+                    String productName = rs.getString("productName");
+                    String description = rs.getString("description");
+                    int numberOfPurchasing = rs.getInt("numberOfPurchasing");
+                    int status = rs.getInt("status");
+                    int brandID = rs.getInt("brandID");
+                    products.add(new ProductDTO(productID, productName, description, numberOfPurchasing, status, brandID));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return products;
+    }
+
+    public int getTotalProductCount() throws SQLException {
+        int count = 0;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                String sql = "SELECT COUNT(*) AS total FROM Products";
+                ptm = conn.prepareStatement(sql);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    count = rs.getInt("total");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return count;
+    }
+
+    public ProductDTO getProductByID(int productID) throws SQLException {
+        ProductDTO product = null;
+        String sql = "SELECT * FROM Products WHERE ProductID = ?";
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection(); // Lấy kết nối đến CSDL
+            if (conn != null) {
+                ptm = conn.prepareStatement(sql);
+                ptm.setInt(1, productID);
+                rs = ptm.executeQuery();
+
+                if (rs.next()) {
+                    // Lấy thông tin chi tiết sản phẩm từ ResultSet
+                    String productName = rs.getString("productName");
+                    String description = rs.getString("description");
+                    int numberOfPurchasing = rs.getInt("NumberOfPurchasing");
+                    int status = rs.getInt("status");
+                    int brandID = rs.getInt("BrandID");
+
+                    product = new ProductDTO(productID, productName, description, numberOfPurchasing, status, brandID);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+
+        }
+
+        return product;
+    }
+
+    public List<ProductDetailsDTO> getProductDetailsByProductID(int productID) throws SQLException {
+        List<ProductDetailsDTO> productDetailsList = new ArrayList<>();
+        String sql = "SELECT * FROM ProductDetails WHERE ProductID = ?";
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection(); // Đảm bảo kết nối đến cơ sở dữ liệu
+            ptm = conn.prepareStatement(sql);
+            ptm.setInt(1, productID);
+            rs = ptm.executeQuery();
+            while (rs.next()) {
+                int productDetailsID = rs.getInt("ProductDetailsID");
+                String color = rs.getString("color");
+                String size = rs.getString("size");
+                int stockQuantity = rs.getInt("stockQuantity");
+                int price = rs.getInt("price");
+                Date importDate = rs.getDate("importDate");
+                String image = rs.getString("image");
+                int status = rs.getInt("status");
+
+                // Tạo đối tượng ProductDetailsDTO từ dữ liệu lấy được
+                ProductDetailsDTO productDetail = new ProductDetailsDTO(productDetailsID, productID, color, size, stockQuantity, price, importDate, image, status);
+                productDetailsList.add(productDetail);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return productDetailsList;
+    }
+
+    public List<String> getSizesByProductIDandColor(int productID, String color) throws SQLException {
+        List<String> sizes = new ArrayList<>();
+        String query = "SELECT DISTINCT Size FROM ProductDetails WHERE ProductID = ? AND Color = ?";
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(query);
+                ptm.setInt(1, productID);
+                ptm.setString(2, color);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    String size = rs.getString("Size");
+                    sizes.add(size); // Add size to the list
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return sizes;
+    }
+
+    public List<ProductDTO> getProductsByPriceRange(String priceRange) throws SQLException {
+        List<ProductDTO> productList = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+
+        String sql = "SELECT p.ProductID, p.ProductName, p.BrandID, p.Description, p.NumberOfPurchasing, p.Status "
+                + "FROM Products p "
+                + "JOIN ProductDetails pd ON p.ProductID = pd.ProductID "
+                + "WHERE ";
+
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                if ("0-100".equals(priceRange)) {
+                    sql += "pd.Price < 100";
+                } else if ("100-200".equals(priceRange)) {
+                    sql += "pd.Price BETWEEN 100 AND 200";
+                } else if ("200plus".equals(priceRange)) {
+                    sql += "pd.Price > 200";
+                } else {
+                    throw new IllegalArgumentException("Invalid price range: " + priceRange);
+                }
+                ptm = conn.prepareStatement(sql);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    int productID = rs.getInt("ProductID");
+                    String productName = rs.getString("ProductName");
+                    int brandID = rs.getInt("BrandID");
+                    String description = rs.getString("Description");
+                    int numberOfPurchasing = rs.getInt("NumberOfPurchasing");
+                    int status = rs.getInt("Status");
+                    ProductDTO product = new ProductDTO(productID, productName, description, numberOfPurchasing, status, brandID);
+                    productList.add(product);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return productList;
+    }
+
+    public List<ProductDetailsDTO> getProductDetailsByProductList(List<ProductDTO> products) throws SQLException {
+        List<ProductDetailsDTO> productDetails = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        if (products == null || products.isEmpty()) {
+            return productDetails;
+        }
+
+        StringBuilder productIds = new StringBuilder();
+        for (ProductDTO product : products) {
+            productIds.append(product.getProductID()).append(",");
+        }
+        // Remove the last comma
+        productIds.setLength(productIds.length() - 1);
+
+        String sql = "SELECT * FROM ProductDetails WHERE ProductID IN (" + productIds.toString() + ")";
+
+        try {
+            conn = DbUtils.getConnection();
+            ptm = conn.prepareStatement(sql);
+            rs = ptm.executeQuery();
+            while (rs.next()) {
+                ProductDetailsDTO detail = new ProductDetailsDTO();
+                detail.setProductDetailsID(rs.getInt("ProductDetailsID"));
+                detail.setProductID(rs.getInt("ProductID"));
+                detail.setColor(rs.getString("color"));
+                detail.setSize(rs.getString("size"));
+                detail.setStockQuantity(rs.getInt("stockQuantity"));
+                detail.setPrice(rs.getInt("price"));
+                detail.setImportDate(rs.getDate("importDate"));
+                detail.setImage(rs.getString("image"));
+                detail.setStatus(rs.getInt("status"));
+                // Set other fields as needed
+                productDetails.add(detail);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return productDetails;
+    }
+
+    public List<ProductDTO> getProductByBrand(int brandID) throws SQLException {
+        List<ProductDTO> productList = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM Products WHERE BrandID = ?";
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(sql);
+                ptm.setInt(1, brandID);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    int productID = rs.getInt("ProductID");
+                    String productName = rs.getString("ProductName");
+                    String description = rs.getString("Description");
+                    int numberOfPurchasing = rs.getInt("NumberOfPurchasing");
+                    int status = rs.getInt("Status");
+
+                    ProductDTO product = new ProductDTO(productID, productName, description, numberOfPurchasing, status, brandID);
+                    productList.add(product);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return productList;
+    }
+
+    public List<ProductDetailsDTO> getProductDetailsByBrand(int brandID) throws SQLException {
+        List<ProductDetailsDTO> productDetailsList = new ArrayList<>();
+        String sql = "SELECT pd.* FROM ProductDetails pd INNER JOIN Products p ON pd.ProductID = p.ProductID WHERE p.BrandID = ?";
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(sql);
+                ptm.setInt(1, brandID);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    ProductDetailsDTO detail = new ProductDetailsDTO();
+                    detail.setProductDetailsID(rs.getInt("ProductDetailsID"));
+                    detail.setProductID(rs.getInt("ProductID"));
+                    detail.setColor(rs.getString("color"));
+                    detail.setSize(rs.getString("size"));
+                    detail.setStockQuantity(rs.getInt("stockQuantity"));
+                    detail.setPrice(rs.getInt("price"));
+                    detail.setImportDate(rs.getDate("importDate"));
+                    detail.setImage(rs.getString("image"));
+                    detail.setStatus(rs.getInt("status"));
+
+                    productDetailsList.add(detail);
+                }
+            }
+        } catch (Exception e) {
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return productDetailsList;
+    }
+
+    public static void main(String[] args) throws SQLException {
+        ProductDAO dao = new ProductDAO();
+//        List<ProductDTO> allProducts = dao.getAllProductPags(1, 10);
+//        for (ProductDTO allProduct : allProducts) {
+//            System.out.println(allProduct);
+//        }
+
+//        int total = dao.getTotalProductCount();
+//        System.out.println("Total product is: " + total);
+//
+//        List<ProductDetailsDTO> lists = dao.getProductDetailsByProductID(3);
+//        for (ProductDetailsDTO list : lists) {
+//            System.out.println(list);
+//        }
+        String color = "Black";
+        int productID = 3;
+//       
+        List<ProductDetailsDTO> products = dao.getProductDetailsByBrand(3);
+        for (ProductDTO product : products) {
+            System.out.println(product);
+        }
+
+    }
+
 }
