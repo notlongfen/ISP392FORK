@@ -55,6 +55,14 @@ public class ProductDetailsDTO extends ProductDTO {
         this.image = image;
         this.price = price;
     }
+    
+    public ProductDetailsDTO(String productName, String color, String size, int price) {
+        super(productName);
+        this.color=color;
+        this.size=size;
+        this.image = image;
+        this.price = price;
+    }
 
     public ProductDetailsDTO(int productID, String productName, String image, int price, String brandName) {
         super(productName);

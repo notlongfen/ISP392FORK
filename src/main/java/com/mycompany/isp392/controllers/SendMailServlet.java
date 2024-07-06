@@ -1,6 +1,8 @@
 package com.mycompany.isp392.controllers;
 
 import com.mycompany.isp392.forgetpassword.*;
+import com.mycompany.isp392.order.*;
+import com.mycompany.isp392.product.*;
 import com.mycompany.isp392.support.*;
 import com.mycompany.isp392.user.*;
 
@@ -21,6 +23,10 @@ import jakarta.mail.Message;
 import jakarta.mail.PasswordAuthentication;
 import jakarta.mail.Session;
 import jakarta.servlet.http.HttpSession;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @WebServlet(name = "SendMailServlet", urlPatterns = {"/SendMailServlet"})
 public class SendMailServlet extends HttpServlet {
@@ -31,30 +37,28 @@ public class SendMailServlet extends HttpServlet {
     private static final String ERROR_REPLY_SUPPORT = "AD_ReplySupport.jsp";
     private static final String SUCCESS_REPLY_SUPPORT = "GetSupportListController";
     private static final String SUCCESS_SEND_EMAIL_UPDATE_ORDER_STATUS = "EditOrderController";
-    private static final String ERROR_SEND_EMAIL_UPDATE_ORDER_STATUS  = "AD_EditOrder.jsp";
+    private static final String ERROR_SEND_EMAIL_UPDATE_ORDER_STATUS = "AD_EditOrder.jsp";
     private static final String SUCCESS_SEND_REQUEST = "RequestSupportController";
     private static final String ERROR_SEND_REQUEST = "AD_RequestSupport.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
-            HttpSession sessionCur = request.getSession();
-            String action = request.getParameter("action");
-            String url = ERROR;
+        HttpSession sessionCur = request.getSession();
+        String action = request.getParameter("action");
+        String url = ERROR;
 
-            if ("Forgot_Password".equals(action)) {
-                url = processForgotPassword(request, response);
-            } else if ("Reply_Support".equals(action)) {
-                url = processReplySupport(request, response, sessionCur);
-            } else if("UpdateOrderController".equals(action)){
-                url = updateOrderStatusFromAdmin(request, response);
-            } else if("Request For Support".equals(action)){
-                url = requestForSupport(request, response);
-            }
-            response.sendRedirect(url);
+        if ("Forgot_Password".equals(action)) {
+            url = processForgotPassword(request, response);
+        } else if ("Reply_Support".equals(action)) {
+            url = processReplySupport(request, response, sessionCur);
+        } else if ("UpdateOrderController".equals(action)) {
+            url = updateOrderStatusFromAdmin(request, response);
+        } else if ("Request For Support".equals(action)) {
+            url = requestForSupport(request, response);
+        }
+        response.sendRedirect(url);
     }
-
-        
 
     private boolean sendEmail(String toEmail, String subject, String messageBody) {
         final String fromEmail = "micomicomun@gmail.com";
@@ -123,7 +127,7 @@ public class SendMailServlet extends HttpServlet {
         } catch (Exception e) {
             error.setError("FAIL TO SEND MAIL.");
             e.printStackTrace();
-        } 
+        }
         return url;
     }
 
@@ -155,14 +159,51 @@ public class SendMailServlet extends HttpServlet {
         return url;
     }
 
-    private String updateOrderStatusFromAdmin(HttpServletRequest request, HttpServletResponse response) {
+    private String updateOrderStatusFromAdmin(HttpServletRequest request, HttpServletResponse response) throws SQLException {
         String status = request.getParameter("status");
         String url = ERROR_SEND_EMAIL_UPDATE_ORDER_STATUS;
         int orderID = Integer.parseInt(request.getParameter("orderID"));
         UserDAO userDAO = new UserDAO();
+        OrderDAO orderDao = new OrderDAO();
+        ProductDAO productDao = new ProductDAO();
+        
         UserDTO userDTO = userDAO.getUserInfoBasedOnOrderID(orderID);
-        boolean result = sendEmail(userDTO.getEmail(), "Your Order Status Just Got Updated", "Your order status has been updated to " + status);
-        if(result){
+        OrderDTO order = orderDao.getOrderInfo(orderID);
+        List<OrderDetailsDTO> orderDetailsList = orderDao.getListOrderDetailsByOrderID(orderID);
+        List<ProductDetailsDTO> productDetailsList = productDao.getProductInfoToSendMail(orderID);
+        
+        String emailContent = "<p>Dear " + userDTO.getUserName() + ",</p>";
+
+        if (status.equals("Cancelled")) {
+            emailContent += "<p>We are sorry that your order with ID #" + orderID + " has been cancelled. We hope to see you again soon. Thank you for your interest in our products !</p>";
+        } else if (status.equals("In processing")) {
+            emailContent += "<p>Thank you for ordering from our website. We are pleased to confirm the receipt of your order #" + orderID + ", dated " + order.getOrderDate()+". <b>PLEASE CHECK YOUR ORDER DETAILS BELOW AGAIN !</b></p>"
+                    + "<h3>Summary:</h3>"
+                    + "<ul>";
+
+            for (int i=0;i<orderDetailsList.size();i++) {
+                emailContent += "<li>Item " + (i+1) + ": Name " + productDetailsList.get(i).getProductName() + 
+                                                " - Quantity: " + orderDetailsList.get(i).getQuantity()+ 
+                                                " - Color: " + productDetailsList.get(i).getColor()+ 
+                                                " - Size: " + productDetailsList.get(i).getSize() + "</li>";
+            }
+
+            emailContent += "</ul>"
+                    + "<li>Total Amount: " + order.getTotal()+ "</li>"
+                    + "<li>Delivery Address: " + order.getAddress()+ ", " + order.getWard() + ", "+ order.getDistrict() +", "+ order.getCity() +"</li>"
+                    + "</ul>"
+                    + "<p>Your order is now being processed and we will ensure its prompt dispatch. You will receive a notification once your order has been shipped.</p>"
+                    + "<p>We appreciate the trust you have placed in us and aim to provide you with the highest quality of service. If you have any questions or need further assistance, please do not hesitate to contact our customer service team at micomicomun@gmail.com or 0123456789.</p>"
+                    + "<p>Thank you for choosing us. We value your business and look forward to serving you again.</p>"
+                    + "<p>Warm regards,</p>"
+                    + "<p>ISP392.</p>";
+        } else if (status.equals("Delivering")) {
+            emailContent += "<p>Your order #" + orderID + " is currently being delivered. Please expect your items soon.</p>";
+        } else if (status.equals("Completed")) {
+            emailContent += "<p>Your order #" + orderID + " has been successfully delivered. Thank you for shopping with us!</p>";
+        }
+        boolean result = sendEmail(userDTO.getEmail(), "YOUR ORDER STATUS: " + status, emailContent);
+        if (result) {
             url = SUCCESS_SEND_EMAIL_UPDATE_ORDER_STATUS;
         }
         return url;
@@ -187,13 +228,21 @@ public class SendMailServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(SendMailServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(SendMailServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override

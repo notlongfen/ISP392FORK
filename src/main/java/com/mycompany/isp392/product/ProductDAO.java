@@ -67,6 +67,11 @@ public class ProductDAO {
     private static final String ADD__WISHLIST = "insert into Wishlists(CustID) values (?)";
     private static final String SHOW__WISHLIST = "select * from Wishlists where CustID = ?";
     private static final String ADD__WISHLISTDETAIl = "insert into WishlistDetails (WishlistID,ProductID) values (?,?) ";
+    private static final String GET_PRODUCT_INFO_TO_SENDMAIL = "SELECT p.productName, pd.color, pd.size, pd.price, pd.image FROM Orders o" +
+                                                                "INNER JOIN OrderDetails od ON o.OrderID = od.OrderID" +
+                                                                "INNER JOIN Products p ON od.ProductID = p.ProductID" +
+                                                                "INNER JOIN ProductDetails pd ON od.ProductDetailsID = pd.ProductDetailsID" +
+                                                                "WHERE o.OrderID = ?; ";
 
     public boolean addProduct(ProductDTO product) throws SQLException {
         boolean check = false;
@@ -1388,4 +1393,39 @@ public class ProductDAO {
 
     }
 
+    
+    public List<ProductDetailsDTO> getProductInfoToSendMail(int orderID) throws SQLException {
+        List<ProductDetailsDTO> products = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_PRODUCT_INFO_TO_SENDMAIL);
+                ptm.setInt(1, orderID);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    String productName = rs.getString("productName");
+                    String color = rs.getString("color");
+                    String size = rs.getString("size");
+                    int price = rs.getInt("price");
+                    products.add(new ProductDetailsDTO(productName,color,size,price));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return products;
+    }
 }
