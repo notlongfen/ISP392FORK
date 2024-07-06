@@ -172,10 +172,13 @@ public class SendMailServlet extends HttpServlet {
         String toEmail = request.getParameter("email");
         String subject = request.getParameter("title");
         String messageBody = request.getParameter("content");
+        String shopEmail = "micomicomun@gmail.com";
+
         String url = ERROR_SEND_REQUEST;
 
-        boolean result = sendEmail(toEmail, subject, messageBody);
-        if (result) {
+        boolean resultOfSendMailToShop = sendEmail(shopEmail, subject + " From:" + toEmail, messageBody);
+        boolean result = sendEmail(toEmail, "We Have Recieved Your Request", "Your request has been sent to us. We will get back to you as soon as possible.");
+        if (result && resultOfSendMailToShop) {
             url = SUCCESS_SEND_REQUEST;
         }
         return url;

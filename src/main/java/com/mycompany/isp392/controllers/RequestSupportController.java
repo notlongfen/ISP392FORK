@@ -37,23 +37,23 @@ public class RequestSupportController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-//        String url = ERROR;
-//        try {
-//            String customerEmail = request.getParameter("email");
-//            String title = request.getParameter("title");
-//            String content = request.getParameter("content");
-//            SupportDAO supportDAO = new SupportDAO();
-//            boolean check = supportDAO.insertToSupport(customerEmail, title, content);
-//            if (check) {
-//                request.getRequestDispatcher(url).include(request, response);
-//                url = SUCCESS;
-//            }
-//        } catch (Exception e) {
-//            log("Error at RequestSupportController: " + e.toString());
-//
-//        } finally {
-//            request.getRequestDispatcher(url).forward(request, response);
-//        }
+        // String url = ERROR;
+        // try {
+        // String customerEmail = request.getParameter("email");
+        // String title = request.getParameter("title");
+        // String content = request.getParameter("content");
+        // SupportDAO supportDAO = new SupportDAO();
+        // boolean check = supportDAO.insertToSupport(customerEmail, title, content);
+        // if (check) {
+        // request.getRequestDispatcher(url).include(request, response);
+        // url = SUCCESS;
+        // }
+        // } catch (Exception e) {
+        // log("Error at RequestSupportController: " + e.toString());
+        //
+        // } finally {
+        // request.getRequestDispatcher(url).forward(request, response);
+        // }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the
@@ -92,12 +92,12 @@ public class RequestSupportController extends HttpServlet {
             SupportDAO supportDAO = new SupportDAO();
             boolean check = supportDAO.insertToSupport(customerEmail, title, content);
             if (check) {
-//                url = "SendMailServlet";
-////                request.setAttribute("action", "RequestSupportController");
-//                request.getRequestDispatcher(url).include(request, response);
+                url = "SendMailServlet";
+                // request.setAttribute("action", "RequestSupportController");
+                request.getRequestDispatcher(url).include(request, response);
                 url = SUCCESS;
                 request.setAttribute("MESSAGE", "We have received your request! Have a wonderful shopping experience");
-            }else{
+            } else {
                 request.setAttribute("ERROR", "Something went wrong with you");
             }
         } catch (Exception e) {

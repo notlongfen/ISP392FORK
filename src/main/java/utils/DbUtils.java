@@ -6,7 +6,13 @@ import java.sql.ResultSet;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.io.File;
 import java.sql.Connection;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartUtils;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.general.DefaultPieDataset;
 import org.mindrot.jbcrypt.BCrypt;
 
 public class DbUtils {
@@ -63,5 +69,21 @@ public class DbUtils {
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
+        DefaultPieDataset dataset = new DefaultPieDataset();
+        dataset.setValue("A", 2.0);
+        dataset.setValue("B", 3.0);
+        dataset.setValue("C", 4.0);
+        dataset.setValue("D", 5.0);
+        JFreeChart chart = ChartFactory.createPieChart("Test", dataset, true, true, true);
+        int width = 640;
+        int height = 480;
+        File pieChart = new File("./PieChart.jpeg");
+        try {
+            ChartUtils.saveChartAsJPEG(pieChart, chart, width, height);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
     }
+
 }
