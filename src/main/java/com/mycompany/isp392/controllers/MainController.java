@@ -25,7 +25,10 @@ public class MainController extends HttpServlet {
 
     private static final String ADD_PRODUCT_PAGE = "Add_Product_Page";
     private static final String ADD_PRODUCT_PAGE_VIEW = "GetBrandsController";
-
+    
+      private static final String EDIT_PRODUCT_PAGE = "Edit_Product_Page";
+    private static final String EDIT_PRODUCT_PAGE_VIEW = "GetSpecificProductController";
+    
     private static final String GET_PRODUCTS_PAGE = "Manage_Products_Page";
     private static final String GET_PRODUCTS_PAGE_VIEW = "GetProductsController";
 
@@ -414,6 +417,8 @@ public class MainController extends HttpServlet {
                 url = GET_PRODUCT_BY_BRAND_CONTROLLER;
             } else if (GET_PRODUCT_BY_PRICES.equals(action)) {
                 url = GET_PRODUCT_BY_PRICE_CONTROLLER;
+            }else if (EDIT_PRODUCT_PAGE.equals(action)) {
+                url = EDIT_PRODUCT_PAGE_VIEW;
             }
 
         } catch (Exception e) {

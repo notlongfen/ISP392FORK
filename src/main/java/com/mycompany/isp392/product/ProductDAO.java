@@ -14,6 +14,8 @@ import java.util.Map;
 import java.util.List;
 import com.mycompany.isp392.brand.BrandDTO;
 import com.mycompany.isp392.wishlist.WishlistDTO;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ProductDAO {
 
@@ -72,6 +74,8 @@ public class ProductDAO {
                                                                 "INNER JOIN Products p ON od.ProductID = p.ProductID" +
                                                                 "INNER JOIN ProductDetails pd ON od.ProductDetailsID = pd.ProductDetailsID" +
                                                                 "WHERE o.OrderID = ?; ";
+    private static final String GET_PRODUCTS_BY_PAGE = "SELECT * FROM Products ORDER BY productID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+    private static final String GET_TOTAL_PRODUCTS = "SELECT COUNT(*) AS total FROM Products";
 
     public boolean addProduct(ProductDTO product) throws SQLException {
         boolean check = false;
@@ -492,8 +496,7 @@ public class ProductDAO {
                     int numberOfPurchasing = rs.getInt("numberOfPurchasing");
                     int status = rs.getInt("status");
                     int brandID = rs.getInt("brandID");
-                    products.add(
-                            new ProductDTO(productID, productName, description, numberOfPurchasing, status, brandID));
+                    products.add(new ProductDTO(productID, productName, description, numberOfPurchasing, status, brandID));
                 }
             }
         } catch (Exception e) {
@@ -946,7 +949,6 @@ public class ProductDAO {
 
         return check;
     }
-
     public List<ProductDetailsDTO> getAllProductDetails() throws SQLException {
         String sql = "SELECT * FROM ProductDetails";
         Connection conn = null;
@@ -1235,6 +1237,30 @@ public class ProductDAO {
         }
         return productList;
     }
+     // Method to get products by page
+    public List<ProductDTO> getProductsByPage(int page, int entriesPerPage) throws SQLException {
+        List<ProductDTO> productList = new ArrayList<>();
+        try (Connection conn = DbUtils.getConnection();
+             PreparedStatement pst = conn.prepareStatement(GET_PRODUCTS_BY_PAGE)) {
+            int offset = (page - 1) * entriesPerPage;
+            pst.setInt(1, offset);
+            pst.setInt(2, entriesPerPage);
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    int productID = rs.getInt("productID");
+                    String productName = rs.getString("productName");
+                    String description = rs.getString("description");
+                    int brandID = rs.getInt("brandID");
+                    int status = rs.getInt("status");
+                    int numberOfPurchase = rs.getInt("numberOfPurchasing");
+                    productList.add(new ProductDTO(productID, productName, description, brandID, status, numberOfPurchase));
+                }
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return productList;
+    }
 
     public List<ProductDetailsDTO> getProductDetailsByProductList(List<ProductDTO> products) throws SQLException {
         List<ProductDetailsDTO> productDetails = new ArrayList<>();
@@ -1427,5 +1453,75 @@ public class ProductDAO {
             }
         }
         return products;
+    }
+    // Method to get total number of products
+    public int getTotalProducts() throws SQLException {
+        int total = 0;
+        try (Connection conn = DbUtils.getConnection();
+             PreparedStatement pst = conn.prepareStatement(GET_TOTAL_PRODUCTS);
+             ResultSet rs = pst.executeQuery()) {
+            if (rs.next()) {
+                total = rs.getInt("total");
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return total;
+    }
+       public List<ProductDTO> searchProductsByPage(String searchText, int page, int entriesPerPage) throws SQLException {
+        List<ProductDTO> productList = new ArrayList<>();
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        int start = (page - 1) * entriesPerPage;
+        try {
+            con = DbUtils.getConnection();
+            if (con != null) {
+                String sql = "SELECT * FROM Products WHERE productName LIKE ? ORDER BY productID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+                ps = con.prepareStatement(sql);
+                ps.setString(1, "%" + searchText + "%");
+                ps.setInt(2, start);
+                ps.setInt(3, entriesPerPage);
+                rs = ps.executeQuery();
+                while (rs.next()) {
+                    int productID = rs.getInt("productID");
+                    String productName = rs.getString("productName");
+                    int brandID = rs.getInt("brandID");
+                    String description = rs.getString("description");
+                    int status = rs.getInt("status");
+                    int numberOfPurchase = rs.getInt("numberOfPurchasing");
+                    productList.add(new ProductDTO(productID, productName, description, numberOfPurchase, status, brandID));
+                }
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DbUtils.closeConnection(con, ps, rs);
+        }
+        return productList;
+    }
+
+    public int getTotalSearchProducts(String searchText) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        int totalProducts = 0;
+        try {
+            con = DbUtils.getConnection();
+            if (con != null) {
+                String sql = "SELECT COUNT(*) FROM Products WHERE productName LIKE ?";
+                ps = con.prepareStatement(sql);
+                ps.setString(1, "%" + searchText + "%");
+                rs = ps.executeQuery();
+                if (rs.next()) {
+                    totalProducts = rs.getInt(1);
+                }
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DbUtils.closeConnection(con, ps, rs);
+        }
+        return totalProducts;
     }
 }

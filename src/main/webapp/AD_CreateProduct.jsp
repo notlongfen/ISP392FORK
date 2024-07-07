@@ -59,7 +59,7 @@
                                     <select class="form-control" id="brandID" name="brandID">
                                         <option value="">Choose...</option>
                                         <%
-                                            List<BrandDTO> brandList = (List<BrandDTO>) request.getAttribute("BRAND_LIST");
+                                            List<BrandDTO> brandList = (List<BrandDTO>) request.getAttribute("ACTIVE_BRAND_LIST");
                                             if (brandList != null) {
                                                 for (BrandDTO brand : brandList) {
                                         %>

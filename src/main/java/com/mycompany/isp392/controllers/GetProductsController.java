@@ -52,6 +52,12 @@ public class GetProductsController extends HttpServlet {
                 request.getSession().removeAttribute("ERROR_MESSAGE");
             }
 
+            int entriesPerPage = 10; // Fixed number of entries per page
+            int currentPage = 1;
+            if (request.getParameter("page") != null) {
+                currentPage = Integer.parseInt(request.getParameter("page"));
+            }
+
             // get product details page
             if (request.getParameter("productID") != null) {
                 int productID = Integer.parseInt(request.getParameter("productID"));
@@ -75,10 +81,13 @@ public class GetProductsController extends HttpServlet {
                 request.setAttribute("PARENT_PRODUCT_NAME", parentProductName);
                 url = ADD_PRODUCT_DETAIL_PAGE;
             } else {
-                List<ProductDTO> productList = productDAO.getAllProducts();
+                int totalProducts = productDAO.getTotalProducts();
+                List<ProductDTO> productList = productDAO.getProductsByPage(currentPage, entriesPerPage);
                 List<BrandDTO> brands = dao.getAllBrands();
                 request.setAttribute("BRAND_LIST", brands);
                 request.setAttribute("PRODUCT_LIST", productList);
+                request.setAttribute("CURRENT_PAGE", currentPage);
+                request.setAttribute("TOTAL_PAGES", (int) Math.ceil((double) totalProducts / entriesPerPage));
                 for (ProductDTO detail : productList) {
                     List<CategoryDTO> categories = categoryDAO.getCategoriesByProductID(detail.getProductID());
                     request.setAttribute("CATEGORY_LIST_" + detail.getProductID(), categories);

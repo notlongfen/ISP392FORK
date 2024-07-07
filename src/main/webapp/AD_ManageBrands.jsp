@@ -51,14 +51,14 @@
                     <!-- Header -->
                     <%@include file="AD_header.jsp" %>
                     <%
-         if (loginUser == null || 2 != loginUser.getRoleID()) {
-             response.sendRedirect("US_SignIn.jsp");
-             return;
-         }
-         String search = request.getParameter("search");
-         if (search == null) {
-             search = "";
-         }
+                    if (loginUser == null || 2 != loginUser.getRoleID()) {
+                        response.sendRedirect("US_SignIn.jsp");
+                        return;
+                    }
+                    String search = request.getParameter("search");
+                    if (search == null) {
+                        search = "";
+                    }
                     %>
                     <!-- Container Fluid-->
                     <div class="container-fluid" id="container-wrapper">
@@ -81,7 +81,7 @@
                                                     <select id="brandSelect" class="custom-select">
                                                         <option value="Select Brand">Select Brand</option>
                                                         <% 
-                                                        List<BrandDTO> brands = (List<BrandDTO>) session.getAttribute("BRAND_LIST");
+                                                        List<BrandDTO> brands = (List<BrandDTO>) request.getAttribute("BRAND_LIST");
                                                         if (brands != null) {
                                                             for (BrandDTO brand : brands) {
                                                         %>
@@ -134,11 +134,12 @@
                                                     <td class="text-center"><img src="<%= brand.getImage() %>" alt="Brand Image" style="max-width: 100px; max-height: 100px;"></td>
                                                     <td class="text-center"><span class="badge <%= brand.getStatus() == 1 ? "badge-success" : "badge-warning" %>"><%= brand.getStatus() == 1 ? "Available" : "Deleted" %></span></td>
                                                     <td class="text-center action-buttons">
-                                                        <!--<button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirmDeleteModal" data-id="<%= brand.getBrandID() %>" data-delete-type="brand">Delete</button>-->
+                                                        <% if (brand.getStatus() == 1) { %>
+                                                            <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirmDeleteModal" data-id="<%= brand.getBrandID() %>" data-status="<%= brand.getStatus() %>">Delete</button>
+                                                        <% } else { %>
+                                                            <button type="button" class="btn btn-sm btn-danger delete-btn-disabled" disabled aria-disabled="true">Delete</button>
+                                                        <% } %>
                                                         <form action="MainController" method="post" style="display:inline;">
-                                                            <input type="hidden" name="status" value="<%= brand.getStatus() %>">
-                                                            <button type="submit" class="btn btn-sm btn-danger" name="action" value="Delete_Brand">Delete</button> <!-- Luu y -->
-                                                            <input type="hidden" name="delete" value="Delete">
                                                             <input type="hidden" name="brandID" value="<%= brand.getBrandID() %>">
                                                             <button type="submit" class="btn btn-sm btn-dark" name="action" value="Edit_Brand_Page">Edit</button>
                                                         </form>
@@ -218,7 +219,8 @@
                                     <div class="modal-footer">
                                         <form id="deleteForm" method="post">
                                             <input type="hidden" name="id" id="modalID" value="">
-                                            <input type="hidden" name="deleteType" id="modalDeleteType" value="">
+                                            <input type="hidden" name="status" id="modalStatus" value="">
+                                            <input type="hidden" name="delete" value="delete">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                                             <button type="submit" class="btn btn-danger">Delete</button>
                                         </form>
@@ -312,9 +314,9 @@
                             document.querySelectorAll('.btn-danger[data-toggle="modal"]').forEach(btn => {
                                 btn.addEventListener('click', function () {
                                     const id = this.getAttribute('data-id');
-                                    const deleteType = this.getAttribute('data-delete-type');
+                                    const status = this.getAttribute('data-status');
                                     document.getElementById('modalID').value = id;
-                                    document.getElementById('modalDeleteType').value = deleteType;
+                                    document.getElementById('modalStatus').value = status;
                                     document.getElementById('deleteForm').action = 'DeleteBrandController';
                                 });
                             });

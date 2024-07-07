@@ -3,6 +3,7 @@
 <%@ page import="com.mycompany.isp392.brand.BrandDTO" %>
 <%@ page import="com.mycompany.isp392.category.CategoryDTO" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.mycompany.isp392.user.UserDTO" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -36,6 +37,12 @@
                 border-top-right-radius: 15px;
                 border-bottom-right-radius: 15px;
             }
+            .delete-btn {
+                display: none;
+            }
+            .table-hover tbody tr:hover .delete-btn {
+                display: inline-block;
+            }
         </style>
     </head>
     <body id="page-top">
@@ -49,10 +56,11 @@
                     <!-- Header -->
                     <%@include file="AD_header.jsp" %>
                     <%
-                   if ((loginUser == null || 2!=loginUser.getRoleID()) && (loginUser == null || 3!=loginUser.getRoleID()) ) {
-                       response.sendRedirect("US_SignIn.jsp");
-                       return;
-                   }
+                    UserDTO loginUser1 = (UserDTO) session.getAttribute("LOGIN_USER");
+                    if (loginUser == null || (loginUser.getRoleID() != 2 && loginUser.getRoleID() != 3)) {
+                        response.sendRedirect("US_SignIn.jsp");
+                        return;
+                    }
                     %>
                     <div class="container-fluid" id="container-wrapper">
                         <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -73,17 +81,6 @@
                                     <div class="table-responsive">
                                         <form>
                                             <div class="row mb-4 mx-2 justify-content-between">
-                                                <div class="col">
-                                                    <div class="input-group">
-                                                        <select id="entriesSelect" class="custom-select">
-                                                            <option value="Select Entries">Select Entries</option>
-                                                            <option value="5">5</option>
-                                                            <option value="10">10</option>
-                                                            <option value="15">15</option>
-                                                            <option value="20">20</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
                                                 <div class="col">
                                                     <div class="input-group">
                                                         <select id="brandSelect" class="custom-select">
@@ -125,7 +122,7 @@
                                             </div>
                                         </form>
                                     </div>
-                                    <table class="table align-items-center table-flush">
+                                    <table class="table table-hover align-items-center table-flush">
                                         <thead class="thead-light">
                                             <tr>
                                                 <th class="text-center">ID</th>
@@ -187,6 +184,8 @@
                                                 <td class="text-center action-buttons">
                                                     <% if (product.getStatus() == 1) { %>
                                                     <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirmDeleteModal" data-id="<%= product.getProductID() %>" data-delete-type="product">Delete</button>
+                                                    <% } else { %>
+                                                    <button type="button" class="btn btn-sm btn-danger delete-btn-disabled" disabled aria-disabled="true">Delete</button>
                                                     <% } %>
                                                     <form action="MainController" method="post" style="display:inline;">
                                                         <input type="hidden" name="productID" value="<%= product.getProductID() %>">
@@ -210,19 +209,29 @@
                                     <!-- Pagination -->
                                     <nav aria-label="Page navigation">
                                         <ul class="pagination justify-content-center mt-3">
+                                            <% 
+                                                int currentPage = (int) request.getAttribute("CURRENT_PAGE");
+                                                int totalPages = (int) request.getAttribute("TOTAL_PAGES");
+                                                if (currentPage > 1) { 
+                                            %>
                                             <li class="page-item">
-                                                <a class="page-link" href="#" aria-label="Previous" style="color: #C43337">
+                                                <a class="page-link" href="GetProductsController?page=<%= currentPage - 1 %>" aria-label="Previous" style="color: #C43337">
                                                     <span aria-hidden="true">&laquo;</span>
                                                 </a>
                                             </li>
-                                            <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">1</a></li>
-                                            <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">2</a></li>
-                                            <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">3</a></li>
+                                            <% } %>
+                                            <% for (int i = 1; i <= totalPages; i++) { %>
+                                            <li class="page-item <%= (i == currentPage) ? "active" : "" %>">
+                                                <a class="page-link" href="GetProductsController?page=<%= i %>" style="color: #C43337"><%= i %></a>
+                                            </li>
+                                            <% } %>
+                                            <% if (currentPage < totalPages) { %>
                                             <li class="page-item">
-                                                <a class="page-link" href="#" aria-label="Next" style="color: #C43337">
+                                                <a class="page-link" href="GetProductsController?page=<%= currentPage + 1 %>" aria-label="Next" style="color: #C43337">
                                                     <span aria-hidden="true">&raquo;</span>
                                                 </a>
                                             </li>
+                                            <% } %>
                                         </ul>
                                     </nav>
                                     <!-- End Pagination -->
@@ -280,16 +289,6 @@
                             document.getElementById('sortIconBrand').textContent = ascending ? '▲' : '▼';
                         }
 
-                        document.getElementById('entriesSelect').addEventListener('change', function () {
-                            const numEntries = parseInt(this.value);
-                            const tableBody = document.getElementById('tableBody');
-                            const rows = Array.from(tableBody.rows);
-
-                            rows.forEach((row, index) => {
-                                row.style.display = isNaN(numEntries) || this.value === "Select Entries" ? '' : (index < numEntries ? '' : 'none');
-                            });
-                        });
-
                         document.getElementById('brandSelect').addEventListener('change', function () {
                             const name = this.value;
                             const tableBody = document.getElementById('tableBody');
@@ -307,22 +306,20 @@
                             const rows = Array.from(tableBody.rows);
 
                             rows.forEach(row => {
-                                    const rowStatus = row.querySelector('td:nth-child(5) .badge').textContent.trim();
-                                    row.style.display = status === "Select Status" ? '' : (rowStatus === status ? '' : 'none');
-                                });
+                                const rowStatus = row.querySelector('td:nth-child(5) .badge').textContent.trim();
+                                row.style.display = status === "Select Status" ? '' : (rowStatus === status ? '' : 'none');
                             });
-                        <script>
-                                                        document.querySelectorAll('.btn-danger[data-toggle="modal"]').forEach(btn => {
-                                    btn.addEventListener('click', function () {
-                                        const id = this.getAttribute('data-id');
-                                        const deleteType = this.getAttribute('data-delete-type');
-                                        document.getElementById('modalID').value = id;
-                                        document.getElementById('modalDeleteType').value = deleteType;
-                                        document.getElementById('deleteForm').action = deleteType === 'product' ? 'DeleteProductController' : 'DeleteProductDetailsController';
-                                    });
-                                                        });
-            </script>
+                        });
 
+                        document.querySelectorAll('.btn-danger[data-toggle="modal"]').forEach(btn => {
+                            btn.addEventListener('click', function () {
+                                const id = this.getAttribute('data-id');
+                                const deleteType = this.getAttribute('data-delete-type');
+                                document.getElementById('modalID').value = id;
+                                document.getElementById('modalDeleteType').value = deleteType;
+                                document.getElementById('deleteForm').action = deleteType === 'product' ? 'DeleteProductController' : 'DeleteProductDetailsController';
+                            });
+                        });
                     </script>
                     <script src="vendor/jquery/jquery.min.js"></script>
                     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -333,5 +330,8 @@
                     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
                     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDzwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
                     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-                    </body>
-                    </html>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
