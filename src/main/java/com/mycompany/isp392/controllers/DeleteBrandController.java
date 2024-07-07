@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DeleteBrandController extends HttpServlet {
 
@@ -32,12 +34,13 @@ public class DeleteBrandController extends HttpServlet {
             int newStatus = brandDAO.deleteBrand1(brandID);
 
             if (newStatus != -1) {
-                ManageBrandDTO manage = new ManageBrandDTO(brandID, empID, Integer.toString(oldStatus), Integer.toString(newStatus), action);
+                List<String> oldList = new ArrayList<>();
+                List<String> newList = new ArrayList<>();
+                oldList.add(String.valueOf(oldStatus));
+                newList.add(String.valueOf(newStatus));
+                ManageBrandDTO manage = new ManageBrandDTO(brandID, empID, oldList, newList, action);
                 boolean checkAdd = brandDAO.addManageBrand(manage);
                 request.setAttribute("SUCCESS_MESSAGE", "BRAND DELETED SUCCESSFULLY !");
-//            boolean check = brandDAO.deleteBrand(brandID);
-//            if (check) {
-//                request.setAttribute("SUCCESS_MESSAGE", "BRAND DELETED SUCCESSFULLY !");
                 url = SUCCESS;
             } else {
                 brandError.setError("UNABLE TO DELETE BRAND !");

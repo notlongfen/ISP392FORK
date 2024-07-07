@@ -6,6 +6,8 @@ package com.mycompany.isp392.brand;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -14,15 +16,28 @@ import java.sql.Timestamp;
 public class ManageBrandDTO {
     public int brandID;
     public int empID;
-    public String oldField;
-    public String newField;
+    public List<String> oldField;
+    public List<String> newField; 
+    public String loadNewField; 
+    public String loadOldField; 
     public String action;
     public Timestamp changeDate;
 
     public ManageBrandDTO() {
     }
 
-    public ManageBrandDTO(int brandID, int empID, String oldField, String newField, String action, Timestamp changeDate) {
+    public ManageBrandDTO(int brandID, int empID, List<String> oldField, List<String> newField, String loadNewField, String loadOldField, String action, Timestamp changeDate) {
+        this.brandID = brandID;
+        this.empID = empID;
+        this.oldField = oldField;
+        this.newField = newField;
+        this.loadNewField = loadNewField;
+        this.loadOldField = loadOldField;
+        this.action = action;
+        this.changeDate = changeDate;
+    }
+
+    public ManageBrandDTO(int brandID, int empID, List<String> oldField, List<String> newField, String action, Timestamp changeDate) {
         this.brandID = brandID;
         this.empID = empID;
         this.oldField = oldField;
@@ -31,15 +46,25 @@ public class ManageBrandDTO {
         this.changeDate = changeDate;
     }
 
-
-    
-    public ManageBrandDTO(int brandID, int empID, String oldField, String newField, String action) {
+    public ManageBrandDTO(int brandID, int empID, List<String> oldField, List<String> newField, String action) {
         this.brandID = brandID;
         this.empID = empID;
         this.oldField = oldField;
         this.newField = newField;
         this.action = action;
     }
+
+    public ManageBrandDTO(int brandID, int empID, String loadOldField, String loadNewField,  String action, Timestamp changeDate) {
+        this.brandID = brandID;
+        this.empID = empID;
+        this.loadNewField = loadNewField;
+        this.loadOldField = loadOldField;
+        this.action = action;
+        this.changeDate = changeDate;
+    }
+
+    
+ 
 
     public int getBrandID() {
         return brandID;
@@ -57,21 +82,23 @@ public class ManageBrandDTO {
         this.empID = empID;
     }
 
-    public String getOldField() {
+    public List<String> getOldField() {
         return oldField;
     }
 
-    public void setOldField(String oldField) {
+    public void setOldField(List<String> oldField) {
         this.oldField = oldField;
     }
 
-    public String getNewField() {
+    public List<String> getNewField() {
         return newField;
     }
 
-    public void setNewField(String newField) {
+    public void setNewField(List<String> newField) {
         this.newField = newField;
     }
+
+ 
 
     public String getAction() {
         return action;
@@ -89,6 +116,24 @@ public class ManageBrandDTO {
         this.changeDate = changeDate;
     }
 
+    public String getLoadNewField() {
+        return loadNewField;
+    }
+
+    public void setLoadNewField(String loadNewField) {
+        this.loadNewField = loadNewField;
+    }
+
+    public String getLoadOldField() {
+        return loadOldField;
+    }
+
+    public void setLoadOldField(String loadOldField) {
+        this.loadOldField = loadOldField;
+    }
+
+    
+    
     @Override
     public String toString() {
         return "ManageBrandDTO{" + "brandID=" + brandID + ", empID=" + empID + ", oldField=" + oldField + ", newField=" + newField + ", action=" + action + ", changeDate=" + changeDate + '}';

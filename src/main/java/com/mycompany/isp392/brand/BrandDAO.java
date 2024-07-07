@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.Timestamp;
+import java.util.Arrays;
 
 public class BrandDAO {
 
@@ -24,6 +25,7 @@ public class BrandDAO {
     private static final String GET_BRAND = "SELECT * FROM Brands WHERE BrandID=?";
     private static final String ADD_MANAGE_BRAND = "INSERT INTO ManageBrands(BrandID, EmpID, FieldNew, FieldOld, Action) values (?,?,?,?,?)";
     private static final String GET_MANAGE_BRAND = "SELECT * FROM ManageBrands";
+
 
     public List<BrandDTO> searchForBrand(String brandName) {
         List<BrandDTO> list = new ArrayList<>();
@@ -348,8 +350,8 @@ public class BrandDAO {
                 ptm = conn.prepareStatement(ADD_MANAGE_BRAND);
                 ptm.setInt(1, manage.getBrandID());
                 ptm.setInt(2, manage.getEmpID());
-                ptm.setString(3, manage.getNewField());
-                ptm.setString(4, manage.getOldField());
+                ptm.setString(3, String.join(",", manage.getNewField())); // Chuyển đổi danh sách thành chuỗi
+                ptm.setString(4, String.join(",", manage.getOldField())); // Chuyển đổi danh sách thành chuỗi
                 ptm.setString(5, manage.getAction());
                 check = ptm.executeUpdate() > 0;
             }
@@ -384,6 +386,7 @@ public class BrandDAO {
                     String newField = rs.getString("FieldNew");
                     String action = rs.getString("Action");
                     Timestamp changeDate = rs.getTimestamp("ChangeDate");
+
                     list.add(new ManageBrandDTO(brandID, empID, oldField, newField, action, changeDate));
                 }
             }

@@ -115,8 +115,8 @@
                                                 %>
                                                     <td><%= list.getBrandID()%></td>
                                                     <td><%= list.getEmpID()%></td>
-                                                    <td><%= list.getOldField()%></td>
-                                                    <td><%= list.getNewField()%></td>
+                                                    <td><%= list.getLoadOldField()%></td>
+                                                    <td><%= list.getLoadNewField()%></td>
                                                     <td><%= list.getAction()%></td>
                                                     <td><%= list.getChangeDate()%></td>
                                                      </tr> 

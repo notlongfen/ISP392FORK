@@ -51,15 +51,18 @@
                                     <div class="form-group col-md-8 mt-xl-5" style="margin-left: 100px;">
                                         <label for="brand">Brand Name</label>
                                         <% 
-                                            BrandDTO brand = (BrandDTO) request.getAttribute("BRAND");
-                                            if (brand != null) {
+    BrandDTO brand = (BrandDTO) request.getAttribute("BRAND");
+    if (brand != null) {
                                         %>
+
+                                        
 
                                         <input type="text" class="form-control" name="newBrandName" value="<%= brand.getBrandName() %>" 
                                                style="width: 550px">
                                         <input type="hidden" class="form-control" name="oldBrandName" value="<%= brand.getBrandName() %>">
                                         <input type="hidden" name="brandID" value="<%= brand.getBrandID() %>">
                                         <input type="hidden" name="edit" value="Edit">
+                                        <input type="hidden" name="oldStatus" value="<%= brand.getStatus() %>">
                                     </div>
                                     <div class="form-group col-md-8 mt-xl-5" style="margin-left: 100px;">
                                         <label for="brandImage">Brand Image</label>

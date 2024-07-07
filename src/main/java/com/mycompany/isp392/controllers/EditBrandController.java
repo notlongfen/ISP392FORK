@@ -15,6 +15,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
+import java.util.ArrayList;
+import java.util.List;
 
 @MultipartConfig
 @WebServlet(name = "EditBrandController", urlPatterns = {"/EditBrandController"})
@@ -33,17 +35,17 @@ public class EditBrandController extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             String newBrandName = request.getParameter("newBrandName");
-//            int brandID = Integer.parseInt(request.getParameter("brandID"));
             int brandID = Integer.parseInt(request.getParameter("brandID"));
-//            String brandName = request.getParameter("brandName");
-
             UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
             int empID = user.getUserID();
             String oldBrandName = request.getParameter("oldBrandName");
+            int oldStatus = Integer.parseInt(request.getParameter("oldStatus"));
+            int newStatus = Integer.parseInt(request.getParameter("status"));
+
             Part filePart = request.getPart("brandImage");
-            int status = Integer.parseInt(request.getParameter("status"));
             ManageBrandDTO manage = null;
             BrandDAO brandDAO = new BrandDAO();
+
             if (brandDAO.checkBrandExists(newBrandName, brandID)) {
                 brandError.setBrandNameError("Brand already exists.");
                 checkValidation = false;
@@ -63,18 +65,32 @@ public class EditBrandController extends HttpServlet {
             }
 
             if (checkValidation) {
-                boolean check = brandDAO.updateBrand(newBrandName, imagePath, brandID, status);
+                boolean check = brandDAO.updateBrand(newBrandName, imagePath, brandID, newStatus);
                 if (check) {
-                    if(!oldBrandName.equals(newBrandName)) {
-                    String action = request.getParameter("edit");
-                    manage = new ManageBrandDTO(brandID, empID, oldBrandName, newBrandName, action);
+                    List<String> oldList = new ArrayList<>();
+                    List<String> newList = new ArrayList<>();
+
+                    if (!oldBrandName.equals(newBrandName)) {
+                        oldList.add(oldBrandName);
+                        newList.add(newBrandName);
                     }
-                    boolean checkAdd = brandDAO.addManageBrand(manage);
-                    request.setAttribute("SUCCESS_MESSAGE", "INFORMATION UPDATED SUCCESSFULLY !");
+
+                    if (oldStatus != newStatus) {
+                        oldList.add(String.valueOf(oldStatus));
+                        newList.add(String.valueOf(newStatus));
+                    }
+
+                    if (!oldList.isEmpty() && !newList.isEmpty()) {
+                        String action = request.getParameter("edit");
+                        manage = new ManageBrandDTO(brandID, empID, oldList, newList, action);
+                        boolean checkAdd = brandDAO.addManageBrand(manage);
+                    }
+
+                    request.setAttribute("SUCCESS_MESSAGE", "INFORMATION UPDATED SUCCESSFULLY!");
                     url = SUCCESS;
                 }
             } else {
-                brandError.setError("UNABLE TO UPDATE INFORMATION !");
+                brandError.setError("UNABLE TO UPDATE INFORMATION!");
                 request.setAttribute("BRAND_ERROR", brandError);
             }
         } catch (SQLException e) {
