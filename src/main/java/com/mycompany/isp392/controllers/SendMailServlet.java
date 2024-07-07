@@ -52,7 +52,7 @@ public class SendMailServlet extends HttpServlet {
             url = processForgotPassword(request, response);
         } else if ("Reply_Support".equals(action)) {
             url = processReplySupport(request, response, sessionCur);
-        } else if ("UpdateOrderController".equals(action)) {
+        } else if ("Update_Order_Status".equals(action)) {
             url = updateOrderStatusFromAdmin(request, response);
         } else if ("Request For Support".equals(action)) {
             url = requestForSupport(request, response);
@@ -60,7 +60,7 @@ public class SendMailServlet extends HttpServlet {
         response.sendRedirect(url);
     }
 
-    private boolean sendEmail(String toEmail, String subject, String messageBody) {
+    private boolean sendEmail(String toEmail, String subject, String messageBody, boolean isHtml) {
         final String fromEmail = "micomicomun@gmail.com";
         final String password = "ezox gkgv joqr mbwx";
 
@@ -82,7 +82,11 @@ public class SendMailServlet extends HttpServlet {
             message.setFrom(new InternetAddress(fromEmail));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
             message.setSubject(subject);
-            message.setText(messageBody);
+            if (isHtml) {
+                message.setContent(messageBody, "text/html; charset=utf-8");
+            } else {
+                message.setText(messageBody);
+            }
             Transport.send(message);
             return true;
         } catch (MessagingException e) {
@@ -111,7 +115,7 @@ public class SendMailServlet extends HttpServlet {
                     messageBody = "Click the link below to reset your password: http://localhost:8080/ISP392/US_CreateNewPassword.jsp?token="
                             + dto.getToken();
 
-                    boolean result = sendEmail(toEmail, subject, messageBody);
+                    boolean result = sendEmail(toEmail, subject, messageBody,false);
                     if (result) {
                         url = SUCCESS_FORGOT_PASSWORD;
                     }
@@ -137,7 +141,7 @@ public class SendMailServlet extends HttpServlet {
         String messageBody = request.getParameter("replyMessage");
         String url = ERROR_REPLY_SUPPORT;
 
-        boolean result = sendEmail(toEmail, subject, messageBody);
+        boolean result = sendEmail(toEmail, subject, messageBody,false);
         if (result) {
             try {
                 UserDTO edto = (UserDTO) sessionCur.getAttribute("LOGIN_USER");
@@ -160,49 +164,56 @@ public class SendMailServlet extends HttpServlet {
     }
 
     private String updateOrderStatusFromAdmin(HttpServletRequest request, HttpServletResponse response) throws SQLException {
-        String status = request.getParameter("status");
+        int status = Integer.parseInt(request.getParameter("status"));
         String url = ERROR_SEND_EMAIL_UPDATE_ORDER_STATUS;
         int orderID = Integer.parseInt(request.getParameter("orderID"));
         UserDAO userDAO = new UserDAO();
         OrderDAO orderDao = new OrderDAO();
         ProductDAO productDao = new ProductDAO();
-        
+
         UserDTO userDTO = userDAO.getUserInfoBasedOnOrderID(orderID);
         OrderDTO order = orderDao.getOrderInfo(orderID);
         List<OrderDetailsDTO> orderDetailsList = orderDao.getListOrderDetailsByOrderID(orderID);
         List<ProductDetailsDTO> productDetailsList = productDao.getProductInfoToSendMail(orderID);
-        
-        String emailContent = "<p>Dear " + userDTO.getUserName() + ",</p>";
 
-        if (status.equals("Cancelled")) {
-            emailContent += "<p>We are sorry that your order with ID #" + orderID + " has been cancelled. We hope to see you again soon. Thank you for your interest in our products !</p>";
-        } else if (status.equals("In processing")) {
-            emailContent += "<p>Thank you for ordering from our website. We are pleased to confirm the receipt of your order #" + orderID + ", dated " + order.getOrderDate()+". <b>PLEASE CHECK YOUR ORDER DETAILS BELOW AGAIN !</b></p>"
+        String emailContent = "<p>Dear " + userDTO.getUserName() + ",</p>";
+        String statusName = "";
+
+        if (status == 0) {
+            statusName = "Canceled";
+            emailContent += "<p>We are sorry that your order with ID #" + orderID + " has been cancelled. We hope to see you again soon. Thank you for your interest in our products!</p>";
+        } else if (status == 1) {
+            statusName = "In processing";
+            emailContent += "<p>Thank you for ordering from our website. We are pleased to confirm the receipt of your order #" + orderID + ", dated " + order.getOrderDate() + ". <b>PLEASE CHECK YOUR ORDER DETAILS BELOW AGAIN!</b></p>"
                     + "<h3>Summary:</h3>"
                     + "<ul>";
 
-            for (int i=0;i<orderDetailsList.size();i++) {
-                emailContent += "<li>Item " + (i+1) + ": Name " + productDetailsList.get(i).getProductName() + 
-                                                " - Quantity: " + orderDetailsList.get(i).getQuantity()+ 
-                                                " - Color: " + productDetailsList.get(i).getColor()+ 
-                                                " - Size: " + productDetailsList.get(i).getSize() + "</li>";
+            for (int i = 0; i < productDetailsList.size(); i++) {
+                emailContent += "<li>Item " + (i + 1) + ": Name: " + productDetailsList.get(i).getProductName()
+                        + " - Quantity: " + orderDetailsList.get(i).getQuantity()
+                        + " - Unit price: " + orderDetailsList.get(i).getUnitPrice()
+                        + " - Color: " + productDetailsList.get(i).getColor()
+                        + " - Size: " + productDetailsList.get(i).getSize() + "</li>";
             }
 
             emailContent += "</ul>"
-                    + "<li>Total Amount: " + order.getTotal()+ "</li>"
-                    + "<li>Delivery Address: " + order.getAddress()+ ", " + order.getWard() + ", "+ order.getDistrict() +", "+ order.getCity() +"</li>"
+                    + "<li>Total Amount: " + order.getTotal() + "</li>"
+                    + "<li>Delivery Address: " + order.getAddress() + ", " + order.getWard() + ", " + order.getDistrict() + ", " + order.getCity() + "</li>"
                     + "</ul>"
                     + "<p>Your order is now being processed and we will ensure its prompt dispatch. You will receive a notification once your order has been shipped.</p>"
                     + "<p>We appreciate the trust you have placed in us and aim to provide you with the highest quality of service. If you have any questions or need further assistance, please do not hesitate to contact our customer service team at micomicomun@gmail.com or 0123456789.</p>"
                     + "<p>Thank you for choosing us. We value your business and look forward to serving you again.</p>"
                     + "<p>Warm regards,</p>"
                     + "<p>ISP392.</p>";
-        } else if (status.equals("Delivering")) {
+        } else if (status == 2) {
+            statusName = "Delivering";
             emailContent += "<p>Your order #" + orderID + " is currently being delivered. Please expect your items soon.</p>";
-        } else if (status.equals("Completed")) {
+        } else if (status == 3) {
+            statusName = "Completed";
             emailContent += "<p>Your order #" + orderID + " has been successfully delivered. Thank you for shopping with us!</p>";
         }
-        boolean result = sendEmail(userDTO.getEmail(), "YOUR ORDER STATUS: " + status, emailContent);
+
+        boolean result = sendEmail(userDTO.getEmail(), "YOUR ORDER STATUS: " + statusName, emailContent,true);
         if (result) {
             url = SUCCESS_SEND_EMAIL_UPDATE_ORDER_STATUS;
         }
@@ -217,8 +228,8 @@ public class SendMailServlet extends HttpServlet {
 
         String url = ERROR_SEND_REQUEST;
 
-        boolean resultOfSendMailToShop = sendEmail(shopEmail, subject + " From:" + toEmail, messageBody);
-        boolean result = sendEmail(toEmail, "We Have Recieved Your Request", "Your request has been sent to us. We will get back to you as soon as possible.");
+        boolean resultOfSendMailToShop = sendEmail(shopEmail, subject + " From:" + toEmail, messageBody,false);
+        boolean result = sendEmail(toEmail, "We Have Recieved Your Request", "Your request has been sent to us. We will get back to you as soon as possible.",false);
         if (result && resultOfSendMailToShop) {
             url = SUCCESS_SEND_REQUEST;
         }

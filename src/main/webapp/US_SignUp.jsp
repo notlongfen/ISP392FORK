@@ -43,7 +43,7 @@
                     </div>
 
                     <!--Form--->
-                    <form action="RegisterController" method="POST">
+                    <form action="RegisterController" method="POST" accept-charset="UTF-8">
                         <div class="mb-3">
                             <label for="fullName" class="form-label" >Enter your full name</label>
                             <input type="text" class="form-control" id="fullName" placeholder="Enter your full name" name="userName" required="">

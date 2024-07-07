@@ -239,7 +239,7 @@ public class OrderDAO {
                 int productID = rs.getInt("productID");
                 int quantity = rs.getInt("quantity");
                 int unitPrice = rs.getInt("unitPrice");
-                listOrderDetails.add(new OrderDetailsDTO(productDetailsID,orderID, productID, quantity, unitPrice));
+                listOrderDetails.add(new OrderDetailsDTO(productDetailsID, orderID, productID, quantity, unitPrice));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -307,10 +307,11 @@ public class OrderDAO {
             if (conn != null) {
                 ptm = conn.prepareStatement(GET_ORDER_INFO_BY_ORDERID);
                 ptm.setInt(1, orderID);
-                int id = orderID;
                 rs = ptm.executeQuery();
                 if (rs.next()) {
+                    double total = rs.getDouble("total");
                     int promotionID = rs.getInt("promotionID");
+                    Date orderDate = rs.getDate("orderDate");
                     String userName = rs.getString("userName");
                     String city = rs.getString("city");
                     String district = rs.getString("district");
@@ -318,53 +319,7 @@ public class OrderDAO {
                     String address = rs.getString("address");
                     int phone = rs.getInt("phone");
                     String note = rs.getString("note");
-                    order = new OrderDTO(id, userName, city, district, ward, address, phone, note);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-                if (ptm != null) {
-                    ptm.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return order;
-    }
-
-    public OrderDTO getOrderInfoByID(int orderID) {
-        Connection conn = null;
-        PreparedStatement ptm = null;
-        ResultSet rs = null;
-        OrderDTO order = null;
-        try {
-            conn = DbUtils.getConnection();
-            if (conn != null) {
-                ptm = conn.prepareStatement(GET_ORDER_INFO_BY_ORDERID);
-                ptm.setInt(1, orderID);
-                int id = orderID;
-                rs = ptm.executeQuery();
-                if (rs.next()) {
-                    int promotionID = rs.getInt("promotionID");
-                    String userName = rs.getString("userName");
-                    String city = rs.getString("city");
-                    String district = rs.getString("district");
-                    String ward = rs.getString("ward");
-                    String address = rs.getString("address");
-                    int phone = rs.getInt("phone");
-                    String note = rs.getString("note");
-                    int status = rs.getInt("status");
-                    order = new OrderDTO(id, userName, city, district, ward, address, phone, note, status);
+                    order = new OrderDTO(orderID, total, orderDate, userName, city, district, ward, address, phone, note);
                 }
             }
         } catch (Exception e) {

@@ -169,7 +169,7 @@
                                                         <% 
                                                             } else {  
                                                         %>
-                                                        <a href="MainController?action=EditOrder&orderID=<%= order.getOrderID()%>&status=0" class="btn btn-sm btn-danger">Delete</a> 
+                                                        <a href="MainController?action=DeleteOrder&orderID=<%= order.getOrderID()%>&status=0" class="btn btn-sm btn-danger">Delete</a> 
                                                         <% 
                                                             }
                                                         %>

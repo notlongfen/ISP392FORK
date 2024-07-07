@@ -1431,7 +1431,7 @@ public class ProductDAO {
                 ptm = conn.prepareStatement(GET_PRODUCT_INFO_TO_SENDMAIL);
                 ptm.setInt(1, orderID);
                 rs = ptm.executeQuery();
-                if (rs.next()) {
+                while (rs.next()) {
                     String productName = rs.getString("productName");
                     String color = rs.getString("color");
                     String size = rs.getString("size");

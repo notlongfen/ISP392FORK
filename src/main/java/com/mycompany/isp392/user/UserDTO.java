@@ -38,8 +38,14 @@ public class UserDTO {
         this.email = email;
         this.phone = phone;
     }
+    
+    public UserDTO( String userName, String email, int phone) {
+        this.userName = userName;
+        this.email = email;
+        this.phone = phone;
+    }
 
-    //Get User Basic Info For Users
+
     public UserDTO(String userName, String email, int phone, int roleID, int status) {
         this.userName = userName;
         this.email = email;

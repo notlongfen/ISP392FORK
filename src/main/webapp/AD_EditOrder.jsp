@@ -83,51 +83,53 @@
                                     <div class=" py-3 d-flex flex-row align-items-center justify-content-between">
                                         <!--<h6 class="m-0 font-weight-bold text-primary">Invoice</h6>-->
                                     </div>
-
-                                    <table class="table align-items-center table-flush">
-                                        <thead class="thead-light">
-                                            <tr>
-                                                <th class="text-center">Order ID</th>
-                                                <th class="text-center">Consignee</th>
-                                                <th class="text-center">Delivery address</th>
-                                                <th class="text-center">Ward</th>
-                                                <th class="text-center">District</th>
-                                                <th class="text-left">City</th>
-                                                <th class="text-center">Phone</th>
-                                                <th class="text-center">Note</th>
-                                                <th class="text-center">Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="tableBody">
-                                            <!-- GetOrderInforController -->
-                                            <%
-                                                OrderDTO order = (OrderDTO) request.getAttribute("ORDER_INFOR");
-                                                if (order != null) {
-                                            %>
-                                            <tr>
-                                                <td class="text-center"><%= order.getOrderID() %></td>
-                                                <td class="text-center"><%= order.getUserName() %></td>
-                                                <td class="text-center"><%= order.getAddress() %></td>
-                                                <td class="text-center"><%= order.getWard() %></td>
-                                                <td class="text-center"><%= order.getDistrict() %></td>
-                                                <td class="text-center"><%= order.getCity() %></td>
-                                                <td class="text-center"><%= order.getPhone() %></td>
-                                                <td class="text-center"><%= order.getNote() %></td>
-                                                <td class="text-center">
-                                                    <input type="hidden" name="orderID" value="<%= order.getOrderID() %>">
-                                                    <select name="status" class="form-control" onchange="this.form.submit()">
-                                                        <option value="0" <%= order.getStatus() == 0 ? "selected" : "" %>>Canceled</option>
-                                                        <option value="1" <%= order.getStatus() == 1 ? "selected" : "" %>>In processing</option>
-                                                        <option value="2" <%= order.getStatus() == 2 ? "selected" : "" %>>Delivering</option>
-                                                        <option value="3" <%= order.getStatus() == 3 ? "selected" : "" %>>Completed</option>
-                                                    </select>
-                                                </td>
-                                            </tr>
-                                            <%
-                                                }
-                                            %>
-                                        </tbody>
-                                    </table>
+                                    <form action="MainController">
+                                        <table class="table align-items-center table-flush">
+                                            <thead class="thead-light">
+                                                <tr>
+                                                    <th class="text-center">Order ID</th>
+                                                    <th class="text-center">Consignee</th>
+                                                    <th class="text-center">Delivery address</th>
+                                                    <th class="text-center">Ward</th>
+                                                    <th class="text-center">District</th>
+                                                    <th class="text-left">City</th>
+                                                    <th class="text-center">Phone</th>
+                                                    <th class="text-center">Note</th>
+                                                    <th class="text-center">Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tableBody">
+                                                <!-- GetOrderInforController -->
+                                                <%
+                                                    OrderDTO order = (OrderDTO) request.getAttribute("ORDER_INFOR");
+                                                    if (order != null) {
+                                                %>
+                                                <tr>
+                                                    <td class="text-center"><%= order.getOrderID() %></td>
+                                                    <td class="text-center"><%= order.getUserName() %></td>
+                                                    <td class="text-center"><%= order.getAddress() %></td>
+                                                    <td class="text-center"><%= order.getWard() %></td>
+                                                    <td class="text-center"><%= order.getDistrict() %></td>
+                                                    <td class="text-center"><%= order.getCity() %></td>
+                                                    <td class="text-center"><%= order.getPhone() %></td>
+                                                    <td class="text-center"><%= order.getNote() %></td>
+                                                    <td class="text-center">
+                                                        <input type="hidden" name="orderID" value="<%= order.getOrderID() %>">
+                                                        <select name="status" class="form-control">
+                                                            <option value="0" <%= order.getStatus() == 0 ? "selected" : "" %> >Canceled</option>
+                                                            <option value="1" <%= order.getStatus() == 1 ? "selected" : "" %>>In processing</option>
+                                                            <option value="2" <%= order.getStatus() == 2 ? "selected" : "" %>>Delivering</option>
+                                                            <option value="3" <%= order.getStatus() == 3 ? "selected" : "" %>>Completed</option>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <%
+                                                    }
+                                                %>
+                                            </tbody>
+                                            <input type="submit" name="action" value="Update_Order_Status">
+                                        </table>
+                                    </form>
 
                                     <table class="table align-items-center table-flush mt-4">
                                         <thead class="thead-light">
@@ -155,8 +157,11 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="card-footer"></div>
+                                            <%--                                            <a href="MainController?action=Update_Order_Status&orderID=<%= order.getOrderID()%>&status=<%= order.getStatus() %>" class="btn btn-primary btn-danger" style="">Save</a> --%>
+
+                                <!--<div class="card-footer"></div>-->
                             </div>
+
                         </div>
                     </div>
                     <!--Row-->

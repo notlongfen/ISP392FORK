@@ -32,7 +32,7 @@ public class GetOrderInforController extends HttpServlet {
         OrderDAO orderDao = new OrderDAO();
         try {
             int orderID = Integer.parseInt(request.getParameter("orderID"));
-            OrderDTO order = orderDao.getOrderInfoByID(orderID);
+            OrderDTO order = orderDao.getOrderInfo(orderID);
             List<OrderDetailsDTO> orderDetailsList = orderDao.getListOrderDetailsByOrderID(orderID);
             if (order != null) {
                 request.setAttribute("ORDER_INFOR", order);

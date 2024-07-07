@@ -5,14 +5,16 @@ import com.mycompany.isp392.order.OrderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
 
+@WebServlet(name = "EditOrderController", urlPatterns = {"/EditOrderController"})
 public class EditOrderController extends HttpServlet {
-    private static final String ERROR = "AD_EditOrder.jsp";
-    private static final String SUCCESS = "AD_OrderList.jsp";
+    private static final String ERROR = "GetOrderInfoController";
+    private static final String SUCCESS = "GetOrderListController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -25,7 +27,7 @@ public class EditOrderController extends HttpServlet {
             boolean check = orderDAO.editOrderStatus(orderID, status);
             if (check) {
                 url = "SendMailServlet";
-                request.setAttribute("REQFROM", "UpdateOrderController");
+                request.setAttribute("REQFROM", "Update_Order_Status");
                 request.setAttribute("MESSAGE", "Order status updated successfully! With status" + status);
                 request.setAttribute("status", status);
                 request.setAttribute("orderID", orderID);

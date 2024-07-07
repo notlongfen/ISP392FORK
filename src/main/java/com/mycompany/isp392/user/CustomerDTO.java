@@ -30,7 +30,7 @@ public class CustomerDTO extends UserDTO{
     
     
 
-    public CustomerDTO(String userName, String email, int phone, int points, Date birthday, String city, String district, String ward, String address) {
+    public CustomerDTO(String userName, String email, int phone,int roleID, int points, Date birthday, String city, String district, String ward, String address) {
         super(userName, email, phone);
         this.points = points;
         this.birthday = birthday;

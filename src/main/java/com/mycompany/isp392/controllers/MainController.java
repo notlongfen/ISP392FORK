@@ -128,11 +128,12 @@ public class MainController extends HttpServlet {
     private static final String EDIT_ORDER_PAGE = "EditOrder";
     private static final String EDIT_ORDER_PAGE_VIEW = "GetOrderInforController";
 
-    private static final String EDIT_ORDER = "Send_Mail";
-    private static final String EDIT_ORDER_CONTROLLER = "SendMailServlet";
-
+    private static final String EDIT_ORDER = "Update_Order_Status";
     private static final String DELETE_ORDER = "DeleteOrder";
-    private static final String DELETE_ORDER_CONTROLLER = "DeleteOrderController";
+        private static final String EDIT_ORDER_CONTROLLER = "EditOrderController";
+
+    private static final String VIEW_ORDER = "ViewOrderDetail";
+    private static final String VIEW_ORDER_CONTROLLER = "ViewOrderDetailController";
 
     private static final String FORGOT_PASSWORD_CONTROLLER = "ForgotPasswordController";
     private static final String FORGOT_PASSWORD_PAGE = "Forgot_Password";
@@ -319,16 +320,8 @@ public class MainController extends HttpServlet {
                 url = SEARCH_ORDER_CONTROLLER;
             } else if (EDIT_ORDER.equals(action)) {
                 url = EDIT_ORDER_CONTROLLER;
-            } else if (GET_ORDER_LIST.equals(action)) {
-                url = GET_ORDER_LIST_CONTROLLER;
-            } else if (BACK_ORDER_LIST.equals(action)) {
-                url = GET_ORDER_LIST_CONTROLLER;
-            } else if (EDIT_ORDER_PAGE.equals(action)) {
-                url = EDIT_ORDER_PAGE_VIEW;
-            } else if (DELETE_CATEGORY.equals(action)) {
-                url = DELETE_CATEGORY_CONTROLLER;
-            } else if (DELETE_CHILDREN_CATEGORY.equals(action)) {
-                url = DELETE_CHILDREN_CATEGORY_CONTROLLER;
+            } else if (DELETE_ORDER.equals(action)) {
+                url = EDIT_ORDER_CONTROLLER;
             } else if (EDIT_ORDER.equals(action)) {
                 url = EDIT_ORDER_CONTROLLER;
             } else if (GET_ORDER_LIST.equals(action)) {
@@ -337,6 +330,12 @@ public class MainController extends HttpServlet {
                 url = GET_ORDER_LIST_CONTROLLER;
             } else if (EDIT_ORDER_PAGE.equals(action)) {
                 url = EDIT_ORDER_PAGE_VIEW;
+            } else if (VIEW_ORDER.equals(action)) {
+                url = VIEW_ORDER_CONTROLLER;
+            } else if (DELETE_CATEGORY.equals(action)) {
+                url = DELETE_CATEGORY_CONTROLLER;
+            } else if (DELETE_CHILDREN_CATEGORY.equals(action)) {
+                url = DELETE_CHILDREN_CATEGORY_CONTROLLER;
             } else if (FORGOT_PASSWORD_PAGE.equals(action)) {
                 url = FORGOT_PASSWORD_CONTROLLER;
             } else if (VERIFY_TOKEN.equals(action)) {
