@@ -4,6 +4,7 @@
     Author     : jojo
 --%>
 
+<%@page import="com.mycompany.isp392.user.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -80,6 +81,50 @@
                     </div>
                 </div>
             </div>
+                    
+            <!-- Error Modal -->
+            <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger text-white">
+                            <h5 class="modal-title" id="errorModalLabel">Error</h5>
+                            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <ul class="list-group list-group-flush">
+                                <%
+                                    UserError error = (UserError) request.getAttribute("USER_ERROR");
+                                    if (error != null) {
+                                        if (error.getEmailError() != null && !error.getEmailError().isEmpty()) {
+                                %>
+                                    <li class="list-group-item list-group-item-danger"><%= error.getEmailError() %></li>
+                                <%
+                                        }
+                                        if (error.getPhoneError() != null && !error.getPhoneError().isEmpty()) {
+                                %>
+                                    <li class="list-group-item list-group-item-danger"><%= error.getPhoneError() %></li>
+                                <%
+                                        }
+                                    }
+                                %>
+                            </ul>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <% if (request.getAttribute("USER_ERROR") != null) { %>
+            <script>
+                $(document).ready(function () {
+                    $('#errorModal').modal('show');
+                });
+            </script>
+            <% } %>
 
             <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
             <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

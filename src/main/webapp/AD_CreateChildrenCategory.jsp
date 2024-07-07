@@ -66,28 +66,6 @@
                                         <input type="hidden" name="parentID" value="<%= parentID%>"/>
                                     </div>
                                 </div>
-                                <%--                                <div class="form-row mb-3">
-                                                                    <div class="form-group col-md-6">
-                                                                        <label for="parentID" >Select Parent Category</label>
-                                                                        <select class="form-select form-control" id="parentID" aria-label=".form-select-sm" 
-                                                                                style="width: 375px" name="parentID">
-                                                                            <%
-                                                                                CategoryDAO dao = new CategoryDAO();
-                                                                                List<CategoryDTO> list = (List<CategoryDTO>) dao.getActiveCategory();
-                                                                                if (list != null) {
-                                                                                    if (list.size() > 0) {
-                                                                                        for (CategoryDTO category : list) {
-
-                                            %>
-                                            <option value = <%=category.getCategoryID()%>><%=category.getCategoryName()%></option>
-                                            <%                                
-                                                        }
-                                                    }
-                                                }
-                                            %>
-                                        </select>
-                                    </div>
-                                </div>--%>
                                 <div class="form-group text-center" style="margin-top: 30px;">
                                     <button type="submit" name="action" value="Add_Children_Category" class="btn btn-danger btn-custom">Submit</button>
                                     <button type="reset" class="btn btn-secondary btn-custom">Reset</button>
@@ -97,6 +75,44 @@
                     </div>
                 </div>
             </div>
+            <!-- Error Modal -->
+            <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger text-white">
+                            <h5 class="modal-title" id="errorModalLabel">Error</h5>
+                            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <ul class="list-group list-group-flush">
+                                <%
+                                    CategoryError error = (CategoryError) request.getAttribute("CHILDREN_CATEGORY_ERROR");
+                                    if (error != null) {
+                                        if (error.getCdCategoryNameError() != null && !error.getCdCategoryNameError().isEmpty()) {
+                                %>
+                                <li class="list-group-item list-group-item-danger"><%= error.getCdCategoryNameError() %></li>
+                                    <%
+                                            }
+                                        }
+                                    %>
+                            </ul>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <% if (request.getAttribute("CHILDREN_CATEGORY_ERROR") != null) { %>
+            <script>
+                $(document).ready(function () {
+                    $('#errorModal').modal('show');
+                });
+            </script>
+            <% } %>
 
             <!-- Include necessary scripts -->
             <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

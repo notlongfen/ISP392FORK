@@ -22,7 +22,7 @@ import jakarta.servlet.http.HttpSession;
 @WebServlet(name = "EditEmployeeController", urlPatterns = {"/EditEmployeeController"})
 public class EditEmployeeController extends HttpServlet {
 
-    private static final String ERROR = "AD_EditEmployee.jsp";
+    private static final String ERROR = "GetUserInfoController";
     private static final String SUCCESS = "SearchUserController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)

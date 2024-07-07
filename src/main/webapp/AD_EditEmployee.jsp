@@ -110,7 +110,50 @@
                     </div>
                 </div>
             </div>
-        </div>
+                                        
+            <!-- Error Modal -->
+            <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger text-white">
+                            <h5 class="modal-title" id="errorModalLabel">Error</h5>
+                            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <ul class="list-group list-group-flush">
+                                <%
+                                    UserError error = (UserError) request.getAttribute("EDIT_ERROR");
+                                    if (error != null) {
+                                        if (error.getEmailError() != null && !error.getEmailError().isEmpty()) {
+                                %>
+                                    <li class="list-group-item list-group-item-danger"><%= error.getEmailError() %></li>
+                                <%
+                                        }
+                                        if (error.getPhoneError() != null && !error.getPhoneError().isEmpty()) {
+                                %>
+                                    <li class="list-group-item list-group-item-danger"><%= error.getPhoneError() %></li>
+                                <%
+                                        }
+                                    }
+                                %>
+                            </ul>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <% if (request.getAttribute("EDIT_ERROR") != null) { %>
+            <script>
+                $(document).ready(function () {
+                    $('#errorModal').modal('show');
+                });
+            </script>
+            <% } %>
 
         <!-- Include necessary scripts -->
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -122,5 +165,6 @@
         <script src="js/ruang-admin.min.js"></script>
         <script src="vendor/chart.js/Chart.min.js"></script>
         <script src="js/demo/chart-area-demo.js"></script>
+        <script src="AD_js/demo/chart-area-demo.js"></script>
     </body>
 </html>

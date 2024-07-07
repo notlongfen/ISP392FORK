@@ -133,7 +133,7 @@
                     <!-- Container Fluid-->
                     <%@include file="AD_header.jsp" %>
                     <%
-                               UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
+                               loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
                                if (loginUser == null || 1 != loginUser.getRoleID() || loginUser.getStatus() == 0) {
                                     response.sendRedirect("US_SignIn.jsp");
                                     return;
