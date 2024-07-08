@@ -1,10 +1,16 @@
 package com.mycompany.isp392.controllers;
 
+import com.mycompany.isp392.product.ProductDAO;
+import com.mycompany.isp392.product.ProductDTO;
+import com.mycompany.isp392.product.ProductDetailsDTO;
+import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
+import java.util.List;
 
 public class MainController extends HttpServlet {
 
@@ -25,10 +31,10 @@ public class MainController extends HttpServlet {
 
     private static final String ADD_PRODUCT_PAGE = "Add_Product_Page";
     private static final String ADD_PRODUCT_PAGE_VIEW = "GetBrandsController";
-    
-      private static final String EDIT_PRODUCT_PAGE = "Edit_Product_Page";
+
+    private static final String EDIT_PRODUCT_PAGE = "Edit_Product_Page";
     private static final String EDIT_PRODUCT_PAGE_VIEW = "GetSpecificProductController";
-    
+
     private static final String GET_PRODUCTS_PAGE = "Manage_Products_Page";
     private static final String GET_PRODUCTS_PAGE_VIEW = "GetProductsController";
 
@@ -49,6 +55,9 @@ public class MainController extends HttpServlet {
 
     private static final String EDIT_BRAND_PAGE = "Edit_Brand_Page";
     private static final String EDIT_BRAND_PAGE_VIEW = "GetSpecificBrandController";
+
+    private static final String EDIT_PRODUCT_DETAIL_PAGE = "Edit_Product_Detail_Page";
+    private static final String EDIT_PRODUCT_DETAIL_PAGE_VIEW = "GetSpecificProductController";
 
     private static final String SEARCH_BRAND = "Search_Brand";
     private static final String SEARCH_BRAND_CONTROLLER = "SearchBrandController";
@@ -130,7 +139,7 @@ public class MainController extends HttpServlet {
 
     private static final String EDIT_ORDER = "Update_Order_Status";
     private static final String DELETE_ORDER = "DeleteOrder";
-        private static final String EDIT_ORDER_CONTROLLER = "EditOrderController";
+    private static final String EDIT_ORDER_CONTROLLER = "EditOrderController";
 
     private static final String VIEW_ORDER = "ViewOrderDetail";
     private static final String VIEW_ORDER_CONTROLLER = "ViewOrderDetailController";
@@ -245,6 +254,9 @@ public class MainController extends HttpServlet {
 
     private static final String GET_PRODUCT_BY_BRAND = "Get_product_by_brand";
     private static final String GET_PRODUCT_BY_BRAND_CONTROLLER = "FilterProductByBrandController";
+
+    private static final String ALL_PRODUCT = "All_Product";
+    private static final String ALL_PRODUCT_PAGE = "ViewAllProductController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -416,8 +428,12 @@ public class MainController extends HttpServlet {
                 url = GET_PRODUCT_BY_BRAND_CONTROLLER;
             } else if (GET_PRODUCT_BY_PRICES.equals(action)) {
                 url = GET_PRODUCT_BY_PRICE_CONTROLLER;
-            }else if (EDIT_PRODUCT_PAGE.equals(action)) {
+            } else if (EDIT_PRODUCT_PAGE.equals(action)) {
                 url = EDIT_PRODUCT_PAGE_VIEW;
+            } else if (ALL_PRODUCT.equals(action)) {
+                url = ALL_PRODUCT_PAGE;
+            } else if (EDIT_PRODUCT_DETAIL_PAGE.equals(action)) {
+                url = EDIT_PRODUCT_DETAIL_PAGE_VIEW;
             }
 
         } catch (Exception e) {
@@ -427,44 +443,60 @@ public class MainController extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the
-    // + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("action");
+        if ("FilterProducts".equals(action)) {
+            try {
+                filterProducts(request, response);
+            } catch (SQLException e) {
+                e.printStackTrace();
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            // Handle other actions if necessary
+        }
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
+    private void filterProducts(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
+        String[] selectedBrands = request.getParameterValues("brands[]");
+        String[] selectedPrices = request.getParameterValues("prices[]");
+        String[] selectedCategories = request.getParameterValues("categories[]");
+
+        ProductDAO productDAO = new ProductDAO();
+
+        // Get pagination parameters
+        int page = 1;
+        int recordsPerPage = 10; // Adjust as needed
+        if (request.getParameter("page") != null) {
+            page = Integer.parseInt(request.getParameter("page"));
+        }
+
+        List<ProductDTO> filteredProducts = productDAO.getFilteredProducts(selectedBrands, selectedPrices, selectedCategories, page, recordsPerPage);
+        List<ProductDetailsDTO> productDetails = productDAO.getProductDetailsByProductList(filteredProducts);
+
+        request.setAttribute("products", filteredProducts);
+        request.setAttribute("productDetails", productDetails);
+
+        int totalProducts = productDAO.getTotalFilteredProductsCount(selectedBrands, selectedPrices, selectedCategories);
+        int totalPages = (int) Math.ceil(totalProducts * 1.0 / recordsPerPage);
+
+        request.setAttribute("currentPage", page);
+        request.setAttribute("totalPages", totalPages);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("US_AllProducts.jsp");
+        dispatcher.forward(request, response);
+    }
+
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
+    }
 
 }

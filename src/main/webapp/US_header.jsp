@@ -126,7 +126,7 @@
                                 <nav class="navbar">
                                     <ul class="navbar_menu" >
                                         <li><a href="US_index.jsp">home</a></li>
-                                        <li><a href="US_AllProducts.jsp">shop</a></li>
+                                        <li><a href="MainController?action=All_Product">shop</a></li>
                                         <li><a href="MainController?action=View promotion">promotion</a></li>
                                         <li><a href="contact.html">contact</a></li>
                                     </ul>

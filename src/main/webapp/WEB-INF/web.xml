@@ -96,6 +96,10 @@
         <servlet-name>HomePageController</servlet-name>
         <servlet-class>com.mycompany.isp392.controllers.HomePageController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ViewAllProductController</servlet-name>
+        <servlet-class>com.mycompany.isp392.controllers.ViewAllProductController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>MainController</servlet-name>
         <url-pattern>/MainController</url-pattern>
@@ -191,6 +195,10 @@
     <servlet-mapping>
         <servlet-name>HomePageController</servlet-name>
         <url-pattern>/HomePageController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewAllProductController</servlet-name>
+        <url-pattern>/ViewAllProductController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

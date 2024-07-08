@@ -69,11 +69,11 @@ public class ProductDAO {
     private static final String ADD__WISHLIST = "insert into Wishlists(CustID) values (?)";
     private static final String SHOW__WISHLIST = "select * from Wishlists where CustID = ?";
     private static final String ADD__WISHLISTDETAIl = "insert into WishlistDetails (WishlistID,ProductID) values (?,?) ";
-    private static final String GET_PRODUCT_INFO_TO_SENDMAIL = "SELECT p.productName, pd.color, pd.size, pd.price, pd.image FROM Orders o" +
-                                                                "INNER JOIN OrderDetails od ON o.OrderID = od.OrderID" +
-                                                                "INNER JOIN Products p ON od.ProductID = p.ProductID" +
-                                                                "INNER JOIN ProductDetails pd ON od.ProductDetailsID = pd.ProductDetailsID" +
-                                                                "WHERE o.OrderID = ?; ";
+    private static final String GET_PRODUCT_INFO_TO_SENDMAIL = "SELECT p.productName, pd.color, pd.size, pd.price, pd.image FROM Orders o"
+            + "INNER JOIN OrderDetails od ON o.OrderID = od.OrderID"
+            + "INNER JOIN Products p ON od.ProductID = p.ProductID"
+            + "INNER JOIN ProductDetails pd ON od.ProductDetailsID = pd.ProductDetailsID"
+            + "WHERE o.OrderID = ?; ";
     private static final String GET_PRODUCTS_BY_PAGE = "SELECT * FROM Products ORDER BY productID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
     private static final String GET_TOTAL_PRODUCTS = "SELECT COUNT(*) AS total FROM Products";
     private static final String UPDATE_PRODUCT_NUMBER_OF_PURCHASING = "UPDATE Products SET numberOfPurchasing = numberOfPurchasing + ? WHERE productID = ?";
@@ -950,6 +950,7 @@ public class ProductDAO {
 
         return check;
     }
+
     public List<ProductDetailsDTO> getAllProductDetails() throws SQLException {
         String sql = "SELECT * FROM ProductDetails";
         Connection conn = null;
@@ -1238,11 +1239,11 @@ public class ProductDAO {
         }
         return productList;
     }
-     // Method to get products by page
+    // Method to get products by page
+
     public List<ProductDTO> getProductsByPage(int page, int entriesPerPage) throws SQLException {
         List<ProductDTO> productList = new ArrayList<>();
-        try (Connection conn = DbUtils.getConnection();
-             PreparedStatement pst = conn.prepareStatement(GET_PRODUCTS_BY_PAGE)) {
+        try (Connection conn = DbUtils.getConnection(); PreparedStatement pst = conn.prepareStatement(GET_PRODUCTS_BY_PAGE)) {
             int offset = (page - 1) * entriesPerPage;
             pst.setInt(1, offset);
             pst.setInt(2, entriesPerPage);
@@ -1254,7 +1255,7 @@ public class ProductDAO {
                     int brandID = rs.getInt("brandID");
                     int status = rs.getInt("status");
                     int numberOfPurchase = rs.getInt("numberOfPurchasing");
-                    productList.add(new ProductDTO(productID, productName, description, brandID, status, numberOfPurchase));
+                    productList.add(new ProductDTO(productID, productName, description, numberOfPurchase, status, brandID));
                 }
             }
         } catch (Exception ex) {
@@ -1396,31 +1397,6 @@ public class ProductDAO {
         return productDetailsList;
     }
 
-    public static void main(String[] args) throws SQLException {
-        ProductDAO dao = new ProductDAO();
-//        List<ProductDTO> allProducts = dao.getAllProductPags(1, 10);
-//        for (ProductDTO allProduct : allProducts) {
-//            System.out.println(allProduct);
-//        }
-
-//        int total = dao.getTotalProductCount();
-//        System.out.println("Total product is: " + total);
-//
-//        List<ProductDetailsDTO> lists = dao.getProductDetailsByProductID(3);
-//        for (ProductDetailsDTO list : lists) {
-//            System.out.println(list);
-//        }
-        String color = "Black";
-        int productID = 3;
-//       
-        List<ProductDetailsDTO> products = dao.getProductDetailsByBrand(3);
-        for (ProductDTO product : products) {
-            System.out.println(product);
-        }
-
-    }
-
-    
     public List<ProductDetailsDTO> getProductInfoToSendMail(int orderID) throws SQLException {
         List<ProductDetailsDTO> products = new ArrayList<>();
         Connection conn = null;
@@ -1437,7 +1413,7 @@ public class ProductDAO {
                     String color = rs.getString("color");
                     String size = rs.getString("size");
                     int price = rs.getInt("price");
-                    products.add(new ProductDetailsDTO(productName,color,size,price));
+                    products.add(new ProductDetailsDTO(productName, color, size, price));
                 }
             }
         } catch (Exception e) {
@@ -1455,12 +1431,11 @@ public class ProductDAO {
         }
         return products;
     }
+
     // Method to get total number of products
     public int getTotalProducts() throws SQLException {
         int total = 0;
-        try (Connection conn = DbUtils.getConnection();
-             PreparedStatement pst = conn.prepareStatement(GET_TOTAL_PRODUCTS);
-             ResultSet rs = pst.executeQuery()) {
+        try (Connection conn = DbUtils.getConnection(); PreparedStatement pst = conn.prepareStatement(GET_TOTAL_PRODUCTS); ResultSet rs = pst.executeQuery()) {
             if (rs.next()) {
                 total = rs.getInt("total");
             }
@@ -1469,7 +1444,8 @@ public class ProductDAO {
         }
         return total;
     }
-       public List<ProductDTO> searchProductsByPage(String searchText, int page, int entriesPerPage) throws SQLException {
+
+    public List<ProductDTO> searchProductsByPage(String searchText, int page, int entriesPerPage) throws SQLException {
         List<ProductDTO> productList = new ArrayList<>();
         Connection con = null;
         PreparedStatement ps = null;
@@ -1544,5 +1520,165 @@ public class ProductDAO {
             DbUtils.closeConnection(conn, pstm);
         }
         return result;
+    }
+
+    public List<ProductDTO> getFilteredProducts(String[] brandFilters, String[] priceFilters, String[] categoryFilters, int page, int recordsPerPage) throws SQLException {
+        List<ProductDTO> productList = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+
+        StringBuilder sql = new StringBuilder("SELECT DISTINCT p.* FROM Products p JOIN ProductDetails pd ON p.ProductID = pd.ProductID");
+
+        if (categoryFilters != null && categoryFilters.length > 0) {
+            sql.append(" JOIN ProductBelongtoCDCategories pbcc ON p.ProductID = pbcc.ProductID");
+            sql.append(" JOIN ChildrenCategories cc ON pbcc.CDCategoryID = cc.CDCategoryID");
+        }
+
+        sql.append(" WHERE p.status = 1");
+
+        if (brandFilters != null && brandFilters.length > 0) {
+            sql.append(" AND p.BrandID IN (").append(String.join(",", brandFilters)).append(")");
+        }
+
+        if (priceFilters != null && priceFilters.length > 0) {
+            sql.append(" AND (");
+            for (int i = 0; i < priceFilters.length; i++) {
+                if (i > 0) {
+                    sql.append(" OR ");
+                }
+                switch (priceFilters[i]) {
+                    case "0-100":
+                        sql.append("pd.price < 100");
+                        break;
+                    case "100-200":
+                        sql.append("pd.price BETWEEN 100 AND 200");
+                        break;
+                    case "200plus":
+                        sql.append("pd.price > 200");
+                        break;
+                }
+            }
+            sql.append(")");
+        }
+
+        if (categoryFilters != null && categoryFilters.length > 0) {
+            sql.append(" AND cc.ParentID IN (");
+            for (int i = 0; i < categoryFilters.length; i++) {
+                if (i > 0) {
+                    sql.append(",");
+                }
+                sql.append(categoryFilters[i]);
+            }
+            sql.append(")");
+        }
+
+        sql.append(" ORDER BY p.ProductID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+
+        try {
+            conn = DbUtils.getConnection();
+            ptm = conn.prepareStatement(sql.toString());
+            ptm.setInt(1, (page - 1) * recordsPerPage);
+            ptm.setInt(2, recordsPerPage);
+            rs = ptm.executeQuery();
+            while (rs.next()) {
+                int productID = rs.getInt("ProductID");
+                String productName = rs.getString("ProductName");
+                String description = rs.getString("Description");
+                int numberOfPurchasing = rs.getInt("NumberOfPurchasing");
+                int status = rs.getInt("Status");
+                int brandID = rs.getInt("BrandID");
+
+                ProductDTO product = new ProductDTO(productID, productName, description, numberOfPurchasing, status, brandID);
+                productList.add(product);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return productList;
+    }
+
+    public int getTotalFilteredProductsCount(String[] brandFilters, String[] priceFilters, String[] categoryFilters) throws SQLException {
+        int totalProducts = 0;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+
+        StringBuilder sql = new StringBuilder("SELECT COUNT(DISTINCT p.ProductID) FROM Products p JOIN ProductDetails pd ON p.ProductID = pd.ProductID");
+
+        if (categoryFilters != null && categoryFilters.length > 0) {
+            sql.append(" JOIN ProductBelongtoCDCategories pbcc ON p.ProductID = pbcc.ProductID");
+            sql.append(" JOIN ChildrenCategories cc ON pbcc.CDCategoryID = cc.CDCategoryID");
+        }
+
+        sql.append(" WHERE p.status = 1");
+
+        if (brandFilters != null && brandFilters.length > 0) {
+            sql.append(" AND p.BrandID IN (").append(String.join(",", brandFilters)).append(")");
+        }
+
+        if (priceFilters != null && priceFilters.length > 0) {
+            sql.append(" AND (");
+            for (int i = 0; i < priceFilters.length; i++) {
+                if (i > 0) {
+                    sql.append(" OR ");
+                }
+                switch (priceFilters[i]) {
+                    case "0-100":
+                        sql.append("pd.price < 100");
+                        break;
+                    case "100-200":
+                        sql.append("pd.price BETWEEN 100 AND 200");
+                        break;
+                    case "200plus":
+                        sql.append("pd.price > 200");
+                        break;
+                }
+            }
+            sql.append(")");
+        }
+
+        if (categoryFilters != null && categoryFilters.length > 0) {
+            sql.append(" AND cc.ParentID IN (");
+            for (int i = 0; i < categoryFilters.length; i++) {
+                if (i > 0) {
+                    sql.append(",");
+                }
+                sql.append(categoryFilters[i]);
+            }
+            sql.append(")");
+        }
+
+        try {
+            conn = DbUtils.getConnection();
+            ptm = conn.prepareStatement(sql.toString());
+            rs = ptm.executeQuery();
+            if (rs.next()) {
+                totalProducts = rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return totalProducts;
     }
 }
