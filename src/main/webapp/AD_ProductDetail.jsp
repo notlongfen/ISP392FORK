@@ -130,7 +130,7 @@
                                                         <% } %>
                                                         <form action="MainController" method="post" style="display:inline;">
                                                             <input type="hidden" name="productDetailID" value="<%= details.getProductDetailsID() %>">
-                                                            <button type="submit" class="btn btn-sm btn-dark" name="action" value="Edit_Product_Detail_Page">Edit</button>
+                                                            <button type="submit" class="btn btn-sm btn-dark" name="action" value="Edit_Product_Page">Edit</button>
                                                         </form>
                                                     </td>
                                                 </tr>

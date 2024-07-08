@@ -14,10 +14,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
+import java.util.Collection;
 
 @MultipartConfig
 public class EditProductDetailsController extends HttpServlet {
 
+    private static final String UPLOAD_DIRECTORY = "images";
     private static final String ERROR = "GetSpecificProductController";
     private static final String SUCCESS = "GetProductsController";
 
@@ -32,28 +34,37 @@ public class EditProductDetailsController extends HttpServlet {
             int price = Integer.parseInt(request.getParameter("price"));
             Date importDate = Date.valueOf(request.getParameter("importDate"));
             int detailStatus = Integer.parseInt(request.getParameter("detailStatus"));
-
+            Collection<Part> fileParts =  request.getParts();
+            StringBuilder imagePathBuilder = new StringBuilder();
+            
             ProductDAO productDAO = new ProductDAO();
             ProductDetailsDTO existingProductDetail = productDAO.selectProductDetailByID(productDetailID);
             String existingImage = existingProductDetail.getImage();
 
-            Part filePart = request.getPart("imageUpload");
-            String image = existingImage;
+            for (Part filePart : fileParts) {
+                if (filePart.getName().equals("imageUpload") && filePart.getSize() > 0) {
+                    String path = getServletContext().getRealPath("") + File.separator + UPLOAD_DIRECTORY;
+                    File uploadDir = new File(path);
+                    if (!uploadDir.exists()) {
+                        uploadDir.mkdirs();
+                    }
 
-            if (filePart != null && filePart.getSize() > 0) {
-                String path = getServletContext().getRealPath("") + File.separator + "images";
-                File uploadDir = new File(path);
-                if (!uploadDir.exists()) {
-                    uploadDir.mkdirs();
+                    String fileName = UUID.randomUUID().toString() + "_" + Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+                    String imagePath = UPLOAD_DIRECTORY + File.separator + fileName;
+                    filePart.write(path + File.separator + fileName);
+
+                    if (imagePathBuilder.length() > 0) {
+                        imagePathBuilder.append(";");
+                    }
+                    imagePathBuilder.append(imagePath);
                 }
-
-                String fileName = UUID.randomUUID().toString() + "_" + Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-                String imagePath = "images" + File.separator + fileName;
-                filePart.write(path + File.separator + fileName);
-                image = imagePath;
             }
-
-            boolean checkProductDetails = productDAO.editProductDetails(productDetailID, stockQuantity, price, importDate, image, detailStatus);
+            String imagePaths = imagePathBuilder.toString();
+            if(imagePaths == null || imagePaths.isEmpty()){
+                imagePaths = existingImage;
+            }
+            
+            boolean checkProductDetails = productDAO.editProductDetails(productDetailID, stockQuantity, price, importDate, imagePaths, detailStatus);
 
             if (checkProductDetails) {
                 request.setAttribute("SUCCESS_MESSAGE", "Product details updated successfully!");
