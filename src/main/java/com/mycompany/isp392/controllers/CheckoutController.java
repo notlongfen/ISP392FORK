@@ -135,7 +135,7 @@ public class CheckoutController extends HttpServlet {
             int userPoint = userDAO.getCustomerByID(userDTO.getUserID()).getPoints();
             int minPointToApplyCoupon = promotionDAO.getPromotionByID(promotionID).getCondition();
 
-
+            // Check if user point is enough to apply coupon
             if (userPoint >= minPointToApplyCoupon) {
                 double percentage = promotionDAO.getPromotionByID(promotionID).getDiscountPer() / 100;
                 int point  = userDAO.getCustomerByID(userDTO.getUserID()).getPoints() - 100;
@@ -151,6 +151,7 @@ public class CheckoutController extends HttpServlet {
                 return;
             }
 
+            //Add Order
             OrderDAO orderDAO = new OrderDAO();
             ProductDAO productDAO = new ProductDAO();
             OrderDTO order = orderDAO.insertOrder(cart.getTotalPrice(), user.getUserID(), promotionID, cart.getCartID(),
@@ -161,7 +162,7 @@ public class CheckoutController extends HttpServlet {
                 // OrderDetailsDTO odDTO = new OrderDetailsDTO(order.getOrderID(), cart.prod,
                 // promotionID, phone); //not done
                 // OrderDetailsDTO orderDetailsDTO = orderDAO.insertOrderDetails()
-                for (CartDetailsDTO cartDetail : cartDetails) {
+                for (CartDetailsDTO cartDetail : cartDetails) { //Add order details
                     OrderDetailsDTO orderDetailsDTO = new OrderDetailsDTO(cartDetail.getProductDetailsID(),
                             cartDetail.getProductID(), order.getOrderID(), cartDetail.getQuantity(),
                             cartDetail.getPrice());
@@ -171,6 +172,7 @@ public class CheckoutController extends HttpServlet {
 
                 session.removeAttribute("cart");
                 boolean check = cartDAO.updateCartStaus(cart.getCartID(), 0);
+                // Update user point
                 HashMap<Integer, Integer> priceAndPoint = new HashMap<>();
                 priceAndPoint.put(500000, 10);
                 priceAndPoint.put(1000000, 20);
@@ -194,6 +196,10 @@ public class CheckoutController extends HttpServlet {
                     int finalUserPoint = userDAO.updateUserPoint(userDTO.getUserID(), point);
 
                     if (finalUserPoint != 0) {
+                        //Update best sellet attribute
+                        for(CartDetailsDTO cartDetail : cartDetails) {
+                            productDAO.updateProductNumberOfPurchasedItems(cartDetail.getProductID(), cartDetail.getQuantity());
+                        }
                         url = SUCCESS;
                     }
                 }

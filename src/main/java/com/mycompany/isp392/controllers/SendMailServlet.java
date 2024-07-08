@@ -6,6 +6,8 @@ import com.mycompany.isp392.product.*;
 import com.mycompany.isp392.support.*;
 import com.mycompany.isp392.user.*;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Properties;
@@ -61,8 +63,9 @@ public class SendMailServlet extends HttpServlet {
     }
 
     private boolean sendEmail(String toEmail, String subject, String messageBody, boolean isHtml) {
-        final String fromEmail = "micomicomun@gmail.com";
-        final String password = "ezox gkgv joqr mbwx";
+        final Dotenv dotenv = Dotenv.configure().directory("/home/notlongfen/code/java/ISP392/.env").load();
+        final String fromEmail = dotenv.get("GOOGLE_SENDMAIL_EMAIL");
+        final String password = dotenv.get("GOOGLE_SENDMAIL_PASSWORD");
 
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");

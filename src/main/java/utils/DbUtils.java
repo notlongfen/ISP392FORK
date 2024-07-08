@@ -46,6 +46,20 @@ public class DbUtils {
         }
     }
 
+    public static void closeConnection(Connection conn, PreparedStatement ptm) {
+        try {
+            if(ptm != null) {
+                ptm.close();
+            }
+
+            if(conn != null) {
+                conn.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
         System.out.println(dotenv.get("DB_USERNAME"));
 //        System.out.println(Path.of("").toAbsolutePath().toString());

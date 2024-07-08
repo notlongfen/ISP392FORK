@@ -76,6 +76,7 @@ public class ProductDAO {
                                                                 "WHERE o.OrderID = ?; ";
     private static final String GET_PRODUCTS_BY_PAGE = "SELECT * FROM Products ORDER BY productID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
     private static final String GET_TOTAL_PRODUCTS = "SELECT COUNT(*) AS total FROM Products";
+    private static final String UPDATE_PRODUCT_NUMBER_OF_PURCHASING = "UPDATE Products SET numberOfPurchasing = numberOfPurchasing + ? WHERE productID = ?";
 
     public boolean addProduct(ProductDTO product) throws SQLException {
         boolean check = false;
@@ -1523,5 +1524,25 @@ public class ProductDAO {
             DbUtils.closeConnection(con, ps, rs);
         }
         return totalProducts;
+    }
+
+    public boolean updateProductNumberOfPurchasedItems(int productID, int quantity) throws SQLException {
+        boolean result = false;
+        Connection conn = null;
+        PreparedStatement pstm = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                pstm = conn.prepareStatement(UPDATE_PRODUCT_NUMBER_OF_PURCHASING);
+                pstm.setInt(1, quantity);
+                pstm.setInt(2, productID);
+                result = pstm.executeUpdate() > 0;
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DbUtils.closeConnection(conn, pstm);
+        }
+        return result;
     }
 }
