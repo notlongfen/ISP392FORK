@@ -171,6 +171,7 @@
 
                         <label for="coupon" class="form-label" >You have a coupon? Click here to enter your code</label>
                         <input type="text" class="form-control" id="coupon" name="promotionID">
+                        <input type="submit" form="billing-form" class="btn" name="action" class="btn mb-5"value="Apply"></input>
 
                     </div>
                     <ul class="list-group mb-3 no-borders">

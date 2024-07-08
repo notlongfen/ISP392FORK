@@ -54,7 +54,7 @@ public class AddToCartController extends HttpServlet {
             //check if customer have cart already, if not, create new one
             if(cartID ==-1){
                 cartID = cartDao.getLatestCartID() + 1;
-                CartDTO cart = new CartDTO(cartID, 0, custID, 1);
+                CartDTO cart = new CartDTO(cartID, 0, custID, 0,1);
                 boolean checkCart = cartDao.createCart(cart);
                 if(!checkCart){
                     error.setError("Unable to create new cart");

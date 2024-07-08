@@ -122,7 +122,7 @@ public class CheckoutController extends HttpServlet {
         try {
             UserDTO userDTO = (UserDTO) session.getAttribute("LOGIN_USER");
             UserDAO userDAO = new UserDAO();
-            PromotionDAO promotionDAO = new PromotionDAO();
+            // PromotionDAO promotionDAO = new PromotionDAO();
             String name = request.getParameter("name");
             String ward = request.getParameter("ward");
             String district = request.getParameter("district");
@@ -132,21 +132,28 @@ public class CheckoutController extends HttpServlet {
             int phone = Integer.parseInt(request.getParameter("phone"));
 
             List<CartDetailsDTO> cartDetails = cartDAO.getCartItems(cart.getCartID());
-            int userPoint = userDAO.getCustomerByID(userDTO.getUserID()).getPoints();
-            int minPointToApplyCoupon = promotionDAO.getPromotionByID(promotionID).getCondition();
+            // int userPoint = userDAO.getCustomerByID(userDTO.getUserID()).getPoints();
+            // int minPointToApplyCoupon = promotionDAO.getPromotionByID(promotionID).getCondition();
 
-            // Check if user point is enough to apply coupon
-            if (userPoint >= minPointToApplyCoupon) {
-                double percentage = promotionDAO.getPromotionByID(promotionID).getDiscountPer() / 100;
-                int point  = userDAO.getCustomerByID(userDTO.getUserID()).getPoints() - 100;
-                userDAO.updateUserPoint(userDTO.getUserID(), point);
-                cart.setTotalPrice(cart.getTotalPrice() - (cart.getTotalPrice() * percentage));
+            // // Check if user point is enough to apply coupon
+            // if (userPoint >= minPointToApplyCoupon) {
+            //     double percentage = promotionDAO.getPromotionByID(promotionID).getDiscountPer() / 100;
+            //     int point  = userDAO.getCustomerByID(userDTO.getUserID()).getPoints() - 100;
+            //     userDAO.updateUserPoint(userDTO.getUserID(), point);
+            //     cart.setTotalPrice(cart.getTotalPrice() - (cart.getTotalPrice() * percentage));
 
                 
-            } else {
+            // } else {
+            //     PromotionError pe = new PromotionError();
+            //     pe.setConditionError("Your membership point does not reach the condition of this promotion " + "("
+            //             + minPointToApplyCoupon + " points)" + "Your point: " + userPoint + " points");
+            //     request.setAttribute("PROMOTION_ERROR", pe);
+            //     return;
+            // }
+
+            if(promotionID != cart.getPromotionID()) {
                 PromotionError pe = new PromotionError();
-                pe.setConditionError("Your membership point does not reach the condition of this promotion " + "("
-                        + minPointToApplyCoupon + " points)" + "Your point: " + userPoint + " points");
+                pe.setConditionError("You should apply your current voucher first or retype the voucher code");
                 request.setAttribute("PROMOTION_ERROR", pe);
                 return;
             }
@@ -154,7 +161,7 @@ public class CheckoutController extends HttpServlet {
             //Add Order
             OrderDAO orderDAO = new OrderDAO();
             ProductDAO productDAO = new ProductDAO();
-            OrderDTO order = orderDAO.insertOrder(cart.getTotalPrice(), user.getUserID(), promotionID, cart.getCartID(),
+            OrderDTO order = orderDAO.insertOrder(cart.getTotalPrice() + 40000, user.getUserID(), promotionID, cart.getCartID(),
                     name, city, district, ward, address, phone, note);
 
 

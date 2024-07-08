@@ -258,6 +258,9 @@ public class MainController extends HttpServlet {
     private static final String ALL_PRODUCT = "All_Product";
     private static final String ALL_PRODUCT_PAGE = "ViewAllProductController";
 
+    private static final String PROMOTION_CHECKER = "Apply";
+    private static final String PROMOTION_CHECKER_CONTROLLER = "PromotionCheckerController";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -430,6 +433,8 @@ public class MainController extends HttpServlet {
                 url = GET_PRODUCT_BY_PRICE_CONTROLLER;
             } else if (EDIT_PRODUCT_PAGE.equals(action)) {
                 url = EDIT_PRODUCT_PAGE_VIEW;
+            } else if (PROMOTION_CHECKER.equals(action)) {
+                url = PROMOTION_CHECKER_CONTROLLER;
             } else if (ALL_PRODUCT.equals(action)) {
                 url = ALL_PRODUCT_PAGE;
             } else if (EDIT_PRODUCT_DETAIL_PAGE.equals(action)) {

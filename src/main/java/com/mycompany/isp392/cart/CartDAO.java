@@ -403,8 +403,45 @@ public class CartDAO {
             if (rs.next()) {
                 int cartID = rs.getInt("CartID");
                 double totalPrice = rs.getDouble("totalPrice");
+                int promotionID = rs.getInt("PromotionID");
                 int status = rs.getInt("status");
-                cart = new CartDTO(cartID, totalPrice, custID, status);
+                cart = new CartDTO(cartID, totalPrice, custID, promotionID,status);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pstm != null) {
+                    pstm.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return cart;
+    }
+
+    public CartDTO updateCartPromotionAndTotalPrice(CartDTO cart, int promotionID) {
+        Connection conn = null;
+        PreparedStatement pstm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            pstm = conn.prepareStatement("UPDATE Carts SET PromotionID = ? WHERE CartID = ?");
+            pstm.setInt(1, promotionID);
+            pstm.setInt(2, cart.getCartID());
+            pstm.executeUpdate();
+            pstm = conn.prepareStatement("SELECT SUM(price) AS totalPrice FROM CartDetails WHERE CartID = ?");
+            pstm.setInt(1, cart.getCartID());
+            rs = pstm.executeQuery();
+            if (rs.next()) {
+                cart.setTotalPrice(rs.getDouble("totalPrice"));
             }
         } catch (Exception e) {
             e.printStackTrace();

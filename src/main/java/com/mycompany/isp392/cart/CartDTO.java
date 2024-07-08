@@ -17,16 +17,18 @@ public class CartDTO {
     private int cartID;
     private double totalPrice;
     private int custID;
+    private int promotionID;
     private int status;
     public CartDTO() {
         
     }
     
 
-    public CartDTO(int cartID, double totalPrice, int custID, int status) {
+    public CartDTO(int cartID, double totalPrice, int custID, int promotionID,int status) {
         this.cartID = cartID;
         this.totalPrice = totalPrice;
         this.custID = custID;
+        this.promotionID = promotionID;
         this.status = status;
     }
 
@@ -40,6 +42,10 @@ public class CartDTO {
 
     public int getCustID() {
         return custID;
+    }
+
+    public int getPromotionID() {
+        return promotionID;
     }
 
     public int getStatus() {
@@ -56,6 +62,10 @@ public class CartDTO {
 
     public void setCustID(int custID) {
         this.custID = custID;
+    }
+
+    public void setPromotionID(int promotionID) {
+        this.promotionID = promotionID;
     }
 
     public void setStatus(int status) {
