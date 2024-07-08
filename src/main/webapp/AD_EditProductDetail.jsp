@@ -109,7 +109,7 @@
                                         %>
                                     </div>
                                     <div class="mt-3">
-                                        <input type="file" class="form-control-file" id="imageUpload" name="imageUpload">
+                                        <input type="file" class="form-control-file" id="imageUpload" name="imageUpload" multiple>
                                     </div>
                                 </div>
 
