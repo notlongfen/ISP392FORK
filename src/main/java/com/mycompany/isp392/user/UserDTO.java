@@ -60,7 +60,6 @@ public class UserDTO {
         this.phone = phone;
         this.roleID = roleID;
         this.status = status;
-
     }
             
     public int getUserID() {
