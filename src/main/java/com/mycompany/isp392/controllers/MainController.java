@@ -258,9 +258,11 @@ public class MainController extends HttpServlet {
     private static final String ALL_PRODUCT = "All_Product";
     private static final String ALL_PRODUCT_PAGE = "ViewAllProductController";
 
+
     private static final String PROMOTION_CHECKER = "Apply";
     private static final String PROMOTION_CHECKER_CONTROLLER = "PromotionCheckerController";
-
+    private static final String FILTER_PRODUCTS = "FilterProducts";
+    private static final String FILTER_PRODUCTS_CONTROLLER = "FilterProductsController";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -439,6 +441,8 @@ public class MainController extends HttpServlet {
                 url = ALL_PRODUCT_PAGE;
             } else if (EDIT_PRODUCT_DETAIL_PAGE.equals(action)) {
                 url = EDIT_PRODUCT_DETAIL_PAGE_VIEW;
+            }else if (FILTER_PRODUCTS.equals(action)) {
+                url = FILTER_PRODUCTS_CONTROLLER;
             }
 
         } catch (Exception e) {
@@ -456,17 +460,7 @@ public class MainController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String action = request.getParameter("action");
-        if ("FilterProducts".equals(action)) {
-            try {
-                filterProducts(request, response);
-            } catch (SQLException e) {
-                e.printStackTrace();
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            }
-        } else {
-            // Handle other actions if necessary
-        }
+        processRequest(request, response);
     }
 
     private void filterProducts(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
