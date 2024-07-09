@@ -261,8 +261,7 @@ public class MainController extends HttpServlet {
 
     private static final String PROMOTION_CHECKER = "Apply";
     private static final String PROMOTION_CHECKER_CONTROLLER = "PromotionCheckerController";
-    private static final String FILTER_PRODUCTS = "FilterProducts";
-    private static final String FILTER_PRODUCTS_CONTROLLER = "FilterProductsController";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -441,10 +440,7 @@ public class MainController extends HttpServlet {
                 url = ALL_PRODUCT_PAGE;
             } else if (EDIT_PRODUCT_DETAIL_PAGE.equals(action)) {
                 url = EDIT_PRODUCT_DETAIL_PAGE_VIEW;
-            }else if (FILTER_PRODUCTS.equals(action)) {
-                url = FILTER_PRODUCTS_CONTROLLER;
             }
-
         } catch (Exception e) {
             log("error at MainController: " + e.toString());
         } finally {
@@ -462,37 +458,6 @@ public class MainController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);
     }
-
-    private void filterProducts(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
-        String[] selectedBrands = request.getParameterValues("brands[]");
-        String[] selectedPrices = request.getParameterValues("prices[]");
-        String[] selectedCategories = request.getParameterValues("categories[]");
-
-        ProductDAO productDAO = new ProductDAO();
-
-        // Get pagination parameters
-        int page = 1;
-        int recordsPerPage = 10; // Adjust as needed
-        if (request.getParameter("page") != null) {
-            page = Integer.parseInt(request.getParameter("page"));
-        }
-
-        List<ProductDTO> filteredProducts = productDAO.getFilteredProducts(selectedBrands, selectedPrices, selectedCategories, page, recordsPerPage);
-        List<ProductDetailsDTO> productDetails = productDAO.getProductDetailsByProductList(filteredProducts);
-
-        request.setAttribute("products", filteredProducts);
-        request.setAttribute("productDetails", productDetails);
-
-        int totalProducts = productDAO.getTotalFilteredProductsCount(selectedBrands, selectedPrices, selectedCategories);
-        int totalPages = (int) Math.ceil(totalProducts * 1.0 / recordsPerPage);
-
-        request.setAttribute("currentPage", page);
-        request.setAttribute("totalPages", totalPages);
-
-        RequestDispatcher dispatcher = request.getRequestDispatcher("US_AllProducts.jsp");
-        dispatcher.forward(request, response);
-    }
-
     @Override
     public String getServletInfo() {
         return "Short description";
