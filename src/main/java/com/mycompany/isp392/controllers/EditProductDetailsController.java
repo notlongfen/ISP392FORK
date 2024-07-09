@@ -1,5 +1,7 @@
 package com.mycompany.isp392.controllers;
 
+import com.mycompany.isp392.cart.CartDAO;
+import com.mycompany.isp392.cart.CartDTO;
 import com.mycompany.isp392.product.ProductDAO;
 import com.mycompany.isp392.product.ProductDetailsDTO;
 import java.io.File;
@@ -15,6 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 import java.util.Collection;
+import java.util.List;
 
 @MultipartConfig
 public class EditProductDetailsController extends HttpServlet {
@@ -38,8 +41,10 @@ public class EditProductDetailsController extends HttpServlet {
             StringBuilder imagePathBuilder = new StringBuilder();
             
             ProductDAO productDAO = new ProductDAO();
+            CartDAO cartDAO = new CartDAO();
             ProductDetailsDTO existingProductDetail = productDAO.selectProductDetailByID(productDetailID);
             String existingImage = existingProductDetail.getImage();
+            int existingPrice = existingProductDetail.getPrice();
 
             for (Part filePart : fileParts) {
                 if (filePart.getName().equals("imageUpload") && filePart.getSize() > 0) {
@@ -62,6 +67,22 @@ public class EditProductDetailsController extends HttpServlet {
             String imagePaths = imagePathBuilder.toString();
             if(imagePaths == null || imagePaths.isEmpty()){
                 imagePaths = existingImage;
+            }
+            
+            List<Integer> listCart = cartDAO.getCartsByProduct(productDetailID);
+            if(existingPrice != price && !listCart.isEmpty()){
+                boolean checkCartDetails = cartDAO.updateCartDetailsPrice(productDetailID, price);
+                boolean checkAllCarts = true;
+                for(int cartID : listCart){
+                    boolean checkCart = cartDAO.updateCart(cartID);
+                    if(!checkCart){
+                        checkAllCarts = false;
+                        break;
+                    }
+                }
+                if(!checkCartDetails && !checkAllCarts){
+                    request.setAttribute("ERROR_MESSAGE", "Failed to update product details.");
+                }
             }
             
             boolean checkProductDetails = productDAO.editProductDetails(productDetailID, stockQuantity, price, importDate, imagePaths, detailStatus);

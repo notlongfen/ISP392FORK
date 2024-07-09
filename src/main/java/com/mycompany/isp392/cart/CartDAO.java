@@ -33,7 +33,9 @@ public class CartDAO {
             + "WHERE cd.CartID = ?";
     private static final String UPDATE_CART_STATUS = "UPDATE Carts SET status = ? WHERE cartID = ?";
     private static final String GET_CART_INFO_BY_CUSTOMER_ID = "SELECT * FROM Carts WHERE CustID = ?";
-    
+    private static final String GET_CARTS_BY_PRODUCT = "SELECT * FROM Carts c JOIN CartDetails cd ON c.CartID = cd.CartID WHERE cd.ProductDetailsID = ?";
+    private static final String UPDATE_CART_DETAILS_PRICE = "UPDATE CartDetails SET price = quantity * ? WHERE ProductDetailsID = ?";
+
 
     public boolean createCart(CartDTO cart) throws SQLException {
         boolean check = false;
@@ -461,5 +463,87 @@ public class CartDAO {
             }
         }
         return cart;
+    }
+    
+    public List<Integer> getCartsByProduct(int productDetailsID) throws SQLException{
+        List<Integer> carts = new ArrayList();
+        Connection conn = null;
+        ResultSet rs = null;
+        PreparedStatement ptm = null;
+        try{
+            conn = DbUtils.getConnection();
+            if(conn!=null){
+                ptm = conn.prepareStatement(GET_CARTS_BY_PRODUCT);
+                ptm.setInt(1, productDetailsID);
+                rs = ptm.executeQuery();
+                while(rs.next()){
+                    int cartID = rs.getInt("cartID");
+                    carts.add(cartID);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return carts;
+    }
+    
+    public boolean updateCartDetailsPrice(int productDetailsID, int price)throws SQLException{
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try{
+            conn = DbUtils.getConnection();
+            if(conn != null){
+                ptm = conn.prepareStatement(UPDATE_CART_DETAILS_PRICE);
+                ptm.setInt(1, price);
+                ptm.setInt(2, productDetailsID);
+                check = ptm.executeUpdate()>0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+    
+    public boolean updateCart(int cartID) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try{
+            conn = DbUtils.getConnection();
+            if(conn != null){
+                ptm = conn.prepareStatement(UPDATE_CART);
+                ptm.setInt(1, cartID);
+                ptm.setInt(2, cartID);
+                check = ptm.executeUpdate()>0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
     }
 }
