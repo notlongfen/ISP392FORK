@@ -1,8 +1,3 @@
-<%-- 
-    Document   : header
-    Created on : May 21, 2024, 8:09:19 PM
-    Author     : jojo
---%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -121,7 +116,7 @@
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <div class="logo_container" >
-                                    <a href="US_index.jsp">ISP392<span>Shop</span></a>
+                                    <a href="HomePageController">ISP392<span>Shop</span></a>
                                 </div>
                                 <nav class="navbar">
                                     <ul class="navbar_menu" >

@@ -1,11 +1,17 @@
 package com.mycompany.isp392.controllers;
 
-import com.mycompany.isp392.brand.*;
+import com.mycompany.isp392.brand.BrandDAO;
+import com.mycompany.isp392.brand.BrandError;
+import com.mycompany.isp392.brand.ManageBrandDTO;
 import com.mycompany.isp392.user.UserDTO;
+import net.coobird.thumbnailator.Thumbnails;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -15,8 +21,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
-import java.util.ArrayList;
-import java.util.List;
 
 @MultipartConfig
 @WebServlet(name = "EditBrandController", urlPatterns = {"/EditBrandController"})
@@ -25,6 +29,8 @@ public class EditBrandController extends HttpServlet {
     private static final String ERROR = "GetSpecificBrandController";
     private static final String SUCCESS = "GetBrandsController";
     private static final String UPLOAD_DIRECTORY = "images";
+    private static final int IMAGE_WIDTH = 500; // Set desired image width
+    private static final int IMAGE_HEIGHT = 500; // Set desired image height
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -61,6 +67,13 @@ public class EditBrandController extends HttpServlet {
 
                 String fileName = UUID.randomUUID().toString() + "_" + Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
                 imagePath = UPLOAD_DIRECTORY + File.separator + fileName;
+                File outputFile = new File(path + File.separator + fileName);
+
+                // Resize the image
+                Thumbnails.of(filePart.getInputStream())
+                        .size(IMAGE_WIDTH, IMAGE_HEIGHT)
+                        .toFile(outputFile);
+
                 filePart.write(path + File.separator + fileName);
             }
 
@@ -114,6 +127,6 @@ public class EditBrandController extends HttpServlet {
 
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "EditBrandController";
     }
 }

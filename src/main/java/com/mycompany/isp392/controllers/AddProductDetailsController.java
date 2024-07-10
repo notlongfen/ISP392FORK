@@ -3,6 +3,8 @@ package com.mycompany.isp392.controllers;
 import com.mycompany.isp392.product.ProductDAO;
 import com.mycompany.isp392.product.ProductDetailsDTO;
 import com.mycompany.isp392.product.ProductError;
+import net.coobird.thumbnailator.Thumbnails;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -23,6 +25,8 @@ public class AddProductDetailsController extends HttpServlet {
     private static final String UPLOAD_DIRECTORY = "images";
     private static final String ERROR = "GetProductsController";
     private static final String SUCCESS = "GetProductsController";
+    private static final int IMAGE_WIDTH = 500; // Set desired image width
+    private static final int IMAGE_HEIGHT = 500; // Set desired image height
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -75,7 +79,12 @@ public class AddProductDetailsController extends HttpServlet {
 
                     String fileName = UUID.randomUUID().toString() + "_" + Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
                     String imagePath = UPLOAD_DIRECTORY + File.separator + fileName;
-                    filePart.write(path + File.separator + fileName);
+                    File outputFile = new File(path + File.separator + fileName);
+
+                    // Resize the image
+                    Thumbnails.of(filePart.getInputStream())
+                            .size(IMAGE_WIDTH, IMAGE_HEIGHT)
+                            .toFile(outputFile);
 
                     if (imagePathBuilder.length() > 0) {
                         imagePathBuilder.append(";");
@@ -99,7 +108,7 @@ public class AddProductDetailsController extends HttpServlet {
 
                 if (check) {
                     request.setAttribute("newProductID", productID);
-                     request.getSession().setAttribute("SUCCESS_MESSAGE", "Product added successfully!");
+                    request.getSession().setAttribute("SUCCESS_MESSAGE", "Product added successfully!");
                     url = SUCCESS;
                 }
             }
@@ -108,16 +117,6 @@ public class AddProductDetailsController extends HttpServlet {
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
-    }
-
-    private String getFileName(Part part) {
-        String contentDisp = part.getHeader("content-disposition");
-        for (String token : contentDisp.split(";")) {
-            if (token.trim().startsWith("filename")) {
-                return token.substring(token.indexOf('=') + 2, token.length() - 1);
-            }
-        }
-        return "";
     }
 
     @Override

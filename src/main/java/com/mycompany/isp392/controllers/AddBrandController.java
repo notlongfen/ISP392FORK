@@ -1,6 +1,9 @@
 package com.mycompany.isp392.controllers;
 
-import com.mycompany.isp392.brand.*;
+import com.mycompany.isp392.brand.BrandDAO;
+import com.mycompany.isp392.brand.BrandError;
+import net.coobird.thumbnailator.Thumbnails;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -19,6 +22,8 @@ public class AddBrandController extends HttpServlet {
     private static final String UPLOAD_DIRECTORY = "images";
     private static final String ERROR = "AD_AddBrands.jsp";
     private static final String SUCCESS = "GetBrandsController";
+    private static final int IMAGE_WIDTH = 500; // Set desired image width
+    private static final int IMAGE_HEIGHT = 500; // Set desired image height
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -52,6 +57,13 @@ public class AddBrandController extends HttpServlet {
 
                 String fileName = UUID.randomUUID().toString() + "_" + Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
                 imagePath = UPLOAD_DIRECTORY + File.separator + fileName;
+                File outputFile = new File(path + File.separator + fileName);
+
+                // Resize the image
+                Thumbnails.of(filePart.getInputStream())
+                        .size(IMAGE_WIDTH, IMAGE_HEIGHT)
+                        .toFile(outputFile);
+
                 filePart.write(path + File.separator + fileName);
             }
 

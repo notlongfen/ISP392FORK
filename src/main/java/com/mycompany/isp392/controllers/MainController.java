@@ -1,16 +1,10 @@
 package com.mycompany.isp392.controllers;
 
-import com.mycompany.isp392.product.ProductDAO;
-import com.mycompany.isp392.product.ProductDTO;
-import com.mycompany.isp392.product.ProductDetailsDTO;
-import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
-import java.util.List;
 
 public class MainController extends HttpServlet {
 
@@ -247,7 +241,7 @@ public class MainController extends HttpServlet {
     private static final String REQUEST_FOR_SUPPORT_CONTROLLER = "RequestSupportController";
 
     private static final String GET_PRODUCTBYID = "Get_product_detail";
-    private static final String GET_PRODUCTBYID_CONTROLLER = "GetProductDetailByproductID";
+    private static final String GET_PRODUCTBYID_CONTROLLER = "GetProductDetails";
 
     private static final String GET_PRODUCT_BY_PRICES = "Get_product_by_price";
     private static final String GET_PRODUCT_BY_PRICE_CONTROLLER = "FilterProductsByPriceController";

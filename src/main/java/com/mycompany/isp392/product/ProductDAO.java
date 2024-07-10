@@ -77,7 +77,7 @@ public class ProductDAO {
     private static final String GET_PRODUCTS_BY_PAGE = "SELECT * FROM Products ORDER BY productID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
     private static final String GET_TOTAL_PRODUCTS = "SELECT COUNT(*) AS total FROM Products";
     private static final String UPDATE_PRODUCT_NUMBER_OF_PURCHASING = "UPDATE Products SET numberOfPurchasing = numberOfPurchasing + ? WHERE productID = ?";
-
+   private static final String GET_PRODUCT_DETAILS_BY_COLOR = "SELECT * FROM ProductDetails WHERE ProductID = ? AND Color = ? AND status = 1";
     public boolean addProduct(ProductDTO product) throws SQLException {
         boolean check = false;
         Connection conn = null;
@@ -1680,5 +1680,70 @@ public class ProductDAO {
             }
         }
         return totalProducts;
+    }
+    public List<ProductDetailsDTO> getProductDetailsByColor(int productID, String color) throws SQLException {
+        List<ProductDetailsDTO> productDetailsList = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_PRODUCT_DETAILS_BY_COLOR);
+                ptm.setInt(1, productID);
+                ptm.setString(2, color);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    int productDetailsID = rs.getInt("ProductDetailsID");
+                    String size = rs.getString("size");
+                    int stockQuantity = rs.getInt("stockQuantity");
+                    int price = rs.getInt("price");
+                    Date importDate = rs.getDate("importDate");
+                    String image = rs.getString("image");
+                    int status = rs.getInt("status");
+                    productDetailsList.add(new ProductDetailsDTO(productDetailsID, productID, color, size, stockQuantity, price, importDate, image, status));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return productDetailsList;
+    }
+     public Map<String, Map<String, Map<String, Object>>> getProductDetailsByProductID2(int productId) {
+        Map<String, Map<String, Map<String, Object>>> colorSizeMap = new HashMap<>();
+        
+        try (Connection con = DbUtils.getConnection()) {
+            String query = "SELECT color, size, price, image FROM ProductDetails WHERE ProductID = ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, productId);
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                String color = rs.getString("color");
+                String size = rs.getString("size");
+                int price = rs.getInt("price");
+                String images = rs.getString("image");
+                
+                colorSizeMap.putIfAbsent(color, new HashMap<>());
+                Map<String, Object> sizeDetails = new HashMap<>();
+                sizeDetails.put("price", price);
+                sizeDetails.put("images", images.split(";"));
+                colorSizeMap.get(color).put(size, sizeDetails);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return colorSizeMap;
     }
 }

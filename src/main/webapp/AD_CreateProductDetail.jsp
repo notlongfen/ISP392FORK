@@ -6,7 +6,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
         <title>Add Product Details</title>
@@ -21,6 +21,15 @@
             }
             .form-group label {
                 font-weight: bold;
+            }
+            .image-preview {
+                border: 1px solid #ccc;
+                margin-top: 10px;
+            }
+            .image-preview-container {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
             }
         </style>
     </head>
@@ -74,6 +83,7 @@
                     <div class="form-group">
                         <label for="uploadImages">Upload Images</label>
                         <input type="file" class="form-control-file" id="uploadImages" name="images" multiple>
+                        <div id="imagePreviewContainer" class="image-preview-container"></div>
                     </div>
                     <div class="form-group text-center">
                         <button type="submit" class="btn btn-danger" name="action" value="Add_Product_Details">Submit</button>
@@ -91,5 +101,23 @@
         </script>
         <% } %>
 
+        <script>
+            $(document).ready(function () {
+                $('#uploadImages').on('change', function () {
+                    $('#imagePreviewContainer').empty(); // Clear previous previews
+                    var files = this.files;
+                    if (files) {
+                        $.each(files, function (index, file) {
+                            var reader = new FileReader();
+                            reader.onload = function (e) {
+                                var img = $('<img>').attr('src', e.target.result).addClass('image-preview').show();
+                                $('#imagePreviewContainer').append(img);
+                            }
+                            reader.readAsDataURL(file);
+                        });
+                    }
+                });
+            });
+        </script>
     </body>
 </html>
