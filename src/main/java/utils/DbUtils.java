@@ -7,6 +7,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 
 import org.jfree.chart.ChartFactory;
@@ -19,6 +20,7 @@ public class DbUtils {
 
 
     private static Dotenv dotenv = Dotenv.configure().directory("/home/notlongfen/code/java/ISP392/.env").load();
+    private static final String CHECK_LOG_FORMAT = "INSERT INTO ? (EmpID, ?, FieldOld, FieldNew, Action) VALUES (?, ?, ?, ?, ?)";
 
     public static Connection getConnection() throws ClassNotFoundException, SQLException {
         Connection conn = null;
@@ -26,6 +28,29 @@ public class DbUtils {
         String url = "jdbc:sqlserver://localhost:1433;databaseName=" + dotenv.get("DB_NAME") + ";encrypt=true;trustServerCertificate=true";
         conn = DriverManager.getConnection(url, dotenv.get("DB_USERNAME"), dotenv.get("DB_PASSWORD"));
         return conn;
+    }
+
+    public <T> boolean addCheckLogToDB(String tableName, String attributeName, T manageDTO) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = getConnection();
+            ptm = conn.prepareStatement(CHECK_LOG_FORMAT);
+            ptm.setString(1, tableName);
+            ptm.setString(2, attributeName);
+            ptm.setInt(3, (int) manageDTO.getClass().getMethod("getEmpID").invoke(manageDTO));
+            ptm.setString(4, manageDTO.getClass().getMethod("get" + attributeName).invoke(manageDTO).toString());
+            ptm.setString(5, manageDTO.getClass().getMethod("getFieldOld").invoke(manageDTO).toString());
+            ptm.setString(6, manageDTO.getClass().getMethod("getFieldNew").invoke(manageDTO).toString());
+            ptm.setString(7, manageDTO.getClass().getMethod("getAction").invoke(manageDTO).toString());
+            ptm.executeUpdate();
+            return true;
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection(conn, ptm);
+        }
+        return false;
     }
 
     public static void closeConnection(Connection conn, PreparedStatement ptm, ResultSet rs) {

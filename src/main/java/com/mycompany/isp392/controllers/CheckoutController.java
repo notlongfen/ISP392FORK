@@ -156,6 +156,9 @@ public class CheckoutController extends HttpServlet {
                 pe.setConditionError("You should apply your current voucher first or retype the voucher code");
                 request.setAttribute("PROMOTION_ERROR", pe);
                 return;
+            }else{
+                int point = userDAO.getCustomerByID(userDTO.getUserID()).getPoints() - 100;
+                userDAO.updateUserPoint(userDTO.getUserID(), point);
             }
 
             //Add Order
