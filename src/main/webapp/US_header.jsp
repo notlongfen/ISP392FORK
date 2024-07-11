@@ -116,7 +116,7 @@
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <div class="logo_container" >
-                                    <a href="HomePageController">ISP392<span>Shop</span></a>
+                                    <a href="HomePageController">Kro<span>no</span></a>
                                 </div>
                                 <nav class="navbar">
                                     <ul class="navbar_menu" >
