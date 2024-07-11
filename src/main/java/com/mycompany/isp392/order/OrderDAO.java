@@ -4,6 +4,7 @@
  */
 package com.mycompany.isp392.order;
 
+import com.mycompany.isp392.category.ChildrenCategoryDTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.mycompany.isp392.user.UserDTO;
 import com.mycompany.isp392.order.*;
+import com.mycompany.isp392.product.ProductDetailsDTO;
 
 import utils.DbUtils;
 
@@ -31,6 +33,155 @@ public class OrderDAO {
     private static final String GET_ORDER_INFO_BY_ORDERID = "SELECT * FROM Orders WHERE orderID = ?";
     private static final String GET_LIST_ORDER_DETAIL_INFO_BY_ORDERID = "SELECT * FROM OrderDetails WHERE orderID = ?";
     private static final String GET_ALL_ORDERS = "SELECT * FROM Orders";
+    private static final String VIEW_ORDER = "SELECT * FROM Orders o JOIN OrderDetails od ON o.OrderID = od.OrderID JOIN ProductDetails pd ON pd.ProductDetailsID = od.ProductDetailsID WHERE custID = ?";
+    private static final String VIEW_PD_IN_ORDER = "SELECT * FROM ProductDetails pd JOIN Products p ON pd.ProductID = p.ProductID WHERE ProductID = ?";
+    private static final String VIEW_CATE_OF_PRODUCT = "SELECT * FROM ProductBelongtoCDCategories pc JOIN Categories c ON pc.CDCategoryID = c.CategoryID JOIN ChildrenCategories cdc ON c.CategoryID = cdc.ParentID WHERE pc.ProductID = ? "; 
+    private static final String CANCEL_ORDER = "UPDATE Orders SET status = 4 WHERE orderID = ? AND status NOT IN (0, 2, 3)";
+    
+    
+    public boolean cancelOrder(int orderID) throws ClassNotFoundException {
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        boolean isCanceled = false;
+        try {
+            conn = DbUtils.getConnection();
+            ptm = conn.prepareStatement(CANCEL_ORDER);
+            ptm.setInt(1, orderID);
+            int row = ptm.executeUpdate();
+            if (row > 0) {
+                isCanceled = true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ptm != null) {
+                    ptm.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return isCanceled;
+    }
+    
+    public List<ChildrenCategoryDTO> viewCateOfProduct(int productID) throws ClassNotFoundException, SQLException {
+        List<ChildrenCategoryDTO> cateList = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(VIEW_CATE_OF_PRODUCT);
+                ptm.setInt(1, productID);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    String cateName = rs.getString("categoryName");
+                    cateList.add(new ChildrenCategoryDTO(cateName));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return cateList;
+    }
+    
+    
+    public List<OrderDetailsDTO> viewOrder(int custID) throws ClassNotFoundException, SQLException {
+        List<OrderDetailsDTO> orderList = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(VIEW_ORDER);
+                ptm.setInt(1, custID);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    int orderID = rs.getInt("orderID");
+                    int status = rs.getInt("status");
+                    int total = rs.getInt("total");
+                    Date orderDate = rs.getDate("orderDate");
+                    int promotionID = rs.getInt("promotionID");
+                    int cartID = rs.getInt("cartID");
+                    String userName = rs.getString("userName");
+                    String city = rs.getString("city");
+                    String district = rs.getString("district");
+                    String ward = rs.getString("ward");
+                    String address = rs.getString("address");
+                    int phone = rs.getInt("phone");
+                    String note = rs.getString("note");
+                    int productDetailsID = rs.getInt("productDetailsID");
+                    int productID = rs.getInt("productID");
+                    int quantity = rs.getInt("quantity");
+                    int unitPrice = rs.getInt("unitPrice");
+                    orderList.add(new OrderDetailsDTO(productDetailsID, orderID, productID, quantity, unitPrice, status, total, orderDate, promotionID, cartID, userName, city, district, ward, address, phone, note));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return orderList;
+    }
+    
+    public List<ProductDetailsDTO> viewProductDetailsInOrder(int productID) throws ClassNotFoundException, SQLException {
+        List<ProductDetailsDTO> productList = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(VIEW_PD_IN_ORDER);
+                ptm.setInt(1, productID);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    String size = rs.getString("size");
+                    String productName = rs.getString("productName");
+                    productList.add(new ProductDetailsDTO(productName, size));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return productList;
+    }
+    
 
     public int getLastOrderId() throws SQLException {
         Connection conn = null;

@@ -1,5 +1,7 @@
 package com.mycompany.isp392.order;
 
+import java.sql.Date;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -8,7 +10,7 @@ package com.mycompany.isp392.order;
  *
  * @author TTNHAT
  */
-public class OrderDetailsDTO {
+public class OrderDetailsDTO extends OrderDTO {
 
     private int productDetailsID;
     private int orderID;
@@ -18,6 +20,8 @@ public class OrderDetailsDTO {
 
     public OrderDetailsDTO() {
     }
+    
+    
 
     public OrderDetailsDTO(int productDetailsID, int orderID, int productID, int quantity, int unitPrice) {
         this.productDetailsID = productDetailsID;
@@ -26,6 +30,22 @@ public class OrderDetailsDTO {
         this.quantity = quantity;
         this.unitPrice = unitPrice;
     }
+
+    public OrderDetailsDTO(int productDetailsID, int orderID, int productID, int quantity, int unitPrice, int status, double total, Date orderDate, int custID, int promotionID, int cartID, String userName, String city, String district, String ward, String address, int phone, String note) {
+        super(orderID, status, total, orderDate, custID, promotionID, cartID, userName, city, district, ward, address, phone, note);
+        this.productDetailsID = productDetailsID;
+        this.productID = productID;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+    }
+    public OrderDetailsDTO(int productDetailsID, int orderID, int productID, int quantity, int unitPrice, int status, double total, Date orderDate, int promotionID, int cartID, String userName, String city, String district, String ward, String address, int phone, String note) {
+        super(orderID, status, total, orderDate, promotionID, cartID, userName, city, district, ward, address, phone, note);
+        this.productDetailsID = productDetailsID;
+        this.productID = productID;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+    }
+    
     
     public OrderDetailsDTO(int productDetailsID, int orderID, int quantity, int unitPrice) {
         this.productDetailsID = productDetailsID;
@@ -34,6 +54,7 @@ public class OrderDetailsDTO {
         this.quantity = quantity;
         this.unitPrice = unitPrice;
     }
+
 
     public int getProductDetailsID() {
         return productDetailsID;

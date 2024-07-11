@@ -30,6 +30,23 @@ public class OrderDTO {
     public OrderDTO() {
     }
 
+    public OrderDTO(int orderID, int status, double total, Date orderDate, int promotionID, int cartID, String userName, String city, String district, String ward, String address, int phone, String note) {
+        this.orderID = orderID;
+        this.status = status;
+        this.total = total;
+        this.orderDate = orderDate;
+        this.promotionID = promotionID;
+        this.cartID = cartID;
+        this.userName = userName;
+        this.city = city;
+        this.district = district;
+        this.ward = ward;
+        this.address = address;
+        this.phone = phone;
+        this.note = note;
+    }
+
+    
     public OrderDTO(int orderID, int status, double total, Date orderDate, int custID, int promotionID, int cartID, String userName, String city, String district, String ward, String address, int phone, String note) {
         this.orderID = orderID;
         this.status = status;

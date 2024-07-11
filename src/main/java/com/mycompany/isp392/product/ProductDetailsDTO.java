@@ -21,9 +21,9 @@ public class ProductDetailsDTO extends ProductDTO {
     private Date importDate;
     private String image;
     private int status;
-
     private String brandName;
 
+    
     public ProductDetailsDTO() {
     }
 
@@ -70,6 +70,12 @@ public class ProductDetailsDTO extends ProductDTO {
         this.image = image;
         this.price = price;
         this.brandName = brandName;
+    }
+
+    public ProductDetailsDTO(String productName, String size) {
+        super(productName);
+        this.size = size;
+        
     }
 
     public int getProductDetailsID() {

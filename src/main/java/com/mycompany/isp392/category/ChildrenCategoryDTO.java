@@ -18,6 +18,10 @@ public class ChildrenCategoryDTO {
     public ChildrenCategoryDTO() {
     }
 
+    public ChildrenCategoryDTO(String categoryName) {
+        this.categoryName = categoryName;
+    }
+    
     public ChildrenCategoryDTO(int cdCategoryID, String categoryName, int parentID, int status) {
         this.cdCategoryID = cdCategoryID;
         this.categoryName = categoryName;

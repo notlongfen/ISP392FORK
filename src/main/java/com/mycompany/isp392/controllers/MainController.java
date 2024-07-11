@@ -255,7 +255,13 @@ public class MainController extends HttpServlet {
 
     private static final String PROMOTION_CHECKER = "Apply";
     private static final String PROMOTION_CHECKER_CONTROLLER = "PromotionCheckerController";
-
+    
+    private static final String VIEW_US_ORDER = "ViewUSOrder";
+    private static final String VIEW_US_ORDER_CONTROLLER = "ViewUSOrderController";
+    
+    private static final String CANCEL_ORDER = "CancelOrder";
+    private static final String CANCEL_ORDER_CONTROLLER = "CancelOrderController";
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -434,6 +440,10 @@ public class MainController extends HttpServlet {
                 url = ALL_PRODUCT_PAGE;
             } else if (EDIT_PRODUCT_DETAIL_PAGE.equals(action)) {
                 url = EDIT_PRODUCT_DETAIL_PAGE_VIEW;
+            } else if (VIEW_US_ORDER.equals(action)){
+                url = VIEW_US_ORDER_CONTROLLER;
+            } else if (CANCEL_ORDER.equals(action)){
+                url = CANCEL_ORDER_CONTROLLER;
             }
         } catch (Exception e) {
             log("error at MainController: " + e.toString());

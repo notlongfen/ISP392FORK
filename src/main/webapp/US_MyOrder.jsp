@@ -5,6 +5,11 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.util.List"%>
+<%@page import="com.mycompany.isp392.user.CustomerDTO"%>
+<%@page import="com.mycompany.isp392.product.ProductDetailsDTO"%>
+<%@page import="com.mycompany.isp392.category.ChildrenCategoryDTO"%>
+<%@page import="com.mycompany.isp392.order.OrderDetailsDTO"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -121,12 +126,25 @@
         <%@include file="US_header.jsp" %>
 
         <div class="container-fluid custom-margin">
+            <%
+                       CustomerDTO loginUser = (CustomerDTO) session.getAttribute("cust");  
+                       List<ProductDetailsDTO> products = (List<ProductDetailsDTO>)request.getAttribute("PRODUCT");
+                       List<ChildrenCategoryDTO> categories = (List<ChildrenCategoryDTO>) request.getAttribute("CATEGORY");
+                       List<OrderDetailsDTO> orders = (List<OrderDetailsDTO>)request.getAttribute("ORDER");
+                       int custID = (int) session.getAttribute("custID");
+                       if (loginUser == null) {
+                           return;
+                      
+                   }
+            %>
+            
+
             <div class="row">
                 <div class="col-lg-3 profile-sidebar m" id="sidebar" >
                     <div class="card h-100">
                         <div class="user-side-bar" style="padding-left: 30px">
                             <h5 class="card-title" style="padding-top: 20px">Hello 🌟</h5>
-                            <h2 class="card-text" style="font-size: medium; font-weight: bold">Nguyen Van A</h2>
+                            <h2 class="card-text" style="font-size: medium; font-weight: bold"><%= loginUser.getUserName()%></h2>
                         </div>
                         <hr>
                         <ul class="nav flex-column">
@@ -159,7 +177,13 @@
                             </div>
                         </div>
                     </div>
-
+                    <%
+                            if (orders != null && !orders.isEmpty()) {
+                                for (int i = 0; i < orders.size(); i++) {
+                                    OrderDetailsDTO order = orders.get(i);
+                                    ProductDetailsDTO product = products.get(i);
+                                    ChildrenCategoryDTO category = categories.get(i);
+                        %>
                     <div>
                         <div class="mb-3 border-bottom order-item">
                             <div class="row">
@@ -169,122 +193,54 @@
                                 <div class="col-md-4">
                                     <div class="card-body">
                                         <div class="d-flex">
-                                            <h5 class="card-title">Air Jordan 1 x Off-White Retro High OG 'Chicago'</h5>
+                                            <h5 class="card-title"><%= product.getProductName() %></h5>
                                         </div>
                                         <div class="d-flex justify-content-start">
-                                            <p class="card-text mb-0"><strong>Category:</strong> Shoes</p>
-                                            <p class="card-text mb-0 pl-3"><strong>Size:</strong> 41.3</p>
-                                            <p class="card-text mb-0 pl-3"><strong>Quantity:</strong> 1</p>
+                                            <p class="card-text mb-0"><strong>Category:</strong> <%= category.getCategoryName()%></p>
+                                            <p class="card-text mb-0 pl-3"><strong>Size:</strong> <%= product. getSize()%></p>
+                                            <p class="card-text mb-0 pl-3"><strong>Quantity:</strong> <%= order.getQuantity()%></p>
                                         </div>
-                                        <div class="status-box mt-5">In Process</div>
+                                        <div class="status-box mt-5"><%= order.getStatusDescription()%></div>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
                                     <div class="d-flex align-items-center">
-                                        <p class="card-text text-danger fs-4 mt-3">$5,000</p>
+                                        <p class="card-text text-danger fs-4 mt-3"><%= order.getUnitPrice()%></p>
                                     </div>
                                 </div>
                                 <div class="col-md-3 d-flex flex-column justify-content-center align-items-center ">
                                     <div class="d-grid gap-2">
                                         <button class="btn btn-primary mb-2" type="button" style="background: white; color: black; border: 2px solid black;">View Order</button>
-                                        <button class="btn btn-danger cancel-order" type="button">Cancel Order</button>
+                                        
+                                        <a href="MainController?action=CancelOrder&orderID=<%=order.getOrderID()%>">     
+                                           <button class="btn btn-danger cancel-order" type="button">Cancel Order</button>
+                                        </a>
+                                           
                                         <div class="d-flex justify-content-between mt-4">
                                             <h3>Total:</h3>
-                                            <p class="text-danger fs-4 pl-3">$5,000</p>
+                                            <p class="text-danger fs-4 pl-3"><%= order.getTotal()%></p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
+                        <% 
+                                } 
+                            } else {
+                        %>
+                        <p>No orders available at the moment.</p>
+                        <% 
+                            }
+                        %>                
                         </div>
-                        <div class="number_of_product"> 2 Products</div>
+                        <div class="number_of_product"><%= orders != null ? orders.size() : 0 %>Products</div>
                     </div>
-
-
-                    <div>
-                        <div class="mb-3 border-bottom order-item">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <img src="images/product_6.png" class="img-fluid rounded-start" alt="Air Jordan 1 x Off-White Retro High OG 'Chicago'">
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="card-body">
-                                        <div class="d-flex">
-                                            <h5 class="card-title">Air Jordan 1 x Off-White Retro High OG 'Chicago'</h5>
-                                        </div>
-                                        <div class="d-flex justify-content-start">
-                                            <p class="card-text mb-0"><strong>Category:</strong> Shoes</p>
-                                            <p class="card-text mb-0 pl-3"><strong>Size:</strong> 41.3</p>
-                                            <p class="card-text mb-0 pl-3"><strong>Quantity:</strong> 1</p>
-                                        </div>
-                                        <div class="status-box mt-5 in-delivery">In Delivery</div>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="d-flex align-items-center">
-                                        <p class="card-text text-danger fs-4 mt-3">$5,000</p>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 d-flex flex-column justify-content-center align-items-center">
-                                    <div class="d-grid gap-2">
-                                        <button class="btn btn-primary mb-2" type="button" style="background: white; color: black; border: 2px solid black;">View Order</button>
-                                        <button class="btn btn-danger cancel-order" type="button">Cancel Order</button>
-                                        <div class="d-flex justify-content-between mt-4">
-                                            <h3>Total:</h3>
-                                            <p class="text-danger fs-4 pl-3">$5,000</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="number_of_product"></div>
-                    </div>
-
-                    <div>
-                        <div class="mb-3 border-bottom order-item">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <img src="images/product_6.png" class="img-fluid rounded-start" alt="Air Jordan 1 x Off-White Retro High OG 'Chicago'">
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="card-body">
-                                        <div class="d-flex">
-                                            <h5 class="card-title">Air Jordan 1 x Off-White Retro High OG 'Chicago'</h5>
-                                        </div>
-                                        <div class="d-flex justify-content-start">
-                                            <p class="card-text mb-0"><strong>Category:</strong> Shoes</p>
-                                            <p class="card-text mb-0 pl-3"><strong>Size:</strong> 41.3</p>
-                                            <p class="card-text mb-0 pl-3"><strong>Quantity:</strong> 1</p>
-                                        </div>
-                                        <div class="status-box mt-5 in-delivery">In Delivery</div>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="d-flex align-items-center">
-                                        <p class="card-text text-danger fs-4 mt-3">$5,000</p>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 d-flex flex-column justify-content-center align-items-center">
-                                    <div class="d-grid gap-2">
-                                        <button class="btn btn-primary mb-2" type="button" style="background: white; color: black; border: 2px solid black;">View Order</button>
-                                        <button class="btn btn-danger cancel-order" type="button">Cancel Order</button>
-                                        <div class="d-flex justify-content-between mt-4">
-                                            <h3>Total:</h3>
-                                            <p class="text-danger fs-4 pl-3">$5,000</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="number_of_product"></div>
-                    </div>
-
                 </div>
             </div>
             <button onclick="topFunction()" id="myBtn" title="Go to top">
                 <i class="fas fa-arrow-up"></i>
             </button>
         </div>
+
         <%@include file="US_footer.jsp" %>
         <%@include file="US_RequestSupport.jsp" %>
 
