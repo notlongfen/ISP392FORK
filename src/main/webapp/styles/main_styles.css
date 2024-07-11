@@ -1752,9 +1752,9 @@ section {
  }
 
  .brand-title span {
-	 border-bottom: 2px solid #66cef6;
-	 font-weight: 700;
-	 font-size: 13px;
+	 border-bottom: 4px solid #C53337;
+	 font-weight: 600;
+	 font-size: 33px;
 	 text-transform: uppercase;
 	 display: inline-block;
 	 padding-bottom: 10px;

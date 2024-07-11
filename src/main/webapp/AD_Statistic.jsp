@@ -14,7 +14,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="">
         <meta name="author" content="">
-        <title>Dashboard</title>
+        <title>Statistic</title>
         <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
         <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
         <link href="AD_css/ruang-admin.min.css" rel="stylesheet">
@@ -46,51 +46,46 @@
             }
 
 
-            /* Định dạng cho nút dropdown ở month, today,... */
-            .dropdown {
-                position: relative;
-                display: inline-block;
+            .product {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 10px;
+                border-bottom: 1px solid #ccc;
             }
 
-            .dropdown-button {
-                background-color: #6c63ff;
-                color: white;
-                padding: 10px 20px;
-                font-size: 16px;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
+            .product span:nth-child(1) {
+                width: 20%;
+                font-weight: bold;
+            }
+            .product span:nth-child(2) {
+                width: 70%;
+                text-align: center;
+            }
+            .product span:nth-child(3) {
+                width: 20%;
+                text-align: right;
             }
 
-            .dropdown-content {
-                display: none;
-                position: absolute;
-                background-color: #f9f9f9;
-                min-width: 160px;
-                box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-                z-index: 1;
-                border-radius: 5px;
+            .product span {
+                font-weight: bold;
+            }
+            .top1 span:nth-child(1) {
+                color: #FF9900;
+            }
+            .top2 span:nth-child(1) {
+                color: #33CC33;
+            }
+            .top3 span:nth-child(1) {
+                color: #FF6666;
+            }
+            .top4 span:nth-child(1) {
+                color: #66CCFF;
+            }
+            .top5 span:nth-child(1) {
+                color: #FF9900;
             }
 
-            .dropdown-content a {
-                color: black;
-                padding: 12px 16px;
-                text-decoration: none;
-                display: block;
-                border-radius: 5px;
-            }
-
-            .dropdown-content a:hover {
-                background-color: #ddd;
-            }
-
-            .dropdown:hover .dropdown-content {
-                display: block;
-            }
-
-            .dropdown:hover .dropdown-button {
-                background-color: #5a54d6;
-            }
 
             /*Customer*/
             .customers {
@@ -115,7 +110,7 @@
                 width: 20px;
                 height: 20px;
             }
-            
+
             /*Order*/
             .dashboard1 {
                 display: flex;
@@ -154,7 +149,7 @@
                 margin-bottom: 10px;
                 color: #000;
             }
-            .icon1 {               
+            .icon1 {
                 margin-left: 150px;
                 margin-top: -20px;
             }
@@ -195,15 +190,34 @@
 
                         <div class="row mb-3">
                             <!-- Earnings (Monthly) Card Example -->
-                            <div class="col-xl-3 col-md-6 mb-4">
-                                <div class="card h-100">
+                            <div class=" mb-4" style="margin-left: 15px;">
+                                <div class="card" style="height: 150px; width: 330px;">
                                     <div class="card-body">
                                         <div class="row align-items-center">
                                             <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-uppercase mb-1">Earnings (Today)</div>
-                                                <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
-                                                <div class="mt-2 mb-0 text-muted text-xs">
-                                                </div>
+                                                <!--<div class="text-xs font-weight-bold text-uppercase mb-2">Total incomes</div>-->
+                                                <div class=" mb-0 font-weight-bold text-gray mb-2" style="font-size: 20px;">TOTAL INCOMES</div>
+                                                <div class=" mb-0 font-weight-bold text-gray mb-2" style="font-size: 20px;">Today: ....$</div>
+                                                <div class=" mb-0 font-weight-bold text-gray" style="font-size: 20px;">Yesterday: ....$</div>                            
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="far fa-file-alt fa-2x text-warning"></i>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Earnings (Annual) Card Example -->
+                            <div class=" col-md-3 mb-4">
+                                <div class="card" style="height: 150px; width: 330px;">
+                                    <div class="card-body">
+                                        <div class="row align-items-center">
+                                            <div class="col mr-2">
+                                                <!--<div class="text-xs font-weight-bold text-uppercase mb-2">Total incomes</div>-->
+                                                <div class=" mb-0 font-weight-bold text-gray mb-2" style="font-size: 20px;">NUMBER OF ORDERS</div>
+                                                <div class=" mb-0 font-weight-bold text-gray mb-2" style="font-size: 20px;">Today: ....$</div>
+                                                <div class=" mb-0 font-weight-bold text-gray" style="font-size: 20px;">Yesterday: ....$</div>                            
                                             </div>
                                             <div class="col-auto">
                                                 <i class="fas fa-calendar fa-2x text-primary"></i>
@@ -212,93 +226,30 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- Earnings (Annual) Card Example -->
-                            <div class="col-xl-3 col-md-6 mb-4">
-                                <div class="card h-100">
-                                    <div class="card-body">
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-uppercase mb-1">Sales</div>
-                                                <div class="h5 mb-0 font-weight-bold text-gray-800">650</div>
-                                                <div class="mt-2 mb-0 text-muted text-xs">
-                                                </div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <i class="fas fa-shopping-cart fa-2x text-success"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             <!-- New User Card Example -->
-                            <div class="col-xl-3 col-md-6 mb-4">
-                                <div class="card h-100">
+                            <div class="mb-4" style="margin-left: 45px;">
+                                <!-- All User Card Example -->
+                                <div class="card mb-2" style="height: 70px; width: 330px;"> 
                                     <div class="card-body">
                                         <div class="row no-gutters align-items-center">
                                             <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-uppercase mb-1">All User</div>
-                                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">366</div>
-                                                <div class="mt-2 mb-0 text-muted text-xs">
-                                                </div>
+                                                <div class="text-xs font-weight-bold text-uppercase mb-1" style="font-size: 17px;">CANCEL ORDER: 5</div>
                                             </div>
                                             <div class="col-auto">
-                                                <i class="fas fa-users fa-2x text-info"></i>
+                                                <i class='fas fa-box-open' style=" color: #FF6347"></i>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <!-- Pending Requests Card Example -->
-
-                            <!-- All Product Card Example -->
-                            <div class="col-xl-3 col-md-6 mb-4">
-                                <div class="card h-100">
+                                <!-- All Product Card Example -->
+                                <div class="card " style="height: 70px; width: 330px;">
                                     <div class="card-body">
                                         <div class="row no-gutters align-items-center">
                                             <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-uppercase mb-1">All Product</div>
-                                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">20</div>
-                                                <div class="mt-2 mb-0 text-muted text-xs">
-                                                </div>
+                                                <div class="text-xs font-weight-bold text-uppercase mb-1" style="font-size: 17px;">COMPLETED ORDER: 5</div>
                                             </div>
                                             <div class="col-auto">
-                                                <i class="fas fa-cubes fa-2x text-success"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- All invoice Card Example -->
-                            <div class="col-xl-3 col-md-6 mb-4">
-                                <div class="card h-100">
-                                    <div class="card-body">
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-uppercase mb-1">Order</div>
-                                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50</div>
-                                                <div class="mt-2 mb-0 text-muted text-xs">
-                                                </div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <i class="far fa-file-alt fa-2x text-warning"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Pending Requests Card Example -->
-                            <div class="col-xl-3 col-md-6 mb-4">
-                                <div class="card h-100">
-                                    <div class="card-body">
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-uppercase mb-1">Pending Requests</div>
-                                                <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
-                                                <div class="mt-2 mb-0 text-muted text-xs">
-                                                </div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <i class="fas fa-comments fa-2x text-warning"></i>
+                                                <i class='fas fa-box' style="color: #218838"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -312,9 +263,8 @@
                                         <h6 class="m-0 font-weight-bold text-primary">Revenue Report</h6>
                                     </div>
                                     <div class="btn-group-center">
-                                        <button class="btn" onclick="activateButton(this)">7 days</button>
-                                        <button class="btn" onclick="activateButton(this)">2 weeks</button>
-                                        <button class="btn active" onclick="activateButton(this)">1 month</button>
+                                        <button class="btn" onclick="activateButton(this)">Total incomes in year</button>
+                                        <button class="btn" onclick="activateButton(this)">Number of orders in year</button>              
                                     </div>
                                     <div class="card-body">
                                         <div class="chart-area">
@@ -329,156 +279,46 @@
                             <div class="col-xl-4 col-lg-5">
                                 <div class="card mb-4" style="height: 473px;">
                                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                        <h6 class="m-0 font-weight-bold text-primary">Top 5 Products Sold</h6>
-                                        <div class="dropdown">
-                                            <button class="dropdown-button" id="dropdownButton">Month &#x25BC;</button>
-                                            <div class="dropdown-content">
-                                                <a href="#" onclick="changeText('Today')">Today</a>
-                                                <a href="#" onclick="changeText('Week')">Week</a>
-                                                <a href="#" onclick="changeText('Month')">Month</a>
-                                                <a href="#" onclick="changeText('This year')">This year</a>
-                                            </div>
-                                        </div>
-
+                                        <h6 class="m-0 font-weight-bold text-primary">Top 5 Products Sold</h6>                                    
                                     </div>
                                     <div class="card-body">
                                         <div class="mb-3">
-                                            <div class="small text-gray-500">Air force 1
-                                                <div class="small float-right"><b>600 of 800 Items</b></div>
+                                            <div class="product top1">
+                                                <span>TOP 1:</span>
+                                                <span>Air Force 1</span>
+                                                <span style="font-size: 13px">600 of 800 items</span>
                                             </div>
-                                            <div class="progress" style="height: 12px;">
-                                                <div class="progress-bar bg-warning" role="progressbar" style="width: 80%" aria-valuenow="80"
-                                                     aria-valuemin="0" aria-valuemax="100"></div>
+                                            <div class="product top2">
+                                                <span>TOP 2:</span>
+                                                <span>Air Force 1</span>
+                                                <span style="font-size: 13px">600 of 800 items</span>
                                             </div>
+                                            <div class="product top3">
+                                                <span>TOP 3:</span>
+                                                <span>Air Force 1</span>
+                                                <span style="font-size: 13px">600 of 800 items</span>
+                                            </div>
+                                            <div class="product top4">
+                                                <span>TOP 4:</span>
+                                                <span>Air Force 1</span>
+                                                <span style="font-size: 13px">600 of 800 items</span>
+                                            </div>
+                                            <div class="product top5">
+                                                <span>TOP 5:</span>
+                                                <span>Air Force 1</span>
+                                                <span style="font-size: 13px">600 of 800 items</span>
+                                            </div>
+
                                         </div>
-                                        <div class="mb-3">
-                                            <div class="small text-gray-500">T-shirt
-                                                <div class="small float-right"><b>500 of 800 Items</b></div>
-                                            </div>
-                                            <div class="progress" style="height: 12px;">
-                                                <div class="progress-bar bg-success" role="progressbar" style="width: 70%" aria-valuenow="70"
-                                                     aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                        <div class="mb-3">
-                                            <div class="small text-gray-500">Ultra boost 5
-                                                <div class="small float-right"><b>455 of 800 Items</b></div>
-                                            </div>
-                                            <div class="progress" style="height: 12px;">
-                                                <div class="progress-bar bg-danger" role="progressbar" style="width: 55%" aria-valuenow="55"
-                                                     aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                        <div class="mb-3">
-                                            <div class="small text-gray-500">Jordan 1
-                                                <div class="small float-right"><b>400 of 800 Items</b></div>
-                                            </div>
-                                            <div class="progress" style="height: 12px;">
-                                                <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50"
-                                                     aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                        <div class="mb-3">
-                                            <div class="small text-gray-500">Sun glasses
-                                                <div class="small float-right"><b>200 of 800 Items</b></div>
-                                            </div>
-                                            <div class="progress" style="height: 12px;">
-                                                <div class="progress-bar " role="progressbar" style="width: 30%; background-color: #FF964B;" aria-valuenow="30"
-                                                     aria-valuemin="0" aria-valuemax="100" ></div>
-                                            </div>
-                                        </div>
+
                                     </div>
-                                    <div class="card-footer text-center">
-                                        <div style="display: flex; justify-content: space-around;">
-                                            <div>
-                                                <div style="color: #6366F1; font-size: 14px;">Remaining Products</div>
-                                                <div style="display: flex; align-items: center; justify-content: center; margin-top: 5px;">
-                                                    <span style="font-size: 24px; color: #6B7280;">110</span>
-                                                    <i class='fas fa-box' style="margin-left: 20px; color: #218838"></i>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <div style="color: #6366F1; font-size: 14px;">Out of stock Products</div>
-                                                <div style="display: flex; align-items: center; justify-content: center; margin-top: 5px;">
-                                                    <span style="font-size: 24px; color: #6B7280;">10</span>
-                                                    <i class='fas fa-box-open' style="margin-left: 20px; color: #FF6347"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+
                                 </div>
                             </div>
                             <!-- Invoice Example -->
-                            <div class="col-xl-8 col-lg-7 mb-4">
-                                <div class="card">
-                                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                        <h6 class="m-0 font-weight-bold text-primary">Invoice</h6>
-                                        <a class="m-0 float-right btn btn-danger btn-sm" href="AD_OrderList.jsp">Order<i class="fas fa-chevron-right" style="margin-left: 5px;"></i></a>
-                                    </div>
-                                    <div class="table-responsive">
-                                        <div class="dashboard1 formatDashboard1">
-                                            <div class="card1 in-progress" style="text-align: left">
-                                                <div class="count">113<span class="arrow-down"><i class="fas fa-arrow-down"></i></span></div>
-                                                <div>In progress</div>
-                                                <div class="icon1"><i class="fas fa-spinner"></i></div>                                                      
-                                            </div>
-                                            <div class="card1 in-delivery" style="text-align: left">
-                                                <div class="count">52<span class="arrow-down"><i class="fas fa-arrow-down"></i></span></div>
-                                                <div>In Delivery</div>
-                                                <div class="icon1"><i class="fas fa-truck"></i></div>                                                      
-                                            </div>
-                                            <div class="card1 items-delivered" style="text-align: left">
-                                                <div class="count">250<span class="arrow-up"><i class="fas fa-arrow-up"></i></span></div>
-                                                <div>Items Delivered</div>
-                                                <div class="icon1"><i class="fas fa-box"></i></div>
-                                            </div>
-                                            <div class="card1 items-canceled" style="text-align: left">
-                                                <div class="count">13<span class="arrow-up"><i class="fas fa-arrow-up"></i></span></div>
-                                                <div>Items Canceled</div>
-                                                <div class="icon1"><i class="fas fa-ban"></i></div>      
-                                            </div>
-                                        </div>
-                                </div>
-                            </div>
-                                </div>
+
                             <!-- Message From Customer-->
-                            <div class="col-xl-4 col-lg-5">
-                                <div class="card mb-4">
-                                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                        <h6 class="m-0 font-weight-bold text-primary">Customers</h6>
-                                        <div class="dropdown">
-                                            <button class="dropdown-button" id="dropdownButton">Month &#x25BC;</button>
-                                            <div class="dropdown-content">
-                                                <a href="#" onclick="changeText('Today')">Today</a>
-                                                <a href="#" onclick="changeText('Week')">Week</a>
-                                                <a href="#" onclick="changeText('Month')">Month</a>
-                                                <a href="#" onclick="changeText('This year')">This year</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="customers">
-                                        <div class="customer-row">
-                                            <div>New Customers</div>
-                                            <div class="icon">
-                                                <span>20</span>
-                                                <i class="bi bi-people"></i>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people" viewBox="0 0 16 16" style="color: #218838">
-                                                <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4"/>
-                                                </svg> 
-                                            </div>
-                                        </div>     
-                                        <div class="customer-row">
-                                            <div>Returning Customers</div>
-                                            <div class="icon">
-                                                <span>30</span>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people" viewBox="0 0 16 16" style="color: #FF6347">
-                                                <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4"/>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+
 
 
 

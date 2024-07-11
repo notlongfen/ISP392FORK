@@ -39,76 +39,91 @@
                 </div>
 
                 <% if (roleID == 2 || roleID == 3) { %> <!-- Shop Manager, Shop Staff -->
-                    <li class="nav-item mt-3">
-                        <button type="submit" class="nav-link btn btn-link" name="action" value="Manage_Products_Page">
-                            <i class="fas fa-box"></i>
-                            <span>Products</span>
-                        </button>
-                    </li>
+                <li class="nav-item mt-3">
+                    <button type="submit" class="nav-link btn btn-link" name="action" value="Manage_Products_Page">
+                        <i class="fas fa-box"></i>
+                        <span>Products</span>
+                    </button>
+                </li>
                 <% } %>
 
                 <% if (roleID == 2) { %> <!-- Shop Manager -->
-                    <li class="nav-item mt-3">
-                        <button type="submit" class="nav-link btn btn-link" name="action" value="Search_Category">
-                            <i class="fa fa-pie-chart"></i>
-                            <span>Categories</span>
-                        </button>
-                    </li>
+                <li class="nav-item mt-3">
+                    <button type="submit" class="nav-link btn btn-link" name="action" value="Search_Category">
+                        <i class="fa fa-pie-chart"></i>
+                        <span>Categories</span>
+                    </button>
+                </li>
                 <% } %>
 
                 <% if (roleID == 2) { %> <!-- Shop Manager -->
-                    <li class="nav-item mt-3">
-                        <button type="submit" class="nav-link btn btn-link" name="action" value="Manage_Brands_Page">
-                            <i class="fas fa-tshirt"></i>
-                            <span>Brands</span>
-                        </button>
-                    </li>
+                <li class="nav-item mt-3">
+                    <button type="submit" class="nav-link btn btn-link" name="action" value="Manage_Brands_Page">
+                        <i class="fas fa-tshirt"></i>
+                        <span>Brands</span>
+                    </button>
+                </li>
                 <% } %>
 
                 <% if (roleID == 2 || roleID == 3) { %> <!-- Shop Manager, Shop Staff -->
-                    <li class="nav-item mt-3">
-                        <button type="submit" class="nav-link btn btn-link" name="action" value="Manage_Support">
-                            <i class="fas fa-comment"></i>
-                            <span>Supports</span>
-                        </button>
-                    </li>
+                <li class="nav-item mt-3">
+                    <button type="submit" class="nav-link btn btn-link" name="action" value="Manage_Support">
+                        <i class="fas fa-comment"></i>
+                        <span>Supports</span>
+                    </button>
+                </li>
                 <% } %>
 
                 <% if (roleID == 2) { %> <!-- Shop Manager -->
-                    <li class="nav-item mt-3">
-                        <button type="submit" class="nav-link btn btn-link" name="action" value="Manage_Order">
-                            <i class="fas fa-cash-register"></i>
-                            <span>Orders</span>
-                        </button>
-                    </li>
+                <li class="nav-item mt-3">
+                    <button type="submit" class="nav-link btn btn-link" name="action" value="Manage_Order">
+                        <i class="fas fa-cash-register"></i>
+                        <span>Orders</span>
+                    </button>
+                </li>
                 <% } %>
 
                 <% if (roleID == 2) { %> <!-- Shop Manager -->
-                    <li class="nav-item mt-3">
-                        <button type="submit" class="nav-link btn btn-link" name="action" value="Manage promotions">
-                            <i class="fas fa-tags"></i>
-                            <span>Promotions</span>
-                        </button>
-                    </li>
+                <li class="nav-item mt-3">
+                    <button type="submit" class="nav-link btn btn-link" name="action" value="Manage promotions">
+                        <i class="fas fa-tags"></i>
+                        <span>Promotions</span>
+                    </button>
+                </li>
                 <% } %>
 
                 <% if (roleID == 1) { %> <!-- System Manager -->
-                    <li class="nav-item mt-3">
-                        <button type="submit" class="nav-link btn btn-link" name="action" value="Search_User">
-                            <i class="fas fa-users"></i>
-                            <span>Users</span>
-                        </button>
-                    </li>
+                <li class="nav-item mt-3">
+                    <button type="submit" class="nav-link btn btn-link" name="action" value="Search_User">
+                        <i class="fas fa-users"></i>
+                        <span>Users</span>
+                    </button>
+                </li>
                 <% } %>
-                
+
+
                 <% if (roleID == 2) { %> <!-- Shop Manager -->
-                    <li class="nav-item mt-3">
-                        <button type="submit" class="nav-link btn btn-link" name="action" value="History">
-                            <i class="fas fa-tags"></i>
-                            <span>View Update History</span>
-                        </button>
-                    </li>
+                <li class="nav-item mt-3">
+                    <button type="submit" class="nav-link btn btn-link" name="action" value="History">
+                        <i class="fas fa-tags"></i>
+                        <span>View Update History</span>
+                    </button>
+                </li>
                 <% } %>
+
+                <li class="nav-item mt-3">
+                    <a class="nav-link" href="AD_Statistic.jsp">
+                        <i class="fas fa-tshirt"></i>
+                        <span>AD_Statistic</span>
+                    </a>
+                </li>
+                
+                 <li class="nav-item mt-3">
+                    <a class="nav-link" href="AD_StatisticCustomer.jsp">
+                        <i class="fas fa-tshirt"></i>
+                        <span>AD_StatisticCustomer</span>
+                    </a>
+                </li>
 
                 <hr class="sidebar-divider">
 
