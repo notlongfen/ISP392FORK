@@ -43,20 +43,20 @@ public class AddProductController extends HttpServlet {
                     for (String categoryID : categoryArray) {
                         categoryDAO.addProductCategory(productID, Integer.parseInt(categoryID));
                     }
-                    request.getSession().setAttribute("SUCCESS_MESSAGE", "Product added successfully!");
-                    request.getSession().setAttribute("PRODUCT_ID", productID);
+                    request.setAttribute("SUCCESS_MESSAGE", "Product added successfully!");
+                    request.setAttribute("PRODUCT_ID", productID);
                     response.sendRedirect(SUCCESS);
                     return;
                 } else {
                     productError.setError("Unable to add product to the database!");
-                    request.getSession().setAttribute("PRODUCT_ERROR", productError);
+                    request.setAttribute("PRODUCT_ERROR", productError);
                 }
             } else {
-                request.getSession().setAttribute("PRODUCT_ERROR", productError);
+                request.setAttribute("PRODUCT_ERROR", productError);
             }
         } catch (Exception e) {
             log("Error at AddProductController: " + e.toString());
-            request.getSession().setAttribute("ERROR_MESSAGE", "Error adding product: " + e.getMessage());
+            request.setAttribute("ERROR_MESSAGE", "Error adding product: " + e.getMessage());
         }
         request.getRequestDispatcher(url).forward(request, response);
     }

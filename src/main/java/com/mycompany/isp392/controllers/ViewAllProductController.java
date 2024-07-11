@@ -35,6 +35,12 @@ public class ViewAllProductController extends HttpServlet {
             String[] priceFilters = request.getParameterValues("prices[]");
             String[] categoryFilters = request.getParameterValues("categories[]");
 
+            // Check for brandID query parameter and add it to the filters
+            String brandID = request.getParameter("brandID");
+            if (brandID != null && !brandID.isEmpty()) {
+                brandFilters = new String[]{brandID}; // Override any existing brand filters
+            }
+
             // Get pagination parameters
             int page = 1;
             int recordsPerPage = 10;
@@ -91,3 +97,4 @@ public class ViewAllProductController extends HttpServlet {
         return "Short description";
     }
 }
+

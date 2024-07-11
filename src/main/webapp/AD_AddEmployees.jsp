@@ -1,8 +1,3 @@
-<%-- 
-    Document   : CreateProduct
-    Created on : Jun 2, 2024, 4:10:09 PM
-    Author     : jojo
---%>
 
 <%@page import="com.mycompany.isp392.user.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -33,14 +28,13 @@
 
         <div id="wrapper">
             <!-- Sidebar -->
-            <%@include file="AD_sidebar.jsp" %>
 
             <!-- Sidebar -->
             <div id="content-wrapper" class="d-flex flex-column">
 
                 <div id="content">
                     <!-- Header -->
-                    <%@include file="AD_header.jsp" %>
+            
 
                     <div class="container-fluid" id="container-wrapper">
 

@@ -99,9 +99,8 @@
 
             <script>
                 $(document).ready(function () {
-                <% if (request.getSession().getAttribute("PRODUCT_ERROR") != null) { %>
+                <% if (request.getAttribute("PRODUCT_ERROR") != null) { %>
                     $('#errorModal').modal('show');
-                <% request.getSession().removeAttribute("PRODUCT_ERROR"); %>
                 <% } %>
                 });
             </script>
