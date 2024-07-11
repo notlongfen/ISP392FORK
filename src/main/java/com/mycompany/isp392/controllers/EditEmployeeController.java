@@ -59,6 +59,10 @@ public class EditEmployeeController extends HttpServlet {
                 error.setPhoneError("Phone number already exists.");
                 checkValidation = false;
             }
+            if(status == 0 && loginUser.getUserID() == userID ){
+                error.setUserIDError("You cannot delete your own account.");
+                checkValidation = false;
+            }
 
             //hash password & execute
             if (checkValidation) {

@@ -80,7 +80,12 @@
                                 <input type="hidden" name="oldImage" value="<%= category.getImage()%>" readonly=""/>
                                 <div class="form-group">
                                     <label for="image">Category Image</label>
-                                    <input type="file" class="form-control" id="image" name="image" style="width: 550px">
+                                    <div class="col-md-3">
+                                        <img src="<%= category.getImage() %>" alt="Category Image" class="img-thumbnail" style="max-width: 100px; max-height: 100px; margin-right: 10px;">
+                                    </div>
+                                    <div class="mt-3">
+                                        <input type="file" class="form-control-file" id="image" name="image" style="width: 550px">
+                                    </div>
                                 </div>
 
                                 <input type="hidden" name="oldStatus" value="<%= category.getStatus()%>" readonly=""/>

@@ -156,7 +156,7 @@
                     </div>
                     <form>
                         <div class="mb-3">
-                            <label for="fullName" class="form-label">FullName</label>
+                            <label for="fullName" class="form-label">Full Name</label>
                             <div class="input-group">
                                 <input type="text" style="color: black; background-color: #fff" class="form-control" id="fullName" value="<%= loginUser.getUserName()%>" disabled>
                                 <!--                            <span class="input-group-text edit-icon btn-sm" style="background-color: #fff"><i class="fas fa-pencil-alt"></i></span>-->
@@ -220,6 +220,33 @@
                             </div>
                         </div>
                     </form>
+                                
+                    <div class="btn-format right-element btn-format.right-element button" >
+                        <a href="#" onclick="showConfirmDeleteModal(<%= custID %>)">
+                            <button type="button" class="btn middle" style="background-color: #dc3545">
+                                <h5 style="color: white; align-items: center;">Deactivate Account</h5>
+                            </button>
+                        </a>
+                    </div>
+                            
+                    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Delete</h5>
+                                    <!--                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>-->
+                                </div>
+                                <div class="modal-body">
+                                    Are you sure you want to deactivate your account?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="button" class="btn btn-danger" id="confirmDeleteButton">Confirm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                            
                 </div>
             </div>
         </div>
@@ -272,6 +299,20 @@
                     }
                 })
             })
+        });
+        
+        function showConfirmDeleteModal(userID) {
+            // Store the user ID in a global variable or data attribute
+            document.getElementById('confirmDeleteButton').setAttribute('data-user-id', userID);
+            // Show the modal
+            var confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+            confirmDeleteModal.show();
+        }
+
+        document.getElementById('confirmDeleteButton').addEventListener('click', function () {
+            var userID = this.getAttribute('data-user-id');
+            var url = "MainController?action=Logout&userID=" + userID;
+            window.location.href = url;
         });
     </script>
 </body>

@@ -66,7 +66,12 @@
                                     </div>
                                     <div class="form-group col-md-8 mt-xl-5" style="margin-left: 100px;">
                                         <label for="brandImage">Brand Image</label>
-                                        <input type="file" class="form-control" id="brandImage" name="brandImage" style="width: 550px">
+                                        <div class="col-md-3">
+                                            <img src="<%= brand.getImage() %>" alt="Brand Image" class="img-thumbnail" style="max-width: 100px; max-height: 100px; margin-right: 10px;">
+                                        </div>
+                                        <div class="mt-3">
+                                            <input type="file" class="form-control-file" id="brandImage" name="brandImage" style="width: 550px">
+                                        </div>
                                     </div>
                                     <div class="form-group col-md-8 mt-xl-5" style="margin-left: 100px;">
                                         <label for="status">Status</label>

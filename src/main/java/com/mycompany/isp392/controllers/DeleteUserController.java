@@ -25,21 +25,28 @@ public class DeleteUserController extends HttpServlet {
         String url = ERROR;
         UserDAO dao = new UserDAO();
         UserError userError = new UserError();
+        boolean checkValidation = true;
         try {
             HttpSession session = request.getSession();
             UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
             int UserID = Integer.parseInt(request.getParameter("UserID"));
-            boolean checkDelete = dao.deleteUser(UserID);
-            if (checkDelete) {
-                if(loginUser != null && loginUser.getUserID() == UserID){
-                    loginUser.setStatus(0);
-                    session.setAttribute("LOGIN_USER", loginUser);
+            
+            if(loginUser.getUserID() == UserID){
+                userError.setUserIDError("You cannot delete your own account.");
+                checkValidation = false;
+            }
+            
+            if(checkValidation){
+                boolean checkDelete = dao.deleteUser(UserID);
+                if (checkDelete) {
+                    request.setAttribute("SUCCESS_MESSAGE", "USER DELETED SUCCESSFULLY !");
+                    url = SUCCESS;
+                } else {
+                    userError.setError("UNABLE TO DELETE USER !");
+                    request.setAttribute("DELETE_ERROR", userError);
                 }
-                request.setAttribute("SUCCESS_MESSAGE", "USER DELETED SUCCESSFULLY !");
-                url = SUCCESS;
             } else {
-                userError.setError("UNABLE TO DELETE USER !");
-                request.setAttribute("USER_ERROR", userError);
+                request.setAttribute("DELETE_ERROR", userError);
             }
         } catch (Exception e) {
             log("Error at DeleteUserController: " + e.toString());

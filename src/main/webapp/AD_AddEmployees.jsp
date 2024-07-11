@@ -38,7 +38,7 @@
 
                     <div class="container-fluid" id="container-wrapper">
 
-                        <div class="form-container" style="height: 600px;">
+                        <div class="form-container" style="height: 650px;">
                             <h2 class="text-center" style="color: #000; font-weight: bold;">Add A New Employee</h2>
                             <form action="MainController" method="POST">
                                 <div class="form-row">

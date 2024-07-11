@@ -4,6 +4,7 @@
  */
 package com.mycompany.isp392.controllers;
 
+import com.mycompany.isp392.user.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -28,6 +29,14 @@ public class LogoutController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
+            UserDAO dao = new UserDAO();
+            if(request.getParameter("userID") != null){
+                int userID = Integer.parseInt(request.getParameter("userID"));
+                boolean check = dao.deleteUser(userID);
+                if(!check){
+                    request.setAttribute("ERROR_MESSAGE", "Failed to update database.");
+                }
+            }
             HttpSession session = request.getSession(false);
             if (session != null) {
                 session.invalidate();

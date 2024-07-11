@@ -117,7 +117,7 @@
                     <div class="modal-content">
                         <div class="modal-header bg-danger text-white">
                             <h5 class="modal-title" id="errorModalLabel">Error</h5>
-                            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                            <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
@@ -136,12 +136,18 @@
                                     <li class="list-group-item list-group-item-danger"><%= error.getPhoneError() %></li>
                                 <%
                                         }
+                                        if(error.getUserIDError() != null && !error.getUserIDError().isEmpty()){
+
+                                %>
+                                    <li class="list-group-item list-group-item-danger"><%= error.getUserIDError() %></li>
+                                <%
+                                        }
                                     }
                                 %>
                             </ul>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>
@@ -166,5 +172,7 @@
         <script src="vendor/chart.js/Chart.min.js"></script>
         <script src="js/demo/chart-area-demo.js"></script>
         <script src="AD_js/demo/chart-area-demo.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>
