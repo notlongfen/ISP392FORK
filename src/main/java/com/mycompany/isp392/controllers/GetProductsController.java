@@ -93,6 +93,7 @@ public class GetProductsController extends HttpServlet {
                     int totalQuantity = productDAO.getTotalQuantityByProductID(product.getProductID());
                     productDAO.updateNumberOfPurchasing(product.getProductID(), totalQuantity);
                     product.setNumberOfPurchase(totalQuantity);
+
                     List<CategoryDTO> categories = categoryDAO.getCategoriesByProductID(product.getProductID());
                     request.setAttribute("CATEGORY_LIST_" + product.getProductID(), categories);
                 }

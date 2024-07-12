@@ -522,7 +522,7 @@ public class ProductDAO {
         Connection conn = null;
         PreparedStatement ptm = null;
         ResultSet rs = null;
-        String query = "SELECT SUM(stockQuantity) as totalQuantity FROM ProductDetails WHERE ProductID = ?";
+        String query = "SELECT SUM(stockQuantity) as totalQuantity FROM ProductDetails WHERE ProductID = ? AND status = 1";
         try {
             conn = DbUtils.getConnection();
             if (conn != null) {
