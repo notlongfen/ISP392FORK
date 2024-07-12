@@ -8,20 +8,16 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-import com.mycompany.isp392.cart.CartDAO;
-import com.mycompany.isp392.cart.CartDTO;
-import com.mycompany.isp392.cart.CartDetailsDTO;
-import com.mycompany.isp392.product.ProductDAO;
-import com.mycompany.isp392.product.ProductDTO;
-import com.mycompany.isp392.product.ProductDetailsDTO;
-import com.mycompany.isp392.user.UserDTO;
-
+import com.mycompany.isp392.cart.*;
+import com.mycompany.isp392.product.*;
+import com.mycompany.isp392.user.*;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
@@ -45,10 +41,11 @@ public class ViewCheckoutController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
-
+        HttpSession session = request.getSession();
+        
         try {
-            UserDTO user = (UserDTO) request.getSession().getAttribute("LOGIN_USER");
-            CartDTO cart = (CartDTO) request.getSession().getAttribute("CART");
+            UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
+            CartDTO cart = (CartDTO) request.getAttribute("CART");
 
             if (cart == null) {
                 CartDAO cartDAO = new CartDAO();
@@ -56,11 +53,11 @@ public class ViewCheckoutController extends HttpServlet {
             }
             ProductDAO productDAO = new ProductDAO();
             CartDAO cartDAO = new CartDAO();
-            List<ProductDTO> productList = productDAO.getAllProducts();
+//            List<ProductDetailsDTO> productList = productDAO.getProductByCartID(cart.getCartID());
             List<CartDetailsDTO> cartList = cartDAO.getCartItems(cart.getCartID());
-            request.setAttribute("PRODUCT_LIST", productList);
-            request.setAttribute("CART", cartList);
-            // cartList.get(0).getProductDetails().getImage();
+//            request.setAttribute("PRODUCT_LIST", productList);
+            request.setAttribute("CART_CHECKOUT", cartList);
+            request.setAttribute("CART_INFO", cart);
 
         } catch (Exception e) {
             // TODO: handle exception

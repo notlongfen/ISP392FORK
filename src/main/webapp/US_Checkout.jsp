@@ -5,6 +5,12 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="com.mycompany.isp392.user.*"%>
+<%@page import="com.mycompany.isp392.cart.*"%>
+<%@page import="com.mycompany.isp392.product.*"%>
+<%@ page import="java.util.List" %>
+
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -32,6 +38,10 @@
             input.btn:hover {
                 background: grey;
                 color: white;
+            }
+
+            #coupon {
+                width: 300px; /* Set the desired width */
             }
 
             input, textarea, input.btn {
@@ -65,6 +75,13 @@
         </style>
     </head>
     <body>
+        <%
+                       CustomerDTO loginUser = (CustomerDTO) session.getAttribute("cust");   
+                       int custID = (int) session.getAttribute("custID");
+                       if (loginUser == null) {
+                           return;
+                   }
+        %>
         <%@include file="US_header.jsp" %>
         <div class="container mt-5" style="margin-top: 20px; margin-bottom: 20px;">
             <h1 class="text-center mb-5 border-bottom " style="font-weight: bold">Checkout</h1>
@@ -72,31 +89,32 @@
                 <div class="col-md-6">
                     <h2>Billing Info</h2>
                     <hr >
-                    <form id="billing-form" action="MainController" method="POST">
+
+                    <form action="MainController" method="POST">
                         <div class="mb-3">
                             <label for="name" class="form-label">Name*</label>
-                            <input type="text" style="color: black;" class="form-control" id="name" name="name" required>
+                            <input type="text" style="color: black;" class="form-control" id="name" name="name" value="<%= loginUser.getUserName() %>" required>
                         </div>
                         <div class="mb-3">
                             <label for="phone" class="form-label">Phone*</label>
-                            <input type="text" style="color: black;" class="form-control" id="phone" name="phone" required>
+                            <input type="text" style="color: black;" class="form-control" id="phone" name="phone" value="<%= loginUser.getPhone() %>" required>
                         </div>
                         <div class="mb-3">
                             <label for="address" class="form-label">Address*</label>
-                            <input type="text" style="color: black;" class="form-control" name="" id="address" name="address" required>
+                            <input type="text" style="color: black;" class="form-control" id="address" name="address" value="<%= loginUser.getAddress() %>" required>
                         </div>
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <label for="ward" class="form-label">Ward</label>
-                                <input type="text" style="color: black;" class="form-control" id="ward" value="Phường 13" name="ward">
+                                <input type="text" style="color: black;" class="form-control" id="ward" name="ward" value="<%= loginUser.getWard() %>" required>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="district" class="form-label">District</label>
-                                <input type="text" style="color: black;" class="form-control" id="district" value="Quận 1" name="district">
+                                <input type="text" style="color: black;" class="form-control" id="district" name="district" value="<%= loginUser.getDistrict() %>" required>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="city" class="form-label">City</label>
-                                <input type="text" style="color: black;" class="form-control" id="city" value="Hồ Chí Minh" name="city">
+                                <input type="text" style="color: black;" class="form-control" id="city" name="city" value="<%= loginUser.getCity() %>" required>
                             </div>
                         </div>
                         <div class="mb-3">
@@ -107,103 +125,108 @@
                 </div>
                 <div class="col-md-6 ">
                     <h2>Your Payment Detail</h2>
-
-
+                    <%  
+                        List<CartDetailsDTO> cartList = (List<CartDetailsDTO>) request.getAttribute("CART_CHECKOUT");
+                        for(int i=0; i<cartList.size(); i++){
+                    %>
                     <div class="border p-3">
 
                         <div class="card mb-3" style="border: none">
                             <div class="row g-0">
                                 <div class="col-md-4">
-                                    <img src="images/product_6.png" class="img-fluid rounded-start" alt="Air Jordan 1 x Off-White Retro High OG 'Chicago'">
+                                    <% 
+                                        String[] images = cartList.get(i).getProductDetails().getImage().split(";"); // Assuming images are stored as a semicolon-separated string
+                                        if (!images[0].trim().isEmpty()) { 
+                                    %>
+                                    <img src="<%= images[0] %>" class="img-fluid rounded-start" alt="imgage">
+                                    <% 
+                                            }
+                                    %>
+                                    <!--                                    <img src="images/product_6.png" class="img-fluid rounded-start" alt="Air Jordan 1 x Off-White Retro High OG 'Chicago'">-->
                                 </div>
                                 <div class="col-md-8" style="border: none">
                                     <div class="card-body">
-                                        <h5 class="card-title">Air Jordan 1 x Off-White Retro High OG 'Chicago'</h5>
+                                        <h5 class="card-title"><%= cartList.get(i).getProduct().getProductName() %> </h5>
                                         <div class="d-flex justify-content-between">
-                                            <p class="card-text " style="color: red; font-weight: 700">$5,000</p>
-                                            <p style="color: grey;">Size: EU 42</p>
-                                            <p style="color: grey; padding-right: 20px;">Quantity: 1</p>
+                                            <p class="card-text " style="color: red; font-weight: 700"><%= cartList.get(i).getPrice() %></p>
+                                            <p style="color: grey;">Size: <%= cartList.get(i).getProductDetails().getSize() %></p>
+                                            <p style="color: grey; padding-right: 20px;">Quantity: <%= cartList.get(i).getQuantity() %></p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div>    
+                        <% } %>
 
-                        <div class="card mb-3" style="border: none">
-                            <div class="row g-0">
-                                <div class="col-md-4">
-                                    <img src="images/product_8.png" class="img-fluid rounded-start" alt="Air Jordan 1 x Off-White Retro High OG 'Chicago'">
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Air Jordan 1 x Off-White Retro High OG 'Chicago'</h5>
-                                        <div class="d-flex justify-content-between">
-                                            <p class="card-text " style="color: red; font-weight: 700">$5,000</p>
-                                            <p style="color: grey;">Size: EU 42</p>
-                                            <p style="color: grey; padding-right: 20px;">Quantity: 1</p>
-                                        </div>
-                                    </div>
-                                </div>
+                        <div class="mb-3" >
+                            <label for="coupon" class="form-label" >You have a coupon? Click here to enter your code</label>
+                            <div class="form-inline">
+                                <% if (request.getAttribute("PROMOTION_NAME") ==null){ %>
+                                <input type="text" class="form-control mb-2 mr-sm-2" id="coupon" name="promotionName" value="">
+                                <input type="submit" class="btn btn-primary mb-2" name="action" value="CheckPromotion">
+                                <% }else{ %>
+                                <input type="text" class="form-control mb-2 mr-sm-2" id="coupon" name="promotionName" value="<%=request.getAttribute("PROMOTION_NAME")%>">
+                                <input type="submit" class="btn btn-primary mb-2" name="action" value="CheckPromotion">
+                                <% }%>
+                            </div>
+
+                        </div>
+                        <%  
+                            CartDTO cart = (CartDTO) request.getAttribute("CART_INFO");
+                            Double originalPrice = (Double) request.getAttribute("CART_TOTAL_PRICE");
+                            Double finalPrice = (Double) request.getAttribute("CART_FINAL_PRICE");
+                           
+                        %>
+                        <ul class="list-group mb-3 no-borders">
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Cart Subtotal:</span>
+                                <% if (cart != null){%>
+                                <strong><%= cart.getTotalPrice() %> VNĐ</strong>
+                                <% }else{ %>
+                                <strong><%= originalPrice %> VNĐ</strong>
+                                <% } %>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Shipping:</span>
+                                <strong style="color: yellow">40.000 VNĐ</strong>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Discount:</span>
+                                <% 
+                                    if (originalPrice != null && finalPrice != null) {
+                                        double discountMoney = originalPrice - (finalPrice - 40000) ;
+                                %>
+                                <strong style="color: grey"><%= discountMoney %> VNĐ</strong>
+                                <% }else{ %>
+                                <strong style="color: grey">0 VNĐ</strong>
+                                <% } %>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Order Total:</span>
+                                <% if (finalPrice == null && originalPrice ==null) {
+                                    double price = cart.getTotalPrice() + 40000;
+                                %>
+                                <strong style="color: red; font-weight: bold;"><%= price %> VNĐ</strong>
+                                <% }else{ %>
+                                <strong style="color: red; font-weight: bold;"><%= finalPrice %> VNĐ</strong>
+                                <% } %>
+
+                            </li>
+                        </ul>
+
+                        <div class="form-check mb-3">
+                            <input type="checkbox" class="form-check-input" id="confirm-info" name="" required>
+                            <label class="form-check-label" for="confirm-info" >I confirm that delivery information is correct</label>
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="col-auto">
+                                <input type="submit" class="btn mb-5" name="action" value="Place Order"></input>
                             </div>
                         </div>
-
-
-                        <div class="card mb-3" style="border: none">
-                            <div class="row g-0">
-                                <div class="col-md-4">
-                                    <img src="images/product_5.png" class="img-fluid rounded-start" alt="Air Jordan 1 x Off-White Retro High OG 'Chicago'">
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Air Jordan 1 x Off-White Retro High OG 'Chicago'</h5>
-                                        <div class="d-flex justify-content-between">
-                                            <p class="card-text " style="color: red; font-weight: 700">$5,000</p>
-                                            <p style="color: grey;">Size: EU 42</p>
-                                            <p style="color: grey; padding-right: 20px;">Quantity: 1</p>
-                                        </div>
-                                    </div>                            
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mb-3" >
-
-                        <label for="coupon" class="form-label" >You have a coupon? Click here to enter your code</label>
-                        <input type="text" class="form-control" id="coupon" name="promotionID">
-                        <input type="submit" form="billing-form" class="btn" name="action" class="btn mb-5"value="Apply"></input>
-
-                    </div>
-                    <ul class="list-group mb-3 no-borders">
-                        <li class="list-group-item d-flex justify-content-between">
-                            <span>Cart Subtotal:</span>
-                            <strong>$15,000</strong>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between">
-                            <span>Shipping:</span>
-                            <strong style="color: yellow">$2</strong>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between">
-                            <span>Discount:</span>
-                            <strong style="color: grey">-$3,000</strong>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between">
-                            <span>Order Total:</span>
-                            <strong style="color: red; font-weight: bold;">$12,000</strong>
-                        </li>
-                    </ul>
-                    <div class="form-check mb-3">
-                        <input type="checkbox" class="form-check-input" id="confirm-info" name="" required>
-                        <label class="form-check-label" for="confirm-info" >I confirm that delivery information is correct</label>
-                    </div>
-                    <div class="row justify-content-center">
-                        <div class="col-auto">
-                            <input type="submit" form="billing-form" class="btn mb-5" name="action" value="Place Order"></input>
-                        </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+                    </div> 
+                </div> 
+                </form>
+            </div> 
         </div>
         <%@include file="US_footer.jsp" %>
         <%@include file="US_RequestSupport.jsp" %>

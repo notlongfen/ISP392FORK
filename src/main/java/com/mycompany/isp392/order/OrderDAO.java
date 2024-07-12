@@ -182,6 +182,8 @@ public class OrderDAO {
         return productList;
     }
     
+    private static final String GET_TOTAL_INCOME_THIS_MONTH = "SELECT SUM(total) AS totalIncome FROM Orders  WHERE YEAR(orderDate) = YEAR(GETDATE()) AND MONTH(orderDate) = MONTH(GETDATE()) AND status=3;";
+    private static final String NUMBER_OF_ORDERS_THIS_MONTH = "SELECT COUNT(OrderID) AS numberOfOrder FROM Orders  WHERE YEAR(orderDate) = YEAR(GETDATE()) AND MONTH(orderDate) = MONTH(GETDATE()) AND status=3;";
 
     public int getLastOrderId() throws SQLException {
         Connection conn = null;
@@ -492,6 +494,84 @@ public class OrderDAO {
             }
         }
         return order;
+    }
+
+    public int getMonthIncome() {
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        int totalIncome = 0;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_TOTAL_INCOME_THIS_MONTH);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    totalIncome = rs.getInt("totalIncome");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ptm != null) {
+                    ptm.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return totalIncome;
+    }
+
+    public int getNumberOfCanceledOrder() {
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        int numberOfOrder = 0;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(NUMBER_OF_ORDERS_THIS_MONTH);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    numberOfOrder = rs.getInt("numberOfOrder");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ptm != null) {
+                    ptm.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return numberOfOrder;
+    }
+
+    public int getNumberOfCompletedOrder() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public int getMonthOrder() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

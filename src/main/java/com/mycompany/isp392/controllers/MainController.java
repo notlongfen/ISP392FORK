@@ -204,8 +204,11 @@ public class MainController extends HttpServlet {
     private static final String ADD_WISHLIST = "AddToWishlist";
     private static final String ADD_WISHLIST_CONTROLLER = "AddWishlistController";
 
+    private static final String CHECK_OUT_PAGE = "Checkout";
+    private static final String VIEW_CHECKOUT_CONTROLLER = "ViewCheckoutController";
+    
     private static final String PLACE_ORDER = "Place Order";
-    private static final String ORDER_DETAIL_PAGE = "US_OrderDetail.jsp";
+    private static final String CHECKOUT_CONTROLLER = "US_OrderDetail.jsp";
 
     private static final String VIEW_PROFILE = "View profile";
     private static final String VIEW_PROFILE_CONTROLLER = "ViewProfileController";
@@ -252,8 +255,7 @@ public class MainController extends HttpServlet {
     private static final String ALL_PRODUCT = "All_Product";
     private static final String ALL_PRODUCT_PAGE = "ViewAllProductController";
 
-
-    private static final String PROMOTION_CHECKER = "Apply";
+    private static final String PROMOTION_CHECKER = "CheckPromotion";
     private static final String PROMOTION_CHECKER_CONTROLLER = "PromotionCheckerController";
     
     private static final String VIEW_US_ORDER = "ViewUSOrder";
@@ -262,6 +264,10 @@ public class MainController extends HttpServlet {
     private static final String CANCEL_ORDER = "CancelOrder";
     private static final String CANCEL_ORDER_CONTROLLER = "CancelOrderController";
     
+
+    private static final String WEB_STATISTIC_PAGE = "Statistic";
+    private static final String WEB_STATISTIC_PAGE_VIEW = "AD_Statistic.jsp";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -400,8 +406,10 @@ public class MainController extends HttpServlet {
                 url = WISHLIST_CONTROLLER;
             } else if (DELETE_WISHLIST.equals(action)) {
                 url = DELETE_WISHLIST_CONTROLLER;
+            } else if (CHECK_OUT_PAGE.equals(action)) {
+                url = VIEW_CHECKOUT_CONTROLLER;
             } else if (PLACE_ORDER.equals(action)) {
-                url = ORDER_DETAIL_PAGE;
+                url = CHECKOUT_CONTROLLER;
             } else if (VIEW_PROFILE.equals(action)) {
                 url = VIEW_PROFILE_CONTROLLER;
             } else if (EDIT_PROFILE.equals(action)) {
@@ -444,6 +452,7 @@ public class MainController extends HttpServlet {
                 url = VIEW_US_ORDER_CONTROLLER;
             } else if (CANCEL_ORDER.equals(action)){
                 url = CANCEL_ORDER_CONTROLLER;
+    
             }
         } catch (Exception e) {
             log("error at MainController: " + e.toString());

@@ -31,8 +31,9 @@ import jakarta.servlet.http.HttpSession;
  *
  * @author notlongfen
  */
-@WebServlet(name = "PromotionCheckerController", urlPatterns = { "/PromotionCheckerController" })
+@WebServlet(name = "PromotionCheckerController", urlPatterns = {"/PromotionCheckerController"})
 public class PromotionCheckerController extends HttpServlet {
+
     private static final String ERROR = "US_Checkout.jsp";
     private static final String SUCCESS = "US_Checkout.jsp";
 
@@ -40,10 +41,10 @@ public class PromotionCheckerController extends HttpServlet {
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -55,11 +56,13 @@ public class PromotionCheckerController extends HttpServlet {
             UserDAO userDAO = new UserDAO();
             PromotionDAO promotionDAO = new PromotionDAO();
 
-            int promotionID = Integer.parseInt(request.getParameter("promotionID"));
+            String promotionName = request.getParameter("promotionName");
+            request.setAttribute("PROMOTION_NAME", promotionName);
             CartDTO cart = (CartDTO) sesssion.getAttribute("CART");
             CartDAO cartDAO = new CartDAO();
             if (cart == null) {
                 cart = cartDAO.getCartByCustomerID(userDTO.getUserID());
+//                request.setAttribute("CART_TOTAL_PRICE", cart);
                 if (cart == null) {
                     CartError error = new CartError();
                     error.setError("Your cart is empty");
@@ -67,7 +70,7 @@ public class PromotionCheckerController extends HttpServlet {
                 }
             }
             int userPoint = userDAO.getCustomerByID(userDTO.getUserID()).getPoints();
-            PromotionDTO promotionDTO = promotionDAO.getPromotionByID(promotionID);
+            PromotionDTO promotionDTO = promotionDAO.getPromotionByName(promotionName);
 
             if (promotionDTO == null) {
                 PromotionError pe = new PromotionError();
@@ -80,18 +83,17 @@ public class PromotionCheckerController extends HttpServlet {
 
             // Check if user point is enough to apply coupon
             if (userPoint >= minPointToApplyCoupon) {
-                double percentage = promotionDAO.getPromotionByID(promotionID).getDiscountPer() / 100;
+                double percentage = (double) promotionDTO.getDiscountPer() / 100.0;
                 // int point = userDAO.getCustomerByID(userDTO.getUserID()).getPoints() - 100;
                 // userDAO.updateUserPoint(userDTO.getUserID(), point);
-                cart.setTotalPrice(cart.getTotalPrice() - (cart.getTotalPrice() * percentage));
-
-                ProductDAO productDAO = new ProductDAO();
-
-                List<ProductDTO> productList = productDAO.getAllProducts();
-                request.setAttribute("PRODUCT_LIST", productList);
-                request.setAttribute("CART_TOTAL_PRICE", cart);
+                double originalPrice = cart.getTotalPrice(); // Lưu lại giá gốc trước khi áp dụng khuyến mãi
+                double newPrice = cart.getTotalPrice() - (cart.getTotalPrice() * percentage) + 40000;
+                cart.setTotalPrice(newPrice);
+                List<CartDetailsDTO> cartList = cartDAO.getCartItems(cart.getCartID());
+                request.setAttribute("CART_CHECKOUT", cartList);
+                request.setAttribute("CART_TOTAL_PRICE", originalPrice); // Đặt giá gốc vào thuộc tính request
+                request.setAttribute("CART_FINAL_PRICE", cart.getTotalPrice()); // Đặt giá sau khuyến mãi vào thuộc tính request
                 url = SUCCESS;
-
             } else {
                 PromotionError pe = new PromotionError();
                 pe.setConditionError("Your membership point does not reach the condition of this promotion " + "("
@@ -112,10 +114,10 @@ public class PromotionCheckerController extends HttpServlet {
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -126,10 +128,10 @@ public class PromotionCheckerController extends HttpServlet {
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

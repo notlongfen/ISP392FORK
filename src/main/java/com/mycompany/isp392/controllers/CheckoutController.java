@@ -17,20 +17,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-import com.mycompany.isp392.cart.CartDAO;
-import com.mycompany.isp392.cart.CartDTO;
-import com.mycompany.isp392.cart.CartDetailsDTO;
-import com.mycompany.isp392.cart.CartError;
-import com.mycompany.isp392.order.OrderDAO;
-import com.mycompany.isp392.order.OrderDTO;
-import com.mycompany.isp392.order.OrderDetailsDTO;
-import com.mycompany.isp392.product.ProductDAO;
-import com.mycompany.isp392.product.ProductDTO;
-import com.mycompany.isp392.product.ProductDetailsDTO;
-import com.mycompany.isp392.promotion.PromotionDAO;
-import com.mycompany.isp392.promotion.PromotionError;
-import com.mycompany.isp392.user.UserDAO;
-import com.mycompany.isp392.user.UserDTO;
+import com.mycompany.isp392.cart.*;
+import com.mycompany.isp392.order.*;
+import com.mycompany.isp392.product.*;
+import com.mycompany.isp392.promotion.*;
+import com.mycompany.isp392.user.*;
 
 /**
  *
@@ -98,7 +89,7 @@ public class CheckoutController extends HttpServlet {
         processRequest(request, response);
         String url = ERROR;
         HttpSession session = request.getSession();
-        CartDTO cart = (CartDTO) session.getAttribute("CART");
+        CartDTO cart = (CartDTO) session.getAttribute("CART_INFO");
         CartDAO cartDAO = new CartDAO();
         UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
         

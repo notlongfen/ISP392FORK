@@ -130,7 +130,7 @@
                                         <a class="nav-link " href="US_MyOrder.jsp"><div class="fas fa-box mr-2"></div> My Order</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="US_MyWishlist.jsp"><div class="fas fa-heart mr-2"></div> ️My Wishlists</a>
+                                        <a class="nav-link" href="MainController?action=Checkout"><div class="fas fa-heart mr-2"></div> ️Check out</a>
                                     </li>
                                 </ul>
                             </div>

@@ -47,20 +47,16 @@ public class ProductDAO {
     private static final String CHECK_PRODUCT = "SELECT productID FROM Products WHERE productName LIKE ? and productID != ?";
     private static final String CHECK_PRODUCT_NAME = "SELECT productID FROM Products WHERE productName LIKE ?";
     private static final String SEARCH_BRAND_BY_ID = "SELECT * FROM Brands WHERE brandID LIKE ?";
-
     private static final String SELECT_CATEGORY_PRODUCT = "SELECT * FROM Products p JOIN ProductDetails pd ON p.ProductID = pd.ProductID JOIN ProductBelongtoCategories pbc ON p.ProductID = pbc.ProductID "
             + "JOIN Categories c ON pbc.Categories = c.CategoryID WHERE c.CategoriesName = ?";
-
     private static final String SELECT__WISHLIST = "SELECT wd.ProductID, p.productName, pd.image, b.BrandName, pd.price "
             + "FROM Wishlists w JOIN WishlistDetails wd ON w.WishlistID = wd.WishlistID JOIN Products p ON wd.ProductID = p.ProductID JOIN ProductDetails pd ON p.ProductID = pd.ProductID JOIN  Brands b ON p.BrandID = b.BrandID "
             + "WHERE w.CustID = ? ";
     private static final String DELETE__WISHLIST = "DELETE FROM WishlistDetails "
             + "WHERE WishlistID = (SELECT WishlistID FROM Wishlists WHERE CustID = ?) "
             + "AND ProductID = ?";
-
 //    private static final String EDIT_PRODUCT = "UPDATE Products SET productName=?, description=?, numberOfPurchasing=?, brandID=?, status = ? WHERE productID=?";
     private static final String EDIT_PRODUCT = "UPDATE Products SET productName=?, description=?, numberOfPurchasing=?, brandID=?, status = ? WHERE productID=?";
-
     private static final String DELETE_PRODUCT_CATEGORIES = "DELETE FROM ProductBelongtoCDCategories WHERE ProductID=?";
     private static final String ADD_PRODUCT_CATEGORY = "INSERT INTO ProductBelongtoCDCategories (ProductID, CDCategoryID) VALUES (?, ?)";
     private static final String GET_CATEGORIES_BY_PRODUCT_ID = "SELECT c.* FROM Categories c INNER JOIN ProductBelongtoCDCategories pbc ON c.categoryID = pbc.CDCategoryID WHERE pbc.ProductID = ?";
@@ -76,6 +72,11 @@ public class ProductDAO {
             + "WHERE o.OrderID = ?; ";
     private static final String GET_PRODUCTS_BY_PAGE = "SELECT * FROM Products ORDER BY productID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
     private static final String GET_TOTAL_PRODUCTS = "SELECT COUNT(*) AS total FROM Products";
+    private static final String GET_PRODUCT_INFO_BY_CARTID = "SELECT * FROM Carts c" +
+                                                                "INNER JOIN CartDetails cd ON c.CartID = cd.CartID" +
+                                                                "INNER JOIN Products p ON cd.ProductID = p.ProductID" +
+                                                                "INNER JOIN ProductDetails pd ON cd.ProductDetailsID = pd.ProductDetailsID" +
+                                                                "WHERE c.CartID = ?; ";
     private static final String UPDATE_PRODUCT_NUMBER_OF_PURCHASING = "UPDATE Products SET numberOfPurchasing = numberOfPurchasing + ? WHERE productID = ?";
     private static final String GET_PRODUCT_DETAILS_BY_COLOR = "SELECT * FROM ProductDetails WHERE ProductID = ? AND Color = ? AND status = 1";
 
@@ -1571,6 +1572,40 @@ public class ProductDAO {
             DbUtils.closeConnection(con, ps, rs);
         }
         return totalProducts;
+    }
+    
+     public List<ProductDetailsDTO> getProductByCartID(int CartID) throws SQLException {
+        List<ProductDetailsDTO> products = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_PRODUCT_INFO_BY_CARTID);
+                ptm.setInt(1, CartID);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    String productName = rs.getString("productName");
+                    String color = rs.getString("color");
+                    int size = rs.getInt("size");
+                    products.add(new ProductDetailsDTO(productName,color,size));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return products;
     }
 
     public boolean updateProductNumberOfPurchasedItems(int productID, int quantity) throws SQLException {
