@@ -88,9 +88,13 @@ public class GetProductsController extends HttpServlet {
                 request.setAttribute("PRODUCT_LIST", productList);
                 request.setAttribute("CURRENT_PAGE", currentPage);
                 request.setAttribute("TOTAL_PAGES", (int) Math.ceil((double) totalProducts / entriesPerPage));
-                for (ProductDTO detail : productList) {
-                    List<CategoryDTO> categories = categoryDAO.getCategoriesByProductID(detail.getProductID());
-                    request.setAttribute("CATEGORY_LIST_" + detail.getProductID(), categories);
+
+                for (ProductDTO product : productList) {
+                    int totalQuantity = productDAO.getTotalQuantityByProductID(product.getProductID());
+                    productDAO.updateNumberOfPurchasing(product.getProductID(), totalQuantity);
+                    product.setNumberOfPurchase(totalQuantity);
+                    List<CategoryDTO> categories = categoryDAO.getCategoriesByProductID(product.getProductID());
+                    request.setAttribute("CATEGORY_LIST_" + product.getProductID(), categories);
                 }
                 url = PRODUCTS_PAGE;
             }

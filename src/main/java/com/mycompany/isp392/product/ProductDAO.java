@@ -77,7 +77,8 @@ public class ProductDAO {
     private static final String GET_PRODUCTS_BY_PAGE = "SELECT * FROM Products ORDER BY productID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
     private static final String GET_TOTAL_PRODUCTS = "SELECT COUNT(*) AS total FROM Products";
     private static final String UPDATE_PRODUCT_NUMBER_OF_PURCHASING = "UPDATE Products SET numberOfPurchasing = numberOfPurchasing + ? WHERE productID = ?";
-   private static final String GET_PRODUCT_DETAILS_BY_COLOR = "SELECT * FROM ProductDetails WHERE ProductID = ? AND Color = ? AND status = 1";
+    private static final String GET_PRODUCT_DETAILS_BY_COLOR = "SELECT * FROM ProductDetails WHERE ProductID = ? AND Color = ? AND status = 1";
+
     public boolean addProduct(ProductDTO product) throws SQLException {
         boolean check = false;
         Connection conn = null;
@@ -514,6 +515,76 @@ public class ProductDAO {
             }
         }
         return products;
+    }
+
+    public int getTotalQuantityByProductID(int productID) throws SQLException {
+        int totalQuantity = 0;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        String query = "SELECT SUM(stockQuantity) as totalQuantity FROM ProductDetails WHERE ProductID = ?";
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(query);
+                ptm.setInt(1, productID);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    totalQuantity = rs.getInt("totalQuantity");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return totalQuantity;
+    }
+
+    public boolean updateNumberOfPurchasing(int productID, int totalQuantity) throws SQLException {
+        boolean updated = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        String query = "UPDATE Products SET numberOfPurchasing = ? WHERE ProductID = ?";
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(query);
+                ptm.setInt(1, totalQuantity);
+                ptm.setInt(2, productID);
+                updated = ptm.executeUpdate() > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return updated;
+    }
+
+    public static void main(String[] args) throws SQLException {
+        ProductDAO dao = new ProductDAO();
+        int total = dao.getTotalQuantityByProductID(17);
+        boolean isUpdate = dao.updateNumberOfPurchasing(17, total);
+        if (isUpdate) {
+            System.out.println("Update successfully");
+        } else {
+            System.out.println("Failed to update");
+        }
+        System.out.println("Total is:" + total);
     }
 
     public boolean checkProductExists(String productName, int productID) throws SQLException {
@@ -1681,6 +1752,7 @@ public class ProductDAO {
         }
         return totalProducts;
     }
+
     public List<ProductDetailsDTO> getProductDetailsByColor(int productID, String color) throws SQLException {
         List<ProductDetailsDTO> productDetailsList = new ArrayList<>();
         Connection conn = null;
@@ -1719,21 +1791,22 @@ public class ProductDAO {
         }
         return productDetailsList;
     }
-     public Map<String, Map<String, Map<String, Object>>> getProductDetailsByProductID2(int productId) {
+
+    public Map<String, Map<String, Map<String, Object>>> getProductDetailsByProductID2(int productId) {
         Map<String, Map<String, Map<String, Object>>> colorSizeMap = new HashMap<>();
-        
+
         try (Connection con = DbUtils.getConnection()) {
             String query = "SELECT color, size, price, image FROM ProductDetails WHERE ProductID = ?";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setInt(1, productId);
             ResultSet rs = ps.executeQuery();
-            
+
             while (rs.next()) {
                 String color = rs.getString("color");
                 String size = rs.getString("size");
                 int price = rs.getInt("price");
                 String images = rs.getString("image");
-                
+
                 colorSizeMap.putIfAbsent(color, new HashMap<>());
                 Map<String, Object> sizeDetails = new HashMap<>();
                 sizeDetails.put("price", price);
@@ -1743,7 +1816,7 @@ public class ProductDAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         return colorSizeMap;
     }
 }
