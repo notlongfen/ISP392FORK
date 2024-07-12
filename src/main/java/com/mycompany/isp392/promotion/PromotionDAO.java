@@ -29,8 +29,8 @@ public class PromotionDAO {
     private static final String GET_PROMOTION_BY_ID = "SELECT promotionID, promotionName, startDate, endDate, discountPer, condition, description, status FROM Promotions WHERE promotionID = ?";
     private static final String GET_ALL_PROMOTIONS = "SELECT * FROM Promotions";
     private static final String VIEW_PROMOTION = "SELECT * FROM Promotions";
+    private static final String GET_PROMOTION_BY_NAME = "SELECT promotionID, promotionName, startDate, endDate, discountPer, condition, description, status FROM Promotions WHERE promotionName = ? AND status = 1;";
 
-    
     public boolean addPromotion(PromotionDTO promotion) throws SQLException {
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -278,7 +278,7 @@ public class PromotionDAO {
                     int condition = rs.getInt("condition");
                     String description = rs.getString("description");
                     int status = rs.getInt("status");
-                    promotion = new PromotionDTO(promotionID, promotionName, startDate, endDate, discountPer, condition,description, status);
+                    promotion = new PromotionDTO(promotionID, promotionName, startDate, endDate, discountPer, condition, description, status);
                 }
             }
         } catch (Exception e) {
@@ -334,6 +334,7 @@ public class PromotionDAO {
         }
         return promotions;
     }
+
     public List<PromotionDTO> selectAllPromotions() throws ClassNotFoundException {
         List<PromotionDTO> promotions = new ArrayList<>();
         Connection conn = null;
@@ -353,7 +354,7 @@ public class PromotionDAO {
                     int condition = rs.getInt("condition");
                     String description = rs.getString("description");
                     int status = rs.getInt("status");
-                    String image = rs.getString("image");                 
+                    String image = rs.getString("image");
                     promotions.add(new PromotionDTO(promotionID, promotionName, startDate, endDate, discountPer, condition, description, status, image));
                 }
             }
@@ -361,5 +362,43 @@ public class PromotionDAO {
             e.printStackTrace();
         }
         return promotions;
+    }
+
+    public PromotionDTO getPromotionByName(String promotionName) throws SQLException {
+        PromotionDTO promotion = null;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_PROMOTION_BY_NAME);
+                ptm.setString(1, promotionName);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    int promotionID = rs.getInt("promotionID");
+                    Date startDate = rs.getDate("startDate");
+                    Date endDate = rs.getDate("endDate");
+                    int discountPer = rs.getInt("discountPer");
+                    int condition = rs.getInt("condition");
+                    String description = rs.getString("description");
+                    int status = rs.getInt("status");
+                    promotion = new PromotionDTO(promotionID, promotionName, startDate, endDate, discountPer, condition, description, status);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return promotion;
     }
 }
