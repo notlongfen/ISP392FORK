@@ -148,13 +148,6 @@
                                    
                                 <ul class="account_selection">   
                                     <li><a href="MainController?action=Logout"><i class="fa fa-sign-out" style="color: #232530"></i>Logout</a></li>
-                                    <% 
-                                        if(loginUser.getRoleID() != 1) { 
-                                    %>
-                                    <li><a href="MainController?action=Logout&userID=<%= loginUser.getUserID()%>"><i class="fa fa-sign-out" style="color: #232530"></i>Deactivate</a></li>
-                                    <% 
-                                        } 
-                                    %>
                                 </ul>
                             </li>
                         </ul>

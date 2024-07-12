@@ -79,7 +79,8 @@ public class ProductDAO {
                                                                 "WHERE c.CartID = ?; ";
     private static final String UPDATE_PRODUCT_NUMBER_OF_PURCHASING = "UPDATE Products SET numberOfPurchasing = numberOfPurchasing + ? WHERE productID = ?";
     private static final String GET_PRODUCT_DETAILS_BY_COLOR = "SELECT * FROM ProductDetails WHERE ProductID = ? AND Color = ? AND status = 1";
-
+    private static final String GET_PRODUCT_DETAILS_ID = "SELECT * FROM ProductDetails WHERE ProductID = ? AND price = ? AND size LIKE ? AND Color LIKE ? AND status = 1";
+    
     public boolean addProduct(ProductDTO product) throws SQLException {
         boolean check = false;
         Connection conn = null;
@@ -1853,5 +1854,39 @@ public class ProductDAO {
         }
 
         return colorSizeMap;
+    }
+    
+    public int getProductDetailsID (int productID, int price, String size, String color) throws SQLException {
+        int id = -1;
+        Connection conn  = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try{
+            conn = DbUtils.getConnection();
+            if(conn != null){
+                ptm = conn.prepareStatement(GET_PRODUCT_DETAILS_ID);
+                ptm.setInt(1, productID);
+                ptm.setInt(2, price);
+                ptm.setString(3, size);
+                ptm.setString(4, color);
+                rs = ptm.executeQuery();
+                if(rs.next()){
+                    id = rs.getInt("ProductDetailsID");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return id;
     }
 }

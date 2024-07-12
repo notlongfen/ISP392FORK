@@ -221,13 +221,6 @@
                         </div>
                     </form>
                                 
-                    <div class="btn-format right-element btn-format.right-element button" >
-                        <a href="#" onclick="showConfirmDeleteModal(<%= custID %>)">
-                            <button type="button" class="btn middle" style="background-color: #dc3545">
-                                <h5 style="color: white; align-items: center;">Deactivate Account</h5>
-                            </button>
-                        </a>
-                    </div>
                             
                     <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
                         <div class="modal-dialog">

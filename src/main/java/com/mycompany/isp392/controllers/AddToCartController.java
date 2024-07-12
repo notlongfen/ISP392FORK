@@ -25,8 +25,8 @@ import jakarta.servlet.http.HttpSession;
 @WebServlet(name = "AddToCartController", urlPatterns = {"/AddToCartController"})
 public class AddToCartController extends HttpServlet {
     
-    private static final String ERROR = "productDetails.jsp";
-    private static final String SUCCESS = "productDetails.jsp";
+    private static final String ERROR = "GetProductDetails";
+    private static final String SUCCESS = "GetProductDetails";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -38,19 +38,22 @@ public class AddToCartController extends HttpServlet {
         HttpSession session = request.getSession();
         UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
         if (loginUser == null) {
-            response.sendRedirect("login.jsp");
+            response.sendRedirect("US_SignIn.jsp");
             return;
         }
+        
         try{
             boolean checkValidation = true;
-            int custID = Integer.parseInt(request.getParameter("custID"));
+            int custID = loginUser.getUserID();
             int productID = Integer.parseInt(request.getParameter("productID"));
-            int productDetailsID = Integer.parseInt(request.getParameter("productDetailsID"));
-            int unitPrice = Integer.parseInt(request.getParameter("unitPrice"));
+            int unitPrice = Integer.parseInt(request.getParameter("price"));
             int quantity = Integer.parseInt(request.getParameter("quantity"));
+            String size = request.getParameter("selectedSize");
+            String color = request.getParameter("selectedColor");
+            
             int price = quantity * unitPrice;
             int cartID = cartDao.getCartIDByCustomer(custID);
-            
+            int productDetailsID = productDao.getProductDetailsID(productID, unitPrice, size, color);
             //check if customer have cart already, if not, create new one
             if(cartID ==-1){
                 cartID = cartDao.getLatestCartID() + 1;
@@ -61,29 +64,16 @@ public class AddToCartController extends HttpServlet {
                     checkValidation = false;
                 }
             }
+            if(productDetailsID == -1){
+                error.setProductError("Unavailable product");
+                checkValidation = false;
+            }
             //check product stock and status
             ProductDetailsDTO productDetails = productDao.getProductDetailsByID(productDetailsID);
             if(quantity > productDetails.getStockQuantity()){
                 error.setQuantityError("There's not enough products available");
                 checkValidation = false;
             }
-            if(productDetails.getStatus()!=1){
-                error.setProductError("This product is not available");
-                checkValidation = false;
-            }
-            
-//            if(checkValidation){
-//                CartDetailsDTO details = new CartDetailsDTO(cartID, productID, productDetailsID, price, quantity);
-//                boolean checkCartDetails = cartDao.addToCart(details);
-//                if(checkCartDetails){
-//                    url=SUCCESS;
-//                }else{
-//                    error.setError("Unable to update database");
-//                    request.setAttribute("CART_ERROR", error);
-//                }
-//            }else{
-//                request.setAttribute("CART_ERROR", error);
-//            }
 
             if(checkValidation){
                 CartDetailsDTO existingDetails = cartDao.getCartDetails(cartID, productDetailsID);
@@ -93,6 +83,7 @@ public class AddToCartController extends HttpServlet {
                     CartDetailsDTO newDetails = new CartDetailsDTO(cartID, productID, productDetailsID, newQuantity, newPrice);
                     boolean updateCartDetails = cartDao.updateCartDetails(newDetails);
                     if(updateCartDetails){
+                        request.setAttribute("SUCCESS_MESSAGE", "Product added to cart");
                         url = SUCCESS;
                     } else {
                         error.setError("Unable to update database");
@@ -102,6 +93,7 @@ public class AddToCartController extends HttpServlet {
                     CartDetailsDTO details = new CartDetailsDTO(cartID, productID, productDetailsID, quantity, price);
                     boolean checkCartDetails = cartDao.addToCart(details);
                     if(checkCartDetails){
+                        request.setAttribute("SUCCESS_MESSAGE", "Product added to cart");
                         url=SUCCESS;
                     }else{
                         error.setError("Unable to update database");
@@ -115,7 +107,7 @@ public class AddToCartController extends HttpServlet {
             log("Error at AddToCartController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
-        }
+            }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

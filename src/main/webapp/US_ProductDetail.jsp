@@ -2,6 +2,7 @@
 <%@page import="java.util.Map"%>
 <%@page import="com.mycompany.isp392.product.ProductDTO"%>
 <%@page import="com.google.gson.Gson"%>
+<%@page import="com.mycompany.isp392.cart.CartError"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -79,7 +80,7 @@
             String selectedColor = request.getParameter("color");
             if (selectedColor == null && colorSizeMap != null && !colorSizeMap.isEmpty()) {
                 selectedColor = colorSizeMap.keySet().iterator().next();
-            }
+            }  
             String selectedSize = request.getParameter("size");
             if (selectedSize == null && selectedColor != null && colorSizeMap.get(selectedColor) != null && !colorSizeMap.get(selectedColor).isEmpty()) {
                 selectedSize = colorSizeMap.get(selectedColor).keySet().iterator().next();
@@ -144,68 +145,138 @@
                                 <h2><%= product.getProductName() %></h2>
                                 <p><%= product.getDescription() %></p>
                             </div>
-                            <div class="free_delivery d-flex flex-row align-items-center justify-content-center">
-                                <span class="ti-truck"></span><span>free delivery</span>
-                            </div>
-                            <div class="product_price mt-5" style="color: #C53337"><span id="productPrice"><%= colorSizeMap.get(selectedColor).get(selectedSize).get("price") %></span></div>
-
-                            <div style="margin-top: 30px;">
-                                <label style="font-size: 20px;">Select size:</label>
-                                <div class="sizes">
-                                    <% 
-                                        for (int size = 36; size <= 45; size++) {
-                                            String sizeStr = String.valueOf(size);
-                                            boolean available = colorSizeMap.get(selectedColor).containsKey(sizeStr);
-                                    %>
-                                    <div class="size <%= available ? "" : "disabled" %>" data-size="<%= sizeStr %>">
-                                        US <%= size %>
-                                    </div>
-                                    <% 
-                                        } 
-                                    %>
+                            <form action="MainController" method="POST">
+                                <div class="free_delivery d-flex flex-row align-items-center justify-content-center">
+                                    <span class="ti-truck"></span><span>free delivery</span>
                                 </div>
-                            </div>
+                                <div class="product_price mt-5" style="color: #C53337"><span id="productPrice"><%= colorSizeMap.get(selectedColor).get(selectedSize).get("price") %></span></div>
 
-                            <div style="margin-top: 30px;">
-                                <label style="font-size: 20px;">Select color:</label>
-                                <div class="colors">
-                                    <% 
-                                        for (String colorOption : colorSizeMap.keySet()) {
-                                    %>
-                                    <div class="color <%= colorOption.equals(selectedColor) ? "selected" : "" %>" data-color="<%= colorOption %>">
-                                        <%= colorOption %>
-                                    </div>
-                                    <% 
-                                        } 
-                                    %>
-                                </div>
-                            </div>
-
-                            <div class="quantity d-flex flex-column flex-sm-row align-items-sm-center mb-5">
-                                <div class="col-md-4 text-sm-right text-center">
-                                    <span style="font-size: 20px;">Quantity: </span>
-                                </div>
-                                <div class="col-md-8 d-flex justify-content-center align-items-center">
-                                    <button id="decrease" class="btn btn-dark me-2">-</button>
-                                    <span class="border px-3 py-2" id="quantity">1</span>
-                                    <button id="increase" class="btn btn-dark ms-2">+</button>
-                                </div>
-                            </div>
-
-                            <div class="row mt-2 justify-content-center">
-                                <div class="col">
-                                    <div class="d-grid gap-2">
-                                        <button id="add_to_cart" class="btn btn-dark" style="background: black; border: 3px solid black;"><b>Add to Cart</b></button>
+                                <div style="margin-top: 30px;">
+                                    <label style="font-size: 20px;">Select size:</label>
+                                    <div class="sizes">
+                                        <% 
+                                            for (int size = 36; size <= 45; size++) {
+                                                String sizeStr = String.valueOf(size);
+                                                boolean available = colorSizeMap.get(selectedColor).containsKey(sizeStr);
+                                        %>
+                                        <div class="size <%= available ? "" : "disabled" %>" data-size="<%= sizeStr %>">
+                                            US <%= size %>
+                                        </div>
+                                        <% 
+                                            } 
+                                        %>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row mt-2 justify-content-center">
-                                <div class="col">
-                                    <div class="d-grid gap-2">
-                                        <button id="add_to_wishlist" class="btn btn-outline-dark" style="background: white; border: 2px solid black;"><b>Favorite</b></button>
+
+                                <div style="margin-top: 30px;">
+                                    <label style="font-size: 20px;">Select color:</label>
+                                    <div class="colors">
+                                        <% 
+                                            for (String colorOption : colorSizeMap.keySet()) {
+                                        %>
+                                        <div class="color <%= colorOption.equals(selectedColor) ? "selected" : "" %>" data-color="<%= colorOption %>">
+                                            <%= colorOption %>
+                                        </div>
+                                        <% 
+                                            } 
+                                        %>
                                     </div>
                                 </div>
-                            </div>
+
+                                <div class="quantity d-flex flex-column flex-sm-row align-items-sm-center mb-5">
+                                    <div class="col-md-4 text-sm-right text-center">
+                                        <span style="font-size: 20px;">Quantity: </span>
+                                    </div>
+                                    <div class="col-md-8 d-flex justify-content-center align-items-center">
+                                        <button type="button" id="decrease" class="btn btn-dark me-2">-</button>
+                                        <span class="border px-3 py-2" id="quantity">1</span>
+                                        <button type="button" id="increase" class="btn btn-dark ms-2">+</button>
+                                    </div>
+                                </div>
+
+                                <input type="hidden" name="productID" value="<%= product.getProductID()%>">
+                                <input type="hidden" name="quantity" id="quantityInput" value="1">
+                                <input type="hidden" name="price" id="priceInput" value="">
+                                <input type="hidden" name="selectedSize" id="selectedSize" value="">
+                                <input type="hidden" name="selectedColor" id="selectedColor" value="">
+
+                                <div class="row mt-2 justify-content-center">
+                                    <div class="col">
+                                        <div class="d-grid gap-2">
+                                            <button type="submit" name="action" value="Add_To_Cart" id="add_to_cart" class="btn btn-dark" style="background: black; border: 3px solid black;"><b>Add to Cart</b></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-2 justify-content-center">
+                                    <div class="col">
+                                        <div class="d-grid gap-2">
+                                            <button id="add_to_wishlist" class="btn btn-outline-dark" style="background: white; border: 2px solid black;"><b>Favorite</b></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Success Modal -->
+            <% if (request.getAttribute("SUCCESS_MESSAGE") != null) { %>
+            <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-success text-white">
+                            <h5 class="modal-title" id="successModalLabel">Success</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <span id="successMessage"></span>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+            <!-- Error Modal -->
+            <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger text-white">
+                            <h5 class="modal-title" id="errorModalLabel">Error</h5>
+                            <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <ul class="list-group list-group-flush">
+                                <%
+                                    CartError error = (CartError) request.getAttribute("CART_ERROR");
+                                    if (error != null) {
+                                        if(error.getError() != null && !error.getError().isEmpty()){
+                                %>
+                                <li class="list-group-item list-group-item-danger"><%= error.getError() %></li>
+                                    <%
+                                            }
+                                            if(error.getProductError() != null && !error.getProductError().isEmpty()){
+                                    %>
+                                <li class="list-group-item list-group-item-danger"><%= error.getProductError() %></li> 
+                                    <%    
+                                            }
+                                            if(error.getQuantityError() != null && !error.getQuantityError().isEmpty()){
+                                    %>
+                                <li class="list-group-item list-group-item-danger"><%= error.getQuantityError() %></li> 
+                                    <%
+                                            }
+                                        }
+                                    %>
+                            </ul>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>
@@ -218,6 +289,14 @@
             <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
             <script>
                 $(document).ready(function () {
+                    var selectedColor = '<%= selectedColor %>'; // Initial selected color from server-side
+                    if (!selectedColor && $('.color').length > 0) {
+                        selectedColor = $('.color:first').data('color'); // Default to the first available color
+                    }
+                    $('#selectedColor').val(selectedColor); // Update hidden input field
+                });
+                
+                $(document).ready(function () {
                     console.log("Document ready");
 
                     // Handle color selection
@@ -229,9 +308,11 @@
                         var selectedColor = $(this).data('color');
                         $('.color').removeClass('selected');
                         $(this).addClass('selected');
+                        $('#selectedColor').val(selectedColor); // Update hidden input field
 
                         // Update sizes based on selected color
                         updateSizes(selectedColor);
+                        updateImagesAndPrice();
                     });
 
                     // Handle size selection
@@ -243,6 +324,7 @@
                         var selectedSize = $(this).data('size');
                         $('.size').removeClass('selected');
                         $(this).addClass('selected');
+                        $('#selectedSize').val(selectedSize); // Update hidden input field
 
                         // Update images and price based on selected size
                         updateImagesAndPrice();
@@ -252,6 +334,7 @@
                         console.log("Increase quantity clicked");
                         var quantity = parseInt($('#quantity').text());
                         $('#quantity').text(quantity + 1);
+                        $('#quantityInput').val(quantity + 1);
                     });
 
                     $('#decrease').click(function () {
@@ -259,6 +342,7 @@
                         var quantity = parseInt($('#quantity').text());
                         if (quantity > 1) {
                             $('#quantity').text(quantity - 1);
+                            $('#quantityInput').val(quantity - 1);
                         }
                     });
 
@@ -309,9 +393,27 @@
                                 imageGallery.append(item);
                             }
                         }
-                        $('#productPrice').text(sizes[selectedColor][selectedSize]["price"]);
+                        var price = sizes[selectedColor][selectedSize]["price"];
+                        $('#productPrice').text(price);
+                        $('#priceInput').val(price); // Update hidden input field
+
                     }
                 }
+                
+            // Display success modal if message exists
+            $(document).ready(function () {
+                const successMessage = '<%= request.getAttribute("SUCCESS_MESSAGE") %>';
+                if (successMessage) {
+                    document.getElementById('successMessage').innerText = successMessage;
+                    $('#successModal').modal('show');
+                }
+                
+                <% if (request.getAttribute("CART_ERROR") != null) { %>
+                    $('#errorModal').modal('show');
+                <% } %>
+                
+            });
+            
             </script>.
         </div>
     </body>
