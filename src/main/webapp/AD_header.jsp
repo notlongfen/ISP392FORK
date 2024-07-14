@@ -96,7 +96,7 @@
             {
                 margin-right: 10px;
             }
-
+            
         </style>
     </head>
 
@@ -146,7 +146,8 @@
                                     <i class="fa fa-angle-down"></i>
                                 </a>
                                    
-                                <ul class="account_selection">   
+                                <ul class="account_selection">
+                                    <li><a href="MainController?action=EditEmpProfilePage"><i class="fas fa-pencil-alt" style="color: #232530"></i>Edit Profile</a></li>
                                     <li><a href="MainController?action=Logout"><i class="fa fa-sign-out" style="color: #232530"></i>Logout</a></li>
                                 </ul>
                             </li>

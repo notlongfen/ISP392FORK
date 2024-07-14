@@ -206,7 +206,7 @@ public class MainController extends HttpServlet {
 
     private static final String CHECK_OUT_PAGE = "Checkout";
     private static final String VIEW_CHECKOUT_CONTROLLER = "ViewCheckoutController";
-    
+
     private static final String PLACE_ORDER = "Place Order";
     private static final String CHECKOUT_CONTROLLER = "CheckoutController";
 
@@ -257,16 +257,21 @@ public class MainController extends HttpServlet {
 
     private static final String PROMOTION_CHECKER = "CheckPromotion";
     private static final String PROMOTION_CHECKER_CONTROLLER = "PromotionCheckerController";
-    
+
     private static final String VIEW_US_ORDER = "ViewUSOrder";
     private static final String VIEW_US_ORDER_CONTROLLER = "ViewUSOrderController";
-    
+
     private static final String CANCEL_ORDER = "CancelOrder";
     private static final String CANCEL_ORDER_CONTROLLER = "CancelOrderController";
-    
+
     private static final String ADD_TO_CART = "Add_To_Cart";
     private static final String ADD_TO_CART_CONTROLLER = "AddToCartController";
-    
+
+    private static final String EDIT_EMP_PROFILE_PAGE = "EditEmpProfilePage";
+    private static final String EDIT_EMP_PROFILE_PAGE_VIEW = "AD_EditProfile.jsp";
+
+    private static final String EDIT_EMP_PROFILE = "EditEmpProfile";
+    private static final String EDIT_EMP_PROFILE_CONTROLLER = "EditEmployeeProfileController";
 
     private static final String WEB_STATISTIC_PAGE = "Statistic";
     private static final String WEB_STATISTIC_PAGE_VIEW = "AD_Statistic.jsp";
@@ -451,12 +456,16 @@ public class MainController extends HttpServlet {
                 url = ALL_PRODUCT_PAGE;
             } else if (EDIT_PRODUCT_DETAIL_PAGE.equals(action)) {
                 url = EDIT_PRODUCT_DETAIL_PAGE_VIEW;
-            } else if (VIEW_US_ORDER.equals(action)){
+            } else if (VIEW_US_ORDER.equals(action)) {
                 url = VIEW_US_ORDER_CONTROLLER;
-            } else if (CANCEL_ORDER.equals(action)){
+            } else if (CANCEL_ORDER.equals(action)) {
                 url = CANCEL_ORDER_CONTROLLER;
-            } else if (ADD_TO_CART.equals(action)){
+            } else if (ADD_TO_CART.equals(action)) {
                 url = ADD_TO_CART_CONTROLLER;
+            } else if (EDIT_EMP_PROFILE_PAGE.equals(action)) {
+                url = EDIT_EMP_PROFILE_PAGE_VIEW;
+            } else if (EDIT_EMP_PROFILE.equals(action)) {
+                url = EDIT_EMP_PROFILE_CONTROLLER;
             }
         } catch (Exception e) {
             log("error at MainController: " + e.toString());
@@ -475,6 +484,7 @@ public class MainController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);
     }
+
     @Override
     public String getServletInfo() {
         return "Short description";

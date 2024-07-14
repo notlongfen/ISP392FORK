@@ -38,27 +38,9 @@ public class EditEmployeeController extends HttpServlet {
 
             //call
             int userID = Integer.parseInt(request.getParameter("userID"));
-            String userName = request.getParameter("userName");
-            String oldEmail = request.getParameter("oldEmail");
-            String email = request.getParameter("email");
-            String currentPassword = request.getParameter("currentPassword");
-            String password = request.getParameter("password");
             int roleID = Integer.parseInt(request.getParameter("roleID"));
-            int oldPhone = Integer.parseInt(request.getParameter("oldPhone"));
-            int phone = Integer.parseInt(request.getParameter("phone"));
             int status = Integer.parseInt(request.getParameter("status"));
             
-            //error handling
-            //check email exists
-            if (!oldEmail.equals(email) && dao.checkEmailExists(email) != -1) {
-                error.setEmailError("Email already exists.");
-                checkValidation = false;
-            }
-            //check if phone exists
-            if (oldPhone != phone && dao.checkPhoneExists(phone)) {
-                error.setPhoneError("Phone number already exists.");
-                checkValidation = false;
-            }
             if(status == 0 && loginUser.getUserID() == userID ){
                 error.setUserIDError("You cannot delete your own account.");
                 checkValidation = false;
@@ -66,19 +48,10 @@ public class EditEmployeeController extends HttpServlet {
 
             //hash password & execute
             if (checkValidation) {
-                String hashedPassword = currentPassword;
-                if(!password.isEmpty()){
-                    hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-                }
-                UserDTO user = new UserDTO(userID, userName, email, hashedPassword, roleID, phone, status);
-                boolean checkUpdate = dao.editEmployee(user);
-
+                boolean checkUpdate = dao.updateEmpRoleAndStatus(userID, roleID, status);
                 if (checkUpdate) {
                     if(loginUser!=null && loginUser.getUserID() == userID){
-                        loginUser.setUserName(userName);
-                        loginUser.setEmail(email);
                         loginUser.setRoleID(roleID);
-                        loginUser.setPhone(phone);
                         loginUser.setStatus(status);
                         session.setAttribute("LOGIN_USER", loginUser);
                     }

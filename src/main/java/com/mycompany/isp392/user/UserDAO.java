@@ -33,7 +33,7 @@ public class UserDAO {
     private static final String GET_USER_BY_ID = "SELECT * FROM Users WHERE UserID = ?";
     private static final String GET_CUSTOMER_BY_ID = "SELECT * FROM Customers WHERE CustID = ?";
     private static final String GET_EMPLOYEE_BY_ID = "SELECT * FROM Employees WHERE EmpID = ?";
-    private static final String DELETE_USER = "UPDATE Users SET status = 0 WHERE UserID=?";
+    private static final String DELETE_USER = "UPDATE Users SET status = 0 WHERE UserID = ?";
     private static final String GET_USER_INFO_BASED_ON_SUPPORTID = "SELECT * FROM Supports s \n"
             + "INNER JOIN Customers c ON s.CustID = c.CustID\n"
             + "INNER JOIN Users u ON c.CustID = u.UserID\n"
@@ -43,13 +43,16 @@ public class UserDAO {
             + "INNER JOIN Users u ON c.CustID = u.UserID\n";
     private static final String GET_CUSTOMER_INFO = "SELECT * FROM Customers WHERE CustID = ?";
     private static final String GET_FULL_CUSTOMER_BY_ID = "SELECT * FROM Users u JOIN Customers c ON u.UserID = c.CustID WHERE c.CustID=?";
-    private static final String UPDATE_USER_PROFILE ="UPDATE Users SET userName = ?, email = ?, phone = ? WHERE UserID = ?";
-    private static final String UPDATE_CUSTOMER_PROFILE ="UPDATE Customers SET birthday = ?, province_city = ?, district = ?, ward = ?, detailAddress = ? WHERE CustID = ?";
+    private static final String UPDATE_USER_PROFILE = "UPDATE Users SET userName = ?, email = ?, phone = ? WHERE UserID = ?";
+    private static final String UPDATE_CUSTOMER_PROFILE = "UPDATE Customers SET birthday = ?, province_city = ?, district = ?, ward = ?, detailAddress = ? WHERE CustID = ?";
     private static final String GET_USER_INFO_BASED_ON_ORDER_ID = "SELECT * FROM Orders o \n"
             + "INNER JOIN Customers c ON o.CustID = c.CustID\n"
             + "INNER JOIN Users u ON c.CustID = u.UserID\n"
             + "WHERE o.OrderID = ?";
-    
+    private static final String UPDATE_EMP_ROLE_STATUS = "UPDATE Users SET roleID = ?, status = ? WHERE UserID = ?";
+    private static final String GET_HASHED_PASSWORD = "SELECT password FROM Users WHERE UserID = ?";
+
+
     public UserDTO checkLogin(String email, String password) throws SQLException {
         UserDTO user = null;
         Connection conn = null;
@@ -309,8 +312,8 @@ public class UserDAO {
         }
         return result;
     }
-    
-    public boolean updateCustomerStatus (int userID, int status) throws SQLException {
+
+    public boolean updateCustomerStatus(int userID, int status) throws SQLException {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -437,7 +440,7 @@ public class UserDAO {
         return list;
 
     }
-    
+
     public List<UserDTO> getAllUsers() throws SQLException {
         List<UserDTO> list = new ArrayList<>();
         Connection conn = null;
@@ -744,42 +747,42 @@ public class UserDAO {
         return users;
     }
 
-     public CustomerDTO getCustomerInfo(int CustID) throws SQLException {
-         CustomerDTO customer = null;
-         Connection conn = null;
-         PreparedStatement ptm = null;
-         ResultSet rs = null;
-         try {
-             conn = DbUtils.getConnection();
-             if (conn != null) {
-                 ptm = conn.prepareStatement(GET_CUSTOMER_INFO);
-                 ptm.setInt(1, CustID);
-                 rs = ptm.executeQuery();
-                 if (rs.next()) {
-                     int points = rs.getInt("points");
-                     Date birthday = rs.getDate("birthday");
-                     String city = rs.getString("province_city");
-                     String district = rs.getString("district");
-                     String ward = rs.getString("ward");
-                     String address = rs.getString("detailAddress");
-                     customer = new CustomerDTO(CustID, points, birthday, city, district, ward, address);
-                 }
-             }
-         } catch (Exception e) {
-             e.printStackTrace();
-         } finally {
-             if (rs != null) {
-                 rs.close();
-             }
-             if (ptm != null) {
-                 ptm.close();
-             }
-             if (conn != null) {
-                 conn.close();
-             }
-         }
-         return customer;
-     }
+    public CustomerDTO getCustomerInfo(int CustID) throws SQLException {
+        CustomerDTO customer = null;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_CUSTOMER_INFO);
+                ptm.setInt(1, CustID);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    int points = rs.getInt("points");
+                    Date birthday = rs.getDate("birthday");
+                    String city = rs.getString("province_city");
+                    String district = rs.getString("district");
+                    String ward = rs.getString("ward");
+                    String address = rs.getString("detailAddress");
+                    customer = new CustomerDTO(CustID, points, birthday, city, district, ward, address);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return customer;
+    }
 
     public int updateUserPoint(int userID, int point) throws SQLException {
         Connection conn = null;
@@ -805,7 +808,7 @@ public class UserDAO {
         }
         return result;
     }
-    
+
     public CustomerDTO getFullCustomerByID(int CustID) throws SQLException {
         CustomerDTO customer = null;
         Connection conn = null;
@@ -817,7 +820,7 @@ public class UserDAO {
                 ptm = conn.prepareStatement(GET_FULL_CUSTOMER_BY_ID);
                 ptm.setInt(1, CustID);
                 rs = ptm.executeQuery();
-                if (rs.next()) { 
+                if (rs.next()) {
                     String userName = rs.getString("userName");
                     String email = rs.getString("email");
                     int phone = rs.getInt("phone");
@@ -846,8 +849,8 @@ public class UserDAO {
         }
         return customer;
     }
-    
-     public boolean updateUserAndCustomer(CustomerDTO customer) throws SQLException {
+
+    public boolean updateUserAndCustomer(CustomerDTO customer) throws SQLException {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptmUser = null;
@@ -873,7 +876,7 @@ public class UserDAO {
                 ptmCustomer.setString(3, customer.getDistrict());
                 ptmCustomer.setString(4, customer.getWard());
                 ptmCustomer.setString(5, customer.getAddress());
-                ptmCustomer.setInt(6, customer.getUserID());   
+                ptmCustomer.setInt(6, customer.getUserID());
                 boolean customerUpdated = ptmCustomer.executeUpdate() > 0;
 
                 // Check both updates
@@ -940,5 +943,62 @@ public class UserDAO {
             }
         }
         return user;
+    }
+
+    public boolean updateEmpRoleAndStatus(int userID, int roleID, int status) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(UPDATE_EMP_ROLE_STATUS);
+                ptm.setInt(1, roleID);
+                ptm.setInt(2, status);
+                ptm.setInt(3, userID);
+                check = ptm.executeUpdate() > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+    
+    public String getHashedPassword(int userID) throws SQLException {
+        String hashedPassword = null;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_HASHED_PASSWORD);
+                ptm.setInt(1, userID);
+                rs = ptm.executeQuery();
+                if(rs.next()){
+                    hashedPassword = rs.getString("password");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null){
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return hashedPassword;
     }
 }

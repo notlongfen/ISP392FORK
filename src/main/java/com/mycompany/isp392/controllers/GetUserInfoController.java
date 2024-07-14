@@ -12,7 +12,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
@@ -24,7 +24,8 @@ public class GetUserInfoController extends HttpServlet {
     private static final String ERROR = "AD_ManageUsers.jsp";
     private static final String EDIT_CUSTOMER = "AD_EditCustomer.jsp";
     private static final String EDIT_EMPLOYEE = "AD_EditEmployee.jsp";
-    
+    private static final String EDIT_EMP_PROFILE = "AD_EditProfile.jsp";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -35,17 +36,12 @@ public class GetUserInfoController extends HttpServlet {
             int userID = Integer.parseInt(request.getParameter("userID"));
             UserDTO user = dao.getUserByID(userID);
             int roleID = user.getRoleID();
-            if (user != null) {
-                if(roleID == 4){
-                    request.setAttribute("CUSTOMER", user);                
-                    url = EDIT_CUSTOMER;
-                } else {
-                    request.setAttribute("EMPLOYEE", user);                
-                    url = EDIT_EMPLOYEE;
-                }
+            if (roleID == 4) {
+                request.setAttribute("CUSTOMER", user);
+                url = EDIT_CUSTOMER;
             } else {
-                error.setError("UNABLE TO GET CATEGORY INFO FROM DATABASE !");
-                request.setAttribute("CATEGORY_ERROR", error);
+                request.setAttribute("EMPLOYEE", user);
+                url = EDIT_EMPLOYEE;
             }
         } catch (Exception e) {
             log("Error at GetCategoryInfoController: " + e.toString());

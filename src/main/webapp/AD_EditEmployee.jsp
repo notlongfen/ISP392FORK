@@ -55,14 +55,8 @@
                             <h2 class="text-center" style="color: #000; font-weight: bold;">Edit Employee</h2>
                             <form action="MainController" method="POST">
                                 <input type="hidden" name="userID" value="<%= user.getUserID()%>"/>
-
-                                <div class="form-row mb-3">         
-                                    <div class="form-group col-md-6">
-                                        <label for="userName">Employee Name</label>
-                                        <input type="text" class="form-control" id="userName" name="userName" value="<%= user.getUserName()%>" required=""/>
-                                    </div>
-
-                                    <div class="form-group col-md-6">
+                                <div class="form-row mb-3">
+                                     <div class="form-group col-md-6">
                                         <label for="roleID">Role</label>
                                         <select class="form-select form-control" id="roleID" aria-label=".form-select-sm" 
                                                 style="width: 375px" name="roleID">
@@ -71,22 +65,6 @@
                                             <option value="3" <%= user.getRoleID() == 3 ? "selected" : "" %>>Shop Staff</option>
                                         </select>
                                     </div>
-                                </div>
-
-                                <div class="form-row mb-3">
-                                    <div class="form-group col-md-6">
-                                        <input type="hidden" name="oldEmail" value="<%= user.getEmail()%>" readonly=""/>                                        
-                                        <label for="email">Email</label>
-                                        <input type="text" class="form-control" id="email" name="email" value="<%= user.getEmail()%>" required=""/>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <input type="hidden" name="oldPhone" value="<%= user.getPhone()%>" readonly=""/>
-                                        <label for="phone">Phone Number</label>
-                                        <input type="number" class="form-control" id="phone" name="phone" value="<%= user.getPhone()%>" required=""/>
-                                    </div>
-                                </div>
-
-                                <div class="form-row mb-3">
                                     <div class="form-group col-md-6">
                                         <label for="status">Status</label>
                                         <select name="status" style="width: 375px" class="form-select form-control" id="status" aria-label=".form-select-sm">
@@ -94,13 +72,7 @@
                                             <option value="1" <%= user.getStatus() == 1 ? "selected" : "" %>>Active</option>
                                         </select>
                                     </div>
-                                    <div class="form-group col-md-6">
-                                        <input type="hidden" name="currentPassword" value="<%= user.getPassword()%>" readonly=""/>
-                                        <label for="password">Password</label>
-                                        <input type="password" class="form-control" id="password" name="password" value=""/>
-                                    </div>
                                 </div>     
-
                                 <div class="form-group text-center">
                                     <button type="submit" name="action" value="EditEmployee" class="btn btn-danger btn-custom">Submit</button>
                                     <button type="reset" class="btn btn-secondary btn-custom">Reset</button>
