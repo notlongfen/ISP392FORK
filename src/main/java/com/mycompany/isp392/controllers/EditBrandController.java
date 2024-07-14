@@ -97,10 +97,17 @@ public class EditBrandController extends HttpServlet {
                         String action = request.getParameter("edit");
                         manage = new ManageBrandDTO(brandID, empID, oldList, newList, action);
                         boolean checkAdd = brandDAO.addManageBrand(manage);
+                        if(checkAdd) {
+                            request.setAttribute("SUCCESS_MESSAGE", "INFORMATION UPDATED SUCCESSFULLY!");
+                            url = SUCCESS;
+                        } else {
+                            brandError.setError("UNABLE TO UPDATE INFORMATION!");
+                            request.setAttribute("BRAND_ERROR", brandError);
+                        }
                     }
 
-                    request.setAttribute("SUCCESS_MESSAGE", "INFORMATION UPDATED SUCCESSFULLY!");
-                    url = SUCCESS;
+                    // request.setAttribute("SUCCESS_MESSAGE", "INFORMATION UPDATED SUCCESSFULLY!");
+                    // url = SUCCESS;
                 }
             } else {
                 brandError.setError("UNABLE TO UPDATE INFORMATION!");

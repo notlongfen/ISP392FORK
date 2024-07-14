@@ -30,7 +30,7 @@ public class DbUtils {
         return conn;
     }
 
-    public <T> boolean addCheckLogToDB(String tableName, String attributeName, T manageDTO) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+    public static <T> boolean addCheckLogToDB(String tableName, String attributeName, T manageDTO) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
         Connection conn = null;
         PreparedStatement ptm = null;
         try {

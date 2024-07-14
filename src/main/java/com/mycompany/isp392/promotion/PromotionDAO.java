@@ -26,7 +26,7 @@ public class PromotionDAO {
     private static final String EDIT_PROMOTION = "UPDATE Promotions Set promotionName=?, startDate=?, endDate=?, discountPer=?, condition=?, description=?, status=? WHERE promotionID = ?";
     private static final String GET_LATEST_PROMOTION_ID = "SELECT MAX(PromotionID) AS PromotionID FROM Promotions";
     private static final String CHECK_PROMOTION_DUPLICATE = "SELECT * FROM Promotions WHERE promotionName LIKE ? AND status = ?";
-    private static final String GET_PROMOTION_BY_ID = "SELECT promotionID, promotionName, startDate, endDate, discountPer, condition, description, status FROM Promotions WHERE promotionID = ?";
+    private static final String GET_PROMOTION_BY_ID = "SELECT promotionID, promotionName, startDate, endDate, discountPer, condition, description, status FROM Promotions WHERE promotionID = ? AND status = 1";
     private static final String GET_ALL_PROMOTIONS = "SELECT * FROM Promotions";
     private static final String VIEW_PROMOTION = "SELECT * FROM Promotions";
     private static final String GET_PROMOTION_BY_NAME = "SELECT promotionID, promotionName, startDate, endDate, discountPer, condition, description, status FROM Promotions WHERE promotionName = ? AND status = 1;";

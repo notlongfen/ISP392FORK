@@ -32,7 +32,7 @@ public class CartDAO {
             + "JOIN Products p ON cd.ProductID = p.ProductID "
             + "WHERE cd.CartID = ?";
     private static final String UPDATE_CART_STATUS = "UPDATE Carts SET status = ? WHERE cartID = ?";
-    private static final String GET_CART_INFO_BY_CUSTOMER_ID = "SELECT * FROM Carts WHERE CustID = ?";
+    private static final String GET_CART_INFO_BY_CUSTOMER_ID = "SELECT * FROM Carts WHERE CustID = ? AND status = 1";
     private static final String GET_CARTS_BY_PRODUCT = "SELECT * FROM Carts c JOIN CartDetails cd ON c.CartID = cd.CartID WHERE cd.ProductDetailsID = ?";
     private static final String UPDATE_CART_DETAILS_PRICE = "UPDATE CartDetails SET price = quantity * ? WHERE ProductDetailsID = ?";
 

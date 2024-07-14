@@ -92,7 +92,7 @@ public class CheckoutController extends HttpServlet {
         CartDTO cart = (CartDTO) session.getAttribute("CART_INFO");
         CartDAO cartDAO = new CartDAO();
         UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
-        
+
         // List<ProductDetailsDTO> products = (List<ProductDetailsDTO>)
         // session.getAttribute("LIST_PRODUCT");
         if (cart == null) {
@@ -104,8 +104,15 @@ public class CheckoutController extends HttpServlet {
                 request.getRequestDispatcher(url).forward(request, response);
             }
         }
-        String promotionIDS = request.getParameter("promotionID");
-        int promotionID = Integer.parseInt(promotionIDS);
+        
+        String promotionName = request.getParameter("promotionName");
+        if (promotionName == "") {
+            promotionName = "NOSALE";
+        }
+
+        if (cart.getPromotionID() == 0) {
+            cart.setPromotionID(2);
+        }
         if (user == null) {
             url = NOT_LOGED_IN;
             request.getRequestDispatcher(url).forward(request, response);
@@ -124,48 +131,54 @@ public class CheckoutController extends HttpServlet {
 
             List<CartDetailsDTO> cartDetails = cartDAO.getCartItems(cart.getCartID());
             // int userPoint = userDAO.getCustomerByID(userDTO.getUserID()).getPoints();
-            // int minPointToApplyCoupon = promotionDAO.getPromotionByID(promotionID).getCondition();
+            // int minPointToApplyCoupon =
+            // promotionDAO.getPromotionByID(promotionID).getCondition();
 
             // // Check if user point is enough to apply coupon
             // if (userPoint >= minPointToApplyCoupon) {
-            //     double percentage = promotionDAO.getPromotionByID(promotionID).getDiscountPer() / 100;
-            //     int point  = userDAO.getCustomerByID(userDTO.getUserID()).getPoints() - 100;
-            //     userDAO.updateUserPoint(userDTO.getUserID(), point);
-            //     cart.setTotalPrice(cart.getTotalPrice() - (cart.getTotalPrice() * percentage));
+            // double percentage =
+            // promotionDAO.getPromotionByID(promotionID).getDiscountPer() / 100;
+            // int point = userDAO.getCustomerByID(userDTO.getUserID()).getPoints() - 100;
+            // userDAO.updateUserPoint(userDTO.getUserID(), point);
+            // cart.setTotalPrice(cart.getTotalPrice() - (cart.getTotalPrice() *
+            // percentage));
 
-                
             // } else {
-            //     PromotionError pe = new PromotionError();
-            //     pe.setConditionError("Your membership point does not reach the condition of this promotion " + "("
-            //             + minPointToApplyCoupon + " points)" + "Your point: " + userPoint + " points");
-            //     request.setAttribute("PROMOTION_ERROR", pe);
-            //     return;
+            // PromotionError pe = new PromotionError();
+            // pe.setConditionError("Your membership point does not reach the condition of
+            // this promotion " + "("
+            // + minPointToApplyCoupon + " points)" + "Your point: " + userPoint + "
+            // points");
+            // request.setAttribute("PROMOTION_ERROR", pe);
+            // return;
             // }
-
-            if(promotionID != cart.getPromotionID()) {
+            PromotionDAO promotionDAO = new PromotionDAO();
+            PromotionDTO promotionInCart = promotionDAO.getPromotionByID(cart.getPromotionID());
+            String promotionNameInCart = promotionInCart.getPromotionName();
+            if (!promotionName.equals(promotionNameInCart)) {
                 PromotionError pe = new PromotionError();
                 pe.setConditionError("You should apply your current voucher first or retype the voucher code");
                 request.setAttribute("PROMOTION_ERROR", pe);
                 return;
-            }else{
+            } else if (promotionName.equals(promotionNameInCart) && promotionInCart.getDiscountPer() != 0) {
                 int point = userDAO.getCustomerByID(userDTO.getUserID()).getPoints() - 100;
                 userDAO.updateUserPoint(userDTO.getUserID(), point);
             }
 
-            //Add Order
+            // Add Order
             OrderDAO orderDAO = new OrderDAO();
             ProductDAO productDAO = new ProductDAO();
-            OrderDTO order = orderDAO.insertOrder(cart.getTotalPrice() + 40000, user.getUserID(), promotionID, cart.getCartID(),
+            OrderDTO order = orderDAO.insertOrder(cart.getTotalPrice() + 40000, user.getUserID(),
+                    promotionInCart.getPromotionID(), cart.getCartID(),
                     name, city, district, ward, address, phone, note);
-
 
             if (order != null) {
                 // OrderDetailsDTO odDTO = new OrderDetailsDTO(order.getOrderID(), cart.prod,
                 // promotionID, phone); //not done
                 // OrderDetailsDTO orderDetailsDTO = orderDAO.insertOrderDetails()
-                for (CartDetailsDTO cartDetail : cartDetails) { //Add order details
+                for (CartDetailsDTO cartDetail : cartDetails) { // Add order details
                     OrderDetailsDTO orderDetailsDTO = new OrderDetailsDTO(cartDetail.getProductDetailsID(),
-                            cartDetail.getProductID(), order.getOrderID(), cartDetail.getQuantity(),
+                            order.getOrderID(), cartDetail.getProductID(), cartDetail.getQuantity(),
                             cartDetail.getPrice());
                     orderDAO.insertOrderDetails(orderDetailsDTO);
                     productDAO.updateQuantittyAfterCheckout(cartDetail.getProductID(), cartDetail.getQuantity());
@@ -184,11 +197,11 @@ public class CheckoutController extends HttpServlet {
                 if (check) {
                     while (total >= 0) {
                         if (total >= 1000000) {
-                            total -= 1000000;
                             point += priceAndPoint.get(1000000);
+                            total -= 1000000;
                         } else if (total >= 500000) {
-                            total -= 500000;
                             point += priceAndPoint.get(500000);
+                            total -= 500000;
                         } else {
                             break;
                         }
@@ -197,9 +210,10 @@ public class CheckoutController extends HttpServlet {
                     int finalUserPoint = userDAO.updateUserPoint(userDTO.getUserID(), point);
 
                     if (finalUserPoint != 0) {
-                        //Update best sellet attribute
-                        for(CartDetailsDTO cartDetail : cartDetails) {
-                            productDAO.updateProductNumberOfPurchasedItems(cartDetail.getProductID(), cartDetail.getQuantity());
+                        // Update best sellet attribute
+                        for (CartDetailsDTO cartDetail : cartDetails) {
+                            productDAO.updateProductNumberOfPurchasedItems(cartDetail.getProductID(),
+                                    cartDetail.getQuantity());
                         }
                         url = SUCCESS;
                     }
@@ -208,6 +222,7 @@ public class CheckoutController extends HttpServlet {
 
         } catch (Exception e) {
             // TODO: handle exception
+            e.printStackTrace();
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

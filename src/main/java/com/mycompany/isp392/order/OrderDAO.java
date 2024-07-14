@@ -25,7 +25,7 @@ import utils.DbUtils;
  */
 public class OrderDAO {
 
-    private static final String ADD_ORDER = "INSERT INTO Orders (status, total, orderDate, CustID, promotionID, CartID, userName, city, district, ward, addresss, phone) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+    private static final String ADD_ORDER = "INSERT INTO Orders (status, total, orderDate, CustID, promotionID, CartID, userName, city, district, ward, address, phone, note) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
     private static final String GET_LAST_ORDER_ID = "SELECT MAX(orderID) FROM Orders";
     private static final String ADD_ORDER_DETAILS = "INSERT INTO OrderDetails (productDetailsID, orderID, productID, quantity, unitPrice) VALUES (?,?,?,?,?)";
     private static final String SEARCH_ORDERS = "SELECT * FROM Orders WHERE orderID LIKE ? OR orderDate LIKE ? OR total LIKE ? OR CustID LIKE ? OR CartID LIKE ?";
@@ -240,7 +240,7 @@ public class OrderDAO {
             pstm.setString(13, note);
             int row = pstm.executeUpdate();
             if (row > 0) {
-                orderDTO = new OrderDTO(dao.getLastOrderId(), 1, total, init, custId, promotionId, cartId, userName,
+                orderDTO = new OrderDTO(dao.getLastOrderId() - 1, 1, total, init, custId, promotionId, cartId, userName,
                         city, district, ward, address, phone, note);
             }
         } catch (Exception e) {

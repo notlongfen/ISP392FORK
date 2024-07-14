@@ -208,7 +208,7 @@ public class MainController extends HttpServlet {
     private static final String VIEW_CHECKOUT_CONTROLLER = "ViewCheckoutController";
     
     private static final String PLACE_ORDER = "Place Order";
-    private static final String CHECKOUT_CONTROLLER = "US_OrderDetail.jsp";
+    private static final String CHECKOUT_CONTROLLER = "CheckoutController";
 
     private static final String VIEW_PROFILE = "View profile";
     private static final String VIEW_PROFILE_CONTROLLER = "ViewProfileController";
