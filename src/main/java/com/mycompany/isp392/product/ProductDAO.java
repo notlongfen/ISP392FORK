@@ -49,22 +49,13 @@ public class ProductDAO {
     private static final String SEARCH_BRAND_BY_ID = "SELECT * FROM Brands WHERE brandID LIKE ?";
     private static final String SELECT_CATEGORY_PRODUCT = "SELECT * FROM Products p JOIN ProductDetails pd ON p.ProductID = pd.ProductID JOIN ProductBelongtoCategories pbc ON p.ProductID = pbc.ProductID "
             + "JOIN Categories c ON pbc.Categories = c.CategoryID WHERE c.CategoriesName = ?";
-    private static final String SELECT__WISHLIST = "SELECT wd.ProductID, p.productName, pd.image, b.BrandName, pd.price "
-            + "FROM Wishlists w JOIN WishlistDetails wd ON w.WishlistID = wd.WishlistID JOIN Products p ON wd.ProductID = p.ProductID JOIN ProductDetails pd ON p.ProductID = pd.ProductID JOIN  Brands b ON p.BrandID = b.BrandID "
-            + "WHERE w.CustID = ? ";
-    private static final String DELETE__WISHLIST = "DELETE FROM WishlistDetails "
-            + "WHERE WishlistID = (SELECT WishlistID FROM Wishlists WHERE CustID = ?) "
-            + "AND ProductID = ?";
+
 //    private static final String EDIT_PRODUCT = "UPDATE Products SET productName=?, description=?, numberOfPurchasing=?, brandID=?, status = ? WHERE productID=?";
     private static final String EDIT_PRODUCT = "UPDATE Products SET productName=?, description=?, numberOfPurchasing=?, brandID=?, status = ? WHERE productID=?";
     private static final String DELETE_PRODUCT_CATEGORIES = "DELETE FROM ProductBelongtoCDCategories WHERE ProductID=?";
     private static final String ADD_PRODUCT_CATEGORY = "INSERT INTO ProductBelongtoCDCategories (ProductID, CDCategoryID) VALUES (?, ?)";
     private static final String GET_CATEGORIES_BY_PRODUCT_ID = "SELECT c.* FROM Categories c INNER JOIN ProductBelongtoCDCategories pbc ON c.categoryID = pbc.CDCategoryID WHERE pbc.ProductID = ?";
     private static final String GET_PRODUCT_DETAILS_BY_ID = "SELECT * FROM ProductDetails WHERE ProductDetailsID LIKE ? AND status = 1";
-
-    private static final String ADD__WISHLIST = "insert into Wishlists(CustID) values (?)";
-    private static final String SHOW__WISHLIST = "select * from Wishlists where CustID = ?";
-    private static final String ADD__WISHLISTDETAIl = "insert into WishlistDetails (WishlistID,ProductID) values (?,?) ";
     private static final String GET_PRODUCT_INFO_TO_SENDMAIL = "SELECT p.productName, pd.color, pd.size, pd.price, pd.image FROM Orders o"
             + "INNER JOIN OrderDetails od ON o.OrderID = od.OrderID"
             + "INNER JOIN Products p ON od.ProductID = p.ProductID"
@@ -497,10 +488,12 @@ public class ProductDAO {
                     int productID = rs.getInt("ProductID");
                     String productName = rs.getString("productName");
                     String description = rs.getString("description");
-                    int numberOfPurchasing = rs.getInt("numberOfPurchasing");
+                    int numberOfPurchasing = rs.getInt("NumberOfPurchasing");
                     int status = rs.getInt("status");
-                    int brandID = rs.getInt("brandID");
+
+                    int brandID = rs.getInt("BrandID");
                     products.add(new ProductDTO(productID, productName, description, numberOfPurchasing, status, brandID));
+
                 }
             }
         } catch (Exception e) {
@@ -737,67 +730,9 @@ public class ProductDAO {
         return products;
     }
 
-    public List<ProductDetailsDTO> showWishlist(int cusID) throws SQLException {
-        List<ProductDetailsDTO> products = new ArrayList<>();
-        Connection conn = null;
-        PreparedStatement ptm = null;
-        ResultSet rs = null;
-        try {
-            conn = DbUtils.getConnection();
-            if (conn != null) {
-                ptm = conn.prepareStatement(SELECT__WISHLIST);
-                ptm.setInt(1, cusID);
-                rs = ptm.executeQuery();
-                while (rs.next()) {
-                    int productID = rs.getInt("ProductID");
-                    String name = rs.getString("productName");
-                    int price = rs.getInt("price");
-                    String images = rs.getString("image");
-                    String brandName = rs.getString("BrandName");
-                    products.add(new ProductDetailsDTO(productID, name, images, price, brandName));
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (rs != null) {
-                rs.close();
-            }
-            if (ptm != null) {
-                ptm.close();
-            }
-            if (conn != null) {
-                conn.close();
-            }
-        }
-        return products;
-    }
+   
 
-    public boolean deleteWishlist(int cusID, int productID) throws SQLException {
-        boolean result = false;
-        Connection conn = null;
-        PreparedStatement stm = null;
-        try {
-            conn = DbUtils.getConnection();
-            if (conn != null) {
-                stm = conn.prepareStatement(DELETE__WISHLIST);
-                stm.setInt(1, cusID);
-                stm.setInt(2, productID);
-                int value = stm.executeUpdate();
-                result = value > 0 ? true : false;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (stm != null) {
-                stm.close();
-            }
-            if (conn != null) {
-                conn.close();
-            }
-        }
-        return result;
-    }
+    
 
     public ProductDetailsDTO selectProductDetailByID(int productDetailID) throws SQLException {
         ProductDetailsDTO productDetail = null;
@@ -841,30 +776,7 @@ public class ProductDAO {
         return productDetail;
     }
 
-    public boolean addToWishlist(int custID) throws SQLException {
-        boolean check = false;
-        Connection conn = null;
-        PreparedStatement ptm = null;
-        try {
-            conn = DbUtils.getConnection();
-            if (conn != null) {
-                ptm = conn.prepareStatement(ADD__WISHLIST);
-                ptm.setInt(1, custID);
-                check = ptm.executeUpdate() > 0;
-
-            }
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (ptm != null) {
-                ptm.close();
-            }
-            if (conn != null) {
-                conn.close();
-            }
-        }
-        return check;
-    }
+    
 
     public boolean checkDuplicateProductDetail(int productID, String color, String size) throws SQLException {
         boolean isDuplicate = false;
@@ -936,38 +848,7 @@ public class ProductDAO {
         return latestImportDates;
     }
 
-    public WishlistDTO SelectWishlist(int custID) throws SQLException {
-        WishlistDTO wishlist = null;
-        Connection conn = null;
-        PreparedStatement ptm = null;
-        ResultSet rs = null;
-        try {
-            conn = DbUtils.getConnection();
-            if (conn != null) {
-                ptm = conn.prepareStatement(SHOW__WISHLIST);
-                ptm.setInt(1, custID);
-                rs = ptm.executeQuery();
-                if (rs.next()) {
-                    int wID = rs.getInt("WishlistID");
-//                    int cID = rs.getInt("CustID");
-                    wishlist = new WishlistDTO(wID, custID);
-                }
-            }
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (rs != null) {
-                rs.close();
-            }
-            if (ptm != null) {
-                ptm.close();
-            }
-            if (conn != null) {
-                conn.close();
-            }
-        }
-        return wishlist;
-    }
+    
 
     public boolean updateQuantittyAfterCheckout(int productID, int quantity) throws SQLException {
         boolean result = false;
@@ -996,34 +877,7 @@ public class ProductDAO {
         return result;
     }
 
-    public boolean addToWishlistDetail(int wishlistID, int productID) throws SQLException {
-        boolean check = false;
-        Connection conn = null;
-        PreparedStatement ptm = null;
-        try {
-            conn = DbUtils.getConnection();
-            if (conn != null) {
-                ptm = conn.prepareStatement(ADD__WISHLISTDETAIl);
-                ptm.setInt(1, wishlistID);
-                ptm.setInt(2, productID);
-                check = ptm.executeUpdate() > 0;
-
-            }
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (ptm != null) {
-                ptm.close();
-
-            }
-            if (conn != null) {
-                conn.close();
-            }
-        }
-
-        return check;
-    }
-
+   
     public List<ProductDetailsDTO> getAllProductDetails() throws SQLException {
         String sql = "SELECT * FROM ProductDetails";
         Connection conn = null;
@@ -1470,6 +1324,29 @@ public class ProductDAO {
         return productDetailsList;
     }
 
+//    public static void main(String[] args) throws SQLException {
+//        ProductDAO dao = new ProductDAO();
+////        List<ProductDTO> allProducts = dao.getAllProductPags(1, 10);
+////        for (ProductDTO allProduct : allProducts) {
+////            System.out.println(allProduct);
+////        }
+//
+////        int total = dao.getTotalProductCount();
+////        System.out.println("Total product is: " + total);
+////
+////        List<ProductDetailsDTO> lists = dao.getProductDetailsByProductID(3);
+////        for (ProductDetailsDTO list : lists) {
+////            System.out.println(list);
+////        }
+//        String color = "Black";
+//        int productID = 3;
+////       
+//        List<ProductDetailsDTO> products = dao.getProductDetailsByBrand(3);
+//        for (ProductDTO product : products) {
+//            System.out.println(product);
+//        }
+//
+//    }
     public List<ProductDetailsDTO> getProductInfoToSendMail(int orderID) throws SQLException {
         List<ProductDetailsDTO> products = new ArrayList<>();
         Connection conn = null;
@@ -1889,4 +1766,5 @@ public class ProductDAO {
         }
         return id;
     }
+
 }

@@ -7,6 +7,7 @@ package com.mycompany.isp392.controllers;
 import com.mycompany.isp392.product.ProductDAO;
 import com.mycompany.isp392.product.ProductDetailsDTO;
 import com.mycompany.isp392.user.UserDTO;
+import com.mycompany.isp392.wishlist.WishlistDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -33,7 +34,7 @@ public class WishlistController extends HttpServlet {
         String url = ERROR;
         try {
             HttpSession session = request.getSession();
-            ProductDAO dao = new ProductDAO();
+            WishlistDAO dao = new WishlistDAO();
             UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
             int cusID = user.getUserID();
             if (user != null) {

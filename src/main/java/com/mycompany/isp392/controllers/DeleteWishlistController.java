@@ -7,6 +7,7 @@ package com.mycompany.isp392.controllers;
 import com.mycompany.isp392.product.ProductDAO;
 import com.mycompany.isp392.product.ProductDetailsDTO;
 import com.mycompany.isp392.user.UserDTO;
+import com.mycompany.isp392.wishlist.WishlistDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -33,19 +34,19 @@ public class DeleteWishlistController extends HttpServlet {
         String url = ERROR;
         try {
             HttpSession session = request.getSession();
-            ProductDAO dao = new ProductDAO();
+            WishlistDAO dao = new WishlistDAO();
             UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
             int cusID = user.getUserID();
             int productID = Integer.parseInt(request.getParameter("productID"));
-//            UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
-//            boolean check = dao.deleteWishlist(userID);
-//            if (check) {
-//                url = SUCCESS;
-//            }
+            int productDetailID = Integer.parseInt(request.getParameter("producDetailID"));
 
             if (user != null) {
-                boolean check = dao.deleteWishlist(cusID, productID);
+                boolean check = dao.deleteWishlist(cusID, productID, productDetailID);
                 if (check) {
+                    boolean allDetailsZero = dao.areAllWishlistDetailsZero(cusID);
+                    if (allDetailsZero) {
+                        dao.updateWishlistStatus(cusID, 0);
+                    }
                     url = SUCCESS;
                 }
             } else {

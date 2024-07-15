@@ -134,12 +134,13 @@
                                                     <td class="text-center"><img src="<%= brand.getImage() %>" alt="Brand Image" style="max-width: 100px; max-height: 100px;"></td>
                                                     <td class="text-center"><span class="badge <%= brand.getStatus() == 1 ? "badge-success" : "badge-warning" %>"><%= brand.getStatus() == 1 ? "Available" : "Deleted" %></span></td>
                                                     <td class="text-center action-buttons">
+                                                        <form action="MainController" method="post" style="display:inline;">
                                                         <% if (brand.getStatus() == 1) { %>
                                                             <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirmDeleteModal" data-id="<%= brand.getBrandID() %>" data-status="<%= brand.getStatus() %>">Delete</button>
                                                         <% } else { %>
                                                             <button type="button" class="btn btn-sm btn-danger delete-btn-disabled" disabled aria-disabled="true">Delete</button>
                                                         <% } %>
-                                                        <form action="MainController" method="post" style="display:inline;">
+                                                            <input type="hidden" name="id" value="<%= brand.getBrandID() %>">
                                                             <input type="hidden" name="brandID" value="<%= brand.getBrandID() %>">
                                                             <button type="submit" class="btn btn-sm btn-dark" name="action" value="Edit_Brand_Page">Edit</button>
                                                         </form>

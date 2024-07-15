@@ -19,8 +19,10 @@ import org.mindrot.jbcrypt.BCrypt;
 public class DbUtils {
 
 
-    private static Dotenv dotenv = Dotenv.configure().directory("/home/notlongfen/code/java/ISP392/.env").load();
-    private static final String CHECK_LOG_FORMAT = "INSERT INTO ? (EmpID, ?, FieldOld, FieldNew, Action) VALUES (?, ?, ?, ?, ?)";
+
+private static final String CHECK_LOG_FORMAT = "INSERT INTO %s (EmpID, %s, FieldOld, FieldNew, Action) VALUES (?, ?, ?, ?, ?)"; 
+
+    private static Dotenv dotenv = Dotenv.configure().directory("D:\\FPT\\K5\\ISP392\\ISP392_Test").load();
 
     public static Connection getConnection() throws ClassNotFoundException, SQLException {
         Connection conn = null;
@@ -30,28 +32,34 @@ public class DbUtils {
         return conn;
     }
 
-    public static <T> boolean addCheckLogToDB(String tableName, String attributeName, T manageDTO) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-        Connection conn = null;
-        PreparedStatement ptm = null;
-        try {
-            conn = getConnection();
-            ptm = conn.prepareStatement(CHECK_LOG_FORMAT);
-            ptm.setString(1, tableName);
-            ptm.setString(2, attributeName);
-            ptm.setInt(3, (int) manageDTO.getClass().getMethod("getEmpID").invoke(manageDTO));
-            ptm.setString(4, manageDTO.getClass().getMethod("get" + attributeName).invoke(manageDTO).toString());
-            ptm.setString(5, manageDTO.getClass().getMethod("getFieldOld").invoke(manageDTO).toString());
-            ptm.setString(6, manageDTO.getClass().getMethod("getFieldNew").invoke(manageDTO).toString());
-            ptm.setString(7, manageDTO.getClass().getMethod("getAction").invoke(manageDTO).toString());
-            ptm.executeUpdate();
-            return true;
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        } finally {
-            closeConnection(conn, ptm);
-        }
-        return false;
+
+
+
+ public static <T> boolean addCheckLogToDB(String tableName, String attributeName, T manageDTO) 
+        throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+    boolean check = false;
+    Connection conn = null;
+    PreparedStatement ptm = null;
+    try {
+        conn = getConnection();
+        
+        String query = String.format(CHECK_LOG_FORMAT, tableName, attributeName);
+        ptm = conn.prepareStatement(query);
+        
+        ptm.setInt(1, (int) manageDTO.getClass().getMethod("getEmpID").invoke(manageDTO));
+        ptm.setInt(2, (int) manageDTO.getClass().getMethod("get" + attributeName).invoke(manageDTO));
+        ptm.setString(3, manageDTO.getClass().getMethod("getOldField").invoke(manageDTO).toString());
+        ptm.setString(4, manageDTO.getClass().getMethod("getNewField").invoke(manageDTO).toString());
+        ptm.setString(5, manageDTO.getClass().getMethod("getAction").invoke(manageDTO).toString());
+        
+        check = ptm.executeUpdate() > 0;
+    } catch (ClassNotFoundException | SQLException e) {
+        e.printStackTrace();
+    } finally {
+        closeConnection(conn, ptm);
     }
+    return check;
+}
 
     public static void closeConnection(Connection conn, PreparedStatement ptm, ResultSet rs) {
         try {

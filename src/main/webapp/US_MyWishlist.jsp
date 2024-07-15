@@ -142,7 +142,7 @@
                             <h5><%= list.getProductName() %></h5>
                             <p style="margin-top: 20px;"><%= list.getBrandName() %></p>
                             <div class="text-left">
-                                <a href="MainController?action=deleteWishlist&productID=<%=list.getProductID()%>" class="remove"><i class="remove-btn fas fa-trash"></i></a>
+                                <a href="MainController?action=deleteWishlist&productID=<%=list.getProductID()%>&producDetailID=<%=list.getProductDetailsID()%>" class="remove"><i class="remove-btn fas fa-trash"></i></a>
                             </div>
                         </div>
                         <div class="col-md-3 text-end">
@@ -160,25 +160,7 @@
                     <%
                     }
                     %>
-                    <!--                    <div class="wishlist-item row mb-4">
-                                            <div class="col-md-2 text-center">
-                                                <img src="images/product_8.png" alt="Jordan 1 Retro High Light Smoke Grey" class="img-fluid">
-                                            </div>
-                                            <div class="col-md-7">
-                                                <h5>Jordan 1 Retro High Light Smoke Grey Night</h5>
-                                                <p style="margin-top: 20px;">Shoes</p>
-                     
-                                                <div class="text-left">
-                                                    <a href="#"class="remove"><i class="remove-btn fas fa-trash"></i></a>
-                                                </div>  
-                                            </div>
-                                            <div class="col-md-3 text-end">
-                                                <p class="inline text-decoration-line-through same-size" >$1,000</p>
-                                                <p class="inline text-danger fs-4 same-size" >$500</p>
-                                                <p class="text-muted small no-wrap" style="font-size: 15px">Sale ends 6/13/2024 at 10:00 PM</p>
-                                                <button class="btn btn-dark" style="width: 150px; margin-top: 50px;">Add to Cart</button>
-                                            </div>
-                                        </div>-->
+
                 </div>
             </div>
         </div>

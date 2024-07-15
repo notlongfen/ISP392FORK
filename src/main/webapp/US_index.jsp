@@ -128,12 +128,23 @@
             }
 
             /*Support*/
+            .product_image1 {
+                width: 220px;  /* Đặt kích thước cố định cho phần tử cha */
+                height: 200px; /* Đặt kích thước cố định cho phần tử cha */
+                overflow: hidden; /* Ẩn phần nào của hình ảnh vượt quá kích thước khung chứa */
+            }
+
+            .product_image1 img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover; /* Bạn có thể thử 'cover' hoặc 'contain' tùy theo mong muốn */
+            }
 
 
         </style>
     </head>
     <body>
-
+        
         <div class="super_container">
             <%@include file="US_header.jsp" %>
 
@@ -229,14 +240,14 @@
                                 %>
                                 <div class="product-item <%= categoryClass.trim() %>">
                                     <div class="product discount product_filter">
-                                        <div class="product_image">
+                                        <div class="product_image1">
                                             <a href="MainController?action=Get_product_detail&productID=<%= product.getProductID() %>&color=<%= firstDetail.getColor() %>" class="image">
                                                 <img src="<%= firstDetail.getImage().split(";")[0] %>" alt="<%= product.getProductName() %>">
                                             </a>
                                         </div>
                                         <div class="favorite favorite_left"></div>
                                         <div class="product_info">
-                                            <h6 class="product_name"><a href=""MainController?action=Get_product_detail&productID=<%= product.getProductID() %>&color=<%= firstDetail.getColor() %>""><%= product.getProductName() %></a></h6>
+                                            <h6 class="product_name"><a href="MainController?action=Get_product_detail&productID=<%= product.getProductID() %>&color=<%= firstDetail.getColor() %>"><%= product.getProductName() %></a></h6>
                                             <div class="product_price" style="color: #C53337">$<%= firstDetail.getPrice() %></div>
                                         </div>
                                     </div>

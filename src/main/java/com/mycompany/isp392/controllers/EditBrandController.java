@@ -21,6 +21,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
+import java.lang.reflect.InvocationTargetException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import utils.DbUtils;
 
 @MultipartConfig
 @WebServlet(name = "EditBrandController", urlPatterns = {"/EditBrandController"})
@@ -33,7 +37,7 @@ public class EditBrandController extends HttpServlet {
     private static final int IMAGE_HEIGHT = 500; // Set desired image height
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, SecurityException, NoSuchMethodException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         BrandError brandError = new BrandError();
@@ -56,7 +60,7 @@ public class EditBrandController extends HttpServlet {
                 brandError.setBrandNameError("Brand already exists.");
                 checkValidation = false;
             }
-
+            String oldImagePath = brandDAO.getBrandImagePath(brandID);
             String imagePath = brandDAO.getBrandImagePath(brandID); // Get current image path
             if (filePart != null && filePart.getSize() > 0) {
                 String path = getServletContext().getRealPath("") + File.separator + UPLOAD_DIRECTORY;
@@ -92,11 +96,16 @@ public class EditBrandController extends HttpServlet {
                         oldList.add(String.valueOf(oldStatus));
                         newList.add(String.valueOf(newStatus));
                     }
+                    
+                    if(!oldImagePath.equals(imagePath)) {
+                        oldList.add(oldImagePath);
+                        newList.add(imagePath);
+                    }
 
                     if (!oldList.isEmpty() && !newList.isEmpty()) {
                         String action = request.getParameter("edit");
                         manage = new ManageBrandDTO(brandID, empID, oldList, newList, action);
-                        boolean checkAdd = brandDAO.addManageBrand(manage);
+                        boolean checkAdd = DbUtils.addCheckLogToDB("ManageBrands", "BrandID", manage);
                         if(checkAdd) {
                             request.setAttribute("SUCCESS_MESSAGE", "INFORMATION UPDATED SUCCESSFULLY!");
                             url = SUCCESS;
@@ -104,6 +113,7 @@ public class EditBrandController extends HttpServlet {
                             brandError.setError("UNABLE TO UPDATE INFORMATION!");
                             request.setAttribute("BRAND_ERROR", brandError);
                         }
+//                        boolean checkAdd = brandDAO.addManageBrand(manage);
                     }
 
                     // request.setAttribute("SUCCESS_MESSAGE", "INFORMATION UPDATED SUCCESSFULLY!");
@@ -123,13 +133,37 @@ public class EditBrandController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(EditBrandController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(EditBrandController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvocationTargetException ex) {
+            Logger.getLogger(EditBrandController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SecurityException ex) {
+            Logger.getLogger(EditBrandController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchMethodException ex) {
+            Logger.getLogger(EditBrandController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(EditBrandController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(EditBrandController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvocationTargetException ex) {
+            Logger.getLogger(EditBrandController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SecurityException ex) {
+            Logger.getLogger(EditBrandController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchMethodException ex) {
+            Logger.getLogger(EditBrandController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override

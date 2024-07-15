@@ -100,7 +100,7 @@
             .product-grid:hover .product-links {
                 right: 10px;
             }
-            .product-grid .product-links li a {
+            .product-grid .product-links li button {
                 color: #333;
                 background: transparent;
                 font-size: 17px;
@@ -110,7 +110,7 @@
                 display: block;
                 transition: all 0.3s;
             }
-            .product-grid .product-links li a:hover {
+            .product-grid .product-links li button:hover {
                 color: #c53337;
             }
             .product-grid .add-to-cart {
@@ -199,6 +199,18 @@
                 color: #999;
                 pointer-events: none;
             }
+
+            .product_image1 {
+                width: 270px;  /* Đặt kích thước cố định cho phần tử cha */
+                height: 250px; /* Đặt kích thước cố định cho phần tử cha */
+                overflow: hidden; /* Ẩn phần nào của hình ảnh vượt quá kích thước khung chứa */
+            }
+
+            .product_image1 img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover; /* Bạn có thể thử 'cover' hoặc 'contain' tùy theo mong muốn */
+            }
         </style>
     </head>
     <body>
@@ -272,12 +284,14 @@
                         <div class="col-md-4 mb-4">
                             <div class="product-grid">
                                 <div class="product-image">
-                                    <a href="MainController?action=Get_product_detail&productID=<%= product.getProductID() %>&color=<%= firstDetail.getColor() %>" class="image">
-                                        <img src="<%= firstDetail.getImage().split(";")[0] %>" alt="<%= product.getProductName() %>">
+                                    <a href="MainController?action=Get_product_detail&productID=<%= product.getProductID() %>&color=<%= firstDetail.getColor() %>" >
+                                        <div class="product_image1">
+                                            <img  src="<%= firstDetail.getImage().split(";")[0] %>" alt="<%= product.getProductName() %>">
+                                        </div>
                                     </a>
-                                    <ul class="product-links">
-                                        <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                    </ul>
+                                     <ul class="product-links">
+                                            <li><button type="submit" name="action" value="AddToWishlist"><i class="fa fa-heart"></i></button></li>
+                                        </ul>
                                 </div>
                                 <div class="product-content">
                                     <h3 class="title"><a href="MainController?action=Get_product_detail&productID=<%= product.getProductID() %>&color=<%= firstDetail.getColor() %>"><%= product.getProductName() %></a></h3>
