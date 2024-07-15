@@ -24,7 +24,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet(name = "ForgotPasswordController", urlPatterns = { "/ForgotPasswordController" })
 public class ForgotPasswordController extends HttpServlet {
     private static final String ERROR = "US_ForgotPassword.jsp";
-    private static final String SUCCESS = "US_CreateNewPassword.jsp";
+    private static final String SUCCESS = "NotificationMail.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -45,7 +45,7 @@ public class ForgotPasswordController extends HttpServlet {
         String url = ERROR;
         ForgetPasswordErrors error = new ForgetPasswordErrors();
         try {
-            String email = request.getParameter("email");
+            String email = request.getParameter("toEmail");
             UserDAO dao = new UserDAO();
             ForgetPasswordDAO fpdao = new ForgetPasswordDAO();
             int userID = dao.checkEmailExists(email);

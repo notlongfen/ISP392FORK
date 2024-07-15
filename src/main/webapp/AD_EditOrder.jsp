@@ -114,12 +114,33 @@
                                                     <td class="text-center"><%= order.getPhone() %></td>
                                                     <td class="text-center"><%= order.getNote() %></td>
                                                     <td class="text-center">
-                                                        <input type="hidden" name="orderID" value="<%= order.getOrderID() %>">
+                                                        <input type="hidden" name="orderID" value="<%= order.getOrderID() %>">    
                                                         <select name="status" class="form-control">
-                                                            <option value="0" <%= order.getStatus() == 0 ? "selected" : "" %> >Canceled</option>
-                                                            <option value="1" <%= order.getStatus() == 1 ? "selected" : "" %>>In processing</option>
-                                                            <option value="2" <%= order.getStatus() == 2 ? "selected" : "" %>>Delivering</option>
-                                                            <option value="3" <%= order.getStatus() == 3 ? "selected" : "" %>>Completed</option>
+                                                            <%
+                                                                int currentStatus = order.getStatus();
+                                                                if (currentStatus == 1) {
+                                                            %>
+                                                            <option value="0" <%= currentStatus == 0 ? "selected" : "" %> >Canceled</option>
+                                                            <option value="1" <%= currentStatus == 1 ? "selected" : "" %>>Pending</option>
+                                                            <option value="2" <%= currentStatus == 2 ? "selected" : "" %>>In processing</option>
+                                                            <%
+                                                                } if (currentStatus == 2) {
+                                                            %>
+                                                            <option value="2" <%= currentStatus == 2 ? "selected" : "" %>>In processing</option>
+                                                            <option value="3" <%= currentStatus == 3 ? "selected" : "" %>>Delivering</option>
+                                                            <%
+                                                                } if (currentStatus == 3) {
+                                                            %>
+                                                            <option value="3" <%= currentStatus == 3 ? "selected" : "" %>>Delivering</option>
+                                                            <option value="4" <%= currentStatus == 4 ? "selected" : "" %>>Completed</option>
+                                                            <%
+                                                                } if (currentStatus == 4) {
+                                                            %>
+                                                            <option value="4" <%= currentStatus == 4 ? "selected" : "" %>>Completed</option>
+                                                            <option value="0" <%= currentStatus == 0 ? "selected" : "" %> >Canceled</option>
+                                                            <%
+                                                                }
+                                                            %>
                                                         </select>
                                                     </td>
                                                 </tr>
@@ -157,7 +178,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                            <%--                                            <a href="MainController?action=Update_Order_Status&orderID=<%= order.getOrderID()%>&status=<%= order.getStatus() %>" class="btn btn-primary btn-danger" style="">Save</a> --%>
+                                <%--                                            <a href="MainController?action=Update_Order_Status&orderID=<%= order.getOrderID()%>&status=<%= order.getStatus() %>" class="btn btn-primary btn-danger" style="">Save</a> --%>
 
                                 <!--<div class="card-footer"></div>-->
                             </div>
@@ -166,27 +187,7 @@
                     </div>
                     <!--Row-->
 
-                    <!-- Modal Logout -->
-                    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabelLogout">Ohh No!</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <p>Are you sure you want to logout?</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
-                                    <a href="login.html" class="btn btn-primary">Logout</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+                 
                     <!---Mode up delete item in voice -->
                     <!-- Modal Xác nhận Xóa -->
                     <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">

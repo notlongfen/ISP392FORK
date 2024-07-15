@@ -10,12 +10,23 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import com.mycompany.isp392.promotion.*;
+import jakarta.servlet.annotation.MultipartConfig;
+import jakarta.servlet.http.Part;
+import java.io.File;
+import java.nio.file.Paths;
+import java.util.Collection;
+import java.util.UUID;
+import net.coobird.thumbnailator.Thumbnails;
 
+@MultipartConfig
 @WebServlet(name = "AddPromotionController", urlPatterns = {"/AddPromotionController"})
 public class AddPromotionController extends HttpServlet {
 
+    private static final String UPLOAD_DIRECTORY = "images";
     private static final String ERROR = "AD_CreatePromotion.jsp";
     private static final String SUCCESS = "GetPromotionListController";
+    private static final int IMAGE_WIDTH = 500; // Set desired image width
+    private static final int IMAGE_HEIGHT = 500; // Set desired image height
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -31,7 +42,10 @@ public class AddPromotionController extends HttpServlet {
             int discountPer = Integer.parseInt(request.getParameter("discountPer"));
             int condition = Integer.parseInt(request.getParameter("condition"));
             String description = request.getParameter("description");
+            Collection<Part> fileParts = request.getParts();
             int status = 1;
+
+            StringBuilder imagePathBuilder = new StringBuilder();
 
             if (dao.checkPromotionDuplicate(promotionName, status)) {
                 error.setPromotionNameError("This promotion already exists.");
@@ -54,9 +68,35 @@ public class AddPromotionController extends HttpServlet {
                 checkValidation = false;
             }
 
+            // Image upload logic
+            for (Part filePart : fileParts) {
+                if (filePart.getName().equals("images") && filePart.getSize() > 0) {
+                    String path = getServletContext().getRealPath("") + File.separator + UPLOAD_DIRECTORY;
+                    File uploadDir = new File(path);
+                    if (!uploadDir.exists()) {
+                        uploadDir.mkdirs();
+                    }
+
+                    String fileName = UUID.randomUUID().toString() + "_" + Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+                    String imagePath = UPLOAD_DIRECTORY + File.separator + fileName;
+                    File outputFile = new File(path + File.separator + fileName);
+
+                    Thumbnails.of(filePart.getInputStream())
+                            .size(IMAGE_WIDTH, IMAGE_HEIGHT)
+                            .toFile(outputFile);
+
+                    if (imagePathBuilder.length() > 0) {
+                        imagePathBuilder.append(";");
+                    }
+                    imagePathBuilder.append(imagePath);
+                }
+            }
+
+            String imagePaths = imagePathBuilder.toString();
+
             if (checkValidation) {
                 int promotionID = dao.getLatestPromotionID() + 1;
-                PromotionDTO promotion = new PromotionDTO(promotionID, promotionName, startDate, endDate, discountPer, condition, description, status);
+                PromotionDTO promotion = new PromotionDTO(promotionID, promotionName, startDate, endDate, discountPer, imagePaths, condition, description, 1);
                 boolean checkPromotion = dao.addPromotion(promotion);
                 if (checkPromotion) {
                     request.setAttribute("SUCCESS_MESSAGE", "PROMOTION ADDED SUCCESSFULLY !");
@@ -72,7 +112,7 @@ public class AddPromotionController extends HttpServlet {
         } catch (Exception e) {
             log("Error at AddPromotionController: " + e.toString());
         } finally {
-             request.getRequestDispatcher(url).forward(request, response);
+            request.getRequestDispatcher(url).forward(request, response);
         }
     }
 

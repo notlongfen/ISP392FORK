@@ -63,6 +63,12 @@ public class PromotionCheckerController extends HttpServlet {
             if (cart == null) {
                 cart = cartDAO.getCartByCustomerID(userDTO.getUserID());
 //                request.setAttribute("CART_TOTAL_PRICE", cart);
+                cart.setPromotionID(promotionDAO.getPromotionByName(promotionName).getPromotionID());
+                boolean checkUpdate = cartDAO.updateCartPromotion(cart.getPromotionID(), cart.getCartID());
+                if(!checkUpdate){
+                    request.setAttribute("UPDATE_ERROR", "Cannot update promotionID in cart");
+                    return;
+                }
                 if (cart == null) {
                     CartError error = new CartError();
                     error.setError("Your cart is empty");
@@ -90,6 +96,11 @@ public class PromotionCheckerController extends HttpServlet {
                 double newPrice = cart.getTotalPrice() - (cart.getTotalPrice() * percentage) + 40000;
                 cart.setTotalPrice(newPrice);
                 List<CartDetailsDTO> cartList = cartDAO.getCartItems(cart.getCartID());
+                boolean checkUpdate = cartDAO.updateCartNewPrice(cart.getTotalPrice(), cart.getCartID());
+                if(!checkUpdate){
+                    request.setAttribute("UPDATE_ERROR", "Cannot update total price in cart");
+                    return;
+                }
                 request.setAttribute("CART_CHECKOUT", cartList);
                 request.setAttribute("CART_TOTAL_PRICE", originalPrice); // Đặt giá gốc vào thuộc tính request
                 request.setAttribute("CART_FINAL_PRICE", cart.getTotalPrice()); // Đặt giá sau khuyến mãi vào thuộc tính request

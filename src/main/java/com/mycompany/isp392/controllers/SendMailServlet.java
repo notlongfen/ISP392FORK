@@ -63,7 +63,7 @@ public class SendMailServlet extends HttpServlet {
     }
 
     private boolean sendEmail(String toEmail, String subject, String messageBody, boolean isHtml) {
-        final Dotenv dotenv = Dotenv.configure().directory("/home/notlongfen/code/java/ISP392/.env").load();
+        final Dotenv dotenv = Dotenv.configure().directory("D:\\Document\\FPT\\HK5_SU24\\ISP392\\ISP392\\.env").load();
         final String fromEmail = dotenv.get("GOOGLE_SENDMAIL_EMAIL");
         final String password = dotenv.get("GOOGLE_SENDMAIL_PASSWORD");
 
@@ -183,10 +183,10 @@ public class SendMailServlet extends HttpServlet {
         String statusName = "";
 
         if (status == 0) {
-            statusName = "Canceled";
-            emailContent += "<p>We are sorry that your order with ID #" + orderID + " has been cancelled. We hope to see you again soon. Thank you for your interest in our products!</p>";
+            statusName = "CANCELED";
+            emailContent += "<p>Your order with ID #" + orderID + " has been cancelled. We hope to see you again soon. Thank you for your interest in our products!</p>";
         } else if (status == 1) {
-            statusName = "In processing";
+            statusName = "PENDING";
             emailContent += "<p>Thank you for ordering from our website. We are pleased to confirm the receipt of your order #" + orderID + ", dated " + order.getOrderDate() + ". <b>PLEASE CHECK YOUR ORDER DETAILS BELOW AGAIN!</b></p>"
                     + "<h3>Summary:</h3>"
                     + "<ul>";
@@ -203,16 +203,19 @@ public class SendMailServlet extends HttpServlet {
                     + "<li>Total Amount: " + order.getTotal() + "</li>"
                     + "<li>Delivery Address: " + order.getAddress() + ", " + order.getWard() + ", " + order.getDistrict() + ", " + order.getCity() + "</li>"
                     + "</ul>"
-                    + "<p>Your order is now being processed and we will ensure its prompt dispatch. You will receive a notification once your order has been shipped.</p>"
-                    + "<p>We appreciate the trust you have placed in us and aim to provide you with the highest quality of service. If you have any questions or need further assistance, please do not hesitate to contact our customer service team at micomicomun@gmail.com or 0123456789.</p>"
+                    + "<p><b>If there is any problem, please contact us via email micomicomun@gmail.com or phone number 0123456789 for the earliest support</b></p>"
+                    + "<p>We appreciate the trust you have placed in us and aim to provide you with the highest quality of service. Your order is currently awaiting confirmation. We will send you a notification when the order is confirmed.</p>"
                     + "<p>Thank you for choosing us. We value your business and look forward to serving you again.</p>"
                     + "<p>Warm regards,</p>"
                     + "<p>ISP392.</p>";
         } else if (status == 2) {
-            statusName = "Delivering";
-            emailContent += "<p>Your order #" + orderID + " is currently being delivered. Please expect your items soon.</p>";
+            statusName = "IN PROCESSING";
+            emailContent += "<p>Your order #" + orderID + " has been confirmed and is being prepared. We will notify you as soon as it is sent to the shipping carrier.</p>";
         } else if (status == 3) {
-            statusName = "Completed";
+            statusName = "DELIVERING";
+            emailContent += "<p>Your order #" + orderID + " is currently being delivered. Please expect your items soon.</p>";
+        } else if (status == 4) {
+            statusName = "COMPLETED";
             emailContent += "<p>Your order #" + orderID + " has been successfully delivered. Thank you for shopping with us!</p>";
         }
 

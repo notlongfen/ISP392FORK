@@ -89,7 +89,7 @@ public class CheckoutController extends HttpServlet {
         processRequest(request, response);
         String url = ERROR;
         HttpSession session = request.getSession();
-        CartDTO cart = (CartDTO) session.getAttribute("CART_INFO");
+        CartDTO cart = (CartDTO) request.getAttribute("CART_INFO");
         CartDAO cartDAO = new CartDAO();
         UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
 
@@ -111,7 +111,7 @@ public class CheckoutController extends HttpServlet {
         }
 
         if (cart.getPromotionID() == 0) {
-            cart.setPromotionID(2);
+            cart.setPromotionID(3);
         }
         if (user == null) {
             url = NOT_LOGED_IN;
@@ -168,7 +168,7 @@ public class CheckoutController extends HttpServlet {
             // Add Order
             OrderDAO orderDAO = new OrderDAO();
             ProductDAO productDAO = new ProductDAO();
-            OrderDTO order = orderDAO.insertOrder(cart.getTotalPrice() + 40000, user.getUserID(),
+            OrderDTO order = orderDAO.insertOrder(cart.getTotalPrice(), user.getUserID(),
                     promotionInCart.getPromotionID(), cart.getCartID(),
                     name, city, district, ward, address, phone, note);
 

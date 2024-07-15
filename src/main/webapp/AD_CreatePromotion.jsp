@@ -21,59 +21,67 @@
             .form-group label {
                 font-weight: bold;
             }
+            .image-preview {
+                width: 100px;
+                height: 100px;
+                margin: 10px;
+                object-fit: cover;
+            }
         </style>
     </head>
     <body id="page-top">
-
         <div id="wrapper">
             <!-- Sidebar -->
             <%@include file="AD_sidebar.jsp" %>
             <!-- Sidebar -->
             <div id="content-wrapper" class="d-flex flex-column">
-
                 <div id="content">
                     <!-- Header -->
                     <%@include file="AD_header.jsp" %>
                     <%
-                                if (loginUser == null || 2 != loginUser.getRoleID()) {
-                                    response.sendRedirect("US_SignIn.jsp");
-                                    return;
-                                }
+                        if (loginUser == null || 2 != loginUser.getRoleID()) {
+                            response.sendRedirect("US_SignIn.jsp");
+                            return;
+                        }
                     %>
                     <div class="container-fluid" id="container-wrapper">
-
                         <div class="form-container">
                             <h2 class="text-center" style="color: #000; font-weight: bold;">Create New Promotion</h2>
-                            <form action="MainController">
+                            <form action="AddPromotionController" method="post" enctype="multipart/form-data">
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label for="promotionName">Code Name</label>
-                                        <input type="text" class="form-control" id="promotionName" placeholder="Enter Code Name" name="promotionName">
+                                        <input type="text" class="form-control" id="promotionName" placeholder="Enter Code Name" name="promotionName" required>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="discountPer">Percentage</label>
-                                        <input type="text" class="form-control" id="discountPer" placeholder="Enter Percentage" name="discountPer">
+                                        <input type="text" class="form-control" id="discountPer" placeholder="Enter Percentage" name="discountPer" required>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label for="startDate">Start Date</label>
-                                        <input type="date" class="form-control" id="startDate" name="startDate">
+                                        <input type="date" class="form-control" id="startDate" name="startDate" required>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="endDate">End Date</label>
-                                        <input type="date" class="form-control" id="endDate" name="endDate">
+                                        <input type="date" class="form-control" id="endDate" name="endDate" required>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label for="description">Description</label>
-                                        <input type="text" class="form-control" id="description" placeholder="Enter Description" name="description">
+                                        <input type="text" class="form-control" id="description" placeholder="Enter Description" name="description" required>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="condition">Condition</label>
-                                        <input type="text" class="form-control" id="condition" placeholder="Enter Condition" name="condition">
+                                        <input type="text" class="form-control" id="condition" placeholder="Enter Condition" name="condition" required>
                                     </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="uploadImages">Upload Images</label>
+                                    <input type="file" class="form-control-file" id="uploadImages" name="images" multiple>
+                                    <div id="imagePreviewContainer" class="image-preview-container"></div>
                                 </div>
                                 <div class="form-group text-center">
                                     <button type="submit" class="btn btn-danger btn-custom" name="action" value="Add_Promotion">Submit</button>
@@ -84,7 +92,6 @@
                     </div>
                 </div>
             </div>
-
             <!-- Error Modal -->
             <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -103,35 +110,35 @@
                                         if (promotionError.getPromotionNameError() != null && !promotionError.getPromotionNameError().isEmpty()) {
                                 %>
                                 <li class="list-group-item list-group-item-danger"><%= promotionError.getPromotionNameError() %></li>
-                                    <%
-                                            }
-                                            if (promotionError.getStartDateError() != null && !promotionError.getStartDateError().isEmpty()) {
-                                    %>
-                                <li class="list-group-item list-group-item-danger"><%= promotionError.getStartDateError() %></li>
-                                    <%
-                                            }
-                                            if (promotionError.getEndDateError() != null && !promotionError.getEndDateError().isEmpty()) {
-                                    %>
-                                <li class="list-group-item list-group-item-danger"><%= promotionError.getEndDateError() %></li>
-                                    <%
-                                            }
-                                            if (promotionError.getDiscountPerError() != null && !promotionError.getDiscountPerError().isEmpty()) {
-                                    %>
-                                <li class="list-group-item list-group-item-danger"><%= promotionError.getDiscountPerError() %></li>
-                                    <%
-                                            }
-                                            if (promotionError.getConditionError() != null && !promotionError.getConditionError().isEmpty()) {
-                                    %>
-                                <li class="list-group-item list-group-item-danger"><%= promotionError.getConditionError() %></li>
-                                    <%
-                                            }
-                                            if (promotionError.getError() != null && !promotionError.getError().isEmpty()) {
-                                    %>
-                                <li class="list-group-item list-group-item-danger"><%= promotionError.getError() %></li>
-                                    <%
-                                            }
+                                <%
                                         }
-                                    %>
+                                        if (promotionError.getStartDateError() != null && !promotionError.getStartDateError().isEmpty()) {
+                                %>
+                                <li class="list-group-item list-group-item-danger"><%= promotionError.getStartDateError() %></li>
+                                <%
+                                        }
+                                        if (promotionError.getEndDateError() != null && !promotionError.getEndDateError().isEmpty()) {
+                                %>
+                                <li class="list-group-item list-group-item-danger"><%= promotionError.getEndDateError() %></li>
+                                <%
+                                        }
+                                        if (promotionError.getDiscountPerError() != null && !promotionError.getDiscountPerError().isEmpty()) {
+                                %>
+                                <li class="list-group-item list-group-item-danger"><%= promotionError.getDiscountPerError() %></li>
+                                <%
+                                        }
+                                        if (promotionError.getConditionError() != null && !promotionError.getConditionError().isEmpty()) {
+                                %>
+                                <li class="list-group-item list-group-item-danger"><%= promotionError.getConditionError() %></li>
+                                <%
+                                        }
+                                        if (promotionError.getError() != null && !promotionError.getError().isEmpty()) {
+                                %>
+                                <li class="list-group-item list-group-item-danger"><%= promotionError.getError() %></li>
+                                <%
+                                        }
+                                    }
+                                %>
                             </ul>
                         </div>
                         <div class="modal-footer">
@@ -140,7 +147,6 @@
                     </div>
                 </div>
             </div>
-
             <% if (request.getAttribute("PROMOTION_ERROR") != null) { %>
             <script>
                 $(document).ready(function () {
@@ -148,7 +154,24 @@
                 });
             </script>
             <% } %>
-
+            <script>
+                $(document).ready(function () {
+                    $('#uploadImages').on('change', function () {
+                        $('#imagePreviewContainer').empty(); // Clear previous previews
+                        var files = this.files;
+                        if (files) {
+                            $.each(files, function (index, file) {
+                                var reader = new FileReader();
+                                reader.onload = function (e) {
+                                    var img = $('<img>').attr('src', e.target.result).addClass('image-preview').show();
+                                    $('#imagePreviewContainer').append(img);
+                                }
+                                reader.readAsDataURL(file);
+                            });
+                        }
+                    });
+                });
+            </script>
             <!-- Include necessary scripts -->
             <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
             <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDzwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

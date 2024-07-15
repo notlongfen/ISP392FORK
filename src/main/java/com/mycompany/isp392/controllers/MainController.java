@@ -61,6 +61,9 @@ public class MainController extends HttpServlet {
 
     private static final String SENDMAIL = "Send_Email";
     private static final String SEND_EMAIL_CONTROLLER = "SendMailServlet";
+    
+    private static final String REPLY_SUPPORT = "Reply_Support";
+    private static final String SEND_EMAIL_REPLY_SUPPORT = "SendMailServlet";
 
     private static final String GET_SUPPORT_LIST = "Manage_Support";
     private static final String GET_SUPPORT_LIST_CONTROLLER = "GetSupportListController";
@@ -73,6 +76,9 @@ public class MainController extends HttpServlet {
 
     private static final String REPLY_SUPPORT_PAGE = "ReplySupport";
     private static final String REPLY_SUPPORT_PAGE_VIEW = "GetSupportInfoController";
+    
+    private static final String BACK_SUPPORT_PAGE = "Back_To_SupportList";
+    private static final String BACK_SUPPORT_PAGE_VIEW = "GetSupportListController";
 
     private static final String SEARCH_PROMOTION = "Search promotion";
     private static final String SEARCH_PROMOTION_CONTROLLER = "SearchPromotionController";
@@ -85,6 +91,9 @@ public class MainController extends HttpServlet {
 
     private static final String DELETE_PROMOTION = "DeletePromotion";
     private static final String DELETE_PROMOTION_CONTROLLER = "DeletePromotionController";
+    
+    private static final String VIEW_PROMOTION_DETAIL = "ViewDetailPromotion";
+    private static final String VIEW_PROMOTION_DETAIL_CONTROLLER = "ViewPromotionDetailController";
 
     private static final String ADD_CATEGORY_PAGE = "Add_Category_View";
     private static final String ADD_CATEGORY_PAGE_VIEW = "addCategory.jsp";
@@ -290,6 +299,8 @@ public class MainController extends HttpServlet {
                 url = REGISTER_CONTROLLER;
             } else if (SENDMAIL.equals(action)) {
                 url = SEND_EMAIL_CONTROLLER;
+            } else if (REPLY_SUPPORT.equals(action)) {
+                url = SEND_EMAIL_REPLY_SUPPORT;
             } else if (ADD_PRODUCT.equals(action)) {
                 url = ADD_PRODUCT_CONTROLLER;
             } else if (VIEW_SUPPORT_PAGE.equals(action)) {
@@ -300,6 +311,8 @@ public class MainController extends HttpServlet {
                 url = SEARCH_SUPPORT_CONTROLLER;
             } else if (REPLY_SUPPORT_PAGE.equals(action)) {
                 url = REPLY_SUPPORT_PAGE_VIEW;
+            } else if (BACK_SUPPORT_PAGE.equals(action)) {
+                url = BACK_SUPPORT_PAGE_VIEW;
             } else if (ADD_PRODUCT_PAGE.equals(action)) {
                 url = ADD_PRODUCT_PAGE_VIEW;
             } else if (ADD_BRAND.equals(action)) {
@@ -324,6 +337,8 @@ public class MainController extends HttpServlet {
                 url = EDIT_PROMOTION_CONTROLLER;
             } else if (DELETE_PROMOTION.equals(action)) {
                 url = DELETE_PROMOTION_CONTROLLER;
+            } else if (VIEW_PROMOTION_DETAIL.equals(action)) {
+                url = VIEW_PROMOTION_DETAIL_CONTROLLER;
             } else if (ADD_CATEGORY_PAGE.equals(action)) {
                 url = ADD_CATEGORY_PAGE_VIEW;
             } else if (ADD_CATEGORY.equals(action)) {

@@ -75,19 +75,19 @@
                search = "";
            }
                     %>
-                    <form action="MainController">
-                        <div class="container-fluid" id="container-wrapper">
-                            <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                                <h1 class="h3 mb-0 text-gray-900"><b>Promotions</b></h1>
-                            </div>
-                            <div class="d-flex justify-content-end mb-4">
-                                <a href="AD_CreatePromotion.jsp" class="btn btn-danger" style="background: #C43337;">Create Promotion</a>
-                            </div>
-                            <div class="row mb-3">
-                                <!-- Invoice Example -->
-                                <div class="col-xl-12 mb-4">
-                                    <div class="card">
 
+                    <div class="container-fluid" id="container-wrapper">
+                        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                            <h1 class="h3 mb-0 text-gray-900"><b>Promotions</b></h1>
+                        </div>
+                        <div class="d-flex justify-content-end mb-4">
+                            <a href="AD_CreatePromotion.jsp" class="btn btn-danger" style="background: #C43337;">Create Promotion</a>
+                        </div>
+                        <div class="row mb-3">
+                            <!-- Invoice Example -->
+                            <div class="col-xl-12 mb-4">
+                                <div class="card">
+                                    <form action="MainController">
                                         <div class="table-responsive">
                                             <div class="container">
                                                 <input type="date" id="ngayBatDau" placeholder="Start Date">
@@ -103,37 +103,42 @@
                                             <table class="table align-items-center table-flush">
                                                 <thead class="thead-light">
                                                     <tr>
-                                                        <th>NO</th>
-                                                        <th>ID</th>
-                                                        <th>Code Name</th>
-                                                        <th>Start Date</th>
-                                                        <th>End Date</th>
-                                                        <th>Percentage</th>
-                                                        <th>Condition</th>
-                                                        <th>Description</th>
-                                                        <th>Status</th>
+                                                        <th class="text-center">ID</th>
+                                                        <th class="text-center">Code Name</th>
+                                                        <th class="text-center">Start Date</th>
+                                                        <th class="text-center">End Date</th>
+                                                        <th class="text-center">Percentage</th>
+                                                        <th class="text-center">Condition</th>
+                                                        <th class="text-center">Status</th>
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
                                                 <%
                                                 List<PromotionDTO> promotionList = (List<PromotionDTO>) request.getAttribute("LIST_PROMOTION");
                                                 if (promotionList != null) {
-                                                    int count = 1;
                                                     for (PromotionDTO promotion : promotionList) {
                                                 %>
                                                 <tbody id="tableBody">
                                                     <tr>
-                                                        <td><%= count++ %></td>
                                                         <td class="text-center"><%= promotion.getPromotionID() %></td>
-                                                        <td class="text-center"><%= promotion.getPromotionName() %></td>
+                                                        <td class="text-center"><a href="MainController?action=ViewDetailPromotion&promotionID=<%= promotion.getPromotionID() %>"><%= promotion.getPromotionName() %></td>
                                                         <td class="text-center"><%= promotion.getStartDate() %></td>
                                                         <td class="text-center"><%= promotion.getEndDate() %></td>
                                                         <td class="text-center"><%= promotion.getDiscountPer() %></td>
                                                         <td class="text-center">Points >=<%= promotion.getCondition() %></td>
-                                                        <td class="text-center"><%= promotion.getDescription() %></td>
                                                         <td class="text-center"><span class="badge <%= promotion.getStatus() == 1 ? "badge-success" : "badge-warning" %>"><%= promotion.getStatus() == 1 ? "Available" : "Deleted" %></span></td>
                                                         <td>
-                                                            <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirmDeleteModal" data-id="<%= promotion.getPromotionID() %>">Delete</button>
+                                                            <% 
+                                                            if (promotion.getStatus() == 0){  
+                                                            %>
+                                                            <a href="#" class="btn btn-sm btn-danger disabled" aria-disabled="true">Delete</a> 
+                                                            <% 
+                                                                } else {  
+                                                            %>
+                                                            <a href="MainController?action=DeletePromotion&promotionID=<%= promotion.getPromotionID() %>" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirmDeleteModal" data-id="<%= promotion.getPromotionID() %>">Delete</a> 
+                                                            <% 
+                                                                }
+                                                            %>
                                                             <a href="MainController?action=EditPromotion&promotionID=<%= promotion.getPromotionID()%>" class="btn btn-sm btn-dark">Edit</a>
                                                         </td>
                                                     </tr>                                        
@@ -171,136 +176,137 @@
                                             </nav>
                                             <!-- End Pagination -->
                                         </div>
-                                        <div class="card-footer"></div>
+                                    </form>
+                                    <div class="card-footer"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Row-->
+
+                        <!-- Modal Logout -->
+                        <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabelLogout">Oh No!</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Are you sure you want to logout?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
+                                        <a href="US_SignIn.jsp" class="btn btn-primary">Logout</a>
                                     </div>
                                 </div>
                             </div>
-                            <!--Row-->
+                        </div>
 
-                            <!-- Modal Logout -->
-                            <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabelLogout">Oh No!</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p>Are you sure you want to logout?</p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
-                                            <a href="US_SignIn.jsp" class="btn btn-primary">Logout</a>
-                                        </div>
+                        <!---Mode up delete item in voice -->
+                        <!-- Modal Xác nhận Xóa -->
+                        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-danger text-white">
+                                        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Delete</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are you sure you want to delete this item?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <form id="deleteForm" method="post">
+                                            <input type="hidden" name="id" id="modalID" value="">
+                                            <input type="hidden" name="action" value="DeletePromotion">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                            <!---Mode up delete item in voice -->
-                            <!-- Modal Xác nhận Xóa -->
-                            <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header bg-danger text-white">
-                                            <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Delete</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            Are you sure you want to delete this item?
-                                        </div>
-                                        <div class="modal-footer">
-                                            <form id="deleteForm" method="post">
-                                                <input type="hidden" name="id" id="modalID" value="">
-                                                <input type="hidden" name="action" value="DeletePromotion">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                <button type="submit" class="btn btn-danger">Delete</button>
-                                            </form>
-                                        </div>
+                        <!-- Success Modal -->
+                        <% if (request.getAttribute("SUCCESS_MESSAGE") != null) { %>
+                        <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-success text-white">
+                                        <h5 class="modal-title" id="successModalLabel">Success</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <span id="successMessage"></span>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <% } %>
+                        <script>
+                            //Sort Date
+                            function locNgay() {
+                                const ngayBatDau = document.getElementById('ngayBatDau').value;
+                                const ngayKetThuc = document.getElementById('ngayKetThuc').value;
+                                const tableBody = document.getElementById('tableBody');
+                                const rows = tableBody.getElementsByTagName('tr');
 
-                            <!-- Success Modal -->
-                            <% if (request.getAttribute("SUCCESS_MESSAGE") != null) { %>
-                            <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header bg-success text-white">
-                                            <h5 class="modal-title" id="successModalLabel">Success</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <span id="successMessage"></span>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <% } %>
-                            <script>
-                                //Sort Date
-                                function locNgay() {
-                                    const ngayBatDau = document.getElementById('ngayBatDau').value;
-                                    const ngayKetThuc = document.getElementById('ngayKetThuc').value;
-                                    const tableBody = document.getElementById('tableBody');
-                                    const rows = tableBody.getElementsByTagName('tr');
+                                if (ngayBatDau && ngayKetThuc) {
+                                    const startDate = new Date(ngayBatDau);
+                                    const endDate = new Date(ngayKetThuc);
 
-                                    if (ngayBatDau && ngayKetThuc) {
-                                        const startDate = new Date(ngayBatDau);
-                                        const endDate = new Date(ngayKetThuc);
+                                    for (let i = 0; i < rows.length; i++) {
+                                        const cells = rows[i].getElementsByTagName('td');
+                                        const ngayBatDauRow = new Date(cells[3].textContent.trim());
+                                        const ngayKetThucRow = new Date(cells[4].textContent.trim());
 
-                                        for (let i = 0; i < rows.length; i++) {
-                                            const cells = rows[i].getElementsByTagName('td');
-                                            const ngayBatDauRow = new Date(cells[3].textContent.trim());
-                                            const ngayKetThucRow = new Date(cells[4].textContent.trim());
-
-                                            if (ngayBatDauRow >= startDate && ngayKetThucRow <= endDate) {
-                                                rows[i].style.display = '';
-                                            } else {
-                                                rows[i].style.display = 'none';
-                                            }
-                                        }
-                                    } else {
-                                        for (let i = 0; i < rows.length; i++) {
+                                        if (ngayBatDauRow >= startDate && ngayKetThucRow <= endDate) {
                                             rows[i].style.display = '';
+                                        } else {
+                                            rows[i].style.display = 'none';
                                         }
+                                    }
+                                } else {
+                                    for (let i = 0; i < rows.length; i++) {
+                                        rows[i].style.display = '';
                                     }
                                 }
+                            }
 
-                                // Handle delete modal
-                                document.querySelectorAll('.btn-danger[data-toggle="modal"]').forEach(btn => {
-                                    btn.addEventListener('click', function () {
-                                        const id = this.getAttribute('data-id');
-                                        document.getElementById('modalID').value = id;
-                                    });
+                            // Handle delete modal
+                            document.querySelectorAll('.btn-danger[data-toggle="modal"]').forEach(btn => {
+                                btn.addEventListener('click', function () {
+                                    const id = this.getAttribute('data-id');
+                                    document.getElementById('modalID').value = id;
                                 });
+                            });
 
-                                // Display success modal if message exists
-                                $(document).ready(function () {
-                                    const successMessage = '<%= request.getAttribute("SUCCESS_MESSAGE") %>';
-                                    if (successMessage) {
-                                        document.getElementById('successMessage').innerText = successMessage;
-                                        $('#successModal').modal('show');
-                                    }
-                                });
-                            </script>
+                            // Display success modal if message exists
+                            $(document).ready(function () {
+                                const successMessage = '<%= request.getAttribute("SUCCESS_MESSAGE") %>';
+                                if (successMessage) {
+                                    document.getElementById('successMessage').innerText = successMessage;
+                                    $('#successModal').modal('show');
+                                }
+                            });
+                        </script>
 
-                            <script src="vendor/jquery/jquery.min.js"></script>
-                            <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-                            <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-                            <script src="js/ruang-admin.min.js"></script>
-                            <script src="vendor/chart.js/Chart.min.js"></script>
-                            <script src="js/demo/chart-area-demo.js"></script>  
-                            <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-                            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDzwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-                            <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-                            </body>
-                            </html>
+                        <script src="vendor/jquery/jquery.min.js"></script>
+                        <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+                        <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+                        <script src="js/ruang-admin.min.js"></script>
+                        <script src="vendor/chart.js/Chart.min.js"></script>
+                        <script src="js/demo/chart-area-demo.js"></script>  
+                        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+                        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDzwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+                        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+                        </body>
+                        </html>

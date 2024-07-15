@@ -29,11 +29,10 @@ public class GetOrderListController extends HttpServlet {
         String url = ERROR;
         OrderDAO orderDAO = new OrderDAO();
         try {
-            if (request.getParameter("orderID") == null) {
                 List<OrderDTO> orderList = orderDAO.getAllOrder();
                 request.setAttribute("LIST_ORDER", orderList);
                 url = SUCCESS;
-            }
+            
         } catch (SQLException e) {
             log("Error at GetOrderListController: " + e.toString());
         } finally {

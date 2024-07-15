@@ -139,9 +139,6 @@
                                                List<UserDTO> user = (List<UserDTO>) request.getAttribute("USER_LIST");
                                                if (supportList != null) {
                                                     for (int i=0;i<supportList.size();i++) {
-                                                
-                                                    int count = 1;
-                                                
                                                        if(user != null){ %>
                                             <tr>
                                                 <td class="text-center"><%= supportList.get(i).getSupportID()%></td>
@@ -149,9 +146,9 @@
                                                 <td class="text-center"><%= user.get(i).getEmail() %></td>
                                                 <td class="text-center"><%= user.get(i).getPhone() %></td>
                                                 <td class="text-center"><%= supportList.get(i).getRequestDate() %></td>
-                                                <td class="text-center"><span class="badge <%= supportList.get(i).getStatus() == 1 ? "badge-success" : "badge-warning" %>"><%= supportList.get(i).getStatus() == 1 ? "Done" : "Not yet" %></span></td>
+                                                <td class="text-center"><span class="badge <%= supportList.get(i).getStatus() == 0 ? "badge-success" : "badge-warning" %>"><%= supportList.get(i).getStatus() == 0 ? "Done" : "Not yet" %></span></td>
                                                 <td class="text-center">
-                                                    <% if (supportList.get(i).getStatus() == 1) { %>
+                                                    <% if (supportList.get(i).getStatus() == 0) { %>
                                                     <a href="MainController?action=ViewSupport&email=<%= user.get(i).getEmail() %>&supportID=<%=supportList.get(i).getSupportID()%>" class="btn btn-sm " style="background: green ; color: #FFF">View</a>
                                                     <% 
                                                         } else { 
@@ -164,14 +161,14 @@
                                             <tbody id="tableBody">
 
                                                 <tr>
-                                                    <td class="text-center"><%= count++ %></td>
+                                                    <td class="text-center"><%= supportList.get(i).getSupportID()%></td>
                                                     <td class="text-center"><%= userSupportList.get(i).getUserName() %></td> 
                                                     <td class="text-center"><%= userSupportList.get(i).getEmail() %></td>
                                                     <td class="text-center"><%= userSupportList.get(i).getPhone() %></td>
                                                     <td class="text-center"><%= supportList.get(i).getRequestDate() %></td>
-                                                    <td class="text-center"><span class="badge <%= supportList.get(i).getStatus() == 1 ? "badge-success" : "badge-warning" %>"><%= supportList.get(i).getStatus() == 1 ? "Done" : "Not yet" %></span></td>
+                                                    <td class="text-center"><span class="badge <%= supportList.get(i).getStatus() == 0 ? "badge-success" : "badge-warning" %>"><%= supportList.get(i).getStatus() == 0 ? "Done" : "Not yet" %></span></td>
                                                     <td>
-                                                        <% if (supportList.get(i).getStatus() == 1) { %>
+                                                        <% if (supportList.get(i).getStatus() == 0) { %>
                                                         <a href="MainController?action=ViewSupport&email=<%= userSupportList.get(i).getEmail() %>&supportID=<%=supportList.get(i).getSupportID()%>" class="btn btn-sm " style="background: green ; color: #FFF">View</a>
                                                         <% } else { %>
                                                         <a href="MainController?action=ReplySupport&supportID=<%=supportList.get(i).getSupportID()%>" class="btn btn-sm " style="background: #528CE0 ; color: #FFF">Reply</a>

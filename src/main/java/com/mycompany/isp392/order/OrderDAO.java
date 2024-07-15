@@ -464,6 +464,7 @@ public class OrderDAO {
                 if (rs.next()) {
                     double total = rs.getDouble("total");
                     int promotionID = rs.getInt("promotionID");
+                    int status = rs.getInt("status");
                     Date orderDate = rs.getDate("orderDate");
                     String userName = rs.getString("userName");
                     String city = rs.getString("city");
@@ -472,7 +473,7 @@ public class OrderDAO {
                     String address = rs.getString("address");
                     int phone = rs.getInt("phone");
                     String note = rs.getString("note");
-                    order = new OrderDTO(orderID, total, orderDate, userName, city, district, ward, address, phone, note);
+                    order = new OrderDTO(orderID,status, total, orderDate, userName, city, district, ward, address, phone, note);
                 }
             }
         } catch (Exception e) {

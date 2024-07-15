@@ -150,14 +150,16 @@
                                                     <td class="text-center"><%= order.getTotal() %></td>
                                                     <td class="text-left">
                                                         <span class="badge 
-                                                              <%= order.getStatus() == 0 ? "badge-danger" : 
-                                                                  order.getStatus() == 1 ? "badge-warning" : 
-                                                                  order.getStatus() == 2 ? "badge-info" : 
-                                                                  order.getStatus() == 3 ? "badge-success" : "" %>">
+                                                              <%= order.getStatus() == 0 ? "badge-secondary" : 
+                                                                  order.getStatus() == 1 ? "badge-danger" : 
+                                                                  order.getStatus() == 2 ? "badge-warning" : 
+                                                                  order.getStatus() == 3 ? "badge-info" : 
+                                                                  order.getStatus() == 4 ? "badge-success" : "" %>">
                                                             <%= order.getStatus() == 0 ? "Canceled" : 
-                                                                order.getStatus() == 1 ? "In processing" : 
-                                                                order.getStatus() == 2 ? "Delivering" : 
-                                                                order.getStatus() == 3 ? "Completed" : "" %>
+                                                                order.getStatus() == 1 ? "Pending" : 
+                                                                order.getStatus() == 2 ? "In processing" : 
+                                                                order.getStatus() == 3 ? "Delivering" : 
+                                                                order.getStatus() == 4 ? "Completed" : "" %>
                                                         </span>
                                                     </td>  
                                                     <td> 
@@ -175,7 +177,6 @@
                                                         %>
                                                         <!-- EDIT -->
                                                         <a href="MainController?action=EditOrder&orderID=<%= order.getOrderID()%>" class="btn btn-sm btn-dark">Edit</a>
-
                                                     </td>
                                                 </tr>                                        
                                             </tbody>
@@ -210,27 +211,27 @@
                             </div>
                         </div>
                         <!--Row-->
-
-                        <!-- Modal Logout -->
-                        <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
+                        <!-- Success Modal -->
+                        <% if (request.getAttribute("SUCCESS_MESSAGE") != null) { %>
+                        <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
                                 <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabelLogout">Ohh No!</h5>
+                                    <div class="modal-header bg-success text-white">
+                                        <h5 class="modal-title" id="successModalLabel">Success</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <p>Are you sure you want to logout?</p>
+                                        <span id="successMessage"></span>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
-                                        <a href="login.html" class="btn btn-primary">Logout</a>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <% } %>
 
                         <!---Mode up delete item in voice -->
                         <!-- Modal Xác nhận Xóa -->
@@ -325,7 +326,14 @@
                 // Xóa dòng
                 rowToDelete.remove();
             });
-
+            // Display success modal if message exists
+            $(document).ready(function () {
+                const successMessage = '<%= request.getAttribute("SUCCESS_MESSAGE") %>';
+                if (successMessage) {
+                    document.getElementById('successMessage').innerText = successMessage;
+                    $('#successModal').modal('show');
+                }
+            });
         </script>
         <script src="vendor/jquery/jquery.min.js"></script>
         <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

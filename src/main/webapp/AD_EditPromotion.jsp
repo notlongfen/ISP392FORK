@@ -88,6 +88,16 @@
                                         <input type="text" class="form-control" id="condition" name="condition" value="<%= promotion.getCondition() %>" required=""/>
                                     </div>
                                 </div>
+                                <input type="hidden" name="oldImage" value="<%= promotion.getImage()%>" readonly=""/>
+                                <div class="form-group">
+                                    <label for="image">Image</label>
+                                    <div class="col-md-3">
+                                        <img src="<%= promotion.getImage() %>" alt="Promotion Image" class="img-thumbnail" style="max-width: 100px; max-height: 100px; margin-right: 10px;">
+                                    </div>
+                                    <div class="mt-3">
+                                        <input type="file" class="form-control-file" id="image" name="image" style="width: 550px">
+                                    </div>
+                                </div>
                                 <div class="form-group text-center">
                                     <button type="submit" class="btn btn-danger btn-custom" name="action" value="SaveEditPromotion">Submit</button>
                                     <button type="reset" class="btn btn-secondary btn-custom">Reset</button>
