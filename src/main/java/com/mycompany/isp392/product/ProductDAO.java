@@ -63,15 +63,15 @@ public class ProductDAO {
             + "WHERE o.OrderID = ?; ";
     private static final String GET_PRODUCTS_BY_PAGE = "SELECT * FROM Products ORDER BY productID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
     private static final String GET_TOTAL_PRODUCTS = "SELECT COUNT(*) AS total FROM Products";
-    private static final String GET_PRODUCT_INFO_BY_CARTID = "SELECT * FROM Carts c" +
-                                                                "INNER JOIN CartDetails cd ON c.CartID = cd.CartID" +
-                                                                "INNER JOIN Products p ON cd.ProductID = p.ProductID" +
-                                                                "INNER JOIN ProductDetails pd ON cd.ProductDetailsID = pd.ProductDetailsID" +
-                                                                "WHERE c.CartID = ?; ";
+    private static final String GET_PRODUCT_INFO_BY_CARTID = "SELECT * FROM Carts c"
+            + "INNER JOIN CartDetails cd ON c.CartID = cd.CartID"
+            + "INNER JOIN Products p ON cd.ProductID = p.ProductID"
+            + "INNER JOIN ProductDetails pd ON cd.ProductDetailsID = pd.ProductDetailsID"
+            + "WHERE c.CartID = ?; ";
     private static final String UPDATE_PRODUCT_NUMBER_OF_PURCHASING = "UPDATE Products SET numberOfPurchasing = numberOfPurchasing + ? WHERE productID = ?";
     private static final String GET_PRODUCT_DETAILS_BY_COLOR = "SELECT * FROM ProductDetails WHERE ProductID = ? AND Color = ? AND status = 1";
     private static final String GET_PRODUCT_DETAILS_ID = "SELECT * FROM ProductDetails WHERE ProductID = ? AND price = ? AND size LIKE ? AND Color LIKE ? AND status = 1";
-    
+
     public boolean addProduct(ProductDTO product) throws SQLException {
         boolean check = false;
         Connection conn = null;
@@ -730,10 +730,6 @@ public class ProductDAO {
         return products;
     }
 
-   
-
-    
-
     public ProductDetailsDTO selectProductDetailByID(int productDetailID) throws SQLException {
         ProductDetailsDTO productDetail = null;
         Connection conn = null;
@@ -775,8 +771,6 @@ public class ProductDAO {
         }
         return productDetail;
     }
-
-    
 
     public boolean checkDuplicateProductDetail(int productID, String color, String size) throws SQLException {
         boolean isDuplicate = false;
@@ -848,8 +842,6 @@ public class ProductDAO {
         return latestImportDates;
     }
 
-    
-
     public boolean updateQuantittyAfterCheckout(int productID, int quantity) throws SQLException {
         boolean result = false;
         Connection conn = null;
@@ -877,7 +869,6 @@ public class ProductDAO {
         return result;
     }
 
-   
     public List<ProductDetailsDTO> getAllProductDetails() throws SQLException {
         String sql = "SELECT * FROM ProductDetails";
         Connection conn = null;
@@ -1451,8 +1442,8 @@ public class ProductDAO {
         }
         return totalProducts;
     }
-    
-     public List<ProductDetailsDTO> getProductByCartID(int CartID) throws SQLException {
+
+    public List<ProductDetailsDTO> getProductByCartID(int CartID) throws SQLException {
         List<ProductDetailsDTO> products = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -1467,7 +1458,7 @@ public class ProductDAO {
                     String productName = rs.getString("productName");
                     String color = rs.getString("color");
                     int size = rs.getInt("size");
-                    products.add(new ProductDetailsDTO(productName,color,size));
+                    products.add(new ProductDetailsDTO(productName, color, size));
                 }
             }
         } catch (Exception e) {
@@ -1532,14 +1523,17 @@ public class ProductDAO {
                     sql.append(" OR ");
                 }
                 switch (priceFilters[i]) {
-                    case "0-100":
-                        sql.append("pd.price < 100");
+                    case "0-2000000":
+                        sql.append("pd.price < 2000000");
                         break;
-                    case "100-200":
-                        sql.append("pd.price BETWEEN 100 AND 200");
+                    case "2000000-5000000":
+                        sql.append("pd.price BETWEEN 2000000 AND 5000000");
                         break;
-                    case "200plus":
-                        sql.append("pd.price > 200");
+                    case "5000000-10000000":
+                        sql.append("pd.price BETWEEN 5000000 AND 10000000");
+                        break;
+                    case "10000000plus":
+                        sql.append("pd.price > 10000000");
                         break;
                 }
             }
@@ -1618,20 +1612,23 @@ public class ProductDAO {
                     sql.append(" OR ");
                 }
                 switch (priceFilters[i]) {
-                    case "0-100":
-                        sql.append("pd.price < 100");
+                    case "0-2000000":
+                        sql.append("pd.price < 2000000");
                         break;
-                    case "100-200":
-                        sql.append("pd.price BETWEEN 100 AND 200");
+                    case "2000000-5000000":
+                        sql.append("pd.price BETWEEN 2000000 AND 5000000");
                         break;
-                    case "200plus":
-                        sql.append("pd.price > 200");
+                    case "5000000-10000000":
+                        sql.append("pd.price BETWEEN 5000000 AND 10000000");
+                        break;
+                    case "10000000plus":
+                        sql.append("pd.price > 10000000");
                         break;
                 }
             }
             sql.append(")");
         }
-
+        
         if (categoryFilters != null && categoryFilters.length > 0) {
             sql.append(" AND cc.ParentID IN (");
             for (int i = 0; i < categoryFilters.length; i++) {
@@ -1732,22 +1729,22 @@ public class ProductDAO {
 
         return colorSizeMap;
     }
-    
-    public int getProductDetailsID (int productID, int price, String size, String color) throws SQLException {
+
+    public int getProductDetailsID(int productID, int price, String size, String color) throws SQLException {
         int id = -1;
-        Connection conn  = null;
+        Connection conn = null;
         PreparedStatement ptm = null;
         ResultSet rs = null;
-        try{
+        try {
             conn = DbUtils.getConnection();
-            if(conn != null){
+            if (conn != null) {
                 ptm = conn.prepareStatement(GET_PRODUCT_DETAILS_ID);
                 ptm.setInt(1, productID);
                 ptm.setInt(2, price);
                 ptm.setString(3, size);
                 ptm.setString(4, color);
                 rs = ptm.executeQuery();
-                if(rs.next()){
+                if (rs.next()) {
                     id = rs.getInt("ProductDetailsID");
                 }
             }
