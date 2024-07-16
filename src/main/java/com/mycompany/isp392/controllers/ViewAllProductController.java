@@ -14,7 +14,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @WebServlet(name = "ViewAllProductController", urlPatterns = {"/ViewAllProductController"})
 public class ViewAllProductController extends HttpServlet {
@@ -52,8 +55,14 @@ public class ViewAllProductController extends HttpServlet {
             // Get paginated and filtered products
             List<ProductDTO> filteredProducts = productDAO.getFilteredProducts(brandFilters, priceFilters, categoryFilters, page, recordsPerPage);
 
-            // Get all product details
-            List<ProductDetailsDTO> productDetails = productDAO.getProductDetailsByProductList(filteredProducts);
+            // Get all product details and group by product ID and color
+            Map<Integer, Map<String, ProductDetailsDTO>> productDetailsByColor = new HashMap<>();
+            for (ProductDTO product : filteredProducts) {
+                List<ProductDetailsDTO> details = productDAO.getProductDetails(product.getProductID());
+                Map<String, ProductDetailsDTO> detailsByColor = details.stream()
+                        .collect(Collectors.toMap(ProductDetailsDTO::getColor, detail -> detail, (existing, replacement) -> existing));
+                productDetailsByColor.put(product.getProductID(), detailsByColor);
+            }
 
             // Get all brands for the sidebar
             List<BrandDTO> allBrands = brandDAO.getAllBrands();
@@ -67,7 +76,7 @@ public class ViewAllProductController extends HttpServlet {
             int totalPages = (int) Math.ceil(totalProducts * 1.0 / recordsPerPage);
 
             request.setAttribute("products", filteredProducts);
-            request.setAttribute("productDetails", productDetails);
+            request.setAttribute("productDetailsByColor", productDetailsByColor);
             request.setAttribute("brands", allBrands);
             request.setAttribute("categories", allCategories);
             request.setAttribute("currentPage", page);

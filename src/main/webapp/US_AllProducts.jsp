@@ -1,13 +1,11 @@
 <%@page import="java.text.NumberFormat"%>
 <%@page import="java.util.Locale"%>
-<%@page import="java.util.Locale"%>
-<%@page import="com.mycompany.isp392.product.ProductDAO"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="com.mycompany.isp392.brand.BrandDTO"%>
+<%@page import="java.util.Map"%>
+<%@page import="java.util.List"%>
 <%@page import="com.mycompany.isp392.product.ProductDTO"%>
 <%@page import="com.mycompany.isp392.product.ProductDetailsDTO"%>
+<%@page import="com.mycompany.isp392.brand.BrandDTO"%>
 <%@page import="com.mycompany.isp392.category.CategoryDTO"%>
-<%@page import="java.util.List"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -18,7 +16,6 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
         <style>
-            /* Add your CSS styles here */
             .price-button {
                 display: flex;
                 padding: 5px 10px;
@@ -30,8 +27,8 @@
                 background-color: #fff;
                 margin: 10px 0;
                 text-decoration: none;
-                width: 150px; /* Adjust the width as needed */
-                margin: 5px auto; /* Center the box horizontally */
+                width: 150px;
+                margin: 5px auto;
                 transition: background-color 0.3s ease;
             }
             .price-button:hover {
@@ -203,17 +200,15 @@
                 color: #999;
                 pointer-events: none;
             }
-
             .product_image1 {
-                width: 270px;  /* Đặt kích thước cố định cho phần tử cha */
-                height: 250px; /* Đặt kích thước cố định cho phần tử cha */
-                overflow: hidden; /* Ẩn phần nào của hình ảnh vượt quá kích thước khung chứa */
+                width: 270px;  /* ??t k�ch th??c c? ??nh cho ph?n t? cha */
+                height: 250px; /* ??t k�ch th??c c? ??nh cho ph?n t? cha */
+                overflow: hidden; /* ?n ph?n n�o c?a h�nh ?nh v??t qu� k�ch th??c khung ch?a */
             }
-
             .product_image1 img {
                 width: 100%;
                 height: 100%;
-                object-fit: cover; /* Bạn có thể thử 'cover' hoặc 'contain' tùy theo mong muốn */
+                object-fit: cover; /* B?n c� th? th? 'cover' ho?c 'contain' t�y theo mong mu?n */
             }
         </style>
     </head>
@@ -266,7 +261,6 @@
                             <li><label><input type="checkbox" name="price" class="price-filter" value="10000000plus"> Above 10.000.000</label></li>
                         </ul>
                     </div>
-
                     <hr>
                 </div>
                 <div class="col-md-9">
@@ -277,25 +271,20 @@
                     <div class="row" id="products-container">
                         <%
                             List<ProductDTO> products = (List<ProductDTO>) request.getAttribute("products");
-                            List<ProductDetailsDTO> productDetails = (List<ProductDetailsDTO>) request.getAttribute("productDetails");
+                            Map<Integer, Map<String, ProductDetailsDTO>> productDetailsByColor = (Map<Integer, Map<String, ProductDetailsDTO>>) request.getAttribute("productDetailsByColor");
 
-                            if (products != null && productDetails != null) {
+                            if (products != null && productDetailsByColor != null) {
                                 for (ProductDTO product : products) {
-                                    ProductDetailsDTO firstDetail = null;
-                                    for (ProductDetailsDTO detail : productDetails) {
-                                        if (detail.getProductID() == product.getProductID()) {
-                                            firstDetail = detail;
-                                            break;
-                                        }
-                                    }
-                                    if (firstDetail != null) {
+                                    Map<String, ProductDetailsDTO> detailsByColor = productDetailsByColor.get(product.getProductID());
+                                    if (detailsByColor != null) {
+                                        for (ProductDetailsDTO detail : detailsByColor.values()) {
                         %>
                         <div class="col-md-4 mb-4">
                             <div class="product-grid">
                                 <div class="product-image">
-                                    <a href="MainController?action=Get_product_detail&productID=<%= product.getProductID()%>&color=<%= firstDetail.getColor()%>" >
+                                    <a href="MainController?action=Get_product_detail&productID=<%= product.getProductID()%>&color=<%= detail.getColor()%>" >
                                         <div class="product_image1">
-                                            <img  src="<%= firstDetail.getImage().split(";")[0]%>" alt="<%= product.getProductName()%>">
+                                            <img  src="<%= detail.getImage().split(";")[0]%>" alt="<%= product.getProductName()%>">
                                         </div>
                                     </a>
                                     <ul class="product-links">
@@ -303,12 +292,12 @@
                                     </ul>
                                 </div>
                                 <div class="product-content">
-                                    <h3 class="title"><a href="MainController?action=Get_product_detail&productID=<%= product.getProductID()%>&color=<%= firstDetail.getColor()%>"><%= product.getProductName()%></a></h3>
+                                    <h3 class="title"><a href="MainController?action=Get_product_detail&productID=<%= product.getProductID()%>&color=<%= detail.getColor()%>"><%= product.getProductName()%></a></h3>
                                     <div class="price">
                                         <%
                                             NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
 
-                                            int price = firstDetail.getPrice();
+                                            int price = detail.getPrice();
                                             String formattedPrice = formatter.format(price);
                                         %>
                                         <%= formattedPrice%>
@@ -317,6 +306,7 @@
                             </div>
                         </div>
                         <%
+                                        }
                                     }
                                 }
                             }
@@ -354,72 +344,71 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script>
-                                        $(document).ready(function () {
-                                            function getSelectedValues(selector) {
-                                                return $(selector + ':checked').map(function () {
-                                                    return this.value;
-                                                }).get();
-                                            }
+            $(document).ready(function () {
+                function getSelectedValues(selector) {
+                    return $(selector + ':checked').map(function () {
+                        return this.value;
+                    }).get();
+                }
 
-                                            function loadFilteredProducts(page = 1) {
-                                                var selectedBrands = getSelectedValues('.brand-filter');
-                                                var selectedPrices = getSelectedValues('.price-filter');
-                                                var selectedCategories = getSelectedValues('.category-filter');
+                function loadFilteredProducts(page = 1) {
+                    var selectedBrands = getSelectedValues('.brand-filter');
+                    var selectedPrices = getSelectedValues('.price-filter');
+                    var selectedCategories = getSelectedValues('.category-filter');
 
-                                                $.ajax({
-                                                    url: 'ViewAllProductController',
-                                                    type: 'GET',
-                                                    data: {
-                                                        brands: selectedBrands,
-                                                        prices: selectedPrices,
-                                                        categories: selectedCategories,
-                                                        page: page
-                                                    },
-                                                    success: function (data) {
-                                                        $('#products-container').html($(data).find('#products-container').html());
-                                                        $('#pagination-container').html($(data).find('#pagination-container').html());
-                                                    },
-                                                    error: function () {
-                                                        alert('Error loading products. Please try again.');
-                                                    }
-                                                });
-                                            }
+                    $.ajax({
+                        url: 'ViewAllProductController',
+                        type: 'GET',
+                        data: {
+                            brands: selectedBrands,
+                            prices: selectedPrices,
+                            categories: selectedCategories,
+                            page: page
+                        },
+                        success: function (data) {
+                            $('#products-container').html($(data).find('#products-container').html());
+                            $('#pagination-container').html($(data).find('#pagination-container').html());
+                        },
+                        error: function () {
+                            alert('Error loading products. Please try again.');
+                        }
+                    });
+                }
 
-                                            // Check the brand filter if brandID is present in the URL
-                                            var brandID = new URLSearchParams(window.location.search).get('brandID');
-                                            if (brandID) {
-                                                $('input[name="brand"][value="' + brandID + '"]').prop('checked', true);
-                                            }
+                // Check the brand filter if brandID is present in the URL
+                var brandID = new URLSearchParams(window.location.search).get('brandID');
+                if (brandID) {
+                    $('input[name="brand"][value="' + brandID + '"]').prop('checked', true);
+                }
 
-                                            // Event listeners for the checkboxes
-                                            $('.brand-filter, .price-filter, .category-filter').on('change', function () {
-                                                loadFilteredProducts();
-                                            });
+                // Event listeners for the checkboxes
+                $('.brand-filter, .price-filter, .category-filter').on('change', function () {
+                    loadFilteredProducts();
+                });
 
-                                            // Initial load
-                                            loadFilteredProducts();
-                                        });
+                // Initial load
+                loadFilteredProducts();
+            });
 
-                                        function resetFilters() {
-                                            $('input[type="checkbox"]').prop('checked', false);
-                                            window.location.href = "MainController?action=All_Product";
-                                            loadFilteredProducts();
-                                        }
+            function resetFilters() {
+                $('input[type="checkbox"]').prop('checked', false);
+                window.location.href = "MainController?action=All_Product";
+                loadFilteredProducts();
+            }
 
-                                        // Lấy giá sản phẩm từ phần tử HTML/JSP
-                                        let priceElement = document.getElementById('productPrice');
-                                        let price = parseFloat(priceElement.innerText.replace('$', '')); // Lấy giá và bỏ đi ký tự '$'
+            // L?y gi� s?n ph?m t? ph?n t? HTML/JSP
+            let priceElement = document.getElementById('productPrice');
+            let price = parseFloat(priceElement.innerText.replace('$', '')); // L?y gi� v� b? ?i k� t? '$'
 
-// Định dạng lại giá sang tiền tệ Việt Nam
-                                        const formatter = new Intl.NumberFormat('vi-VN', {
-                                            style: 'currency',
-                                            currency: 'VND'
-                                        });
-                                        let formattedPrice = formatter.format(price);
+            // ??nh d?ng l?i gi� sang ti?n t? Vi?t Nam
+            const formatter = new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+            });
+            let formattedPrice = formatter.format(price);
 
-// Cập nhật nội dung của phần tử HTML/JSP
-                                        priceElement.innerText = formattedPrice;
-
+            // C?p nh?t n?i dung c?a ph?n t? HTML/JSP
+            priceElement.innerText = formattedPrice;
         </script>
     </body>
 </html>
