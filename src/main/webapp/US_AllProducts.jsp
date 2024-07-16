@@ -225,6 +225,10 @@
                     <hr>
                     <div>
                         <h4 style="color: #c53337">FILTER</h4>
+                    </div>
+                    <hr>
+                    <div>
+                        <h4 style="color: #c53337">CATEGORY</h4>
                         <ul class="list-unstyled">
                             <% List<CategoryDTO> categories = (List<CategoryDTO>) request.getAttribute("categories");
                                 if (categories != null) {
@@ -250,20 +254,21 @@
                     </div>
                     <hr>
                     <div>
-                        <h4 style="color: #c53337">FILTER BY PRICE</h4>
+                        <h4 style="color: #c53337">PRICE</h4>
                         <ul class="list-unstyled">
-                            <li><label><input type="checkbox" name="price" class="price-filter" value="0-100"> Below $100</label></li>
-                            <li><label><input type="checkbox" name="price" class="price-filter" value="100-200"> From $100 to $200</label></li>
-                            <li><label><input type="checkbox" name="price" class="price-filter" value="200plus"> Above $200</label></li>
+                            <li><label><input type="checkbox" name="price" class="price-filter" value="0-2000000"> Below 2.000.000</label></li>
+                            <li><label><input type="checkbox" name="price" class="price-filter" value="2000000-5000000"> From 2.000.000 to 5.000.000</label></li>
+                            <li><label><input type="checkbox" name="price" class="price-filter" value="5000000-10000000"> From 5.000.000 to 10.000.000</label></li>
+                            <li><label><input type="checkbox" name="price" class="price-filter" value="10000000plus"> Above 10.000.000</label></li>
                         </ul>
                     </div>
+
                     <hr>
-                    <button onclick="resetFilters()" class="btn btn-outline-secondary reset-button mt-3">Reset</button>
                 </div>
                 <div class="col-md-9">
                     <h5 style="color: grey;">
                         <a style="color: grey; text-decoration: none" href="US_index.jsp">Home ></a>
-                        <a style="color: grey; text-decoration: none" href="AllProducts.jsp">All Products</a>
+                        <a style="color: grey; text-decoration: none" href="ViewAllProductController">All Products</a>
                     </h5>
                     <div class="row" id="products-container">
                         <% 
@@ -289,9 +294,9 @@
                                             <img  src="<%= firstDetail.getImage().split(";")[0] %>" alt="<%= product.getProductName() %>">
                                         </div>
                                     </a>
-                                     <ul class="product-links">
-                                            <li><button type="submit" name="action" value="AddToWishlist"><i class="fa fa-heart"></i></button></li>
-                                        </ul>
+                                    <ul class="product-links">
+                                        <li><button type="submit" name="action" value="AddToWishlist"><i class="fa fa-heart"></i></button></li>
+                                    </ul>
                                 </div>
                                 <div class="product-content">
                                     <h3 class="title"><a href="MainController?action=Get_product_detail&productID=<%= product.getProductID() %>&color=<%= firstDetail.getColor() %>"><%= product.getProductName() %></a></h3>
@@ -388,6 +393,5 @@
                                             loadFilteredProducts();
                                         }
         </script>
-
     </body>
 </html>
