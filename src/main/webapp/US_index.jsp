@@ -1,3 +1,7 @@
+<%@page import="java.text.NumberFormat"%>
+<%@page import="java.util.Locale"%>
+<%@page import="java.util.Locale"%>
+<%@page import="com.mycompany.isp392.product.ProductDAO"%>
 <!DOCTYPE html>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="com.mycompany.isp392.brand.BrandDTO"%>
@@ -144,7 +148,7 @@
         </style>
     </head>
     <body>
-        
+
         <div class="super_container">
             <%@include file="US_header.jsp" %>
 
@@ -210,7 +214,7 @@
                                             if (categoriesList != null) {
                                                 for (CategoryDTO category : categoriesList) {
                                         %>
-                                    <li class="grid_sorting_button button d-flex flex-column justify-content-center align-items-center" data-filter=".category<%= category.getCategoryID() %>"><%= category.getCategoryName() %></li>
+                                    <li class="grid_sorting_button button d-flex flex-column justify-content-center align-items-center" data-filter=".category<%= category.getCategoryID()%>"><%= category.getCategoryName()%></li>
                                         <%
                                                 }
                                             }
@@ -238,21 +242,28 @@
                                             if (productDetailsList != null && !productDetailsList.isEmpty()) {
                                                 ProductDetailsDTO firstDetail = productDetailsList.get(0);
                                 %>
-                                <div class="product-item <%= categoryClass.trim() %>">
+                                <div class="product-item <%= categoryClass.trim()%>">
                                     <div class="product discount product_filter">
                                         <div class="product_image1">
-                                            <a href="MainController?action=Get_product_detail&productID=<%= product.getProductID() %>&color=<%= firstDetail.getColor() %>" class="image">
-                                                <img src="<%= firstDetail.getImage().split(";")[0] %>" alt="<%= product.getProductName() %>">
+                                            <a href="MainController?action=Get_product_detail&productID=<%= product.getProductID()%>&color=<%= firstDetail.getColor()%>" class="image">
+                                                <img src="<%= firstDetail.getImage().split(";")[0]%>" alt="<%= product.getProductName()%>">
                                             </a>
                                         </div>
                                         <div class="favorite favorite_left"></div>
                                         <div class="product_info">
-                                            <h6 class="product_name"><a href="MainController?action=Get_product_detail&productID=<%= product.getProductID() %>&color=<%= firstDetail.getColor() %>"><%= product.getProductName() %></a></h6>
-                                            <div class="product_price" style="color: #C53337">$<%= firstDetail.getPrice() %></div>
+                                            <h6 class="product_name"><a href="MainController?action=Get_product_detail&productID=<%= product.getProductID()%>&color=<%= firstDetail.getColor()%>"><%= product.getProductName()%></a></h6>
+                                            <div class="product_price" style="color: #C53337">
+                                                <%
+                                                    NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+                                                    int price = firstDetail.getPrice();
+                                                    String formattedPrice = formatter.format(price);
+                                                %>
+                                                <%= formattedPrice%>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <% 
+                                <%
                                             }
                                         }
                                     }
@@ -293,23 +304,30 @@
                                                 if (productDetailsList != null && !productDetailsList.isEmpty()) {
                                                     ProductDetailsDTO firstDetail = productDetailsList.get(0);
                                     %>
-                                    <div class="owl-item product_slider_item <%= categoryClass.trim() %>">
+                                    <div class="owl-item product_slider_item <%= categoryClass.trim()%>">
                                         <div class="product-item">
                                             <div class="product discount">
                                                 <div class="product_image">
-                                                    <a href="MainController?action=Get_product_detail&productID=<%= product.getProductID() %>&color=<%= firstDetail.getColor() %>" class="image">
-                                                        <img src="<%= firstDetail.getImage().split(";")[0] %>" alt="<%= product.getProductName() %>">
+                                                    <a href="MainController?action=Get_product_detail&productID=<%= product.getProductID()%>&color=<%= firstDetail.getColor()%>" class="image">
+                                                        <img src="<%= firstDetail.getImage().split(";")[0]%>" alt="<%= product.getProductName()%>">
                                                     </a>
                                                 </div>
                                                 <div class="favorite favorite_left"></div>
                                                 <div class="product_info">
-                                                    <h6 class="product_name"><a href="single.html"><%= product.getProductName() %></a></h6>
-                                                    <div class="product_price" style="color: #C53337">$<%= firstDetail.getPrice() %></div>
+                                                    <h6 class="product_name"><a href="single.html"><%= product.getProductName()%></a></h6>
+                                                    <div class="product_price" style="color: #C53337">
+                                                        <%
+                                                            NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+                                                            int price = firstDetail.getPrice();
+                                                            String formattedPrice = formatter.format(price);
+                                                        %>
+                                                        <%= formattedPrice%>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <% 
+                                    <%
                                                 }
                                             }
                                         }
@@ -344,8 +362,8 @@
                                         for (BrandDTO brand : brandList) {
                                 %>
                                 <div class="item">
-                                    <a href="ViewAllProductController?brandID=<%= brand.getBrandID() %>">
-                                        <img src="<%= brand.getImage() %>" alt="<%= brand.getBrandName() %>" class="img-responsive" style="width: 180px; height: 180px;">
+                                    <a href="ViewAllProductController?brandID=<%= brand.getBrandID()%>">
+                                        <img src="<%= brand.getImage()%>" alt="<%= brand.getBrandName()%>" class="img-responsive" style="width: 180px; height: 180px;">
                                     </a>
                                 </div>
                                 <%

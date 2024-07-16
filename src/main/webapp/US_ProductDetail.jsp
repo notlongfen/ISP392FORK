@@ -1,3 +1,6 @@
+<%@page import="java.text.NumberFormat"%>
+<%@page import="java.util.Locale"%>
+<%@page import="java.util.Locale"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.Map"%>
 <%@page import="com.mycompany.isp392.product.ProductDTO"%>
@@ -80,7 +83,7 @@
             String selectedColor = request.getParameter("color");
             if (selectedColor == null && colorSizeMap != null && !colorSizeMap.isEmpty()) {
                 selectedColor = colorSizeMap.keySet().iterator().next();
-            }  
+            }
             String selectedSize = request.getParameter("size");
             if (selectedSize == null && selectedColor != null && colorSizeMap.get(selectedColor) != null && !colorSizeMap.get(selectedColor).isEmpty()) {
                 selectedSize = colorSizeMap.get(selectedColor).keySet().iterator().next();
@@ -88,6 +91,11 @@
 
             Gson gson = new Gson();
             String colorSizeMapJson = gson.toJson(colorSizeMap);
+
+//            NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+//            int price = (int) colorSizeMap.get(selectedColor).get(selectedSize).get("price");
+//            String formattedPrice = formatter.format(price);
+            
         %>
         <div class="super_container">           
             <%@include file="US_header.jsp" %>
@@ -101,7 +109,7 @@
                             <ul>
                                 <li><a href="index.html">Home</a></li>
                                 <li><a href="categories.html"><i class="fa fa-angle-right" aria-hidden="true"></i>Men's</a></li>
-                                <li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i><%= product.getProductName() %></a></li>
+                                <li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i><%= product.getProductName()%></a></li>
                             </ul>
                         </div>
                     </div>
@@ -118,8 +126,8 @@
                                         for (String image : images) {
                                             if (!image.trim().isEmpty()) {
                                 %>
-                                <div class="carousel-item <%= isActive ? "active" : "" %>">
-                                    <img src="<%= image.trim() %>" alt="Product Image">
+                                <div class="carousel-item <%= isActive ? "active" : ""%>">
+                                    <img src="<%= image.trim()%>" alt="Product Image">
                                 </div>
                                 <%
                                                 isActive = false;
@@ -142,28 +150,31 @@
                     <div class="col-lg-5">
                         <div class="product_details">
                             <div class="product_details_title">
-                                <h2><%= product.getProductName() %></h2>
-                                <p><%= product.getDescription() %></p>
+                                <h2><%= product.getProductName()%></h2>
+                                <p><%= product.getDescription()%></p>
                             </div>
                             <form action="MainController" method="POST">
                                 <div class="free_delivery d-flex flex-row align-items-center justify-content-center">
                                     <span class="ti-truck"></span><span>free delivery</span>
                                 </div>
-                                <div class="product_price mt-5" style="color: #C53337"><span id="productPrice"><%= colorSizeMap.get(selectedColor).get(selectedSize).get("price") %></span></div>
+                                <div class="product_price mt-5" style="color: #C53337"><span id="productPrice">
+                                        <%= colorSizeMap.get(selectedColor).get(selectedSize).get("price")%>
+                                    </span>
+                                </div>
 
                                 <div style="margin-top: 30px;">
                                     <label style="font-size: 20px;">Select size:</label>
                                     <div class="sizes">
-                                        <% 
+                                        <%
                                             for (int size = 36; size <= 45; size++) {
                                                 String sizeStr = String.valueOf(size);
                                                 boolean available = colorSizeMap.get(selectedColor).containsKey(sizeStr);
                                         %>
-                                        <div class="size <%= available ? "" : "disabled" %>" data-size="<%= sizeStr %>">
-                                            US <%= size %>
+                                        <div class="size <%= available ? "" : "disabled"%>" data-size="<%= sizeStr%>">
+                                            US <%= size%>
                                         </div>
-                                        <% 
-                                            } 
+                                        <%
+                                            }
                                         %>
                                     </div>
                                 </div>
@@ -171,14 +182,14 @@
                                 <div style="margin-top: 30px;">
                                     <label style="font-size: 20px;">Select color:</label>
                                     <div class="colors">
-                                        <% 
+                                        <%
                                             for (String colorOption : colorSizeMap.keySet()) {
                                         %>
-                                        <div class="color <%= colorOption.equals(selectedColor) ? "selected" : "" %>" data-color="<%= colorOption %>">
-                                            <%= colorOption %>
+                                        <div class="color <%= colorOption.equals(selectedColor) ? "selected" : ""%>" data-color="<%= colorOption%>">
+                                            <%= colorOption%>
                                         </div>
-                                        <% 
-                                            } 
+                                        <%
+                                            }
                                         %>
                                     </div>
                                 </div>
@@ -256,19 +267,19 @@
                                 <%
                                     CartError error = (CartError) request.getAttribute("CART_ERROR");
                                     if (error != null) {
-                                        if(error.getError() != null && !error.getError().isEmpty()){
+                                        if (error.getError() != null && !error.getError().isEmpty()) {
                                 %>
-                                <li class="list-group-item list-group-item-danger"><%= error.getError() %></li>
+                                <li class="list-group-item list-group-item-danger"><%= error.getError()%></li>
                                     <%
-                                            }
-                                            if(error.getProductError() != null && !error.getProductError().isEmpty()){
+                                        }
+                                        if (error.getProductError() != null && !error.getProductError().isEmpty()) {
                                     %>
-                                <li class="list-group-item list-group-item-danger"><%= error.getProductError() %></li> 
-                                    <%    
-                                            }
-                                            if(error.getQuantityError() != null && !error.getQuantityError().isEmpty()){
+                                <li class="list-group-item list-group-item-danger"><%= error.getProductError()%></li> 
+                                    <%
+                                        }
+                                        if (error.getQuantityError() != null && !error.getQuantityError().isEmpty()) {
                                     %>
-                                <li class="list-group-item list-group-item-danger"><%= error.getQuantityError() %></li> 
+                                <li class="list-group-item list-group-item-danger"><%= error.getQuantityError()%></li> 
                                     <%
                                             }
                                         }
@@ -289,13 +300,13 @@
             <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
             <script>
                 $(document).ready(function () {
-                    var selectedColor = '<%= selectedColor %>'; // Initial selected color from server-side
+                    var selectedColor = '<%= selectedColor%>'; // Initial selected color from server-side
                     if (!selectedColor && $('.color').length > 0) {
                         selectedColor = $('.color:first').data('color'); // Default to the first available color
                     }
                     $('#selectedColor').val(selectedColor); // Update hidden input field
                 });
-                
+
                 $(document).ready(function () {
                     console.log("Document ready");
 
@@ -347,12 +358,12 @@
                     });
 
                     // Initialize sizes based on the initial selected color
-                    updateSizes('<%= selectedColor %>');
+                    updateSizes('<%= selectedColor%>');
                 });
 
                 function updateSizes(selectedColor) {
                     console.log("Updating sizes for color:", selectedColor);
-                    var sizes = <%= colorSizeMapJson %>;
+                    var sizes = <%= colorSizeMapJson%>;
                     $('.size').each(function () {
                         var size = $(this).data('size');
                         if (sizes[selectedColor].hasOwnProperty(size)) {
@@ -374,7 +385,7 @@
                     var selectedSize = $('.size.selected').data('size');
                     console.log("Updating images and price for color:", selectedColor, "and size:", selectedSize);
 
-                    var sizes = <%= colorSizeMapJson %>;
+                    var sizes = <%= colorSizeMapJson%>;
                     var imageGallery = $('.carousel-inner');
                     imageGallery.empty(); // Clear existing images
 
@@ -399,21 +410,20 @@
 
                     }
                 }
-                
-            // Display success modal if message exists
-            $(document).ready(function () {
-                const successMessage = '<%= request.getAttribute("SUCCESS_MESSAGE") %>';
-                if (successMessage) {
-                    document.getElementById('successMessage').innerText = successMessage;
-                    $('#successModal').modal('show');
-                }
-                
+
+                // Display success modal if message exists
+                $(document).ready(function () {
+                    const successMessage = '<%= request.getAttribute("SUCCESS_MESSAGE")%>';
+                    if (successMessage) {
+                        document.getElementById('successMessage').innerText = successMessage;
+                        $('#successModal').modal('show');
+                    }
+
                 <% if (request.getAttribute("CART_ERROR") != null) { %>
                     $('#errorModal').modal('show');
-                <% } %>
-                
-            });
-            
+                <% }%>
+
+                });
             </script>.
         </div>
     </body>

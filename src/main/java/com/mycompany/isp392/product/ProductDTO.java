@@ -11,6 +11,7 @@ import java.util.Objects;
  * @author TTNHAT
  */
 public class ProductDTO {
+
     private int productID;
     private String productName;
     private String description;
@@ -18,9 +19,10 @@ public class ProductDTO {
     private int status;
     private int brandID;
     private ProductDetailsDTO productDetails;
+
     public ProductDTO() {
     }
-    
+
     public ProductDTO(int productID, String productName, String description, int numberOfPurchase, int status, int brandID) {
         this.productID = productID;
         this.productName = productName;
@@ -29,15 +31,16 @@ public class ProductDTO {
         this.status = status;
         this.brandID = brandID;
     }
-    public ProductDTO( String productName, String description, int numberOfPurchase, int status, int brandID) {
+
+    public ProductDTO(String productName, String description, int numberOfPurchase, int status, int brandID) {
         this.productName = productName;
         this.description = description;
         this.numberOfPurchase = numberOfPurchase;
         this.status = status;
         this.brandID = brandID;
     }
-    
-            public ProductDTO(String productName) {
+
+    public ProductDTO(String productName) {
         this.productName = productName;
     }
 
@@ -89,21 +92,27 @@ public class ProductDTO {
         this.brandID = brandID;
     }
 
-      public ProductDetailsDTO getProductDetails() {
+    public ProductDetailsDTO getProductDetails() {
         return productDetails;
     }
 
     public void setProductDetails(ProductDetailsDTO productDetails) {
         this.productDetails = productDetails;
     }
+
     @Override
     public String toString() {
         return "ProductDTO{" + "productID=" + productID + ", productName=" + productName + ", description=" + description + ", numberOfPurchase=" + numberOfPurchase + ", status=" + status + ", brandID=" + brandID + '}';
     }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         ProductDTO that = (ProductDTO) o;
         return productID == that.productID;
     }

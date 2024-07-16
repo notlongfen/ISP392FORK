@@ -21,8 +21,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "ForgotPasswordController", urlPatterns = { "/ForgotPasswordController" })
+@WebServlet(name = "ForgotPasswordController", urlPatterns = {"/ForgotPasswordController"})
 public class ForgotPasswordController extends HttpServlet {
+
     private static final String ERROR = "US_ForgotPassword.jsp";
     private static final String SUCCESS = "NotificationMail.jsp";
 
@@ -69,11 +70,11 @@ public class ForgotPasswordController extends HttpServlet {
 
                     Session session = Session.getInstance(props,
                             new jakarta.mail.Authenticator() {
-                                @Override
-                                protected PasswordAuthentication getPasswordAuthentication() {
-                                    return new PasswordAuthentication(fromEmail, password);
-                                }
-                            });
+                        @Override
+                        protected PasswordAuthentication getPasswordAuthentication() {
+                            return new PasswordAuthentication(fromEmail, password);
+                        }
+                    });
 
                     try {
                         Message message = new MimeMessage(session);

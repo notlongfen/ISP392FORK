@@ -1,6 +1,5 @@
 package com.mycompany.isp392.controllers;
 
-
 import com.mycompany.isp392.product.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -52,4 +51,3 @@ public class DeleteProductController extends HttpServlet {
         return "Short description";
     }
 }
-

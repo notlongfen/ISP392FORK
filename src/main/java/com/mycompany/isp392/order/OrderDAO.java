@@ -35,10 +35,9 @@ public class OrderDAO {
     private static final String GET_ALL_ORDERS = "SELECT * FROM Orders";
     private static final String VIEW_ORDER = "SELECT * FROM Orders o JOIN OrderDetails od ON o.OrderID = od.OrderID JOIN ProductDetails pd ON pd.ProductDetailsID = od.ProductDetailsID WHERE custID = ?";
     private static final String VIEW_PD_IN_ORDER = "SELECT * FROM ProductDetails pd JOIN Products p ON pd.ProductID = p.ProductID WHERE ProductID = ?";
-    private static final String VIEW_CATE_OF_PRODUCT = "SELECT * FROM ProductBelongtoCDCategories pc JOIN Categories c ON pc.CDCategoryID = c.CategoryID JOIN ChildrenCategories cdc ON c.CategoryID = cdc.ParentID WHERE pc.ProductID = ? "; 
+    private static final String VIEW_CATE_OF_PRODUCT = "SELECT * FROM ProductBelongtoCDCategories pc JOIN Categories c ON pc.CDCategoryID = c.CategoryID JOIN ChildrenCategories cdc ON c.CategoryID = cdc.ParentID WHERE pc.ProductID = ? ";
     private static final String CANCEL_ORDER = "UPDATE Orders SET status = 4 WHERE orderID = ? AND status NOT IN (0, 2, 3)";
-    
-    
+
     public boolean cancelOrder(int orderID) throws ClassNotFoundException {
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -67,7 +66,7 @@ public class OrderDAO {
         }
         return isCanceled;
     }
-    
+
     public List<ChildrenCategoryDTO> viewCateOfProduct(int productID) throws ClassNotFoundException, SQLException {
         List<ChildrenCategoryDTO> cateList = new ArrayList<>();
         Connection conn = null;
@@ -99,8 +98,7 @@ public class OrderDAO {
         }
         return cateList;
     }
-    
-    
+
     public List<OrderDetailsDTO> viewOrder(int custID) throws ClassNotFoundException, SQLException {
         List<OrderDetailsDTO> orderList = new ArrayList<>();
         Connection conn = null;
@@ -148,7 +146,7 @@ public class OrderDAO {
         }
         return orderList;
     }
-    
+
     public List<ProductDetailsDTO> viewProductDetailsInOrder(int productID) throws ClassNotFoundException, SQLException {
         List<ProductDetailsDTO> productList = new ArrayList<>();
         Connection conn = null;
@@ -181,7 +179,7 @@ public class OrderDAO {
         }
         return productList;
     }
-    
+
     private static final String GET_TOTAL_INCOME_THIS_MONTH = "SELECT SUM(total) AS totalIncome FROM Orders  WHERE YEAR(orderDate) = YEAR(GETDATE()) AND MONTH(orderDate) = MONTH(GETDATE()) AND status=3;";
     private static final String NUMBER_OF_ORDERS_THIS_MONTH = "SELECT COUNT(OrderID) AS numberOfOrder FROM Orders  WHERE YEAR(orderDate) = YEAR(GETDATE()) AND MONTH(orderDate) = MONTH(GETDATE()) AND status=3;";
 

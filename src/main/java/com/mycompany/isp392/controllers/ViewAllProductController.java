@@ -18,6 +18,7 @@ import java.util.List;
 
 @WebServlet(name = "ViewAllProductController", urlPatterns = {"/ViewAllProductController"})
 public class ViewAllProductController extends HttpServlet {
+
     private static final String SUCCESS_PAGE = "US_AllProducts.jsp";
     private static final String ERROR_PAGE = "error.jsp";
 
@@ -97,4 +98,3 @@ public class ViewAllProductController extends HttpServlet {
         return "Short description";
     }
 }
-

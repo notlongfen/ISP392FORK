@@ -28,7 +28,11 @@ public class LoginController extends HttpServlet {
     public void initClientID() throws ServletException{
 
 
+<<<<<<< Updated upstream
         Dotenv dotenv = Dotenv.configure().directory("C:\\Users\\tuan tran\\Desktop\\ISP392_Project\\.env").load();
+=======
+        Dotenv dotenv = Dotenv.configure().directory("D://Semester5//ISP//ISP392SHOP//.env").load();
+>>>>>>> Stashed changes
         clientID = dotenv.get("GOOGLE_CLIENT_ID");
     }
 

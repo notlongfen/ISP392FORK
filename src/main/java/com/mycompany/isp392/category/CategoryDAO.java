@@ -45,7 +45,7 @@ public class CategoryDAO {
     private static final String GET_CATEGORY_INFO = "SELECT * FROM Categories WHERE CategoryID = ?";
     private static final String GET_CHILDREN_CATEGORY_INFO = "SELECT * FROM ChildrenCategories WHERE CDCategoryID = ?";
     private static final String CHECK_CHILDREN_COUNT = "SELECT COUNT(*) FROM ChildrenCategories WHERE ParentID = ? AND status = 1";
-    
+
     public boolean addCategory(CategoryDTO category) throws SQLException {
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -136,14 +136,14 @@ public class CategoryDAO {
                 rs = ptmCheckChildren.executeQuery();
                 rs.next();
                 int oldChildCount = rs.getInt(1);
-            
+
                 if (oldChildCount > 0) {
                     // If there are children, delete them first
                     ptmChildren = conn.prepareStatement(DELETE_ALL_CHILDREN);
                     ptmChildren.setInt(1, categoryID);
                     ptmChildren.executeUpdate();
                 }
-                
+
                 ptmCheckChildren = conn.prepareStatement(CHECK_CHILDREN_COUNT);
                 ptmCheckChildren.setInt(1, categoryID);
                 rs = ptmCheckChildren.executeQuery();
@@ -701,18 +701,18 @@ public class CategoryDAO {
         try {
             conn = DbUtils.getConnection();
             if (conn != null) {
-                
+
                 ptmCheck = conn.prepareStatement(CHECK_CHILDREN_COUNT);
                 ptmCheck.setInt(1, parentID);
                 rs = ptmCheck.executeQuery();
                 rs.next();
                 int childCount = rs.getInt(1);
-            
+
                 if (childCount > 0) {
                     // If there are children, delete them first
                     ptmDelete = conn.prepareStatement(DELETE_ALL_CHILDREN);
                     ptmDelete.setInt(1, parentID);
-                    check = ptmDelete.executeUpdate()>0;
+                    check = ptmDelete.executeUpdate() > 0;
                 } else {
                     check = true;
                 }

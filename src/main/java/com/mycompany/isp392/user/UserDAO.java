@@ -49,9 +49,9 @@ public class UserDAO {
             + "INNER JOIN Customers c ON o.CustID = c.CustID\n"
             + "INNER JOIN Users u ON c.CustID = u.UserID\n"
             + "WHERE o.OrderID = ?";
+
     private static final String UPDATE_EMP_ROLE_STATUS = "UPDATE Users SET roleID = ?, status = ? WHERE UserID = ?";
     private static final String GET_HASHED_PASSWORD = "SELECT password FROM Users WHERE UserID = ?";
-
 
     public UserDTO checkLogin(String email, String password) throws SQLException {
         UserDTO user = null;
@@ -905,7 +905,7 @@ public class UserDAO {
         return check;
     }
 
-    public UserDTO getUserInfoBasedOnOrderID(int orderID){
+    public UserDTO getUserInfoBasedOnOrderID(int orderID) {
         Connection conn = null;
         PreparedStatement ptm = null;
         ResultSet rs = null;
@@ -970,7 +970,7 @@ public class UserDAO {
         }
         return check;
     }
-    
+
     public String getHashedPassword(int userID) throws SQLException {
         String hashedPassword = null;
         Connection conn = null;
@@ -982,14 +982,14 @@ public class UserDAO {
                 ptm = conn.prepareStatement(GET_HASHED_PASSWORD);
                 ptm.setInt(1, userID);
                 rs = ptm.executeQuery();
-                if(rs.next()){
+                if (rs.next()) {
                     hashedPassword = rs.getString("password");
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (rs != null){
+            if (rs != null) {
                 rs.close();
             }
             if (ptm != null) {

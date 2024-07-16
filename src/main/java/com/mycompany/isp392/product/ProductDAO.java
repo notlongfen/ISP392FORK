@@ -14,6 +14,9 @@ import java.util.Map;
 import java.util.List;
 import com.mycompany.isp392.brand.BrandDTO;
 import com.mycompany.isp392.wishlist.WishlistDTO;
+import java.text.NumberFormat;
+import java.util.Arrays;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -423,6 +426,7 @@ public class ProductDAO {
                     Date importDate = rs.getDate("importDate");
                     String image = rs.getString("image");
                     int status = rs.getInt("status");
+
                     productDetailsList.add(new ProductDetailsDTO(productDetailID, productID, color, size, stockQuantity,
                             price, importDate, image, status));
                 }
@@ -568,18 +572,6 @@ public class ProductDAO {
             }
         }
         return updated;
-    }
-
-    public static void main(String[] args) throws SQLException {
-        ProductDAO dao = new ProductDAO();
-        int total = dao.getTotalQuantityByProductID(17);
-        boolean isUpdate = dao.updateNumberOfPurchasing(17, total);
-        if (isUpdate) {
-            System.out.println("Update successfully");
-        } else {
-            System.out.println("Failed to update");
-        }
-        System.out.println("Total is:" + total);
     }
 
     public boolean checkProductExists(String productName, int productID) throws SQLException {
@@ -1315,29 +1307,6 @@ public class ProductDAO {
         return productDetailsList;
     }
 
-//    public static void main(String[] args) throws SQLException {
-//        ProductDAO dao = new ProductDAO();
-////        List<ProductDTO> allProducts = dao.getAllProductPags(1, 10);
-////        for (ProductDTO allProduct : allProducts) {
-////            System.out.println(allProduct);
-////        }
-//
-////        int total = dao.getTotalProductCount();
-////        System.out.println("Total product is: " + total);
-////
-////        List<ProductDetailsDTO> lists = dao.getProductDetailsByProductID(3);
-////        for (ProductDetailsDTO list : lists) {
-////            System.out.println(list);
-////        }
-//        String color = "Black";
-//        int productID = 3;
-////       
-//        List<ProductDetailsDTO> products = dao.getProductDetailsByBrand(3);
-//        for (ProductDTO product : products) {
-//            System.out.println(product);
-//        }
-//
-//    }
     public List<ProductDetailsDTO> getProductInfoToSendMail(int orderID) throws SQLException {
         List<ProductDetailsDTO> products = new ArrayList<>();
         Connection conn = null;
@@ -1628,7 +1597,7 @@ public class ProductDAO {
             }
             sql.append(")");
         }
-        
+
         if (categoryFilters != null && categoryFilters.length > 0) {
             sql.append(" AND cc.ParentID IN (");
             for (int i = 0; i < categoryFilters.length; i++) {
@@ -1704,6 +1673,8 @@ public class ProductDAO {
 
     public Map<String, Map<String, Map<String, Object>>> getProductDetailsByProductID2(int productId) {
         Map<String, Map<String, Map<String, Object>>> colorSizeMap = new HashMap<>();
+        Locale localeVN = new Locale("vi", "VN");
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(localeVN);
 
         try (Connection con = DbUtils.getConnection()) {
             String query = "SELECT color, size, price, image FROM ProductDetails WHERE ProductID = ?";
@@ -1719,7 +1690,7 @@ public class ProductDAO {
 
                 colorSizeMap.putIfAbsent(color, new HashMap<>());
                 Map<String, Object> sizeDetails = new HashMap<>();
-                sizeDetails.put("price", price);
+                sizeDetails.put("price", currencyFormatter.format(price));
                 sizeDetails.put("images", images.split(";"));
                 colorSizeMap.get(color).put(size, sizeDetails);
             }
@@ -1728,6 +1699,31 @@ public class ProductDAO {
         }
 
         return colorSizeMap;
+    }
+
+//    public static String getProductPrice(int productPrice) {
+//        NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+//        return formatter.format(productPrice);
+//    }
+    public static void main(String[] args) {
+        ProductDAO dao = new ProductDAO();
+        // Thay đổi productId tại đây để truy vấn các chi tiết sản phẩm khác nhau
+        int productId = 9; // Thay đổi productId theo nhu cầu của bạn
+
+        // Gọi hàm để lấy dữ liệu chi tiết sản phẩm
+        Map<String, Map<String, Map<String, Object>>> detailsMap = dao.getProductDetailsByProductID2(17);
+
+        // In ra kết quả để kiểm tra
+        for (String color : detailsMap.keySet()) {
+            System.out.println("Color: " + color);
+            Map<String, Map<String, Object>> sizeMap = detailsMap.get(color);
+            for (String size : sizeMap.keySet()) {
+                System.out.println("  Size: " + size);
+                Map<String, Object> sizeDetails = sizeMap.get(size);
+                System.out.println("    Price: " + sizeDetails.get("price"));
+                System.out.println("    Images: " + Arrays.toString((String[]) sizeDetails.get("images")));
+            }
+        }
     }
 
     public int getProductDetailsID(int productID, int price, String size, String color) throws SQLException {

@@ -44,7 +44,6 @@ public class EditProductController extends HttpServlet {
             int oldNumberOfPurchasing = Integer.parseInt(request.getParameter("oldNumberOfPurchasing"));
             int oldBrandID = Integer.parseInt(request.getParameter("oldBrandID"));
 
-
             if (productDAO.checkProductExists(productName, productID)) {
                 productError.setProductNameError("Product already exists.");
                 checkValidation = false;
@@ -55,7 +54,7 @@ public class EditProductController extends HttpServlet {
                 if (check) {
                     List<String> oldList = new ArrayList<>();
                     List<String> newList = new ArrayList<>();
-                    if(!oldProductName.equals(productName) && !oldDescription.equals(description) && oldNumberOfPurchasing != numberOfPurchasing && oldBrandID != brandID) {
+                    if (!oldProductName.equals(productName) && !oldDescription.equals(description) && oldNumberOfPurchasing != numberOfPurchasing && oldBrandID != brandID) {
                         oldList.add(oldProductName);
                         oldList.add(oldDescription);
                         oldList.add(String.valueOf(oldNumberOfPurchasing));
@@ -65,24 +64,24 @@ public class EditProductController extends HttpServlet {
                         newList.add(String.valueOf(numberOfPurchasing));
                         newList.add(String.valueOf(brandID));
                     } else {
-                        if(!oldProductName.equals(productName)) {
+                        if (!oldProductName.equals(productName)) {
                             oldList.add(oldProductName);
                             newList.add(productName);
                         }
-                        if(!oldDescription.equals(description)) {
+                        if (!oldDescription.equals(description)) {
                             oldList.add(oldDescription);
                             newList.add(description);
                         }
-                        if(oldNumberOfPurchasing != numberOfPurchasing) {
+                        if (oldNumberOfPurchasing != numberOfPurchasing) {
                             oldList.add(String.valueOf(oldNumberOfPurchasing));
                             newList.add(String.valueOf(numberOfPurchasing));
                         }
-                        if(oldBrandID != brandID) {
+                        if (oldBrandID != brandID) {
                             oldList.add(String.valueOf(oldBrandID));
                             newList.add(String.valueOf(brandID));
                         }
                     }
-                    if(oldList.size() > 0 && newList.size() > 0) {
+                    if (oldList.size() > 0 && newList.size() > 0) {
                         String action = request.getParameter("edit");
                         UserDTO user = (UserDTO) request.getSession().getAttribute("LOGIN_USER");
                         int empID = user.getUserID();
@@ -103,7 +102,7 @@ public class EditProductController extends HttpServlet {
             log("Error at EditProductController: " + e.toString());
             request.getSession().setAttribute("ERROR_MESSAGE", "Error updating product: " + e.getMessage());
         }
-         request.getRequestDispatcher(ERROR).forward(request, response);   
+        request.getRequestDispatcher(ERROR).forward(request, response);
     }
 
     @Override

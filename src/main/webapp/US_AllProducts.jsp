@@ -1,3 +1,7 @@
+<%@page import="java.text.NumberFormat"%>
+<%@page import="java.util.Locale"%>
+<%@page import="java.util.Locale"%>
+<%@page import="com.mycompany.isp392.product.ProductDAO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="com.mycompany.isp392.brand.BrandDTO"%>
 <%@page import="com.mycompany.isp392.product.ProductDTO"%>
@@ -234,9 +238,9 @@
                                 if (categories != null) {
                                     for (CategoryDTO category : categories) {
                             %>
-                            <li><label><input type="checkbox" name="category" class="category-filter" value="<%= category.getCategoryID() %>"> <%= category.getCategoryName() %></label></li>
+                            <li><label><input type="checkbox" name="category" class="category-filter" value="<%= category.getCategoryID()%>"> <%= category.getCategoryName()%></label></li>
                                     <%    }
-                            } %>
+                                        } %>
                         </ul>
                     </div>
                     <hr>
@@ -247,9 +251,9 @@
                                 if (brands != null) {
                                     for (BrandDTO brand : brands) {
                             %>
-                            <li><label><input type="checkbox" name="brand" class="brand-filter" value="<%= brand.getBrandID() %>"> <%= brand.getBrandName() %></label></li>
+                            <li><label><input type="checkbox" name="brand" class="brand-filter" value="<%= brand.getBrandID()%>"> <%= brand.getBrandName()%></label></li>
                                     <%    }
-                            } %>
+                                        } %>
                         </ul>
                     </div>
                     <hr>
@@ -271,7 +275,7 @@
                         <a style="color: grey; text-decoration: none" href="ViewAllProductController">All Products</a>
                     </h5>
                     <div class="row" id="products-container">
-                        <% 
+                        <%
                             List<ProductDTO> products = (List<ProductDTO>) request.getAttribute("products");
                             List<ProductDetailsDTO> productDetails = (List<ProductDetailsDTO>) request.getAttribute("productDetails");
 
@@ -289,9 +293,9 @@
                         <div class="col-md-4 mb-4">
                             <div class="product-grid">
                                 <div class="product-image">
-                                    <a href="MainController?action=Get_product_detail&productID=<%= product.getProductID() %>&color=<%= firstDetail.getColor() %>" >
+                                    <a href="MainController?action=Get_product_detail&productID=<%= product.getProductID()%>&color=<%= firstDetail.getColor()%>" >
                                         <div class="product_image1">
-                                            <img  src="<%= firstDetail.getImage().split(";")[0] %>" alt="<%= product.getProductName() %>">
+                                            <img  src="<%= firstDetail.getImage().split(";")[0]%>" alt="<%= product.getProductName()%>">
                                         </div>
                                     </a>
                                     <ul class="product-links">
@@ -299,12 +303,20 @@
                                     </ul>
                                 </div>
                                 <div class="product-content">
-                                    <h3 class="title"><a href="MainController?action=Get_product_detail&productID=<%= product.getProductID() %>&color=<%= firstDetail.getColor() %>"><%= product.getProductName() %></a></h3>
-                                    <div class="price">$<%= firstDetail.getPrice() %> <span></span></div>
+                                    <h3 class="title"><a href="MainController?action=Get_product_detail&productID=<%= product.getProductID()%>&color=<%= firstDetail.getColor()%>"><%= product.getProductName()%></a></h3>
+                                    <div class="price">
+                                        <%
+                                            NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+
+                                            int price = firstDetail.getPrice();
+                                            String formattedPrice = formatter.format(price);
+                                        %>
+                                        <%= formattedPrice%>
+                                        <span></span></div>
                                 </div>
                             </div>
                         </div>
-                        <% 
+                        <%
                                     }
                                 }
                             }
@@ -313,22 +325,22 @@
                     <div id="pagination-container" class="mt-3">
                         <nav aria-label="Page navigation">
                             <ul class="pagination justify-content-center mt-3">
-                                <li class="page-item <%= (request.getAttribute("currentPage") != null && (int) request.getAttribute("currentPage") == 1) ? "disabled" : "" %>">
-                                    <a class="page-link" href="#" onclick="loadFilteredProducts(<%= (int) request.getAttribute("currentPage") - 1 %>)" aria-label="Previous">
+                                <li class="page-item <%= (request.getAttribute("currentPage") != null && (int) request.getAttribute("currentPage") == 1) ? "disabled" : ""%>">
+                                    <a class="page-link" href="#" onclick="loadFilteredProducts(<%= (int) request.getAttribute("currentPage") - 1%>)" aria-label="Previous">
                                         <span aria-hidden="true">&laquo;</span>
                                     </a>
                                 </li>
-                                <% 
+                                <%
                                     int totalPages = (int) request.getAttribute("totalPages");
                                     int currentPage = (int) request.getAttribute("currentPage");
-                                    for (int i = 1; i <= totalPages; i++) { 
+                                    for (int i = 1; i <= totalPages; i++) {
                                 %>
-                                <li class="page-item <%= currentPage == i ? "active" : "" %>">
-                                    <a class="page-link" href="#" onclick="loadFilteredProducts(<%= i %>)"><%= i %></a>
+                                <li class="page-item <%= currentPage == i ? "active" : ""%>">
+                                    <a class="page-link" href="#" onclick="loadFilteredProducts(<%= i%>)"><%= i%></a>
                                 </li>
-                                <% } %>
-                                <li class="page-item <%= currentPage == totalPages ? "disabled" : "" %>">
-                                    <a class="page-link" href="#" onclick="loadFilteredProducts(<%= currentPage + 1 %>)" aria-label="Next">
+                                <% }%>
+                                <li class="page-item <%= currentPage == totalPages ? "disabled" : ""%>">
+                                    <a class="page-link" href="#" onclick="loadFilteredProducts(<%= currentPage + 1%>)" aria-label="Next">
                                         <span aria-hidden="true">&raquo;</span>
                                     </a>
                                 </li>
@@ -390,8 +402,24 @@
 
                                         function resetFilters() {
                                             $('input[type="checkbox"]').prop('checked', false);
+                                            window.location.href = "MainController?action=All_Product";
                                             loadFilteredProducts();
                                         }
+
+                                        // Lấy giá sản phẩm từ phần tử HTML/JSP
+                                        let priceElement = document.getElementById('productPrice');
+                                        let price = parseFloat(priceElement.innerText.replace('$', '')); // Lấy giá và bỏ đi ký tự '$'
+
+// Định dạng lại giá sang tiền tệ Việt Nam
+                                        const formatter = new Intl.NumberFormat('vi-VN', {
+                                            style: 'currency',
+                                            currency: 'VND'
+                                        });
+                                        let formattedPrice = formatter.format(price);
+
+// Cập nhật nội dung của phần tử HTML/JSP
+                                        priceElement.innerText = formattedPrice;
+
         </script>
     </body>
 </html>
