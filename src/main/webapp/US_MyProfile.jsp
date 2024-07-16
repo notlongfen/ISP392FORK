@@ -127,7 +127,7 @@
                                         <a class="nav-link active" aria-current="page" href="US_MyProfile.jsp"><div class="fas fa-user mr-2"></div> Personal Information</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link " href="US_MyOrder.jsp"><div class="fas fa-box mr-2"></div> My Order</a>
+                                        <a class="nav-link " href="MainController?action=ViewUSOrder"><div class="fas fa-box mr-2"></div> My Order</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="MainController?action=Checkout"><div class="fas fa-heart mr-2"></div> ️Check out</a>

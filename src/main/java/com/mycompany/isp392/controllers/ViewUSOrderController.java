@@ -30,7 +30,7 @@ import java.util.List;
 @WebServlet(name = "ViewUSOrderController", urlPatterns = {"/ViewUSOrderController"})
 public class ViewUSOrderController extends HttpServlet {
 
-    private static final String ERROR = "US_index.jsp";
+    private static final String ERROR = "US_MyProfile.jsp";
     private static final String SUCCESS = "US_MyOrder.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -41,7 +41,7 @@ public class ViewUSOrderController extends HttpServlet {
         HttpSession session = request.getSession();
         UserDAO dao = new UserDAO();
         try {
-            CustomerDTO cust = (CustomerDTO) session.getAttribute("LOGIN_USER");
+            UserDTO cust = (UserDTO) session.getAttribute("LOGIN_USER");
             int custID = cust.getUserID();
             session.setAttribute("custID", custID);
             List<ProductDetailsDTO> product = new ArrayList<>();

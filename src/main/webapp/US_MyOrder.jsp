@@ -134,10 +134,9 @@
                        int custID = (int) session.getAttribute("custID");
                        if (loginUser == null) {
                            return;
-                      
                    }
             %>
-            
+
 
             <div class="row">
                 <div class="col-lg-3 profile-sidebar m" id="sidebar" >
@@ -149,13 +148,13 @@
                         <hr>
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a class="nav-link " href="US_MyProfile.jsp"><i class="fas fa-user mr-2"></i> Personal Information</a>
+                                <a class="nav-link active" aria-current="page" href="US_MyProfile.jsp"><div class="fas fa-user mr-2"></div> Personal Information</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link active" href="US_MyOrder.jsp"><i class="fas fa-box mr-2"></i> My Order</a>
+                                <a class="nav-link " href="MainController?action=ViewUSOrder"><div class="fas fa-box mr-2"></div> My Order</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="US_MyWishlist.jsp"><i class="fas fa-heart mr-2"></i> My Wishlists</a>
+                                <a class="nav-link" href="MainController?action=Checkout"><div class="fas fa-heart mr-2"></div> ️Check out</a>
                             </li>
                         </ul>
                     </div>
@@ -183,7 +182,7 @@
                                     OrderDetailsDTO order = orders.get(i);
                                     ProductDetailsDTO product = products.get(i);
                                     ChildrenCategoryDTO category = categories.get(i);
-                        %>
+                    %>
                     <div>
                         <div class="mb-3 border-bottom order-item">
                             <div class="row">
@@ -197,8 +196,8 @@
                                         </div>
                                         <div class="d-flex justify-content-start">
                                             <p class="card-text mb-0"><strong>Category:</strong> <%= category.getCategoryName()%></p>
-                                            <p class="card-text mb-0 pl-3"><strong>Size:</strong> <%= product. getSize()%></p>
-                                            <p class="card-text mb-0 pl-3"><strong>Quantity:</strong> <%= order.getQuantity()%></p>
+                                            <p class="card-text mb-0 pl-3"><strong> Size:</strong> <%= product.getSize()%></p>
+                                            <p class="card-text mb-0 pl-3"><strong> Quantity:</strong> <%= order.getQuantity()%></p>
                                         </div>
                                         <div class="status-box mt-5"><%= order.getStatusDescription()%></div>
                                     </div>
@@ -211,11 +210,21 @@
                                 <div class="col-md-3 d-flex flex-column justify-content-center align-items-center ">
                                     <div class="d-grid gap-2">
                                         <button class="btn btn-primary mb-2" type="button" style="background: white; color: black; border: 2px solid black;">View Order</button>
-                                        
+
+
+                                        <% 
+                                                      if (order.getStatus() == 0 || order.getStatus() == 3 || order.getStatus() == 2){  
+                                        %>
+                                        <a href="#" class="btn btn-sm btn-danger disabled" aria-disabled="true">Cancel</a> 
+                                        <% 
+                                            } else {  
+                                        %>
                                         <a href="MainController?action=CancelOrder&orderID=<%=order.getOrderID()%>">     
-                                           <button class="btn btn-danger cancel-order" type="button">Cancel Order</button>
+                                            <button class="btn btn-danger cancel-order" type="button">Cancel</button>
                                         </a>
-                                           
+                                        <% 
+                                            }
+                                        %>
                                         <div class="d-flex justify-content-between mt-4">
                                             <h3>Total:</h3>
                                             <p class="text-danger fs-4 pl-3"><%= order.getTotal()%></p>
@@ -223,14 +232,14 @@
                                     </div>
                                 </div>
                             </div>
-                        <% 
-                                } 
-                            } else {
-                        %>
-                        <p>No orders available at the moment.</p>
-                        <% 
-                            }
-                        %>                
+                            <% 
+                                    } 
+                                } else {
+                            %>
+                            <p>No orders available at the moment.</p>
+                            <% 
+                                }
+                            %>                
                         </div>
                         <div class="number_of_product"><%= orders != null ? orders.size() : 0 %>Products</div>
                     </div>
