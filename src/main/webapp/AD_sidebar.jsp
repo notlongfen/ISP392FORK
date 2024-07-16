@@ -31,7 +31,7 @@
         <form action="MainController" method="post">
             <ul class="navbar-nav sidebar sidebar-light accordion" id="accordionSidebar" style="background: #C43337">
                 <a class="sidebar-brand d-flex align-items-center justify-content-center" href="HomePageController" style="background: #FFF">
-                    <div class="sidebar-brand-text" style="color: #C43337">KRO<span style="color: #000">SHOP</span></div>
+                    <div class="sidebar-brand-text" style="color: #C43337">KRO<span style="color: #000">NO</span></div>
                 </a>
                 <hr class="sidebar-divider my-0">
                 <div class="sidebar-heading pt-3" style="font-size: 15px">

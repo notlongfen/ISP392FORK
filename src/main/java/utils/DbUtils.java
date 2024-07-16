@@ -19,10 +19,10 @@ import org.mindrot.jbcrypt.BCrypt;
 public class DbUtils {
 
 
+    private static Dotenv dotenv = Dotenv.configure().directory("/home/notlongfen/code/java/ISP392/.env").load();
+    private static final String CHECK_LOG_FORMAT = "INSERT INTO %s (EmpID, %s, FieldOld, FieldNew, Action) VALUES (?, ?, ?, ?, ?)"; 
+    private static final String CHECK_LOG_GET = "SELECT * FROM %s WHERE empID = ?";
 
-private static final String CHECK_LOG_FORMAT = "INSERT INTO %s (EmpID, %s, FieldOld, FieldNew, Action) VALUES (?, ?, ?, ?, ?)"; 
-
-    private static Dotenv dotenv = Dotenv.configure().directory("D:\\FPT\\K5\\ISP392\\ISP392_Test").load();
 
     public static Connection getConnection() throws ClassNotFoundException, SQLException {
         Connection conn = null;
@@ -60,6 +60,26 @@ private static final String CHECK_LOG_FORMAT = "INSERT INTO %s (EmpID, %s, Field
     }
     return check;
 }
+
+    public static <T> boolean getCheckLogFromDB(String tableName, T manageDTO){
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        boolean check = false;
+        try {
+            conn = getConnection();
+            String query = String.format(CHECK_LOG_GET, tableName, manageDTO.getClass().getMethod("getEmpID").invoke(manageDTO));
+            ptm = conn.prepareStatement(query);
+            ptm.setInt(1, (int) manageDTO.getClass().getMethod("getEmpID").invoke(manageDTO));
+            rs = ptm.executeQuery();
+            check = rs.next();
+        } catch (ClassNotFoundException | SQLException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection(conn, ptm, rs);
+        }
+        return check;
+    }
 
     public static void closeConnection(Connection conn, PreparedStatement ptm, ResultSet rs) {
         try {

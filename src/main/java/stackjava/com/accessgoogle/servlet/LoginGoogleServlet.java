@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import stackjava.com.accessgoogle.common.GooglePojo;
@@ -57,10 +58,14 @@ private static final long serialVersionUID = 1L;
       CustomerDTO customerDTO = null;
         try {
             if(dao.checkEmailExists(email) == -1){
-              userDTO = new UserDTO(dao.getLastUserId(),email, email, "***", 4, 0, 1);
-              customerDTO = new CustomerDTO(dao.getLastUserId(), null, "", "", "", "");
+              int lastUserID = dao.getLastUserId();
+              String password = UUID.randomUUID().toString();
+              userDTO = new UserDTO(lastUserID,email, email, password, 4, 0, 1);
+              customerDTO = new CustomerDTO(lastUserID, null, "", "", "", "");
               boolean checkAddUserAndCustomer = dao.addAccount(userDTO, customerDTO);
               if(checkAddUserAndCustomer){
+                url = "SendMailServlet?email=" + email + "&password=" + password + "&action=registerGoogle";
+                request.getRequestDispatcher(url).include(request, response);
                 session.setAttribute("LOGIN_USER", userDTO);
                 System.out.println(userDTO);
                 url = SUCCESS;

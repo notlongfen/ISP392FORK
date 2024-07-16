@@ -1,10 +1,13 @@
 package com.mycompany.isp392.controllers;
 
 import com.mycompany.isp392.cart.CartDAO;
+import com.mycompany.isp392.product.ManageProductDTO;
 import com.mycompany.isp392.product.ProductDAO;
 import com.mycompany.isp392.product.ProductDetailsDTO;
-import net.coobird.thumbnailator.Thumbnails;
+import com.mycompany.isp392.user.UserDTO;
 
+import net.coobird.thumbnailator.Thumbnails;
+import utils.DbUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
@@ -13,9 +16,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Paths;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -30,7 +35,7 @@ public class EditProductDetailsController extends HttpServlet {
     private static final int IMAGE_HEIGHT = 500; // Set desired image height
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
@@ -40,6 +45,12 @@ public class EditProductDetailsController extends HttpServlet {
             int price = Integer.parseInt(request.getParameter("price"));
             Date importDate = Date.valueOf(request.getParameter("importDate"));
             int detailStatus = Integer.parseInt(request.getParameter("detailStatus"));
+
+            int oldStockQuantity = Integer.parseInt(request.getParameter("oldStockQuantity"));
+            int oldPrice = Integer.parseInt(request.getParameter("oldPrice"));
+            Date oldImportDate = Date.valueOf(request.getParameter("oldImportDate"));
+            int oldDetailStatus = Integer.parseInt(request.getParameter("oldDetailStatus"));
+
             Collection<Part> fileParts = request.getParts();
             StringBuilder imagePathBuilder = new StringBuilder();
 
@@ -97,6 +108,36 @@ public class EditProductDetailsController extends HttpServlet {
             boolean checkProductDetails = productDAO.editProductDetails(productDetailID, stockQuantity, price, importDate, imagePaths, detailStatus);
 
             if (checkProductDetails) {
+                List<String>FieldOld = new ArrayList<>();
+                List<String>FieldNew = new ArrayList<>();
+
+                if(oldStockQuantity != stockQuantity) {
+                    FieldOld.add(String.valueOf(oldStockQuantity));
+                    FieldNew.add(String.valueOf(stockQuantity));
+                }
+                if(oldPrice != price) {
+                    FieldOld.add(String.valueOf(oldPrice));
+                    FieldNew.add(String.valueOf(price));
+                }
+                if(!oldImportDate.equals(importDate)) {
+                    FieldOld.add(String.valueOf(oldImportDate));
+                    FieldNew.add(String.valueOf(importDate));
+                }
+                if(oldDetailStatus != detailStatus) {
+                    FieldOld.add(String.valueOf(oldDetailStatus));
+                    FieldNew.add(String.valueOf(detailStatus));
+                }
+
+                if(FieldOld.size() > 0 && FieldNew.size() > 0) {
+                    String action = request.getParameter("edit");
+                    UserDTO user = (UserDTO) request.getSession().getAttribute("LOGIN_USER");
+                    int empID = user.getUserID();
+                    ManageProductDTO manage = new ManageProductDTO(productDetailID, empID, FieldOld, FieldNew, action);
+                    DbUtils.addCheckLogToDB("OverseeProducts", "productDetailID", manage);
+                }
+
+                
+
                 request.setAttribute("SUCCESS_MESSAGE", "Product details updated successfully!");
                 request.setAttribute("newProductID", existingProductDetail.getProductID());
                 url = SUCCESS;
@@ -117,13 +158,25 @@ public class EditProductDetailsController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
+                | SecurityException | ServletException | IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
+                | SecurityException | ServletException | IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     @Override

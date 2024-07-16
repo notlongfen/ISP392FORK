@@ -42,6 +42,8 @@ public class SendMailServlet extends HttpServlet {
     private static final String ERROR_SEND_EMAIL_UPDATE_ORDER_STATUS = "AD_EditOrder.jsp";
     private static final String SUCCESS_SEND_REQUEST = "RequestSupportController";
     private static final String ERROR_SEND_REQUEST = "AD_RequestSupport.jsp";
+    private static final String SUCCESS_SEND_MAIL_GOOGLE_USER = "LoginGoogleServlet";
+    private static final String ERROR_SEND_MAIL_GOOGLE_USER = "US_SignIn.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
@@ -58,12 +60,14 @@ public class SendMailServlet extends HttpServlet {
             url = updateOrderStatusFromAdmin(request, response);
         } else if ("Request For Support".equals(action)) {
             url = requestForSupport(request, response);
+        } else if ("registerGoogle".equals(action)) {
+            url = newGoogleUser(request, response);
         }
         response.sendRedirect(url);
     }
 
     private boolean sendEmail(String toEmail, String subject, String messageBody, boolean isHtml) {
-        final Dotenv dotenv = Dotenv.configure().directory("D:\\Document\\FPT\\HK5_SU24\\ISP392\\ISP392\\.env").load();
+        final Dotenv dotenv = Dotenv.configure().directory("/home/notlongfen/code/java/ISP392/.env").load();
         final String fromEmail = dotenv.get("GOOGLE_SENDMAIL_EMAIL");
         final String password = dotenv.get("GOOGLE_SENDMAIL_PASSWORD");
 
@@ -240,6 +244,18 @@ public class SendMailServlet extends HttpServlet {
             url = SUCCESS_SEND_REQUEST;
         }
         return url;
+    }
+
+    private String newGoogleUser(HttpServletRequest request, HttpServletResponse response) {
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        String subject = "Register Successfully";
+        String messageBody = "You have successfully registered with email: " + email + " and we have create your unique password: " + password + "If you want to change your password, please click on the Forgot Password button at the login page.";
+        boolean result = sendEmail(email, subject, messageBody,false);
+        if (result) {
+            return SUCCESS_SEND_MAIL_GOOGLE_USER;
+        }
+        return ERROR_SEND_MAIL_GOOGLE_USER;
     }
 
     @Override
