@@ -71,6 +71,7 @@ private static final long serialVersionUID = 1L;
                 url = SUCCESS;
               }
             }else{
+              userDTO = dao.getUserGoogleInfo(email);
               session.setAttribute("LOGIN_USER", userDTO);
                 System.out.println(userDTO);
                 url = SUCCESS;

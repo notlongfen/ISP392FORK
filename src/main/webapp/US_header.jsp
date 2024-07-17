@@ -134,7 +134,7 @@
                                                 </form>
                                             </div>
                                         </li>
-                                        <li><a href="MainController?action=View profile"><i class="fa fa-user" aria-hidden="true"></i></a></li>
+                                        <li><a href="MainController?action=View profile&from=<%=request.getContextPath()%>"><i class="fa fa-user" aria-hidden="true"></i></a></li>
                                         <li class="checkout">
                                             <a href="#">
                                                 <i class="fa fa-shopping-cart" aria-hidden="true"></i>
@@ -143,7 +143,7 @@
                                         </li>
 
                                         <li class="checkout">
-                                            <a href="MainController?action=wishlist">
+                                            <a href="MainController?action=wishlist&from=wishlist>
                                                 <i class="fa fa-heart" aria-hidden="true"></i>
                                                 <!--<span id="checkout_items" class="checkout_items">2</span>-->
                                             </a>

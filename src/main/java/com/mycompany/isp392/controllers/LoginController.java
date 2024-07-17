@@ -24,15 +24,15 @@ public class LoginController extends HttpServlet {
     private static final String SYSTEM_MANAGER_PAGE = "SearchUserController";
     private static final String SHOP_MANAGER_PAGE = "GetProductsController";
     private static final String SHOP_STAFF_PAGE = "GetProductsController";
+    private static final String HOME_PAGE = "US_index.jsp";
+    private static final String WISHLIST_PAGE = "US_MyWishlist.jsp";
+    private static final String PRODUCT_DETAIL_PAGE  = "US_ProductDetail.jsp";
+
     private String clientID;
     public void initClientID() throws ServletException{
 
 
-<<<<<<< Updated upstream
-        Dotenv dotenv = Dotenv.configure().directory("C:\\Users\\tuan tran\\Desktop\\ISP392_Project\\.env").load();
-=======
-        Dotenv dotenv = Dotenv.configure().directory("D://Semester5//ISP//ISP392SHOP//.env").load();
->>>>>>> Stashed changes
+        Dotenv dotenv = Dotenv.configure().directory("/home/notlongfen/code/java/ISP392/.env").load();
         clientID = dotenv.get("GOOGLE_CLIENT_ID");
     }
 
@@ -45,6 +45,7 @@ public class LoginController extends HttpServlet {
         try {
             String email = request.getParameter("email");
             String password = request.getParameter("password");
+            String from = request.getParameter("from");
             UserDAO dao = new UserDAO();
             UserDTO loginUser = dao.checkLogin(email, password);
             if (loginUser != null) {
@@ -53,7 +54,21 @@ public class LoginController extends HttpServlet {
                 int roleID = loginUser.getRoleID();
                 switch (roleID) {
                     case CUSTOMER:
-                        url = CUSTOMER_PAGE;
+                        switch (from) {
+                            case "wishlist":
+                                url = WISHLIST_PAGE;
+                                break;
+                            
+                            case "productDetail":
+                                url = PRODUCT_DETAIL_PAGE;
+                                break;
+
+                            
+
+                            default:
+                                url = CUSTOMER_PAGE;
+                                break;
+                        }
                         break;
                     case SYSTEM_MANAGER:
                         url = SYSTEM_MANAGER_PAGE;

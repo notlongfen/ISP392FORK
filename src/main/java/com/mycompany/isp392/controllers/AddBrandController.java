@@ -1,13 +1,21 @@
 package com.mycompany.isp392.controllers;
 
 import com.mycompany.isp392.brand.BrandDAO;
+import com.mycompany.isp392.brand.BrandDTO;
 import com.mycompany.isp392.brand.BrandError;
+import com.mycompany.isp392.brand.ManageBrandDTO;
+import com.mycompany.isp392.user.UserDTO;
+
 import net.coobird.thumbnailator.Thumbnails;
+import utils.DbUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -26,7 +34,7 @@ public class AddBrandController extends HttpServlet {
     private static final int IMAGE_HEIGHT = 500; // Set desired image height
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         BrandError brandError = new BrandError();
@@ -70,6 +78,12 @@ public class AddBrandController extends HttpServlet {
             if (checkValidation) {
                 boolean check = brandDAO.addBrand(brandName, imagePath);
                 if (check) {
+                    List<String> newList = new ArrayList<>();
+                    BrandDTO brand = brandDAO.getBrandByName(brandName);
+                    String action = request.getParameter(brandName);
+                    UserDTO user = (UserDTO) request.getSession().getAttribute("LOGIN_USER");
+                    ManageBrandDTO manage = new ManageBrandDTO(brand.getBrandID(), user.getUserID(), new ArrayList<>(), newList, action);
+                    DbUtils.addCheckLogToDB("ManageBrands", "BrandID", manage);
                     request.setAttribute("SUCCESS_MESSAGE", "BRAND ADDED SUCCESSFULLY !");
                     url = SUCCESS;
                 } else {
@@ -89,13 +103,25 @@ public class AddBrandController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
+                | SecurityException | ServletException | IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
+                | SecurityException | ServletException | IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     @Override

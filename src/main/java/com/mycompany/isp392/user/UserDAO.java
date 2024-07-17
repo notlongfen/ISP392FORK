@@ -52,6 +52,7 @@ public class UserDAO {
 
     private static final String UPDATE_EMP_ROLE_STATUS = "UPDATE Users SET roleID = ?, status = ? WHERE UserID = ?";
     private static final String GET_HASHED_PASSWORD = "SELECT password FROM Users WHERE UserID = ?";
+    private static final String GET_USER_GOOGLE_BY_EMAIL = "SELECT * FROM Users WHERE email = ?";
 
     public UserDTO checkLogin(String email, String password) throws SQLException {
         UserDTO user = null;
@@ -831,7 +832,8 @@ public class UserDAO {
                     String district = rs.getString("district");
                     String ward = rs.getString("ward");
                     String address = rs.getString("detailAddress");
-                    customer = new CustomerDTO(userName, email, phone, roleID, points, birthday, city, district, ward, address);
+                    customer = new CustomerDTO(userName, email, phone, roleID, points, birthday, city, district, ward,
+                            address);
                 }
             }
         } catch (Exception e) {
@@ -1000,5 +1002,31 @@ public class UserDAO {
             }
         }
         return hashedPassword;
+    }
+
+    public UserDTO getUserGoogleInfo(String email) {
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        UserDTO user = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_USER_GOOGLE_BY_EMAIL);
+                ptm.setString(1, email);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    int userID = rs.getInt("UserID");
+                    String userName = rs.getString("userName");
+                    int roleID = rs.getInt("roleID");
+                    int phone = rs.getInt("phone");
+                    int status = rs.getInt("status");
+                    user = new UserDTO(userID, userName, email, "", roleID, phone, status);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return user;
     }
 }

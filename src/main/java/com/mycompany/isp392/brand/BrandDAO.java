@@ -25,7 +25,7 @@ public class BrandDAO {
     private static final String GET_BRAND = "SELECT * FROM Brands WHERE BrandID=?";
     private static final String ADD_MANAGE_BRAND = "INSERT INTO ManageBrands(BrandID, EmpID, FieldNew, FieldOld, Action) values (?,?,?,?,?)";
     private static final String GET_MANAGE_BRAND = "SELECT * FROM ManageBrands";
-
+    private static final String GET_BRAND_BY_NAME = "SELECT * FROM Brands WHERE brandName = ?";
 
     public List<BrandDTO> searchForBrand(String brandName) {
         List<BrandDTO> list = new ArrayList<>();
@@ -406,4 +406,30 @@ public class BrandDAO {
         return list;
     }
 
+    public BrandDTO getBrandByName(String brandName){
+        BrandDTO brand = null;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_BRAND_BY_NAME);
+                ptm.setString(1, brandName);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    int brandID = rs.getInt("brandID");
+                    String name = rs.getString("brandName");
+                    String image = rs.getString("image");
+                    int status = rs.getInt("status");
+                    brand = new BrandDTO(brandID, name, image, status);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            closeResources(conn, ptm, rs);
+        }
+        return brand;
+    }
 }

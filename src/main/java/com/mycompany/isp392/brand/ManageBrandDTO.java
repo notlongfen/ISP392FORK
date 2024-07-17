@@ -63,6 +63,13 @@ public class ManageBrandDTO {
         this.changeDate = changeDate;
     }
 
+    public ManageBrandDTO(int brandID, int empID, String newField, String action){
+        this.brandID = brandID;
+        this.empID = empID;
+        this.loadNewField = newField;
+        this.action = action;
+    }
+
     
  
 

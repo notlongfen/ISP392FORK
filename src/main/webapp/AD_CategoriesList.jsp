@@ -83,7 +83,7 @@
                     %>
                     <div class="container-fluid" id="container-wrapper">
                         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                            <h1 class="h3 mb-0 text-gray-900">Categories</h1>
+                            <h1 class="h3 mb-0 text-gray-900"><b>Categories</b></h1>
                         </div>
                         <div class="d-flex justify-content-end mb-4">
                             <a href="AD_CreateCategories.jsp" class="btn btn-danger" style="background: #C43337;">Add new Category</a>
@@ -284,7 +284,7 @@
                 <div class="modal-content">
                     <div class="modal-header bg-success text-white">
                         <h5 class="modal-title" id="successModalLabel">Success</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>

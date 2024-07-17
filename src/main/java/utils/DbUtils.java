@@ -22,7 +22,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 public class DbUtils {
 
-    private static Dotenv dotenv = Dotenv.configure().directory("D:\\FPT\\K5\\ISP392\\ISP392_Test").load();
+    private static Dotenv dotenv = Dotenv.configure().directory("/home/notlongfen/code/java/ISP392/.env").load();
     private static final String CHECK_LOG_FORMAT = "INSERT INTO %s (EmpID, %s, FieldOld, FieldNew, Action) VALUES (?, ?, ?, ?, ?)";
     private static final String CHECK_LOG_GET = "SELECT * FROM %s";
 
