@@ -281,7 +281,7 @@
                                     <div class="owl-item product_slider_item <%= categoryClass.trim() %>">
                                         <div class="product-item">
                                             <div class="product discount">
-                                                <div class="product_image">
+                                                <div class="product_image1">
                                                     <a href="MainController?action=Get_product_detail&productID=<%= product.getProductID() %>&color=<%= firstDetail.getColor() %>" class="image">
                                                         <img src="<%= firstDetail.getImage().split(";")[0] %>" alt="<%= product.getProductName() %>">
                                                     </a>

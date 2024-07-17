@@ -18,6 +18,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
+import utils.DbUtils;
 
 /**
  *
@@ -36,7 +37,8 @@ public class ShowHistoryBrandController extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             BrandDAO dao = new BrandDAO();
-            List<ManageBrandDTO> manage = dao.getManageBrand();
+//            List<ManageBrandDTO> manage = dao.getManageBrand();
+            List<ManageBrandDTO> manage = (List<ManageBrandDTO>) DbUtils.getCheckLogFromDB("ManageBrands", "BrandID", ManageBrandDTO.class);
             session.setAttribute("manageBrand", manage);
         } catch (Exception e) {
             log("Error at SearchController: " + e.toString());

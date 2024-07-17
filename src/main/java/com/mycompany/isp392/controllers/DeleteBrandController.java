@@ -8,9 +8,13 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import utils.DbUtils;
 
 public class DeleteBrandController extends HttpServlet {
 
@@ -18,7 +22,7 @@ public class DeleteBrandController extends HttpServlet {
     private static final String SUCCESS = "GetBrandsController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         BrandError brandError = new BrandError();
@@ -38,7 +42,7 @@ public class DeleteBrandController extends HttpServlet {
                 oldList.add(String.valueOf(oldStatus));
                 newList.add(String.valueOf(newStatus));
                 ManageBrandDTO manage = new ManageBrandDTO(brandID, empID, oldList, newList, action);
-                boolean checkAdd = brandDAO.addManageBrand(manage);
+                boolean checkAdd = DbUtils.addCheckLogToDB("ManageBrands", "BrandID", manage);
                 request.setAttribute("SUCCESS_MESSAGE", "BRAND DELETED SUCCESSFULLY !");
                 url = SUCCESS;
             } else {
@@ -55,13 +59,33 @@ public class DeleteBrandController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(DeleteBrandController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(DeleteBrandController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvocationTargetException ex) {
+            Logger.getLogger(DeleteBrandController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchMethodException ex) {
+            Logger.getLogger(DeleteBrandController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(DeleteBrandController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(DeleteBrandController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvocationTargetException ex) {
+            Logger.getLogger(DeleteBrandController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchMethodException ex) {
+            Logger.getLogger(DeleteBrandController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override

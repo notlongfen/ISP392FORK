@@ -38,7 +38,7 @@ public class DeleteWishlistController extends HttpServlet {
             UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
             int cusID = user.getUserID();
             int productID = Integer.parseInt(request.getParameter("productID"));
-            int productDetailID = Integer.parseInt(request.getParameter("producDetailID"));
+            int productDetailID = Integer.parseInt(request.getParameter("productDetailID")); 
 
             if (user != null) {
                 boolean check = dao.deleteWishlist(cusID, productID, productDetailID);

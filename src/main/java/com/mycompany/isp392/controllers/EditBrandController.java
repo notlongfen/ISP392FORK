@@ -44,10 +44,10 @@ public class EditBrandController extends HttpServlet {
         boolean checkValidation = true;
         try {
             HttpSession session = request.getSession();
-            String newBrandName = request.getParameter("newBrandName");
             int brandID = Integer.parseInt(request.getParameter("brandID"));
             UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
             int empID = user.getUserID();
+            String newBrandName = request.getParameter("newBrandName");
             String oldBrandName = request.getParameter("oldBrandName");
             int oldStatus = Integer.parseInt(request.getParameter("oldStatus"));
             int newStatus = Integer.parseInt(request.getParameter("status"));
@@ -96,8 +96,8 @@ public class EditBrandController extends HttpServlet {
                         oldList.add(String.valueOf(oldStatus));
                         newList.add(String.valueOf(newStatus));
                     }
-                    
-                    if(!oldImagePath.equals(imagePath)) {
+
+                    if (!oldImagePath.equals(imagePath)) {
                         oldList.add(oldImagePath);
                         newList.add(imagePath);
                     }
@@ -106,7 +106,7 @@ public class EditBrandController extends HttpServlet {
                         String action = request.getParameter("edit");
                         manage = new ManageBrandDTO(brandID, empID, oldList, newList, action);
                         boolean checkAdd = DbUtils.addCheckLogToDB("ManageBrands", "BrandID", manage);
-                        if(checkAdd) {
+                        if (checkAdd) {
                             request.setAttribute("SUCCESS_MESSAGE", "INFORMATION UPDATED SUCCESSFULLY!");
                             url = SUCCESS;
                         } else {

@@ -17,7 +17,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="">
         <meta name="author" content="">
-        <title>Promotion List</title>
+        <title>History List</title>
         <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
         <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
         <link href="css/ruang-admin.min.css" rel="stylesheet">
@@ -110,29 +110,73 @@
 
                                                 <tr>
                                                     <%
-                                                  List<ManageBrandDTO> manage = (List<ManageBrandDTO>) session.getAttribute("manageBrand");
-                                                  if (manage != null && manage.size() > 0) {
-                                                  for (ManageBrandDTO list : manage) {
+ List<ManageBrandDTO> manage = (List<ManageBrandDTO>) session.getAttribute("manageBrand");
+ if (manage != null && manage.size() > 0) {
+     for (ManageBrandDTO list : manage) {
+         String[] oldFields = list.getLoadOldField().replace("[", "").replace("]", "").split(", ");
+         String[] newFields = list.getLoadNewField().replace("[", "").replace("]", "").split(", ");
+        
+         String oldName = "", oldStatus = "", oldImage = "";
+         String newName = "", newStatus = "", newImage = "";
+
+         for (String field : oldFields) {
+             if (field.matches(".*\\.(png|jpg|jpeg|gif)$")) {
+                 oldImage = field;
+             } else if (field.matches("\\d+")) {
+                 oldStatus = field;
+             } else {
+                 oldName = field;
+             }
+         }
+
+         for (String field : newFields) {
+             if (field.matches(".*\\.(png|jpg|jpeg|gif)$")) {
+                 newImage = field;
+             } else if (field.matches("\\d+")) {
+                 newStatus = field;
+             } else {
+                 newName = field;
+             }
+         }
                                                     %>
-                                                    <td><%= list.getBrandID()%></td>
-                                                    <td><%= list.getEmpID()%></td>
-                                                    <td><%= list.getLoadOldField()%></td>
-                                                    <td><%= list.getLoadNewField()%></td>
-                                                    <td><%= list.getAction()%></td>
-                                                    <td><%= list.getChangeDate()%></td>
-                                                </tr> 
+                                                <tr>
+                                                    <td><%= list.getBrandID() %></td>
+                                                    <td><%= list.getEmpID() %></td>
+                                                    <td>
+                                                        <% if (!oldName.isEmpty()) { %>
+                                                        Name: <%= oldName %><br>
+                                                        <% } %>
+                                                        <% if (!oldStatus.isEmpty()) { %>
+                                                        Status: <%= oldStatus %><br>
+                                                        <% } %>
+                                                        <% if (!oldImage.isEmpty()) { %>
+                                                        <img src="<%= oldImage %>" alt="Old Image" width="100" height="100"><br>
+                                                        <% } %>
+                                                    </td>
+                                                    <td>
+                                                        <% if (!newName.isEmpty()) { %>
+                                                        Name: <%= newName %><br>
+                                                        <% } %>
+                                                        <% if (!newStatus.isEmpty()) { %>
+                                                        Status: <%= newStatus %><br>
+                                                        <% } %>
+                                                        <% if (!newImage.isEmpty()) { %>
+                                                        <img src="<%= newImage %>" alt="New Image" width="100" height="100"><br>
+                                                        <% } %>
+                                                    </td>
+                                                    <td><%= list.getAction() %></td>
+                                                    <td><%= list.getChangeDate() %></td>
+                                                </tr>
                                                 <%
-}
-} else {
+                                                    }
+                                                } else {
                                                 %>
                                                 <tr>
                                                     <td colspan="8" class="text-center">No Update !!!</td>
                                                 </tr>
-
                                                 <%
                                                 }
-                                                %>
-
+                                                %>s
                                             </tbody>
                                         </table>
                                         <hr>
@@ -176,9 +220,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody id="tableBody">
-
                                                 <tr>
-
                                                     <td>cvb</td>
                                                     <td>cvb</td>
                                                     <td>cvb</td>
@@ -186,9 +228,6 @@
                                                     <td>gdf</td>
                                                     <td>cvbcbgn</td>
                                                 </tr> 
-
-
-
                                             </tbody>
                                         </table>
                                         <hr>

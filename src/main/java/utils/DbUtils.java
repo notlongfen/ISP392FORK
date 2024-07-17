@@ -1,34 +1,30 @@
 package utils;
 
+import com.mycompany.isp392.brand.ManageBrandDTO;
 import io.github.cdimascio.dotenv.Dotenv;
+import java.sql.ResultSet;
+
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.sql.Connection;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
 import org.mindrot.jbcrypt.BCrypt;
 
-import java.io.File;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.lang.reflect.InvocationTargetException;
-
 public class DbUtils {
 
+    private static Dotenv dotenv = Dotenv.configure().directory("D:\\FPT\\K5\\ISP392\\ISP392_Test").load();
     private static final String CHECK_LOG_FORMAT = "INSERT INTO %s (EmpID, %s, FieldOld, FieldNew, Action) VALUES (?, ?, ?, ?, ?)";
-
-<<<<<<< Updated upstream
-    private static Dotenv dotenv = Dotenv.configure().directory("/home/notlongfen/code/java/ISP392/.env").load();
-    private static final String CHECK_LOG_FORMAT = "INSERT INTO %s (EmpID, %s, FieldOld, FieldNew, Action) VALUES (?, ?, ?, ?, ?)"; 
-    private static final String CHECK_LOG_GET = "SELECT * FROM %s WHERE empID = ?";
-
-=======
-    private static Dotenv dotenv = Dotenv.configure().directory("D://Semester5//ISP//ISP392SHOP//.env").load();
-    // Adjusted dotenv configuration based on your environment setup
-    // private static Dotenv dotenv = Dotenv.configure().directory("D://Semester5//ISP//ISP392SHOP//.env").load();
->>>>>>> Stashed changes
+    private static final String CHECK_LOG_GET = "SELECT * FROM %s";
 
     public static Connection getConnection() throws ClassNotFoundException, SQLException {
         Connection conn = null;
@@ -64,24 +60,35 @@ public class DbUtils {
         return check;
     }
 
-    public static <T> boolean getCheckLogFromDB(String tableName, T manageDTO){
+    public static <T> List<T>  getCheckLogFromDB(String tableName, String attributeName, Class<T> clazz) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+        List<T> list = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ptm = null;
         ResultSet rs = null;
-        boolean check = false;
         try {
             conn = getConnection();
-            String query = String.format(CHECK_LOG_GET, tableName, manageDTO.getClass().getMethod("getEmpID").invoke(manageDTO));
+            String query = String.format(CHECK_LOG_GET, tableName);
             ptm = conn.prepareStatement(query);
-            ptm.setInt(1, (int) manageDTO.getClass().getMethod("getEmpID").invoke(manageDTO));
             rs = ptm.executeQuery();
-            check = rs.next();
-        } catch (ClassNotFoundException | SQLException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+            while (rs.next()) {
+                 int diffAttributeID = rs.getInt(attributeName);
+                    int empID = rs.getInt("EmpID");
+                    String oldField = rs.getString("FieldOld");
+                    String newField = rs.getString("FieldNew");
+                    String action = rs.getString("Action");
+                    Timestamp changeDate = rs.getTimestamp("ChangeDate");
+
+                     T instance = clazz.getDeclaredConstructor(int.class, int.class, String.class, String.class, String.class, Timestamp.class)
+                               .newInstance(diffAttributeID, empID, oldField, newField, action, changeDate);
+
+            list.add(instance);
+            }
+        } catch (ClassNotFoundException | SQLException | IllegalArgumentException | SecurityException e) {
             e.printStackTrace();
         } finally {
             closeConnection(conn, ptm, rs);
         }
-        return check;
+        return list;
     }
 
     public static void closeConnection(Connection conn, PreparedStatement ptm, ResultSet rs) {
@@ -118,44 +125,42 @@ public class DbUtils {
 
     public static void main(String[] args) {
         System.out.println(dotenv.get("DB_USERNAME"));
-
-        // Example of password hashing with BCrypt
+//        System.out.println(Path.of("").toAbsolutePath().toString());
         String password = "super secret";
         String hash = BCrypt.hashpw(password, BCrypt.gensalt());
-        System.out.println("Hashed password: " + hash);
-
-        // Example of password verification with BCrypt
+        String secpasss = "super secret";
+        String hash1 = BCrypt.hashpw(secpasss, BCrypt.gensalt());
+        System.out.println(hash);
+        System.out.println(hash1);
         boolean isMatched = BCrypt.checkpw(password, hash);
-        System.out.println("Password matches: " + isMatched);
-
+        System.out.println(isMatched);
+        System.out.println(hash == secpasss);
         // Test connection
         try {
             Connection conn = DbUtils.getConnection();
             if (conn != null) {
-                System.out.println("Connected to database successfully.");
+                System.out.println("Connected");
             } else {
-                System.out.println("Failed to connect to database.");
+                System.out.println("Failed");
             }
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
-
-        // Example of generating a pie chart using JFreeChart
         DefaultPieDataset dataset = new DefaultPieDataset();
         dataset.setValue("A", 2.0);
         dataset.setValue("B", 3.0);
         dataset.setValue("C", 4.0);
         dataset.setValue("D", 5.0);
-        JFreeChart chart = ChartFactory.createPieChart("Test Chart", dataset, true, true, true);
+        JFreeChart chart = ChartFactory.createPieChart("Test", dataset, true, true, true);
         int width = 640;
         int height = 480;
         File pieChart = new File("./PieChart.jpeg");
         try {
             ChartUtils.saveChartAsJPEG(pieChart, chart, width, height);
-            System.out.println("Pie chart saved successfully.");
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
 }
