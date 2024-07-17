@@ -72,7 +72,7 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="top_nav_left">free shipping on all u.s orders over $50</div>
+                                <div class="top_nav_left"></div>
                             </div>
                             <div class="col-md-6 text-right">
                                 <div class="top_nav_right">
@@ -81,16 +81,10 @@
                                         <!-- Currency / Language / My Account -->
 
                                         <li class="currency">
-                                            <a href="#">
-                                                usd
-                                                <i class="fa fa-angle-down"></i>
-                                            </a>
+                                           
                                         </li>
                                         <li class="language">
-                                            <a href="#">
-                                                English
-                                                <i class="fa fa-angle-down"></i>
-                                            </a>
+                                         
                                         </li>
                                         <li class="account">
                                             <a href="#">
