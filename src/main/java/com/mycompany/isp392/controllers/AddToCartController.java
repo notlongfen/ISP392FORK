@@ -46,10 +46,13 @@ public class AddToCartController extends HttpServlet {
             boolean checkValidation = true;
             int custID = loginUser.getUserID();
             int productID = Integer.parseInt(request.getParameter("productID"));
-            int unitPrice = Integer.parseInt(request.getParameter("price"));
             int quantity = Integer.parseInt(request.getParameter("quantity"));
             String size = request.getParameter("selectedSize");
             String color = request.getParameter("selectedColor");
+            
+            String unitPricePara = request.getParameter("price");
+            unitPricePara = unitPricePara.replaceAll("[^0-9]", "");
+            int unitPrice = Integer.parseInt(unitPricePara);
             
             int price = quantity * unitPrice;
             int cartID = cartDao.getCartIDByCustomer(custID);

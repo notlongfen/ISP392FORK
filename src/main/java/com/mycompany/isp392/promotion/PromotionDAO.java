@@ -209,6 +209,7 @@ public class PromotionDAO {
             if (conn != null) {
                 ptm = conn.prepareStatement(CHECK_PROMOTION_DUPLICATE);
                 ptm.setString(1, promotionName);
+                ptm.setInt(2, 1);
                 rs = ptm.executeQuery();
                 if (rs.next()) {
                     check = true;
