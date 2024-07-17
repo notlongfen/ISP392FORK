@@ -24,12 +24,12 @@ public class CartDAO {
     private static final String GET_CART_BY_CUSTOMER = "SELECT CartID FROM Carts WHERE custID = ?";
     private static final String GET_LATEST_CART_ID = "SELECT MAX(CartID) AS CartID FROM Carts";
     private static final String REMOVE_PRODUCT_FROM_CART = "DELETE FROM CartDetails WHERE CartID = ? AND ProductDetailsID = ?";
-    private static final String GET_CART_ITEMS = "SELECT cd.CartID, cd.ProductID, cd.ProductDetailsID, cd.price, cd.quantity, "
-            + "pd.color, pd.size, pd.stockQuantity, pd.price AS unitPrice, pd.importDate, pd.image, pd.status AS pdStatus, "
-            + "p.productName, p.description, p.NumberOfPurchasing, p.status AS pStatus, p.BrandID "
+    private static final String GET_CART_ITEMS = "SELECT cd.CartID, cd.ProductID, cd.ProductDetailsID, cd.quantity, cd.price, p.productName, pd.size, pd.image, cc.CategoriesName "
             + "FROM CartDetails cd "
             + "JOIN ProductDetails pd ON cd.ProductDetailsID = pd.ProductDetailsID "
-            + "JOIN Products p ON cd.ProductID = p.ProductID "
+            + "JOIN Products p ON pd.ProductID = p.ProductID "
+            + "JOIN ProductBelongtoCDCategories pbtc ON p.ProductID = pbtc.ProductID "
+            + "JOIN ChildrenCategories cc ON pbtc.CDCategoryID = cc.CDCategoryID "
             + "WHERE cd.CartID = ?";
     private static final String UPDATE_CART_STATUS = "UPDATE Carts SET status = ? WHERE cartID = ?";
     private static final String GET_CART_INFO_BY_CUSTOMER_ID = "SELECT * FROM Carts WHERE CustID = ? AND status = 1";
@@ -37,6 +37,7 @@ public class CartDAO {
     private static final String UPDATE_CART_DETAILS_PRICE = "UPDATE CartDetails SET price = quantity * ? WHERE ProductDetailsID = ?";
     private static final String UPDATE_CART_PROMOTION = "UPDATE Carts SET promotionID = ?  WHERE cartID = ?";
     private static final String UPDATE_CART_TOTAL_PRICE = "UPDATE Carts SET totalPrice = ?  WHERE cartID = ?";
+    private static final String GET_TOTAL_PRICE = "SELECT totalPrice FROM Carts WHERE CartID = ?";
 
     public boolean createCart(CartDTO cart) throws SQLException {
         boolean check = false;
@@ -221,26 +222,11 @@ public class CartDAO {
                     int productDetailsID = rs.getInt("ProductDetailsID");
                     int price = rs.getInt("price");
                     int quantity = rs.getInt("quantity");
-                    ProductDTO product = new ProductDTO(
-                            productID,
-                            rs.getString("productName"),
-                            rs.getString("description"),
-                            rs.getInt("NumberOfPurchasing"),
-                            rs.getInt("pStatus"),
-                            rs.getInt("BrandID")
-                    );
-                    ProductDetailsDTO productDetails = new ProductDetailsDTO(
-                            productDetailsID,
-                            productID,
-                            rs.getString("color"),
-                            rs.getString("size"),
-                            rs.getInt("stockQuantity"),
-                            rs.getInt("unitPrice"),
-                            rs.getDate("importDate"),
-                            rs.getString("image"),
-                            rs.getInt("pdStatus")
-                    );
-                    CartDetailsDTO cartDetails = new CartDetailsDTO(cartID, productID, productDetailsID, quantity, price, product, productDetails);
+                    String productName = rs.getString("productName");
+                    String size = rs.getString("size");
+                    String image = rs.getString("image");
+                    String categoriesName = rs.getString ("CategoriesName");
+                    CartDetailsDTO cartDetails = new CartDetailsDTO(cartID, productID, productDetailsID, quantity, price, productName, size, image, categoriesName);
                     list.add(cartDetails);
                 }
             }
@@ -596,5 +582,36 @@ public class CartDAO {
             }
         }
         return check;
+    }
+    
+    public double getTotalPrice(int cartID) throws SQLException {
+        double totalPrice = -1;
+        Connection conn = null;
+        ResultSet rs = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DbUtils.getConnection();
+            if(conn != null){
+                ptm = conn.prepareStatement(GET_TOTAL_PRICE);
+                ptm.setInt(1, cartID);
+                rs = ptm.executeQuery();
+                if(rs.next()){
+                    totalPrice = rs.getDouble("totalPrice");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return totalPrice;
     }
 }

@@ -284,6 +284,9 @@ public class MainController extends HttpServlet {
 
     private static final String WEB_STATISTIC_PAGE = "Statistic";
     private static final String WEB_STATISTIC_PAGE_VIEW = "AD_Statistic.jsp";
+    
+    private static final String VIEW_CART = "View_Cart";
+    private static final String VIEW_CART_CONTROLLER = "ViewCartController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -481,6 +484,8 @@ public class MainController extends HttpServlet {
                 url = EDIT_EMP_PROFILE_PAGE_VIEW;
             } else if (EDIT_EMP_PROFILE.equals(action)) {
                 url = EDIT_EMP_PROFILE_CONTROLLER;
+            } else if (VIEW_CART.equals(action)) {
+                url = VIEW_CART_CONTROLLER;
             }
         } catch (Exception e) {
             log("error at MainController: " + e.toString());

@@ -1,7 +1,5 @@
 package com.mycompany.isp392.cart;
 
-import com.mycompany.isp392.product.*;
-
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -18,8 +16,10 @@ public class CartDetailsDTO {
     private int quantity;
     private int price;
 
-    ProductDTO product;
-    ProductDetailsDTO productDetails;
+    private String productName;
+    private String size;
+    private String image;
+    private String category;
 
     public CartDetailsDTO() {
     }
@@ -31,15 +31,17 @@ public class CartDetailsDTO {
         this.quantity = quantity;
         this.price = price;
     }
-
-    public CartDetailsDTO(int cartID, int productID, int productDetailsID, int quantity, int price, ProductDTO product, ProductDetailsDTO productDetails) {
+    
+    public CartDetailsDTO(int cartID, int productID, int productDetailsID, int quantity, int price, String productName, String size, String image, String category) {
         this.cartID = cartID;
         this.productID = productID;
         this.productDetailsID = productDetailsID;
         this.quantity = quantity;
         this.price = price;
-        this.product = product;
-        this.productDetails = productDetails;
+        this.size = size;
+        this.productName = productName;
+        this.image = image;
+        this.category = category;
     }
 
     public int getCartID() {
@@ -62,12 +64,20 @@ public class CartDetailsDTO {
         return price;
     }
 
-    public ProductDTO getProduct() {
-        return product;
+    public String getProductName() {
+        return productName;
     }
 
-    public ProductDetailsDTO getProductDetails() {
-        return productDetails;
+    public String getSize() {
+        return size;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public String getCategory() {
+        return category;
     }
 
     public void setCartID(int cartID) {

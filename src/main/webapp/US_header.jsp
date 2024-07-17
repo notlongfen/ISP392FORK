@@ -114,7 +114,7 @@
                                 </div>
                                 <nav class="navbar">
                                     <ul class="navbar_menu" >
-                                        <li><a href="US_index.jsp">home</a></li>
+                                        <li><a href="MainController">home</a></li>
                                         <li><a href="MainController?action=All_Product">shop</a></li>
                                         <li><a href="MainController?action=View promotion">promotion</a></li>
                                         <li><a href="contact.html">contact</a></li>
@@ -130,7 +130,7 @@
                                         </li>
                                         <li><a href="MainController?action=View profile&from=<%=request.getContextPath()%>"><i class="fa fa-user" aria-hidden="true"></i></a></li>
                                         <li class="checkout">
-                                            <a href="#">
+                                            <a href="MainController?action=View_Cart">
                                                 <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                                 <!--<span id="checkout_items" class="checkout_items">2</span>-->
                                             </a>

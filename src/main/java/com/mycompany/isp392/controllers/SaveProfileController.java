@@ -59,7 +59,7 @@ public class SaveProfileController extends HttpServlet {
                         user.setAddress(address);
                         user.setWard(ward);
                         user.setDistrict(district);
-                        user.setDistrict(city);
+                        user.setCity(city);
                         user.setBirthday(birthday);
                         user.setPhone(phone);
                         session.setAttribute("cust", user);
