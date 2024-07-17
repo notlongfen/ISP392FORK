@@ -32,7 +32,7 @@ public class LoginController extends HttpServlet {
     public void initClientID() throws ServletException{
 
 
-        Dotenv dotenv = Dotenv.configure().directory("D:\\Document\\FPT\\HK5_SU24\\ISP392\\ISP392\\.env").load();
+        Dotenv dotenv = Dotenv.configure().directory("/home/notlongfen/code/java/ISP392/.env").load();
         clientID = dotenv.get("GOOGLE_CLIENT_ID");
     }
 
@@ -46,6 +46,9 @@ public class LoginController extends HttpServlet {
             String email = request.getParameter("email");
             String password = request.getParameter("password");
             String from = request.getParameter("from");
+            if(from == null){
+                from = email;
+            }
             UserDAO dao = new UserDAO();
             UserDTO loginUser = dao.checkLogin(email, password);
             if (loginUser != null) {

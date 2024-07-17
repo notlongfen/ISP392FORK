@@ -137,7 +137,7 @@
                                         </li>
 
                                         <li class="checkout">
-                                            <a href="MainController?action=wishlist&from=wishlist>
+                                            <a href="MainController?action=wishlist&from=wishlist">
                                                 <i class="fa fa-heart" aria-hidden="true"></i>
                                                 <!--<span id="checkout_items" class="checkout_items">2</span>-->
                                             </a>

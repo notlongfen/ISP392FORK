@@ -136,6 +136,7 @@
                         <div class="mb-3 text-end">
                             <a href="US_ForgotPassword.jsp" style="text-decoration: none">Forgot Password?</a>
                         </div>
+                        <input type="hidden" name="from" value="<%= request.getParameter("from")%>"/>
 
                         <button type="submit" class="btn btn-dark w-100" style="border-radius: 0;" name="action" value="Login">Log in</button>
                         <div class="row d-flex justify-content-center">
