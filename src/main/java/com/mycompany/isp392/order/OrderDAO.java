@@ -35,7 +35,7 @@ public class OrderDAO {
     private static final String GET_ALL_ORDERS = "SELECT * FROM Orders";
     private static final String VIEW_ORDER = "SELECT * FROM Orders o JOIN OrderDetails od ON o.OrderID = od.OrderID JOIN ProductDetails pd ON pd.ProductDetailsID = od.ProductDetailsID WHERE custID = ?";
     private static final String VIEW_PD_IN_ORDER = "SELECT * FROM ProductDetails pd JOIN Products p ON pd.ProductID = p.ProductID WHERE p.ProductID = ?";
-    private static final String VIEW_CATE_OF_PRODUCT = "SELECT * FROM ProductBelongtoCDCategories pc JOIN Categories c ON pc.CDCategoryID = c.CategoryID JOIN ChildrenCategories cdc ON c.CategoryID = cdc.ParentID WHERE pc.ProductID = ? "; 
+    private static final String VIEW_CATE_OF_PRODUCT = "SELECT *,  cdc.CategoriesName AS CDCategoryName FROM ProductBelongtoCDCategories pc JOIN Categories c ON pc.CDCategoryID = c.CategoryID JOIN ChildrenCategories cdc ON c.CategoryID = cdc.ParentID WHERE pc.ProductID = ? "; 
     private static final String CANCEL_ORDER = "UPDATE Orders SET status = 4 WHERE orderID = ? AND status NOT IN (0, 2, 3)";
 
     public boolean cancelOrder(int orderID) throws ClassNotFoundException {
@@ -79,7 +79,7 @@ public class OrderDAO {
                 ptm.setInt(1, productID);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
-                    String cateName = rs.getString("CategoriesName");
+                    String cateName = rs.getString("CDCategoryName");
                     cateList.add(new ChildrenCategoryDTO(cateName));
                 }
             }

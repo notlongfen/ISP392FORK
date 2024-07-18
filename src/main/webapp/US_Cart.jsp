@@ -4,6 +4,11 @@
     Author     : jojo
 --%>
 
+<%@page import="java.text.NumberFormat"%>
+<%@page import="java.util.Locale"%>
+<%@page import="java.util.List"%>
+<%@page import="com.mycompany.isp392.cart.*"%>
+<%@page import="com.mycompany.isp392.user.UserDTO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -31,8 +36,8 @@
             .cart-item p {
                 border-bottom: none!important;
             }
-            
-            
+
+
             .styled-hr {
                 border: 0;
                 height: 1px;
@@ -72,52 +77,53 @@
             label {
                 font-size: 20px;
             }
+            .footer-space {
+                margin-top: 250px; /* Adjust as needed */
+            }
 
         </style>
     </head>
     <body>
         <%@include file="US_header.jsp" %>
+        <%
+            UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
+            if (loginUser == null || loginUser.getStatus() == 0) {
+                 response.sendRedirect("US_SignIn.jsp");
+                 return;
+             }
+        %>
         <div class="container mt-5">
             <div class="row">
                 <!-- Cart Items Section -->
                 <div class="col-md-8">
                     <h2>Cart</h2>
+                    <%
+                        List<CartDetailsDTO> listCartItems = (List<CartDetailsDTO>) request.getAttribute("CART");
+                        NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+                        if (listCartItems != null && listCartItems.size() > 0) {
+                            for (CartDetailsDTO cartItem : listCartItems) {
+                                String[] images = cartItem.getImage().split(";");
+                    %>  
                     <div class="cart-item d-flex justify-content-between align-items-center py-3">
-                        
                         <div class="d-flex align-items-center" >
-                            
-                            <img src="images/s5.png" alt="Air Jordan 1 x Off-White Retro High OG 'Chicago'" class="img-fluid me-3">
-                            
-                            <div >
-                                
-                                <h5>Air Jordan 1 x Off-White Retro High OG 'Chicago'</h5>
-                                
-                                
-                                
-                                
-                               
-                                <p class="text-muted mb-0">Shoes</p>
+                            <img src="<%= images[1]%>" alt="<%= cartItem.getProductName()%>" class="img-fluid me-3">
+                            <div>
+                                <h5><%= cartItem.getProductName()%></h5>
+                                <p class="text-muted mb-0"><%= cartItem.getCategory()%></p>
                                 <div class="d-flex align-items-center left">
                                     <div class="me-3">
                                         <label class ="col-auto no-border" for="size" class="form-label">Size</label>
-                                        <select class="col-auto no-border" id="size" class="form-select">
-                                            <option selected>41.5</option>
-                                            <option>41</option>
-                                            <option>40.5</option>
-                                            <option>40</option>
-                                            <option>39.5</option>
-                                            <option>39</option>
-                                            <!-- Add more options if needed -->
-                                        </select>
+                                        <div class="col-auto no-border" id="size" class="form-select" style="display:inline;"><%= cartItem.getSize()%></div>
                                     </div>
+
                                     <div class="me-3">
                                         <label class ="col-auto no-border" for="quantity" class="form-label">Quantity</label>
-                                        <select class="col-auto no-border" id="quantity" class="form-select">
-                                            <option selected>1</option>
+                                        <select class="col-auto no-border" id="quantity" name="quantity" class="form-select">
+                                            <option selected><%= cartItem.getQuantity()%></option>
+                                            <option>1</option>
                                             <option>2</option>
                                             <option>3</option>
                                             <option>4</option>
-
                                             <!-- Add more options if needed -->
                                         </select>
                                     </div>
@@ -128,60 +134,21 @@
                                 </div>  
                             </div>
                         </div>
-                        <p class="text-danger fw-bold text-right" style="font-size: 20px;">$5,000</p>
+                        <%
+                            int price = cartItem.getPrice();
+                            String formattedPrice = formatter.format(price);
+                        %>
+                        <p class="text-danger fw-bold text-right" style="font-size: 20px;"><%= formattedPrice%> </p>
                     </div>
-                    
-                    
-                     
-                    
-                    <div class="cart-item d-flex justify-content-between align-items-center py-3 mt-5">
-                        <div class="d-flex align-items-center">
-                            <img src="images/s5.png" alt="Air Jordan 1 x Off-White Retro High OG 'Chicago'" class="img-fluid me-3">
-                            <div>
-                                <h5>Jordan 1 Retro High Light Smoke Grey</h5>
-
-                                <p class="text-muted mb-0">Shoes</p>
-                                <div class="d-flex align-items-centerleft left" >
-                                    <div class="me-3">
-                                        <label class ="col-auto no-border" for="size" class="form-label">Size</label>
-                                        <select class="col-auto no-border" id="size" class="form-select">
-                                            <option selected>41.5</option>
-                                            <option>41</option>
-                                            <option>40.5</option>
-                                            <option>40</option>
-                                            <option>39.5</option>
-                                            <option>39</option>
-
-                                            <!-- Add more options if needed -->
-                                        </select>
-                                    </div>
-                                    <div class="me-3">
-                                        <label class ="col-auto no-border" for="quantity" class="form-label">Quantity</label>
-                                        <select class="col-auto no-border" id="quantity" class="form-select">
-                                            <option selected>1</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                            <option>4</option>
-
-                                            <!-- Add more options if needed -->
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="text-left">
-                                    <a href="#" class="wishlist"><i class="fa fa-heart mr-2"></i></a>
-                                    <a href="#"class="remove"><i class="remove-btn fas fa-trash"></i></a>
-                                </div>  
-                            </div>
-                        </div>
-
-
-                        <div class="row text-right" >
-                            <p class="text-muted text-decoration-line-through col" style="font-size: 20px;">$1,000</p>
-                            <p class="text-danger fw-bold col" style="font-size: 20px;">$500</p>
-                        </div>                       
-
-                    </div>
-                    <i class="fas fa-clock mb-5 mt-5" style="color: #A5821D; font-weight: normal"></i><span style="color: #A5821D; font-weight: normal;"> Just a few left. Order soon.</span>
+                    <!--<i class="fas fa-clock mb-5 mt-5" style="color: #A5821D; font-weight: normal"></i><span style="color: #A5821D; font-weight: normal;"> Just a few left. Order soon.</span>-->
+                    <%
+                            }
+                        } else {
+                    %>
+                        <h2>There are no items in your cart!</h2>
+                    <%
+                        }
+                    %>
                 </div>
                 <!-- Summary Section -->
                 <div class="col-lg-4">
@@ -191,12 +158,36 @@
                             <div class="col">
                                 <h5 style="font-weight: normal">Total</h5>
                             </div>
-                            <div class="col text-right">
-                                <h5 style="font-weight: normal">$5.500</h5>
-                            </div>
+                            <%
+                                if(listCartItems != null && listCartItems.size() > 0){
+                                    double totalPrice = (double) request.getAttribute("TOTAL_PRICE");                                     
+                                    String formattedTotalPrice = formatter.format(totalPrice);
+                            %>
+                               <div class="col text-right">
+                                   <h5 style="font-weight: normal"><%= formattedTotalPrice%></h5>
+                               </div>
+                            <%
+                                } else {
+                            %>
+                               <div class="col text-right">
+                                   <h5 style="font-weight: normal">N/A</h5>
+                               </div>
+                            <%
+                                }
+                            %>
                         </div>
-                        <hr class="styled-hr">          
-                        <button class="btn btn-dark w-100 mt-1" style="border-radius: 10px; font-size: 20px">Checkout</button>
+                        <hr class="styled-hr">
+                        <%
+                            if(listCartItems != null && listCartItems.size() > 0){
+                        %>
+                           <button class="btn btn-dark w-100 mt-1" style="border-radius: 10px; font-size: 20px">Checkout</button>
+                        <%
+                            } else {
+                        %>
+                           <button class="btn btn-dark w-100 mt-1 disabled" aria-disabled="true" style="border-radius: 10px; font-size: 20px; pointer-events: none;">Checkout</button>
+                        <%
+                            }
+                        %>
                     </div>
                 </div>
             </div>
@@ -220,7 +211,9 @@
                 </div>
             </div>
         </div>
+        <div class="footer-space">
         <%@include file="US_footer.jsp" %>
+        </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script>
             document.addEventListener('DOMContentLoaded', (event) => {

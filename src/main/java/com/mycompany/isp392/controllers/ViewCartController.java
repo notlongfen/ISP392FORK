@@ -6,7 +6,9 @@ package com.mycompany.isp392.controllers;
 
 
 import com.mycompany.isp392.cart.CartDAO;
+import com.mycompany.isp392.cart.CartDTO;
 import com.mycompany.isp392.cart.CartDetailsDTO;
+import com.mycompany.isp392.cart.CartError;
 import com.mycompany.isp392.user.UserDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -27,8 +29,8 @@ import java.util.List;
 @WebServlet(name = "ViewCartController", urlPatterns = {"/ViewCartController"})
 public class ViewCartController extends HttpServlet {
 
-    private static final String ERROR = "login.jsp";
-    private static final String SUCCESS = "cart.jsp";
+    private static final String ERROR = "HomePageController";
+    private static final String SUCCESS = "US_Cart.jsp";
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -40,16 +42,31 @@ public class ViewCartController extends HttpServlet {
             response.sendRedirect("US_SignIn.jsp");
             return;
         }
-        
         String url = ERROR;
-        int custID = loginUser.getUserID();
         CartDAO dao = new CartDAO();
+        CartError error = new CartError();           
+        boolean checkValidation = true;
         try {
+            int custID = loginUser.getUserID();
             int cartID = dao.getCartIDByCustomer(custID);
-            if (cartID != -1) {
+               if (cartID == -1) {
+                cartID = dao.getLatestCartID() + 1;
+                CartDTO cart = new CartDTO(cartID, 0, custID, 0, 1);
+                boolean checkCart = dao.createCart(cart);
+                if (!checkCart) {
+                    error.setError("Unable to create new cart");
+                    checkValidation = false;
+                }
+            }
+            double totalPrice = dao.getTotalPrice(cartID);
+            
+            if(checkValidation){
                 List<CartDetailsDTO> cartDetails = dao.getCartItems(cartID);
                 request.setAttribute("CART", cartDetails);
+                request.setAttribute("TOTAL_PRICE", totalPrice);
                 url = SUCCESS;
+            } else {      
+                request.setAttribute("CART_ERROR", error);
             }
         } catch (Exception e) {
             log("Error at ViewCartController: " + e.toString());
