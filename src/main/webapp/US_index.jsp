@@ -156,27 +156,23 @@
             </div>
 
             <!-- Banner -->
+            <!-- Banner -->
             <div class="banner">
                 <div class="banner-container">
                     <div class="banener-row">
-                        <form action="MainController" class="col-md-4">
-                            <div class="col-md-4" >
-                                <div class="banner_item align-items-center mx-5" style="background-image:url('images/s3.png'); right: 100px">
-                                    <div class="banner_category">
-                                        <a href="MainController?action=Category&category=Women">Women's</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+                        <% List<CategoryDTO> categoriesList = (List<CategoryDTO>) request.getAttribute("CATEGORIES_LIST");
+                        if (categoriesList != null) {
+                            for (CategoryDTO category : categoriesList) { %>
                         <form action="MainController" method="post" class="col-md-4">
                             <div class="col-md-4">
-                                <div class="banner_item align-items-center mx-5" style="background-image:url('images/s2.png'); left: -10px">
+                                <div class="banner_item align-items-center mx-5" style="background-image: url('<%= request.getContextPath() + "/" + category.getImage().replace("\\", "/") %>');">
                                     <div class="banner_category">
-                                        <a href="MainController?action=Category&category=Men">Men's</a>
+                                        <a href="ViewAllProductController?categoryID=<%= category.getCategoryID() %>"><%= category.getCategoryName() %></a>
                                     </div>
                                 </div>
                             </div>
                         </form>
+                        <% } } %>
                     </div>
                 </div>
             </div>
@@ -197,7 +193,7 @@
                             <div class="new_arrivals_sorting">
                                 <ul class="arrivals_grid_sorting clearfix button-group filters-button-group">
                                     <li class="grid_sorting_button button d-flex flex-column justify-content-center align-items-center active is-checked" data-filter="*">All</li>
-                                        <% List<CategoryDTO> categoriesList = (List<CategoryDTO>) request.getAttribute("CATEGORIES_LIST");
+                                        <% 
                                         if (categoriesList != null) {
                                             for (CategoryDTO category : categoriesList) { %>
                                     <li class="grid_sorting_button button d-flex flex-column justify-content-center align-items-center" data-filter=".category<%= category.getCategoryID() %>"><%= category.getCategoryName() %></li>
@@ -288,7 +284,7 @@
                                                 </div>
                                                 <div class="favorite favorite_left"></div>
                                                 <div class="product_info">
-                                                    <h6 class="product_name"><a href="single.html"><%= product.getProductName() %></a></h6>
+                                                    <h6 class="product_name"><a href="MainController?action=Get_product_detail&productID=<%= product.getProductID() %>&color=<%= firstDetail.getColor() %>"><%= product.getProductName() %></a></h6>
                                                     <div class="product_price" style="color: #C53337">
                                                         <% NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
                                                         int price = firstDetail.getPrice();

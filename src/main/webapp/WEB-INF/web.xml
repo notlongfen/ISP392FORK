@@ -104,6 +104,14 @@
         <servlet-name>GetProductDetails</servlet-name>
         <servlet-class>com.mycompany.isp392.controllers.GetProductDetails</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DashboardController</servlet-name>
+        <servlet-class>com.mycompany.isp392.controllers.DashboardController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewOrderDetailsController</servlet-name>
+        <servlet-class>com.mycompany.isp392.controllers.ViewOrderDetailsController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>MainController</servlet-name>
         <url-pattern>/MainController</url-pattern>
@@ -207,6 +215,14 @@
     <servlet-mapping>
         <servlet-name>GetProductDetails</servlet-name>
         <url-pattern>/GetProductDetails</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DashboardController</servlet-name>
+        <url-pattern>/DashboardController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewOrderDetailsController</servlet-name>
+        <url-pattern>/ViewOrderDetailsController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

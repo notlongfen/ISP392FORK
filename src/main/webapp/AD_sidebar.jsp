@@ -112,7 +112,7 @@
                 <% } %>
 
                 <li class="nav-item mt-3">
-                    <a class="nav-link" href="AD_Statistic.jsp">
+                    <a class="nav-link" href="DashboardController">
                         <i class="fas fa-tshirt"></i>
                         <span>AD_Statistic</span>
                     </a>

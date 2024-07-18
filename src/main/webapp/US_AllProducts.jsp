@@ -230,10 +230,11 @@
                         <h4 style="color: #c53337">CATEGORY</h4>
                         <ul class="list-unstyled">
                             <% List<CategoryDTO> categories = (List<CategoryDTO>) request.getAttribute("categories");
+                                String selectedCategoryID = request.getParameter("categoryID");
                                 if (categories != null) {
                                     for (CategoryDTO category : categories) {
                             %>
-                            <li><label><input type="checkbox" name="category" class="category-filter" value="<%= category.getCategoryID()%>"> <%= category.getCategoryName()%></label></li>
+                            <li><label><input type="checkbox" name="category" class="category-filter" value="<%= category.getCategoryID() %>" <%= selectedCategoryID != null && selectedCategoryID.equals(String.valueOf(category.getCategoryID())) ? "checked" : "" %>> <%= category.getCategoryName() %></label></li>
                                     <%    }
                                         } %>
                         </ul>
@@ -243,10 +244,11 @@
                         <h4 style="color: #c53337">BRANDS</h4>
                         <ul class="list-unstyled">
                             <% List<BrandDTO> brands = (List<BrandDTO>) request.getAttribute("brands");
+                                String selectedBrandID = request.getParameter("brandID");
                                 if (brands != null) {
                                     for (BrandDTO brand : brands) {
                             %>
-                            <li><label><input type="checkbox" name="brand" class="brand-filter" value="<%= brand.getBrandID()%>"> <%= brand.getBrandName()%></label></li>
+                            <li><label><input type="checkbox" name="brand" class="brand-filter" value="<%= brand.getBrandID() %>" <%= selectedBrandID != null && selectedBrandID.equals(String.valueOf(brand.getBrandID())) ? "checked" : "" %>> <%= brand.getBrandName() %></label></li>
                                     <%    }
                                         } %>
                         </ul>
@@ -282,9 +284,9 @@
                         <div class="col-md-4 mb-4">
                             <div class="product-grid">
                                 <div class="product-image">
-                                    <a href="MainController?action=Get_product_detail&productID=<%= product.getProductID()%>&color=<%= detail.getColor()%>" >
+                                    <a href="MainController?action=Get_product_detail&productID=<%= product.getProductID() %>&color=<%= detail.getColor() %>" >
                                         <div class="product_image1">
-                                            <img  src="<%= detail.getImage().split(";")[0]%>" alt="<%= product.getProductName()%>">
+                                            <img src="<%= detail.getImage().split(";")[0] %>" alt="<%= product.getProductName() %>">
                                         </div>
                                     </a>
                                     <ul class="product-links">
@@ -292,7 +294,7 @@
                                     </ul>
                                 </div>
                                 <div class="product-content">
-                                    <h3 class="title"><a href="MainController?action=Get_product_detail&productID=<%= product.getProductID()%>&color=<%= detail.getColor()%>"><%= product.getProductName()%></a></h3>
+                                    <h3 class="title"><a href="MainController?action=Get_product_detail&productID=<%= product.getProductID() %>&color=<%= detail.getColor() %>"><%= product.getProductName() %></a></h3>
                                     <div class="price">
                                         <%
                                             NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
@@ -300,7 +302,7 @@
                                             int price = detail.getPrice();
                                             String formattedPrice = formatter.format(price);
                                         %>
-                                        <%= formattedPrice%>
+                                        <%= formattedPrice %>
                                         <span></span></div>
                                 </div>
                             </div>
@@ -315,8 +317,8 @@
                     <div id="pagination-container" class="mt-3">
                         <nav aria-label="Page navigation">
                             <ul class="pagination justify-content-center mt-3">
-                                <li class="page-item <%= (request.getAttribute("currentPage") != null && (int) request.getAttribute("currentPage") == 1) ? "disabled" : ""%>">
-                                    <a class="page-link" href="#" onclick="loadFilteredProducts(<%= (int) request.getAttribute("currentPage") - 1%>)" aria-label="Previous">
+                                <li class="page-item <%= (request.getAttribute("currentPage") != null && (int) request.getAttribute("currentPage") == 1) ? "disabled" : "" %>">
+                                    <a class="page-link" href="#" onclick="loadFilteredProducts(<%= (int) request.getAttribute("currentPage") - 1 %>)" aria-label="Previous">
                                         <span aria-hidden="true">&laquo;</span>
                                     </a>
                                 </li>
@@ -325,12 +327,12 @@
                                     int currentPage = (int) request.getAttribute("currentPage");
                                     for (int i = 1; i <= totalPages; i++) {
                                 %>
-                                <li class="page-item <%= currentPage == i ? "active" : ""%>">
-                                    <a class="page-link" href="#" onclick="loadFilteredProducts(<%= i%>)"><%= i%></a>
+                                <li class="page-item <%= currentPage == i ? "active" : "" %>">
+                                    <a class="page-link" href="#" onclick="loadFilteredProducts(<%= i %>)"><%= i %></a>
                                 </li>
-                                <% }%>
-                                <li class="page-item <%= currentPage == totalPages ? "disabled" : ""%>">
-                                    <a class="page-link" href="#" onclick="loadFilteredProducts(<%= currentPage + 1%>)" aria-label="Next">
+                                <% } %>
+                                <li class="page-item <%= currentPage == totalPages ? "disabled" : "" %>">
+                                    <a class="page-link" href="#" onclick="loadFilteredProducts(<%= currentPage + 1 %>)" aria-label="Next">
                                         <span aria-hidden="true">&raquo;</span>
                                     </a>
                                 </li>
@@ -379,6 +381,12 @@
                 var brandID = new URLSearchParams(window.location.search).get('brandID');
                 if (brandID) {
                     $('input[name="brand"][value="' + brandID + '"]').prop('checked', true);
+                }
+
+                // Check the category filter if categoryID is present in the URL
+                var categoryID = new URLSearchParams(window.location.search).get('categoryID');
+                if (categoryID) {
+                    $('input[name="category"][value="' + categoryID + '"]').prop('checked', true);
                 }
 
                 // Event listeners for the checkboxes

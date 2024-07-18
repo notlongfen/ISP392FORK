@@ -16,6 +16,8 @@ import java.util.List;
 import com.mycompany.isp392.user.UserDTO;
 import com.mycompany.isp392.order.*;
 import com.mycompany.isp392.product.ProductDetailsDTO;
+import java.util.HashMap;
+import java.util.Map;
 
 import utils.DbUtils;
 
@@ -35,8 +37,12 @@ public class OrderDAO {
     private static final String GET_ALL_ORDERS = "SELECT * FROM Orders";
     private static final String VIEW_ORDER = "SELECT * FROM Orders o JOIN OrderDetails od ON o.OrderID = od.OrderID JOIN ProductDetails pd ON pd.ProductDetailsID = od.ProductDetailsID WHERE custID = ?";
     private static final String VIEW_PD_IN_ORDER = "SELECT * FROM ProductDetails pd JOIN Products p ON pd.ProductID = p.ProductID WHERE p.ProductID = ?";
-    private static final String VIEW_CATE_OF_PRODUCT = "SELECT *,  cdc.CategoriesName AS CDCategoryName FROM ProductBelongtoCDCategories pc JOIN Categories c ON pc.CDCategoryID = c.CategoryID JOIN ChildrenCategories cdc ON c.CategoryID = cdc.ParentID WHERE pc.ProductID = ? "; 
+    private static final String VIEW_CATE_OF_PRODUCT = "SELECT *,  cdc.CategoriesName AS CDCategoryName FROM ProductBelongtoCDCategories pc JOIN Categories c ON pc.CDCategoryID = c.CategoryID JOIN ChildrenCategories cdc ON c.CategoryID = cdc.ParentID WHERE pc.ProductID = ? ";
     private static final String CANCEL_ORDER = "UPDATE Orders SET status = 4 WHERE orderID = ? AND status NOT IN (0, 2, 3)";
+    private static final String GET_TOTAL_INCOME_TODAY = "SELECT SUM(total) AS totalIncome FROM Orders WHERE orderDate = CAST(GETDATE() AS DATE) AND status = 4";
+    private static final String GET_TOTAL_INCOME_YESTERDAY = "SELECT SUM(total) AS totalIncome FROM Orders WHERE orderDate = DATEADD(DAY, -1, CAST(GETDATE() AS DATE)) AND status = 4";
+    private static final String GET_NUMBER_OF_ORDERS_TODAY = "SELECT COUNT(orderID) AS numberOfOrders FROM Orders WHERE orderDate = CAST(GETDATE() AS DATE) AND status = 4";
+    private static final String GET_NUMBER_OF_ORDERS_YESTERDAY = "SELECT COUNT(orderID) AS numberOfOrders FROM Orders WHERE orderDate = DATEADD(DAY, -1, CAST(GETDATE() AS DATE)) AND status = 4";
 
     public boolean cancelOrder(int orderID) throws ClassNotFoundException {
         Connection conn = null;
@@ -68,7 +74,7 @@ public class OrderDAO {
     }
 
     public List<ChildrenCategoryDTO> viewCateOfProduct(int productID) throws ClassNotFoundException, SQLException {
-         List<ChildrenCategoryDTO> cateList = new ArrayList<>();
+        List<ChildrenCategoryDTO> cateList = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ptm = null;
         ResultSet rs = null;
@@ -471,7 +477,7 @@ public class OrderDAO {
                     String address = rs.getString("address");
                     int phone = rs.getInt("phone");
                     String note = rs.getString("note");
-                    order = new OrderDTO(orderID,status, total, orderDate, userName, city, district, ward, address, phone, note);
+                    order = new OrderDTO(orderID, status, total, orderDate, userName, city, district, ward, address, phone, note);
                 }
             }
         } catch (Exception e) {
@@ -565,12 +571,126 @@ public class OrderDAO {
         return numberOfOrder;
     }
 
-    public int getNumberOfCompletedOrder() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public List<Integer> getMonthlyIncomes() throws ClassNotFoundException {
+        List<Integer> monthlyIncomes = new ArrayList<>();
+        String query = "SELECT MONTH(orderDate) as month, SUM(total) as totalIncome FROM Orders WHERE YEAR(orderDate) = YEAR(GETDATE()) AND status = 4 GROUP BY MONTH(orderDate)";
+
+        try (Connection conn = DbUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
+
+            for (int i = 1; i <= 12; i++) {
+                monthlyIncomes.add(0);
+            }
+
+            while (rs.next()) {
+                int month = rs.getInt("month");
+                int totalIncome = rs.getInt("totalIncome");
+                monthlyIncomes.set(month - 1, totalIncome);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return monthlyIncomes;
     }
 
-    public int getMonthOrder() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    // Method to fetch monthly orders
+    public List<Integer> getMonthlyOrders() throws ClassNotFoundException {
+        List<Integer> monthlyOrders = new ArrayList<>();
+        String query = "SELECT MONTH(orderDate) as month, COUNT(orderID) as orderCount FROM Orders WHERE YEAR(orderDate) = YEAR(GETDATE()) AND status = 4 GROUP BY MONTH(orderDate)";
+
+        try (Connection conn = DbUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
+
+            for (int i = 1; i <= 12; i++) {
+                monthlyOrders.add(0);
+            }
+
+            while (rs.next()) {
+                int month = rs.getInt("month");
+                int orderCount = rs.getInt("orderCount");
+                monthlyOrders.set(month - 1, orderCount);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return monthlyOrders;
+    }
+    public int getTotalIncomeToday() throws ClassNotFoundException {
+        int totalIncome = 0;
+        try (Connection conn = DbUtils.getConnection();
+             PreparedStatement ps = conn.prepareStatement(GET_TOTAL_INCOME_TODAY);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                totalIncome = rs.getInt("totalIncome");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return totalIncome;
     }
 
+    // Method to fetch total income for yesterday
+    public int getTotalIncomeYesterday() throws ClassNotFoundException {
+        int totalIncome = 0;
+        try (Connection conn = DbUtils.getConnection();
+             PreparedStatement ps = conn.prepareStatement(GET_TOTAL_INCOME_YESTERDAY);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                totalIncome = rs.getInt("totalIncome");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return totalIncome;
+    }
+
+    // Method to fetch number of orders for today
+    public int getNumberOfOrdersToday() throws ClassNotFoundException {
+        int numberOfOrders = 0;
+        try (Connection conn = DbUtils.getConnection();
+             PreparedStatement ps = conn.prepareStatement(GET_NUMBER_OF_ORDERS_TODAY);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                numberOfOrders = rs.getInt("numberOfOrders");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return numberOfOrders;
+    }
+
+    // Method to fetch number of orders for yesterday
+    public int getNumberOfOrdersYesterday() throws ClassNotFoundException {
+        int numberOfOrders = 0;
+        try (Connection conn = DbUtils.getConnection();
+             PreparedStatement ps = conn.prepareStatement(GET_NUMBER_OF_ORDERS_YESTERDAY);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                numberOfOrders = rs.getInt("numberOfOrders");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return numberOfOrders;
+    }
+      private static final String GET_ORDER_COUNT_BY_STATUS = "SELECT status, COUNT(orderID) as orderCount FROM Orders WHERE status IN (1, 2, 3, 4, 5) GROUP BY status";
+
+    // Method to fetch order counts by status
+    public Map<Integer, Integer> getOrderCountByStatus() throws ClassNotFoundException {
+        Map<Integer, Integer> orderCountByStatus = new HashMap<>();
+        try (Connection conn = DbUtils.getConnection();
+             PreparedStatement ps = conn.prepareStatement(GET_ORDER_COUNT_BY_STATUS);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                int status = rs.getInt("status");
+                int count = rs.getInt("orderCount");
+                orderCountByStatus.put(status, count);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return orderCountByStatus;
+    }
 }

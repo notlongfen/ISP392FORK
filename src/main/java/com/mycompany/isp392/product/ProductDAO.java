@@ -1795,4 +1795,36 @@ public class ProductDAO {
             return id;
     }
 
+
+    public List<ProductDTO> getTop5ProductsByPurchases() throws ClassNotFoundException {
+        List<ProductDTO> products = new ArrayList<>();
+        String query = "SELECT top(5) productID, productName, description, numberOfPurchasing, status, brandID " +
+                       "FROM Products " +
+                       "WHERE status = 1 " + // Assuming status 1 means active
+                       "ORDER BY numberOfPurchasing DESC ";
+                       
+
+        try (Connection conn = DbUtils.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                int productID = rs.getInt("productID");
+                String productName = rs.getString("productName");
+                String description = rs.getString("description");
+                int numberOfPurchase = rs.getInt("numberOfPurchasing");
+                int status = rs.getInt("status");
+                int brandID = rs.getInt("brandID");
+
+                ProductDTO product = new ProductDTO(productID, productName, description, numberOfPurchase, status, brandID);
+                products.add(product);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return products;
+    }
+
 }
