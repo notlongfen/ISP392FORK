@@ -1,12 +1,18 @@
 package com.mycompany.isp392.controllers;
 
 import com.mycompany.isp392.product.*;
+import com.mycompany.isp392.user.UserDTO;
+import com.oracle.wls.shaded.java_cup.runtime.virtual_parse_stack;
 import com.mycompany.isp392.category.CategoryDAO;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import utils.DbUtils;
 
 public class AddProductController extends HttpServlet {
 
@@ -43,6 +49,15 @@ public class AddProductController extends HttpServlet {
                     for (String categoryID : categoryArray) {
                         categoryDAO.addProductCategory(productID, Integer.parseInt(categoryID));
                     }
+                    List<String> newField = new ArrayList<>();
+                    UserDTO user = (UserDTO) request.getSession().getAttribute("USER");
+                    newField.add(productName);
+                    newField.add(description);
+                    newField.add(String.valueOf(brandID));
+                    newField.add(String.valueOf(categoryArray));
+                    ManageProductDTO manageProductDTO = new ManageProductDTO(productID, user.getUserID(), new ArrayList<>(),newField, "Add");
+                    DbUtils.addCheckLogToDB("ManageProducts", "ProductID", manageProductDTO);
+
                     request.setAttribute("SUCCESS_MESSAGE", "Product added successfully!");
                     request.setAttribute("PRODUCT_ID", productID);
                     response.sendRedirect(SUCCESS);

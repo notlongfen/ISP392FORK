@@ -1,16 +1,22 @@
 package com.mycompany.isp392.controllers;
 
+import com.mycompany.isp392.product.ManageProductDTO;
 import com.mycompany.isp392.product.ProductDAO;
 import com.mycompany.isp392.product.ProductDetailsDTO;
 import com.mycompany.isp392.product.ProductError;
+import com.mycompany.isp392.user.UserDTO;
+
 import net.coobird.thumbnailator.Thumbnails;
+import utils.DbUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -104,6 +110,18 @@ public class AddProductDetailsController extends HttpServlet {
                         check = false;
                         break;
                     }
+                    UserDTO user = (UserDTO) request.getSession().getAttribute("LOGIN_USER");
+                    List<String> newField = new ArrayList<>();
+                    newField.add(color);
+                    newField.add(size);
+                    newField.add(String.valueOf(stockQuantity));
+                    newField.add(String.valueOf(price));
+                    newField.add(importDate.toString());
+                    newField.add(imagePaths);
+                    newField.add(String.valueOf(1));
+                    int productDetailID = productDAO.getProductDetailsIDByProductIDColorSize(productID, color, size);
+                    ManageProductDTO manageProduct = new ManageProductDTO(productDetailID, user.getUserID(), new ArrayList<>(), newField, "Add");
+                    DbUtils.addCheckLogToDB("ManageProductDetails", "ProductDetailsID", manageProduct);
                 }
 
                 if (check) {

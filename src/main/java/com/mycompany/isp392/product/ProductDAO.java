@@ -74,6 +74,8 @@ public class ProductDAO {
     private static final String UPDATE_PRODUCT_NUMBER_OF_PURCHASING = "UPDATE Products SET numberOfPurchasing = numberOfPurchasing + ? WHERE productID = ?";
     private static final String GET_PRODUCT_DETAILS_BY_COLOR = "SELECT * FROM ProductDetails WHERE ProductID = ? AND Color = ? AND status = 1";
     private static final String GET_PRODUCT_DETAILS_ID = "SELECT * FROM ProductDetails WHERE ProductID = ? AND price = ? AND size LIKE ? AND Color LIKE ? AND status = 1";
+    private static final String GET_PRODUCT_DETAILS_BY_PRODUCT_ID_COLOR_SIZE = "SELECT * FROM ProductDetails WHERE ProductID = ? AND color = ? AND size = ? AND status = 1";
+
 
     public boolean addProduct(ProductDTO product) throws SQLException {
         boolean check = false;
@@ -1758,6 +1760,39 @@ public class ProductDAO {
             }
         }
         return id;
+    }
+
+    public int getProductDetailsIDByProductIDColorSize(int productID, String color, String size) throws SQLException{
+        int id = -1;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_PRODUCT_DETAILS_BY_PRODUCT_ID_COLOR_SIZE);
+                ptm.setInt(1, productID);
+                ptm.setString(2, color);
+                ptm.setString(3, size);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    id = rs.getInt("ProductDetailsID");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ptm != null) {
+                    ptm.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            }
+            return id;
     }
 
 }
