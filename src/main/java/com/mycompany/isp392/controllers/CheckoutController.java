@@ -7,6 +7,7 @@ package com.mycompany.isp392.controllers;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import utils.DbUtils;
 
 import com.mycompany.isp392.cart.*;
 import com.mycompany.isp392.order.*;
@@ -215,6 +217,21 @@ public class CheckoutController extends HttpServlet {
                             productDAO.updateProductNumberOfPurchasedItems(cartDetail.getProductID(),
                                     cartDetail.getQuantity());
                         }
+                        List<String> newList = new ArrayList<>();
+                        newList.add(String.valueOf(order.getOrderID()));
+                        newList.add(String.valueOf(order.getTotal()));
+                        newList.add(String.valueOf(order.getPromotionID()));
+                        newList.add(String.valueOf(order.getCartID()));
+                        newList.add(order.getUserName());
+                        newList.add(order.getCity());
+                        newList.add(order.getDistrict());
+                        newList.add(order.getWard());
+                        newList.add(order.getAddress());
+                        newList.add(String.valueOf(order.getPhone()));
+                        newList.add(order.getNote());
+                        
+                        ManageOrderDTO manageOrder = new ManageOrderDTO(order.getOrderID(), user.getUserID(), new ArrayList<>(), newList,"checkout");
+                        DbUtils.addCheckLogToDB("ManageOrders", "orderID", manageOrder);
                         url = SUCCESS;
                     }
                 }

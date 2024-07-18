@@ -133,7 +133,7 @@ public class EditProductDetailsController extends HttpServlet {
                     UserDTO user = (UserDTO) request.getSession().getAttribute("LOGIN_USER");
                     int empID = user.getUserID();
                     ManageProductDTO manage = new ManageProductDTO(productDetailID, empID, FieldOld, FieldNew, action);
-                    DbUtils.addCheckLogToDB("OverseeProducts", "productDetailID", manage);
+                    DbUtils.addCheckLogToDB("OverseeProductDetails", "productDetailID", manage);
                 }
 
                 

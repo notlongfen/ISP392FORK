@@ -1,7 +1,12 @@
 
 package com.mycompany.isp392.controllers;
 
+import com.mycompany.isp392.order.ManageOrderDTO;
 import com.mycompany.isp392.order.OrderDAO;
+import com.mycompany.isp392.product.ManageProductDTO;
+import com.mycompany.isp392.product.ProductDetailsDTO;
+import com.mycompany.isp392.user.UserDTO;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -9,7 +14,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import utils.DbUtils;
+
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet(name = "EditOrderController", urlPatterns = {"/EditOrderController"})
 public class EditOrderController extends HttpServlet {
@@ -23,6 +32,9 @@ public class EditOrderController extends HttpServlet {
         try {
             int orderID = Integer.parseInt(request.getParameter("orderID"));
             int status = Integer.parseInt(request.getParameter("status"));
+
+            int oldStatus = Integer.parseInt(request.getParameter("oldStatus"));
+
             OrderDAO orderDAO = new OrderDAO();
             boolean check = orderDAO.editOrderStatus(orderID, status);
             if (check) {
@@ -32,6 +44,23 @@ public class EditOrderController extends HttpServlet {
                 request.setAttribute("status", status);
                 request.setAttribute("orderID", orderID);
                 request.getRequestDispatcher(url).include(request, response);
+
+                List<String> oldList = new ArrayList<>();
+                List<String> newList = new ArrayList<>();
+
+                if(oldStatus != status) {
+                    oldList.add(String.valueOf(oldStatus));
+                    newList.add(String.valueOf(status));
+                }
+
+                if(oldList.size() > 0 && newList.size() > 0) {
+                    UserDTO user = (UserDTO) request.getSession().getAttribute("LOGIN_USER");
+                    String action = request.getParameter("action");
+                    ManageOrderDTO manageOrder = new ManageOrderDTO(orderID, user.getUserID(), oldList, newList, action);
+                    DbUtils.addCheckLogToDB("ManageProductDetails", "productDetailID", ProductDetailsDTO.class);
+                    
+                }
+
             }
             if (check) {
                 request.setAttribute("SUCCESS_MESSAGE", "Order status updated successfully!");

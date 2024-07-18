@@ -8,6 +8,7 @@ package com.mycompany.isp392.controllers;
 import com.mycompany.isp392.brand.BrandDAO;
 import com.mycompany.isp392.brand.BrandDTO;
 import com.mycompany.isp392.brand.ManageBrandDTO;
+import com.mycompany.isp392.product.ManageProductDTO;
 import com.mycompany.isp392.user.UserDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -39,7 +40,13 @@ public class ShowHistoryBrandController extends HttpServlet {
             BrandDAO dao = new BrandDAO();
 //            List<ManageBrandDTO> manage = dao.getManageBrand();
             List<ManageBrandDTO> manage = (List<ManageBrandDTO>) DbUtils.getCheckLogFromDB("ManageBrands", "BrandID", ManageBrandDTO.class);
+            List<ManageProductDTO> manageProduct = (List<ManageProductDTO>) DbUtils.getCheckLogFromDB("ManageProducts", "ProductID", ManageProductDTO.class);
+            List<ManageProductDTO> manageProductDetails = (List<ManageProductDTO>) DbUtils.getCheckLogFromDB("ManageProductDetails", "ProductDetailsID", ManageProductDTO.class);
+            // List<UserDTO> manageUser = (List<UserDTO>) DbUtils.getCheckLogFromDB("ManageUsers", "UserID", UserDTO.class);
+
+            session.setAttribute("manageProduct", manageProduct);
             session.setAttribute("manageBrand", manage);
+            session.setAttribute("manageProductDetails", manageProductDetails);
         } catch (Exception e) {
             log("Error at SearchController: " + e.toString());
         } finally {
