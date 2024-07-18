@@ -16,6 +16,10 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import com.mycompany.isp392.user.*;
+import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
+import utils.DbUtils;
 
 /**
  *
@@ -33,13 +37,39 @@ public class EditCustomerController extends HttpServlet {
         String url = ERROR;
         UserError error = new UserError();
         UserDAO dao = new UserDAO();
-        try { 
+        try {
+            HttpSession session = request.getSession();
+            UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
+
             int userID = Integer.parseInt(request.getParameter("userID"));
             int status = Integer.parseInt(request.getParameter("status"));
+            int oldStatus = Integer.parseInt(request.getParameter("oldStatus"));
+            int empID = loginUser.getUserID();
+
+            ManageUserDTO manage = null;
+
             boolean checkUpdate = dao.updateCustomerStatus(userID, status);
-            if(checkUpdate){
-                request.setAttribute("SUCCESS_MESSAGE", "CUSTOMER EDITED SUCCESSFULLY !");
-                url = SUCCESS;
+            if (checkUpdate) {
+                List<String> oldList = new ArrayList<>();
+                List<String> newList = new ArrayList<>();
+
+                if (oldStatus != status) {
+                    oldList.add(String.valueOf(oldStatus));
+                    newList.add(String.valueOf(status));
+                }
+
+                if (!oldList.isEmpty() && !newList.isEmpty()) {
+                    String action = request.getParameter("edit");
+                    manage = new ManageUserDTO(userID, empID, oldList, newList, action);
+                    boolean checkAdd = DbUtils.addCheckLogToDB("SuperviseCustomers", "UserID", manage);
+                    if (checkAdd) {
+                        request.setAttribute("SUCCESS_MESSAGE", "CUSTOMER EDITED SUCCESSFULLY !");
+                        url = SUCCESS;
+                    } else {
+                        error.setError("Unable to update database");
+                        request.setAttribute("EDIT_ERROR", error);
+                    }
+                }
             } else {
                 error.setError("Unable to update database");
                 request.setAttribute("EDIT_ERROR", error);

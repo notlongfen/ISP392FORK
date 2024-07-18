@@ -9,6 +9,7 @@ import com.mycompany.isp392.brand.BrandDAO;
 import com.mycompany.isp392.brand.BrandDTO;
 import com.mycompany.isp392.brand.ManageBrandDTO;
 import com.mycompany.isp392.product.ManageProductDTO;
+import com.mycompany.isp392.user.ManageUserDTO;
 import com.mycompany.isp392.user.UserDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -37,8 +38,9 @@ public class ShowHistoryBrandController extends HttpServlet {
         String url = ERROR;
         try {
             HttpSession session = request.getSession();
-            BrandDAO dao = new BrandDAO();
+
 //            List<ManageBrandDTO> manage = dao.getManageBrand();
+
             List<ManageBrandDTO> manage = (List<ManageBrandDTO>) DbUtils.getCheckLogFromDB("ManageBrands", "BrandID", ManageBrandDTO.class);
             List<ManageProductDTO> manageProduct = (List<ManageProductDTO>) DbUtils.getCheckLogFromDB("ManageProducts", "ProductID", ManageProductDTO.class);
             List<ManageProductDTO> manageProductDetails = (List<ManageProductDTO>) DbUtils.getCheckLogFromDB("ManageProductDetails", "ProductDetailsID", ManageProductDTO.class);
@@ -47,6 +49,17 @@ public class ShowHistoryBrandController extends HttpServlet {
             session.setAttribute("manageProduct", manageProduct);
             session.setAttribute("manageBrand", manage);
             session.setAttribute("manageProductDetails", manageProductDetails);
+
+            List<ManageBrandDTO> brand = (List<ManageBrandDTO>) DbUtils.getCheckLogFromDB("ManageBrands", "BrandID", ManageBrandDTO.class);
+            session.setAttribute("manageBrand", brand);
+            
+            List<ManageUserDTO> employee = (List<ManageUserDTO>) DbUtils.getCheckLogFromDB("SuperviseEmployees", "UserID", ManageUserDTO.class);
+            session.setAttribute("manageEmployee", employee);
+            
+            List<ManageUserDTO> customer = (List<ManageUserDTO>) DbUtils.getCheckLogFromDB("SuperviseCustomers", "UserID", ManageUserDTO.class);
+            session.setAttribute("manageCustomer", customer);
+            
+
         } catch (Exception e) {
             log("Error at SearchController: " + e.toString());
         } finally {

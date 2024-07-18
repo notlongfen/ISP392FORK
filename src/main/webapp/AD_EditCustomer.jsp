@@ -55,6 +55,8 @@
                             <h2 class="text-center" style="color: #000; font-weight: bold;">Edit Customer</h2>
                             <form action="MainController" method="POST">
                                 <input type="hidden" name="userID" value="<%= user.getUserID()%>"/>
+                                <input type="hidden" name="oldStatus" value="<%= user.getStatus()%>"/>
+                                <input type="hidden" name="edit" value="Edit"/>
                                 <div class="form-row mb-3">
                                     <div class="form-group col-md-6">
                                         <label for="status">Status</label>

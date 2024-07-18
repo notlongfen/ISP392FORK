@@ -176,7 +176,7 @@
                                                 </tr>
                                                 <%
                                                 }
-                                                %>s
+                                                %>
                                             </tbody>
                                         </table>
                                         <hr>
@@ -202,8 +202,9 @@
                                         <!-- End Pagination -->
                                     </div>
                                 </div>
+
                                 <div class="d-sm-flex align-items-center justify-content-between mb-4 " style="margin-top: 20px;">
-                                    <h1 class="h3 mb-0 text-gray-900"><b>History of Brand</b></h1>
+                                    <h1 class="h3 mb-0 text-gray-900"><b>History of Employee</b></h1>
                                 </div>
                                 <div class="card" style="margin-top: 20px;">
                                     <div class="table-responsive">
@@ -211,7 +212,7 @@
                                         <table class="table align-items-center table-flush">
                                             <thead class="thead-light">
                                                 <tr>
-                                                    <th>BrandID</th>
+                                                    <th>UserID</th>
                                                     <th>EmployeeID</th>
                                                     <th>FieldOld</th>
                                                     <th>FieldNew</th>
@@ -221,13 +222,163 @@
                                             </thead>
                                             <tbody id="tableBody">
                                                 <tr>
-                                                    <td>cvb</td>
-                                                    <td>cvb</td>
-                                                    <td>cvb</td>
-                                                    <td>cvb</td>
-                                                    <td>gdf</td>
-                                                    <td>cvbcbgn</td>
-                                                </tr> 
+                                                    <%
+ List<ManageUserDTO> employee = (List<ManageUserDTO>) session.getAttribute("manageEmployee");
+ if (employee != null && employee.size() > 0) {
+     for (ManageUserDTO list : employee) {
+         String[] oldFields = list.getLoadOldField().replace("[", "").replace("]", "").split(", ");
+         String[] newFields = list.getLoadNewField().replace("[", "").replace("]", "").split(", ");
+        
+
+            String oldRole = "";
+            String oldStatus = "";
+            String newRole = "";
+            String newStatus = "";
+
+            // Assign role and status for old fields
+            if (oldFields.length > 0) {
+                if (oldFields.length == 1) {
+                    oldStatus = oldFields[0];
+                } else {
+                    oldRole = oldFields[0];
+                    oldStatus = oldFields[1];
+                }
+            }
+
+            // Assign role and status for new fields
+            if (newFields.length > 0) {
+                if (newFields.length == 1) {
+                    newStatus = newFields[0];
+                } else {
+                    newRole = newFields[0];
+                    newStatus = newFields[1];
+                }
+            }
+            
+               // Mapping role IDs to role names
+            String oldRoleName = "";
+            switch (oldRole) {
+                case "1": oldRoleName = "System Manager"; break;
+                case "2": oldRoleName = "Shop Manager"; break;
+                case "3": oldRoleName = "Staff"; break;
+                
+            }
+
+            String newRoleName = "";
+            switch (newRole) {
+                case "1": newRoleName = "System Manager"; break;
+                case "2": newRoleName = "Shop Manager"; break;
+                case "3": newRoleName = "Staff"; break;
+                
+            }
+                                                    %>
+                                                <tr>
+                                                    <td><%= list.getUserID() %></td>
+                                                    <td><%= list.getEmpID() %></td>
+                                                    <td>
+                                                        <% if (!oldRole.isEmpty()) { %>
+                                                        Role: <%= oldRoleName %><br>
+                                                        <% } %>
+                                                        <% if (!oldStatus.isEmpty()) { %>
+                                                        Status: <%= oldStatus %><br>
+                                                        <% } %>
+                                                    </td>
+                                                    <td>
+                                                        <% if (!newRole.isEmpty()) { %>
+                                                        Role: <%= newRoleName %><br>
+                                                        <% } %>
+                                                        <% if (!newStatus.isEmpty()) { %>
+                                                        Status: <%= newStatus %><br>
+                                                        <% } %>
+
+                                                    </td>
+                                                    <td><%= list.getAction() %></td>
+                                                    <td><%= list.getChangeDate() %></td>
+                                                </tr>
+                                                <%
+                                                    }
+                                                } else {
+                                                %>
+                                                <tr>
+                                                    <td colspan="8" class="text-center">No Update !!!</td>
+                                                </tr>
+                                                <%
+                                                }
+                                                %>
+                                            </tbody>
+                                        </table>
+                                        <hr>
+
+                                        <!-- Pagination -->
+                                        <nav aria-label="Page navigation">
+                                            <ul class="pagination justify-content-center mt-3">
+                                                <li class="page-item">
+                                                    <a class="page-link" href="#" aria-label="Previous" style="color: #C43337">
+                                                        <span aria-hidden="true">&laquo;</span>
+                                                    </a>
+                                                </li>
+                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">1</a></li>
+                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">2</a></li>
+                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">3</a></li>
+                                                <li class="page-item" >
+                                                    <a class="page-link" href="#" aria-label="Next" style="color: #C43337">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                        <!-- End Pagination -->
+                                    </div>
+                                </div>
+
+                                <div class="d-sm-flex align-items-center justify-content-between mb-4 " style="margin-top: 20px;">
+                                    <h1 class="h3 mb-0 text-gray-900"><b>History of Customer</b></h1>
+                                </div>
+                                <div class="card" style="margin-top: 20px;">
+                                    <div class="table-responsive">
+
+                                        <table class="table align-items-center table-flush">
+                                            <thead class="thead-light">
+                                                <tr>
+                                                    <th>UserID</th>
+                                                    <th>EmployeeID</th>
+                                                    <th>FieldOld</th>
+                                                    <th>FieldNew</th>
+                                                    <th>Action</th>
+                                                    <th>Change Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tableBody">
+                                                <tr>
+                                                    <%
+ List<ManageUserDTO> customer = (List<ManageUserDTO>) session.getAttribute("manageCustomer");
+ if (customer != null && customer.size() > 0) {
+     for (ManageUserDTO list : customer) {
+     
+            
+                                                    %>
+                                                <tr>
+                                                    <td><%= list.getUserID() %></td>
+                                                    <td><%= list.getEmpID() %></td>
+                                                    <td>
+                                                        Status: <%= list.getLoadOldField().replace("[", "").replace("]", "")  %>
+                                                    </td>
+                                                    <td>
+                                                        Status: <%= list.getLoadNewField().replace("[", "").replace("]", "")  %>
+                                                    </td>
+                                                    <td><%= list.getAction() %></td>
+                                                    <td><%= list.getChangeDate() %></td>
+                                                </tr>
+                                                <%
+                                                    }
+                                                } else {
+                                                %>
+                                                <tr>
+                                                    <td colspan="8" class="text-center">No Update !!!</td>
+                                                </tr>
+                                                <%
+                                                }
+                                                %>
                                             </tbody>
                                         </table>
                                         <hr>

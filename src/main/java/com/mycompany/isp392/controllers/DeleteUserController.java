@@ -4,6 +4,7 @@
  */
 package com.mycompany.isp392.controllers;
 
+import com.mycompany.isp392.brand.ManageBrandDTO;
 import com.mycompany.isp392.user.*;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -12,6 +13,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
+import utils.DbUtils;
 
 @WebServlet(name = "DeleteUserController", urlPatterns = {"/DeleteUserController"})
 public class DeleteUserController extends HttpServlet {
@@ -29,17 +33,41 @@ public class DeleteUserController extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
+            int empID = loginUser.getUserID();
             int UserID = Integer.parseInt(request.getParameter("UserID"));
-            
-            if(loginUser.getUserID() == UserID){
+            int oldStatus = Integer.parseInt(request.getParameter("status"));
+            int roleID = Integer.parseInt(request.getParameter("roleID"));
+
+            if (loginUser.getUserID() == UserID) {
                 userError.setUserIDError("You cannot delete your own account.");
                 checkValidation = false;
             }
+
+            String action = request.getParameter("delete");
+            ManageUserDTO manage = null;
             
-            if(checkValidation){
-                boolean checkDelete = dao.deleteUser(UserID);
-                if (checkDelete) {
-                    request.setAttribute("SUCCESS_MESSAGE", "USER DELETED SUCCESSFULLY !");
+            if (checkValidation) {
+                int newStatus = dao.deleteUser1(UserID);
+//                if (checkDelete) {
+//                    request.setAttribute("SUCCESS_MESSAGE", "USER DELETED SUCCESSFULLY !");
+//                    url = SUCCESS;
+//                } else {
+//                    userError.setError("UNABLE TO DELETE USER !");
+//                    request.setAttribute("DELETE_ERROR", userError);
+//                }
+
+                if (newStatus != -1) {
+                    List<String> oldList = new ArrayList<>();
+                    List<String> newList = new ArrayList<>();
+                    oldList.add(String.valueOf(oldStatus));
+                    newList.add(String.valueOf(newStatus));
+                    manage = new ManageUserDTO(UserID, empID, oldList, newList, action);
+                    if(roleID != 4) {
+                    boolean checkAdd = DbUtils.addCheckLogToDB("SuperviseEmployees", "UserID", manage);
+                    } else {
+                    boolean checkAdd = DbUtils.addCheckLogToDB("SuperviseCustomers", "UserID", manage);    
+                    }
+                    request.setAttribute("SUCCESS_MESSAGE", "BRAND DELETED SUCCESSFULLY !");
                     url = SUCCESS;
                 } else {
                     userError.setError("UNABLE TO DELETE USER !");

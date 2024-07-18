@@ -269,7 +269,7 @@
                                                         <%
                                                             } else {
                                                         %>
-                                                        <a href="#" class="btn btn-sm btn-danger" onclick="showConfirmDeleteModal(<%= user.getUserID() %>)">Delete</a>
+                                                        <a href="#" class="btn btn-sm btn-danger" onclick="showConfirmDeleteModal(<%= user.getUserID() %>, <%= user.getStatus()%>, <%= user.getRoleID()%>)">Delete</a>
                                                         <%
                                                             }
                                                         %>
@@ -634,9 +634,11 @@
 //                rowToDelete.remove();
 //            });
 
-            function showConfirmDeleteModal(userID) {
+            function showConfirmDeleteModal(userID, status, roleID) {
                 // Store the user ID in a global variable or data attribute
                 document.getElementById('confirmDeleteButton').setAttribute('data-user-id', userID);
+                document.getElementById('confirmDeleteButton').setAttribute('data-status-id', status);
+                document.getElementById('confirmDeleteButton').setAttribute('data-role-id', roleID);
                 // Show the modal
                 var confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
                 confirmDeleteModal.show();
@@ -644,7 +646,9 @@
 
             document.getElementById('confirmDeleteButton').addEventListener('click', function () {
                 var userID = this.getAttribute('data-user-id');
-                var url = "MainController?action=DeleteUser&UserID=" + userID;
+                var status = this.getAttribute('data-status-id');
+                var roleID = this.getAttribute('data-role-id');
+                var url = "MainController?action=DeleteUser&UserID=" + userID + "&status=" + status + "&roleID=" + roleID + "&delete=Delete";
                 window.location.href = url;
             });
 

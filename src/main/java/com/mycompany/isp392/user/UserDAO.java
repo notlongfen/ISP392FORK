@@ -362,6 +362,41 @@ public class UserDAO {
         }
         return check;
     }
+    
+        public int deleteUser1(int UserID) throws SQLException {
+        int newStatus = -1;
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(DELETE_USER);
+                ptm.setInt(1, UserID);
+                check = ptm.executeUpdate() > 0;
+                if (check) {
+                    ptm = conn.prepareStatement(GET_USER_BY_ID);
+                    ptm.setInt(1, UserID);
+                    rs = ptm.executeQuery();
+                    if (rs.next()) {
+                        newStatus = rs.getInt("status");
+                    }
+                }
+
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+        }
+        return newStatus;
+    }
 
     public UserDTO getUserInfoByUserID(int userID) {
         Connection conn = null;

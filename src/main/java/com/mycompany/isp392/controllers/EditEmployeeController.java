@@ -4,6 +4,7 @@
  */
 package com.mycompany.isp392.controllers;
 
+import com.mycompany.isp392.brand.ManageBrandDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,6 +15,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.mindrot.jbcrypt.BCrypt;
 import com.mycompany.isp392.user.*;
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
+import utils.DbUtils;
 
 /**
  *
@@ -39,9 +43,15 @@ public class EditEmployeeController extends HttpServlet {
             //call
             int userID = Integer.parseInt(request.getParameter("userID"));
             int roleID = Integer.parseInt(request.getParameter("roleID"));
+            int oldRoleID = Integer.parseInt(request.getParameter("oldRoleID"));
             int status = Integer.parseInt(request.getParameter("status"));
-            
-            if(status == 0 && loginUser.getUserID() == userID ){
+            int oldStatus = Integer.parseInt(request.getParameter("oldStatus"));
+            int empID = loginUser.getUserID();
+
+//            ManageBrandDTO manage = null;
+            ManageUserDTO manage = null;
+
+            if (status == 0 && loginUser.getUserID() == userID) {
                 error.setUserIDError("You cannot delete your own account.");
                 checkValidation = false;
             }
@@ -49,18 +59,38 @@ public class EditEmployeeController extends HttpServlet {
             //hash password & execute
             if (checkValidation) {
                 boolean checkUpdate = dao.updateEmpRoleAndStatus(userID, roleID, status);
-                if (checkUpdate) {
-                    if(loginUser!=null && loginUser.getUserID() == userID){
-                        loginUser.setRoleID(roleID);
-                        loginUser.setStatus(status);
-                        session.setAttribute("LOGIN_USER", loginUser);
-                    }
-                    request.setAttribute("SUCCESS_MESSAGE", "EMPLOYEE EDITED SUCCESSFULLY !");
-                    url = SUCCESS;
-                } else {
-                    error.setError("Unable to update database");
-                    request.setAttribute("EDIT_ERROR", error);
+                List<String> oldList = new ArrayList<>();
+                List<String> newList = new ArrayList<>();
+
+                if (roleID != oldRoleID) {
+                    oldList.add(String.valueOf(oldRoleID));
+                    newList.add(String.valueOf(roleID));
                 }
+
+                if (oldStatus != status) {
+                    oldList.add(String.valueOf(oldStatus));
+                    newList.add(String.valueOf(status));
+                }
+
+                if (!oldList.isEmpty() && !newList.isEmpty()) {
+                    String action = request.getParameter("edit");
+//                    manage = new ManageBrandDTO(userID, empID, oldList, newList, action);
+                    manage = new ManageUserDTO(userID, empID, oldList, newList, action);
+                    boolean checkAdd = DbUtils.addCheckLogToDB("SuperviseEmployees", "UserID", manage);
+                    if (checkUpdate) {
+                        if (loginUser != null && loginUser.getUserID() == userID) {
+                            loginUser.setRoleID(roleID);
+                            loginUser.setStatus(status);
+                            session.setAttribute("LOGIN_USER", loginUser);
+                        }
+                        request.setAttribute("SUCCESS_MESSAGE", "EMPLOYEE EDITED SUCCESSFULLY !");
+                        url = SUCCESS;
+                    } else {
+                        error.setError("Unable to update database");
+                        request.setAttribute("EDIT_ERROR", error);
+                    }
+                }
+
             } else {
                 request.setAttribute("EDIT_ERROR", error);
             }
