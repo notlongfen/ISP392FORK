@@ -102,11 +102,21 @@
                         NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
                         if (listCartItems != null && listCartItems.size() > 0) {
                             for (CartDetailsDTO cartItem : listCartItems) {
-                                String[] images = cartItem.getImage().split(";");
                     %>  
                     <div class="cart-item d-flex justify-content-between align-items-center py-3">
                         <div class="d-flex align-items-center" >
+                            <%
+                                if(cartItem.getImage().contains(";")){
+                                    String[] images = cartItem.getImage().split(";");     
+                            %>
                             <img src="<%= images[1]%>" alt="<%= cartItem.getProductName()%>" class="img-fluid me-3">
+                            <%
+                                } else {
+                            %>
+                            <img src="<%= cartItem.getImage()%>" alt="<%= cartItem.getProductName()%>" class="img-fluid me-3">
+                            <%
+                                }
+                            %>
                             <div>
                                 <h5><%= cartItem.getProductName()%></h5>
                                 <p class="text-muted mb-0"><%= cartItem.getCategory()%></p>

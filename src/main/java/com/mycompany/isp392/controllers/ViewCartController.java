@@ -49,7 +49,7 @@ public class ViewCartController extends HttpServlet {
         try {
             int custID = loginUser.getUserID();
             int cartID = dao.getCartIDByCustomer(custID);
-               if (cartID == -1) {
+            if (cartID == -1) {
                 cartID = dao.getLatestCartID() + 1;
                 CartDTO cart = new CartDTO(cartID, 0, custID, 0, 1);
                 boolean checkCart = dao.createCart(cart);
