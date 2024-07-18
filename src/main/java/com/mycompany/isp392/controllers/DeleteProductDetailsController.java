@@ -1,13 +1,22 @@
 package com.mycompany.isp392.controllers;
 
+import com.mycompany.isp392.product.ManageProductDTO;
 import com.mycompany.isp392.product.ProductDAO;
+import com.mycompany.isp392.user.UserDTO;
+
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import utils.DbUtils;
+
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet(name = "DeleteProductDetailsController", urlPatterns = {"/DeleteProductDetailsController"})
 public class DeleteProductDetailsController extends HttpServlet {
@@ -16,7 +25,7 @@ public class DeleteProductDetailsController extends HttpServlet {
     private static final String SUCCESS = "GetProductsController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
@@ -25,6 +34,11 @@ public class DeleteProductDetailsController extends HttpServlet {
             ProductDAO productDAO = new ProductDAO();
             boolean check = productDAO.deleteProductDetail(productDetailID);
             if (check) {
+                List<String> oldField = new ArrayList<>();
+                UserDTO user = (UserDTO) request.getSession().getAttribute("LOGIN_USER");
+                oldField.add(String.valueOf(productDetailID));
+                ManageProductDTO manageProductDTO = new ManageProductDTO(productDetailID, user.getUserID(), oldField, new ArrayList<>(), "Delete");
+                DbUtils.addCheckLogToDB("ManageProductDetails", "ProductDetailsID", manageProductDTO);
                 request.setAttribute("SUCCESS_MESSAGE", "Product detail deleted successfully!");
                 request.setAttribute("newProductID", parentID);
                 url = SUCCESS;
@@ -39,13 +53,25 @@ public class DeleteProductDetailsController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
+                | SecurityException | ServletException | IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
+                | SecurityException | ServletException | IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -75,7 +75,7 @@ public class ProductDAO {
     private static final String GET_PRODUCT_DETAILS_BY_COLOR = "SELECT * FROM ProductDetails WHERE ProductID = ? AND Color = ? AND status = 1";
     private static final String GET_PRODUCT_DETAILS_ID = "SELECT * FROM ProductDetails WHERE ProductID = ? AND price = ? AND size LIKE ? AND Color LIKE ? AND status = 1";
     private static final String GET_PRODUCT_DETAILS_BY_PRODUCT_ID_COLOR_SIZE = "SELECT * FROM ProductDetails WHERE ProductID = ? AND color = ? AND size = ? AND status = 1";
-
+    private static final String SEARCH_PRODUCT_LIST_BY_PRODUCTNAME = "SELECT * FROM Products WHERE productName LIKE ? AND status = 1";
 
     public boolean addProduct(ProductDTO product) throws SQLException {
         boolean check = false;
@@ -1795,6 +1795,48 @@ public class ProductDAO {
             return id;
     }
 
+
+    public List<ProductDTO> searchProductByName (String productName){
+        List<ProductDTO> list = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                String sql = SEARCH_PRODUCT_LIST_BY_PRODUCTNAME;
+                ptm = conn.prepareStatement(sql);
+                ptm.setString(1, "%" + productName + "%");
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    int productID = rs.getInt("ProductID");
+                    String productName1 = rs.getString("ProductName");
+                    String description = rs.getString("Description");
+                    int numberOfPurchasing = rs.getInt("NumberOfPurchasing");
+                    int status = rs.getInt("Status");
+                    int brandID = rs.getInt("BrandID");
+                    list.add(new ProductDTO(productID, productName1, description, numberOfPurchasing, status, brandID));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ptm != null) {
+                    ptm.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+        return list;
+    }
 
     public List<ProductDTO> getTop5ProductsByPurchases() throws ClassNotFoundException {
         List<ProductDTO> products = new ArrayList<>();

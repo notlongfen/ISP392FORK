@@ -122,8 +122,9 @@
                                     <ul class="navbar_user">
                                         <li>
                                             <div class="search-container">                                      
-                                                <form action="/search" method="get">
-                                                    <a href="#"><i class="fa fa-search" aria-hidden="true"></i></a>
+                                                <form action="MainController" method="get">
+                                                    <!-- <a href="#"><i class="fa fa-search" aria-hidden="true"></i></a> -->
+                                                     <button type="submit" name= "action" value="findProduct"><i class="fa fa-search" aria-hidden="true"></i></button>
                                                     <input type="text" placeholder="Search" name="search"> 
                                                 </form>
                                             </div>
