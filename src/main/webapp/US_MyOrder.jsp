@@ -10,6 +10,10 @@
 <%@page import="com.mycompany.isp392.product.ProductDetailsDTO"%>
 <%@page import="com.mycompany.isp392.category.ChildrenCategoryDTO"%>
 <%@page import="com.mycompany.isp392.order.OrderDetailsDTO"%>
+<%@page import="com.mycompany.isp392.order.OrderDTO"%>
+<%@page import="java.text.NumberFormat"%>
+<%@page import="java.util.Locale"%>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -127,14 +131,16 @@
 
         <div class="container-fluid custom-margin">
             <%
-                       CustomerDTO loginUser = (CustomerDTO) session.getAttribute("cust");  
-                       List<ProductDetailsDTO> products = (List<ProductDetailsDTO>)request.getAttribute("PRODUCT");
-                       List<ChildrenCategoryDTO> categories = (List<ChildrenCategoryDTO>) request.getAttribute("CATEGORY");
-                       List<OrderDetailsDTO> orders = (List<OrderDetailsDTO>)request.getAttribute("ORDER");
-                       int custID = (int) session.getAttribute("custID");
+                      CustomerDTO loginUser = (CustomerDTO) session.getAttribute("cust");  
+                       //List<ProductDetailsDTO> products = (List<ProductDetailsDTO>)request.getAttribute("PRODUCT");
+                      // List<ChildrenCategoryDTO> categories = (List<ChildrenCategoryDTO>) request.getAttribute("CATEGORY");
+                      // List<OrderDetailsDTO> orders = (List<OrderDetailsDTO>)request.getAttribute("ORDER");
+                       //int custID = (int) session.getAttribute("custID");
                        if (loginUser == null) {
                            return;
-                   }
+                       }
+                       List<OrderDTO> listOrders = (List<OrderDTO>) request.getAttribute("MY_ORDERS");
+                       NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
             %>
 
 
@@ -177,34 +183,52 @@
                         </div>
                     </div>
                     <%
-                            if (orders != null && !orders.isEmpty()) {
-                                for (int i = 0; i < orders.size(); i++) {
-                                    OrderDetailsDTO order = orders.get(i);
-                                    ProductDetailsDTO product = products.get(i);
-                                    ChildrenCategoryDTO category = categories.get(i);
+                            //if (orders != null && !orders.isEmpty()) {
+                               // for (int i = 0; i < orders.size(); i++) {
+                                  //  OrderDetailsDTO order = orders.get(i);
+                                    //ProductDetailsDTO product = products.get(i);
+                                   // ChildrenCategoryDTO category = categories.get(i);
+                           if(listOrders != null && listOrders.size() > 0) { 
+                                for(OrderDTO order : listOrders){
+                                    OrderDetailsDTO firstProduct = (OrderDetailsDTO) request.getAttribute("FIRST_PRODUCT_ORDER_" + order.getOrderID());
                     %>
                     <div>
                         <div class="mb-3 border-bottom order-item">
                             <div class="row">
                                 <div class="col-md-3">
-                                    <img src="images/product_6.png" class="img-fluid rounded-start" alt="Air Jordan 1 x Off-White Retro High OG 'Chicago'">
+                                    <%
+                                        if(firstProduct.getImage().contains(";")){
+                                            String[] images = firstProduct.getImage().split(";");     
+                                    %>
+                                    <img src="<%= images[1]%>" alt="<%= firstProduct.getProductName()%>" class="img-fluid me-3">
+                                    <%
+                                        } else {
+                                    %>
+                                    <img src="<%= firstProduct.getImage()%>" class="img-fluid rounded-start" alt="<%= firstProduct.getProductName()%>">
+                                    <%
+                                        }
+                                    %>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="card-body">
                                         <div class="d-flex">
-                                            <h5 class="card-title"><%= product.getProductName() %></h5>
+                                            <h5 class="card-title"><%= firstProduct.getProductName()%></h5>
                                         </div>
                                         <div class="d-flex justify-content-start">
-                                            <p class="card-text mb-0"><strong>Category:</strong> <%= category.getCategoryName()%></p>
-                                            <p class="card-text mb-0 pl-3"><strong> Size:</strong> <%= product.getSize()%></p>
-                                            <p class="card-text mb-0 pl-3"><strong> Quantity:</strong> <%= order.getQuantity()%></p>
+                                            <p class="card-text mb-0"><strong>Category:</strong> <%= firstProduct.getCategory()%></p>
+                                            <p class="card-text mb-0 pl-3"><strong> Size:</strong> <%= firstProduct.getSize()%></p>
+                                            <p class="card-text mb-0 pl-3"><strong> Quantity:</strong> <%= firstProduct.getQuantity()%></p>
                                         </div>
                                         <div class="status-box mt-5"><%= order.getStatusDescription()%></div>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
                                     <div class="d-flex align-items-center">
-                                        <p class="card-text text-danger fs-4 mt-3"><%= order.getUnitPrice()%></p>
+                                        <%
+                                            int price = firstProduct.getUnitPrice() * firstProduct.getQuantity();
+                                            String formattedPrice = formatter.format(price);
+                                        %>
+                                        <p class="card-text text-danger fs-4 mt-3"><%= formattedPrice%></p>
                                     </div>
                                 </div>
                                 <div class="col-md-3 d-flex flex-column justify-content-center align-items-center ">
@@ -224,73 +248,80 @@
                                         </a>
                                         <% 
                                             }
+                                            double totalPrice = order.getTotal();
+                                            String formattedTotalPrice = formatter.format(totalPrice);
                                         %>
                                         <div class="d-flex justify-content-between mt-4">
                                             <h3>Total:</h3>
-                                            <p class="text-danger fs-4 pl-3"><%= order.getTotal()%></p>
+                                            <p class="text-danger fs-4 pl-3"><%= formattedTotalPrice%></p>
                                         </div>
                                     </div>
+                                    <%
+                                        int totalQuantity = (int) request.getAttribute("TOTAL_QUANTITY_ORDER_" + order.getOrderID());
+                                    %>
+                                    <div class="number_of_product"><%= totalQuantity%> Products</div>
                                 </div>
-                            </div>
-                            <% 
-                                    } 
-                                } else {
-                            %>
-                            <p>No orders available at the moment.</p>
-                            <% 
-                                }
-                            %>                
+                            </div>          
+                            <!-- <div class="number_of_product">%= orders != null ? orders.size() : 0 %>Products</div> -->
                         </div>
-                        <div class="number_of_product"><%= orders != null ? orders.size() : 0 %>Products</div>
+                        <% 
+                              }
+                           } else {
+                        %>
+                        <p>No orders available at the moment.</p>
+                        <% 
+                            }
+                        %>       
                     </div>
                 </div>
             </div>
-            <button onclick="topFunction()" id="myBtn" title="Go to top">
-                <i class="fas fa-arrow-up"></i>
-            </button>
         </div>
+        <button onclick="topFunction()" id="myBtn" title="Go to top">
+            <i class="fas fa-arrow-up"></i>
+        </button>
+    </div>
 
-        <%@include file="US_footer.jsp" %>
-        <%@include file="US_RequestSupport.jsp" %>
+    <%@include file="US_footer.jsp" %>
+    <%@include file="US_RequestSupport.jsp" %>
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                // Highlight active link in the sidebar
-                document.querySelectorAll('.profile-sidebar .nav-link').forEach(function (link) {
-                    link.addEventListener('click', function () {
-                        document.querySelectorAll('.profile-sidebar .nav-link').forEach(nav => nav.classList.remove('active'));
-                        link.classList.add('active');
-                    });
-                });
-
-                // Disable cancel button for "In Delivery" status
-                document.querySelectorAll('.order-item').forEach(function (item) {
-                    const statusBox = item.querySelector('.status-box');
-                    const cancelButton = item.querySelector('.cancel-order');
-                    if (statusBox.textContent.trim() === 'In Delivery') {
-                        cancelButton.classList.add('inactive-button');
-                        cancelButton.disabled = true;
-                    }
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Highlight active link in the sidebar
+            document.querySelectorAll('.profile-sidebar .nav-link').forEach(function (link) {
+                link.addEventListener('click', function () {
+                    document.querySelectorAll('.profile-sidebar .nav-link').forEach(nav => nav.classList.remove('active'));
+                    link.classList.add('active');
                 });
             });
 
-            let mybutton = document.getElementById('myBtn');
-
-            window.addEventListener('scroll', scrollButton);
-
-            function scrollButton() {
-                if (window.pageYOffset > 0) {
-                    mybutton.style.display = 'block';
-                } else {
-                    mybutton.style.display = 'none';
+            // Disable cancel button for "In Delivery" status
+            document.querySelectorAll('.order-item').forEach(function (item) {
+                const statusBox = item.querySelector('.status-box');
+                const cancelButton = item.querySelector('.cancel-order');
+                if (statusBox.textContent.trim() === 'In Delivery') {
+                    cancelButton.classList.add('inactive-button');
+                    cancelButton.disabled = true;
                 }
-            }
+            });
+        });
 
-            function topFunction() {
-                document.body.scrollTop = 0;
-                document.documentElement.scrollTop = 0;
-            }
+        let mybutton = document.getElementById('myBtn');
 
-        </script>
-    </body>
+        window.addEventListener('scroll', scrollButton);
+
+        function scrollButton() {
+            if (window.pageYOffset > 0) {
+                mybutton.style.display = 'block';
+            } else {
+                mybutton.style.display = 'none';
+            }
+        }
+
+        function topFunction() {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        }
+
+    </script>
+</body>
 </html>

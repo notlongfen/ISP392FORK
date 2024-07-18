@@ -43,6 +43,15 @@ public class OrderDAO {
     private static final String GET_TOTAL_INCOME_YESTERDAY = "SELECT SUM(total) AS totalIncome FROM Orders WHERE orderDate = DATEADD(DAY, -1, CAST(GETDATE() AS DATE)) AND status = 4";
     private static final String GET_NUMBER_OF_ORDERS_TODAY = "SELECT COUNT(orderID) AS numberOfOrders FROM Orders WHERE orderDate = CAST(GETDATE() AS DATE) AND status = 4";
     private static final String GET_NUMBER_OF_ORDERS_YESTERDAY = "SELECT COUNT(orderID) AS numberOfOrders FROM Orders WHERE orderDate = DATEADD(DAY, -1, CAST(GETDATE() AS DATE)) AND status = 4";
+    private static final String GET_ORDERS_BY_USERS = "SELECT * FROM Orders WHERE CustID = ?";
+    private static final String GET_FIRST_PRODUCT_IN_ORDER = "SELECT od.*, p.productName, pd.size, pd.image, cc.CategoriesName "
+            + "FROM OrderDetails od "
+            + "JOIN ProductDetails pd ON pd.ProductDetailsID = od.ProductDetailsID "
+            + "JOIN Products p ON p.ProductID = pd.ProductID "
+            + "JOIN ProductBelongtoCDCategories pbtc ON pbtc.ProductID = p.ProductID "
+            + "JOIN ChildrenCategories cc ON cc.CDCategoryID = pbtc.CDCategoryID "
+            + "WHERE od.OrderID = ?";
+    private static final String GET_TOTAL_QUANTITY_BY_ORDER = "SELECT SUM(quantity) AS totalQuantity FROM OrderDetails WHERE OrderID = ?";
 
     public boolean cancelOrder(int orderID) throws ClassNotFoundException {
         Connection conn = null;
@@ -617,11 +626,10 @@ public class OrderDAO {
 
         return monthlyOrders;
     }
+
     public int getTotalIncomeToday() throws ClassNotFoundException {
         int totalIncome = 0;
-        try (Connection conn = DbUtils.getConnection();
-             PreparedStatement ps = conn.prepareStatement(GET_TOTAL_INCOME_TODAY);
-             ResultSet rs = ps.executeQuery()) {
+        try (Connection conn = DbUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(GET_TOTAL_INCOME_TODAY); ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
                 totalIncome = rs.getInt("totalIncome");
             }
@@ -634,9 +642,7 @@ public class OrderDAO {
     // Method to fetch total income for yesterday
     public int getTotalIncomeYesterday() throws ClassNotFoundException {
         int totalIncome = 0;
-        try (Connection conn = DbUtils.getConnection();
-             PreparedStatement ps = conn.prepareStatement(GET_TOTAL_INCOME_YESTERDAY);
-             ResultSet rs = ps.executeQuery()) {
+        try (Connection conn = DbUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(GET_TOTAL_INCOME_YESTERDAY); ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
                 totalIncome = rs.getInt("totalIncome");
             }
@@ -649,9 +655,7 @@ public class OrderDAO {
     // Method to fetch number of orders for today
     public int getNumberOfOrdersToday() throws ClassNotFoundException {
         int numberOfOrders = 0;
-        try (Connection conn = DbUtils.getConnection();
-             PreparedStatement ps = conn.prepareStatement(GET_NUMBER_OF_ORDERS_TODAY);
-             ResultSet rs = ps.executeQuery()) {
+        try (Connection conn = DbUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(GET_NUMBER_OF_ORDERS_TODAY); ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
                 numberOfOrders = rs.getInt("numberOfOrders");
             }
@@ -664,9 +668,7 @@ public class OrderDAO {
     // Method to fetch number of orders for yesterday
     public int getNumberOfOrdersYesterday() throws ClassNotFoundException {
         int numberOfOrders = 0;
-        try (Connection conn = DbUtils.getConnection();
-             PreparedStatement ps = conn.prepareStatement(GET_NUMBER_OF_ORDERS_YESTERDAY);
-             ResultSet rs = ps.executeQuery()) {
+        try (Connection conn = DbUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(GET_NUMBER_OF_ORDERS_YESTERDAY); ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
                 numberOfOrders = rs.getInt("numberOfOrders");
             }
@@ -675,14 +677,12 @@ public class OrderDAO {
         }
         return numberOfOrders;
     }
-      private static final String GET_ORDER_COUNT_BY_STATUS = "SELECT status, COUNT(orderID) as orderCount FROM Orders WHERE status IN (1, 2, 3, 4, 5) GROUP BY status";
+    private static final String GET_ORDER_COUNT_BY_STATUS = "SELECT status, COUNT(orderID) as orderCount FROM Orders WHERE status IN (1, 2, 3, 4, 5) GROUP BY status";
 
     // Method to fetch order counts by status
     public Map<Integer, Integer> getOrderCountByStatus() throws ClassNotFoundException {
         Map<Integer, Integer> orderCountByStatus = new HashMap<>();
-        try (Connection conn = DbUtils.getConnection();
-             PreparedStatement ps = conn.prepareStatement(GET_ORDER_COUNT_BY_STATUS);
-             ResultSet rs = ps.executeQuery()) {
+        try (Connection conn = DbUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(GET_ORDER_COUNT_BY_STATUS); ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 int status = rs.getInt("status");
                 int count = rs.getInt("orderCount");
@@ -692,5 +692,120 @@ public class OrderDAO {
             e.printStackTrace();
         }
         return orderCountByStatus;
+    }
+
+    public List<OrderDTO> getOrdersByUser(int custID) throws SQLException {
+        List<OrderDTO> list = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_ORDERS_BY_USERS);
+                ptm.setInt(1, custID);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    int orderID = rs.getInt("OrderID");
+                    int status = rs.getInt("status");
+                    double total = rs.getDouble("total");
+                    Date orderDate = rs.getDate("orderDate");
+                    int promotionID = rs.getInt("promotionID");
+                    int cartID = rs.getInt("CartID");
+                    String userName = rs.getString("userName");
+                    String city = rs.getString("city");
+                    String district = rs.getString("district");
+                    String ward = rs.getString("ward");
+                    String address = rs.getString("address");
+                    int phone = rs.getInt("phone");
+                    String note = rs.getString("phone");
+                    OrderDTO order = new OrderDTO(orderID, status, total, orderDate, custID, promotionID, cartID, userName, city, district, ward, address, phone, note);
+                    list.add(order);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return list;
+    }
+
+    public OrderDetailsDTO getFirstProductInOrder(int orderID) throws SQLException {
+        OrderDetailsDTO details = null;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_FIRST_PRODUCT_IN_ORDER);
+                ptm.setInt(1, orderID);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    int productID = rs.getInt("ProductID");
+                    int productDetailsID = rs.getInt("ProductDetailsID");
+                    int quantity = rs.getInt("quantity");
+                    int unitPrice = rs.getInt("unitPrice");
+                    String productName = rs.getString("productName");
+                    String size = rs.getString("size");
+                    String image = rs.getString("image");
+                    String category = rs.getString("CategoriesName");
+                    details = new OrderDetailsDTO(productDetailsID, orderID, productID, quantity, unitPrice, productName, size, image, category);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return details;
+    }
+
+    public int getTotalQuantityByOrder(int orderID) throws SQLException {
+        int total = -1;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_TOTAL_QUANTITY_BY_ORDER);
+                ptm.setInt(1, orderID);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    total = rs.getInt("totalQuantity");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return total;
     }
 }

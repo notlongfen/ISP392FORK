@@ -6,6 +6,7 @@ package com.mycompany.isp392.controllers;
 
 import com.mycompany.isp392.category.ChildrenCategoryDTO;
 import com.mycompany.isp392.order.OrderDAO;
+import com.mycompany.isp392.order.OrderDTO;
 import com.mycompany.isp392.order.OrderDetailsDTO;
 import com.mycompany.isp392.order.OrderError;
 import com.mycompany.isp392.product.ProductDetailsDTO;
@@ -39,30 +40,54 @@ public class ViewUSOrderController extends HttpServlet {
         String url = ERROR;
         OrderError error = new OrderError();
         HttpSession session = request.getSession();
-        UserDAO dao = new UserDAO();
+//        UserDAO userDao = new UserDAO();
+        OrderDAO orderDao = new OrderDAO();
         try {
-            UserDTO cust = (UserDTO) session.getAttribute("LOGIN_USER");
-            int custID = cust.getUserID();
-            session.setAttribute("custID", custID);
-            List<ProductDetailsDTO> product = new ArrayList<>();
-            List<ChildrenCategoryDTO> category = new ArrayList<>();
-            List<OrderDetailsDTO> order = new ArrayList<>();
+//            UserDTO cust = (UserDTO) session.getAttribute("LOGIN_USER");
+//            int custID = cust.getUserID();
+//            session.setAttribute("custID", custID);
+//            List<ProductDetailsDTO> product = new ArrayList<>();
+//            List<ChildrenCategoryDTO> category = new ArrayList<>();
+//            List<OrderDetailsDTO> order = new ArrayList<>();
+//
+//            if (cust != null) {
+//                OrderDAO orderDao = new OrderDAO();
+//                order = orderDao.viewOrder(custID);
+//                if (order != null) {
+//                    for (OrderDetailsDTO orderDetailsDTO : order) {
+//                        int productID = orderDetailsDTO.getProductID();
+//                        product = orderDao.viewProductDetailsInOrder(productID);
+//                        category = orderDao.viewCateOfProduct(productID);
+//                    }
+//                }
+//            }
+//            request.setAttribute("PRODUCT", product);
+//            request.setAttribute("CATEGORY", category);
+//            request.setAttribute("ORDER", order);
+//            url = SUCCESS;
 
-            if (cust != null) {
-                OrderDAO orderDao = new OrderDAO();
-                order = orderDao.viewOrder(custID);
-                if (order != null) {
-                    for (OrderDetailsDTO orderDetailsDTO : order) {
-                        int productID = orderDetailsDTO.getProductID();
-                        product = orderDao.viewProductDetailsInOrder(productID);
-                        category = orderDao.viewCateOfProduct(productID);
-                    }
+            UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
+            if (loginUser == null) {
+                response.sendRedirect("US_SignIn.jsp");
+            }
+            int custID = loginUser.getUserID();
+            List<OrderDTO> listOrders = orderDao.getOrdersByUser(custID);
+
+            request.setAttribute("MY_ORDERS", listOrders);
+            for (OrderDTO order : listOrders) {
+                int orderID = order.getOrderID();
+                OrderDetailsDTO firstProduct = orderDao.getFirstProductInOrder(orderID);
+                int totalQuantity = orderDao.getTotalQuantityByOrder(orderID);
+                if (firstProduct != null && totalQuantity != -1) {
+                    url = SUCCESS;
+                    request.setAttribute("TOTAL_QUANTITY_ORDER_" + orderID, totalQuantity);
+                    request.setAttribute("FIRST_PRODUCT_ORDER_" + orderID, firstProduct);
+                } else {
+                    error.setError("Unable to load database");
+                    request.setAttribute("ORDER_ERROR", error);
                 }
             }
-            request.setAttribute("PRODUCT", product);
-            request.setAttribute("CATEGORY", category);
-            request.setAttribute("ORDER", order);
-            url = SUCCESS;
+
         } catch (Exception e) {
             log("Error at ViewUSOrderController: " + e.toString());
         } finally {

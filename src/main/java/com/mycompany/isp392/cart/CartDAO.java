@@ -16,12 +16,12 @@ import utils.DbUtils;
  */
 public class CartDAO {
 
-    private static final String CREATE_CART = "INSERT INTO Carts (CartID, totalPrice, CustID) VALUES (?, ?, ?)";
+    private static final String CREATE_CART = "INSERT INTO Carts (CartID, totalPrice, CustID, status, PromotionID) VALUES (?, ?, ?, ?, ?)";
     private static final String ADD_CART_DETAILS = "INSERT INTO CartDetails (CartID, ProductID, ProductDetailsID, quantity, price) VALUES (?, ?, ?, ?, ?)";
     private static final String UPDATE_CART = "UPDATE Carts SET totalPrice = (SELECT SUM(price) FROM CartDetails WHERE CartID = ?) WHERE CartID = ?";
     private static final String UPDATE_CART_DETAILS = "UPDATE CartDetails SET price = ?, quantity = ? WHERE CartID = ? and ProductDetailsID = ?";
     private static final String GET_CART_DETAILS = "SELECT * FROM CartDetails WHERE CartID = ? AND ProductDetailsID = ?";
-    private static final String GET_CART_BY_CUSTOMER = "SELECT CartID FROM Carts WHERE custID = ?";
+    private static final String GET_CART_BY_CUSTOMER = "SELECT CartID FROM Carts WHERE custID = ? AND status = 1";
     private static final String GET_LATEST_CART_ID = "SELECT MAX(CartID) AS CartID FROM Carts";
     private static final String REMOVE_PRODUCT_FROM_CART = "DELETE FROM CartDetails WHERE CartID = ? AND ProductDetailsID = ?";
     private static final String GET_CART_ITEMS = "SELECT cd.CartID, cd.ProductID, cd.ProductDetailsID, cd.quantity, cd.price, p.productName, pd.size, pd.image, cc.CategoriesName "
@@ -54,6 +54,8 @@ public class CartDAO {
                 ptm.setInt(1, cart.getCartID());
                 ptm.setDouble(2, cart.getTotalPrice());
                 ptm.setInt(3, cart.getCustID());
+                ptm.setInt(4, cart.getStatus());
+                ptm.setInt(5, cart.getPromotionID());
                 check = ptm.executeUpdate() > 0;
 
                 stm.executeUpdate("SET IDENTITY_INSERT Carts OFF");

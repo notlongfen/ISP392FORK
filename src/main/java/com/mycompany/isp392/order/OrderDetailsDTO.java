@@ -17,6 +17,12 @@ public class OrderDetailsDTO extends OrderDTO {
     private int productID;
     private int quantity;
     private int unitPrice;
+    
+    private String productName;
+    private String size;
+    private String image;
+    private String category;
+    
 
     public OrderDetailsDTO() {
     }
@@ -55,6 +61,17 @@ public class OrderDetailsDTO extends OrderDTO {
         this.unitPrice = unitPrice;
     }
 
+    public OrderDetailsDTO(int productDetailsID, int orderID, int productID, int quantity, int unitPrice, String productName, String size, String image, String category) {
+        this.productDetailsID = productDetailsID;
+        this.orderID = orderID;
+        this.productID = productID;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+        this.productName = productName;
+        this.size = size;
+        this.image = image;
+        this.category = category;
+    }
 
     public int getProductDetailsID() {
         return productDetailsID;
@@ -79,6 +96,24 @@ public class OrderDetailsDTO extends OrderDTO {
     public int getUnitPrice() {
         return unitPrice;
     }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+    
+    
 
     public void setOrderID(int orderID) {
         this.orderID = orderID;

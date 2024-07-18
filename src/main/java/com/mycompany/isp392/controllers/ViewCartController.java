@@ -51,7 +51,7 @@ public class ViewCartController extends HttpServlet {
             int cartID = dao.getCartIDByCustomer(custID);
             if (cartID == -1) {
                 cartID = dao.getLatestCartID() + 1;
-                CartDTO cart = new CartDTO(cartID, 0, custID, 0, 1);
+                CartDTO cart = new CartDTO(cartID, 0, custID, 1, 1);
                 boolean checkCart = dao.createCart(cart);
                 if (!checkCart) {
                     error.setError("Unable to create new cart");
