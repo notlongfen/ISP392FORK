@@ -65,7 +65,11 @@
 
                             <form action="EditProductDetailsController" method="post" enctype="multipart/form-data">
                                 <input type="hidden" name="productDetailID" value="<%= productDetail.getProductDetailsID() %>">
-
+                                <input type="hidden" name="oldStockQuantity" value="<%= productDetail.getStockQuantity() %>">
+                                <input type="hidden" name="oldPrice" value="<%= productDetail.getPrice() %>">
+                                <input type="hidden" name="oldImportDate" value="<%= productDetail.getImportDate() %>">
+                                <input type="hidden" name="oldDetailStatus" value="<%= productDetail.getStatus() %>">
+                                <input type="hidden" name="edit" value="Edit">
                                 <div class="form-row mb-3">
                                     <div class="form-group col-md-4">
                                         <label for="color">Color</label>

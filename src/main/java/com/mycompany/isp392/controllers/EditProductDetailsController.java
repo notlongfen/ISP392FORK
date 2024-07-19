@@ -58,6 +58,7 @@ public class EditProductDetailsController extends HttpServlet {
             CartDAO cartDAO = new CartDAO();
             ProductDetailsDTO existingProductDetail = productDAO.selectProductDetailByID(productDetailID);
             String existingImage = existingProductDetail.getImage();
+            String oldImage = existingProductDetail.getImage();
             int existingPrice = existingProductDetail.getPrice();
 
             for (Part filePart : fileParts) {
@@ -108,39 +109,44 @@ public class EditProductDetailsController extends HttpServlet {
             boolean checkProductDetails = productDAO.editProductDetails(productDetailID, stockQuantity, price, importDate, imagePaths, detailStatus);
 
             if (checkProductDetails) {
-                List<String>FieldOld = new ArrayList<>();
-                List<String>FieldNew = new ArrayList<>();
+                List<String> FieldOld = new ArrayList<>();
+                List<String> FieldNew = new ArrayList<>();
 
-                if(oldStockQuantity != stockQuantity) {
+                if (oldStockQuantity != stockQuantity) {
                     FieldOld.add(String.valueOf(oldStockQuantity));
                     FieldNew.add(String.valueOf(stockQuantity));
                 }
-                if(oldPrice != price) {
+                if (oldPrice != price) {
                     FieldOld.add(String.valueOf(oldPrice));
                     FieldNew.add(String.valueOf(price));
                 }
-                if(!oldImportDate.equals(importDate)) {
+                if (!oldImportDate.equals(importDate)) {
                     FieldOld.add(String.valueOf(oldImportDate));
                     FieldNew.add(String.valueOf(importDate));
                 }
-                if(oldDetailStatus != detailStatus) {
+                if (oldDetailStatus != detailStatus) {
                     FieldOld.add(String.valueOf(oldDetailStatus));
                     FieldNew.add(String.valueOf(detailStatus));
                 }
+                
+                if (oldImage != imagePaths) {
+                    FieldOld.add(String.valueOf(oldImage));
+                    FieldNew.add(String.valueOf(imagePaths));
+                }
 
-                if(FieldOld.size() > 0 && FieldNew.size() > 0) {
+                if (FieldOld.size() > 0 && FieldNew.size() > 0) {
                     String action = request.getParameter("edit");
                     UserDTO user = (UserDTO) request.getSession().getAttribute("LOGIN_USER");
                     int empID = user.getUserID();
-                    ManageProductDTO manage = new ManageProductDTO(productDetailID, empID, FieldOld, FieldNew, action);
-                    DbUtils.addCheckLogToDB("OverseeProductDetails", "productDetailID", manage);
+                    boolean isProductDetails = true;
+//                    ManageProductDTO manage = new ManageProductDTO(productDetailID, empID, FieldOld, FieldNew, action, isProductDetails);
+                    ManageProductDTO manage = new ManageProductDTO(productDetailID, empID, FieldOld, FieldNew, action, isProductDetails);
+                    DbUtils.addCheckLogToDB("OverseeProductDetail", "ProductDetailsID", manage);
+                    request.setAttribute("SUCCESS_MESSAGE", "Product details updated successfully!");
+                    request.setAttribute("newProductID", existingProductDetail.getProductID());
+                    url = SUCCESS;
                 }
 
-                
-
-                request.setAttribute("SUCCESS_MESSAGE", "Product details updated successfully!");
-                request.setAttribute("newProductID", existingProductDetail.getProductID());
-                url = SUCCESS;
             } else {
                 request.setAttribute("ERROR_MESSAGE", "Failed to update product details.");
             }

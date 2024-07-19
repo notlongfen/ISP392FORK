@@ -80,7 +80,7 @@ public class AddBrandController extends HttpServlet {
                 if (check) {
                     List<String> newList = new ArrayList<>();
                     BrandDTO brand = brandDAO.getBrandByName(brandName);
-                    String action = request.getParameter(brandName);
+                    String action = request.getParameter("action");
                     UserDTO user = (UserDTO) request.getSession().getAttribute("LOGIN_USER");
                     newList.add(brandName);
                     newList.add(imagePath);

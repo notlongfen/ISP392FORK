@@ -57,6 +57,11 @@
                             %>
                             <form action="EditProductController" method="post">
                                 <input type="hidden" name="productID" value="<%= product.getProductID() %>">
+                                <input type="hidden" name="oldProductName" value="<%= product.getProductName() %>">
+                                <input type="hidden" name="oldDescription" value="<%= product.getDescription() %>">
+                                <input type="hidden" name="oldNumberOfPurchasing" value="<%= product.getNumberOfPurchase() %>">
+                                <input type="hidden" name="oldBrandID" value="<%= product.getBrandID() %>">
+                                <input type="hidden" name="edit" value="Edit">
                                 <div class="form-row">
                                     <div class="form-group col-md-8">
                                         <label for="productName">Product Name</label>
@@ -104,9 +109,11 @@
                                                     boolean isSelected = CategoryUtils.isCategorySelected(productCategories, category.getCdCategoryID());
                                             %>
                                             <div class="form-check">
+                                                <!-- <input name="" value="<%= category.getCdCategoryID() %>"> -->
+                                                
                                                 <input class="form-check-input" type="checkbox" id="category<%= category.getCdCategoryID() %>" name="categoryIDs" value="<%= category.getCdCategoryID() %>" <%= isSelected ? "checked" : "" %>>
                                                 <label class="form-check-label" for="category<%= category.getCdCategoryID() %>"><%= category.getCategoryName() %></label>
-                                            </div>
+                                            </div>     
                                             <%
                                                 }
                                             %>

@@ -244,7 +244,7 @@ public class MainController extends HttpServlet {
     private static final String GET_CHILDREN_CATEGORY_INFO_CONTROLLER = "GetChildrenCategoryInfoController";
 
     private static final String HISTORY = "History";
-    private static final String HISTORY_CONTROLLER = "ShowHistoryBrandController";
+    private static final String HISTORY_CONTROLLER = "ShowHistoryController";
 
     private static final String GET_USER_INFO = "GetUserInfo";
     private static final String GET_USER_INFO_CONTROLLER = "GetUserInfoController";
@@ -264,7 +264,9 @@ public class MainController extends HttpServlet {
     private static final String ALL_PRODUCT = "All_Product";
     private static final String ALL_PRODUCT_PAGE = "ViewAllProductController";
 
+
     private static final String PROMOTION_CHECKER = "CheckPromotion";
+
     private static final String PROMOTION_CHECKER_CONTROLLER = "PromotionCheckerController";
 
     private static final String VIEW_US_ORDER = "ViewUSOrder";

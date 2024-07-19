@@ -86,7 +86,7 @@ public class EditProductController extends HttpServlet {
                         UserDTO user = (UserDTO) request.getSession().getAttribute("LOGIN_USER");
                         int empID = user.getUserID();
                         ManageProductDTO manage = new ManageProductDTO(productID, empID, oldList, newList, action);
-                        DbUtils.addCheckLogToDB("OverseeProducts", "productID", manage);
+                        DbUtils.addCheckLogToDB("OverseeProducts", "ProductID", manage);
                     }
                     request.getSession().setAttribute("SUCCESS_MESSAGE", "Product updated successfully!");
                     response.sendRedirect(SUCCESS);

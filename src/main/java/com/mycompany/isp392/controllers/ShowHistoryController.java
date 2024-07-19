@@ -26,8 +26,8 @@ import utils.DbUtils;
  *
  * @author PC
  */
-@WebServlet(name="ShowHistoryBrandController", urlPatterns={"/ShowHistoryBrandController"})
-public class ShowHistoryBrandController extends HttpServlet {
+@WebServlet(name="ShowHistoryController", urlPatterns={"/ShowHistoryController"})
+public class ShowHistoryController extends HttpServlet {
     
     private static final String ERROR = "AD_HistoryManage.jsp";
     private static final String SUCCESS = "AD_HistoryManage.jsp";

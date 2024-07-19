@@ -416,37 +416,7 @@
                         <i class="fas fa-angle-up"></i>
                     </a>
 
-                    <script>
-                        //Sort Date
-                        function locNgay() {
-                            const ngayBatDau = document.getElementById('ngayBatDau').value;
-                            const ngayKetThuc = document.getElementById('ngayKetThuc').value;
-                            const tableBody = document.getElementById('tableBody');
-                            const rows = tableBody.getElementsByTagName('tr');
-
-                            if (ngayBatDau && ngayKetThuc) {
-                                const startDate = new Date(ngayBatDau);
-                                const endDate = new Date(ngayKetThuc);
-
-                                for (let i = 0; i < rows.length; i++) {
-                                    const cells = rows[i].getElementsByTagName('td');
-                                    const ngayBatDauRow = new Date(cells[3].textContent.trim());
-                                    const ngayKetThucRow = new Date(cells[4].textContent.trim());
-
-                                    if (ngayBatDauRow >= startDate && ngayKetThucRow <= endDate) {
-                                        rows[i].style.display = '';
-                                    } else {
-                                        rows[i].style.display = 'none';
-                                    }
-                                }
-                            } else {
-                                for (let i = 0; i < rows.length; i++) {
-                                    rows[i].style.display = '';
-                                }
-                            }
-                        }
-
-                    </script>
+                    
                     <script src="vendor/jquery/jquery.min.js"></script>
                     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
                     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>

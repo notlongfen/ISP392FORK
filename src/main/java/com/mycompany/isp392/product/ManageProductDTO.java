@@ -13,6 +13,7 @@ import java.util.List;
  */
 public class ManageProductDTO {
     private int productID;
+    private int productDetailsID;
     private int empID;
     private List<String> oldField;
     private List<String> newField;
@@ -43,6 +44,14 @@ public class ManageProductDTO {
         this.action = action;
         this.changeDate = changeDate;
     }
+    
+    public ManageProductDTO(int productDetailsID, int empID, List<String> oldField, List<String> newField, String action, boolean isProductDetails) {
+        this.productDetailsID = productDetailsID;
+        this.empID = empID;
+        this.oldField = oldField;
+        this.newField = newField;
+        this.action = action;
+    }
 
     public ManageProductDTO(int productID, int empID, List<String> oldField, List<String> newField, String action) {
         this.productID = productID;
@@ -60,6 +69,19 @@ public class ManageProductDTO {
         this.action = action;
         this.changeDate = changeDate;
     }
+
+    
+    
+    
+    public int getProductDetailsID() {
+        return productDetailsID;
+    }
+
+    public void setProductDetailsID(int productDetailsID) {
+        this.productDetailsID = productDetailsID;
+    }
+    
+    
 
     public int getProductID() {
         return productID;

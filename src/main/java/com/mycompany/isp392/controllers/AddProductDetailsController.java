@@ -119,9 +119,11 @@ public class AddProductDetailsController extends HttpServlet {
                     newField.add(importDate.toString());
                     newField.add(imagePaths);
                     newField.add(String.valueOf(1));
+                    boolean pdetail = true;
                     int productDetailID = productDAO.getProductDetailsIDByProductIDColorSize(productID, color, size);
-                    ManageProductDTO manageProduct = new ManageProductDTO(productDetailID, user.getUserID(), new ArrayList<>(), newField, "Add");
-                    DbUtils.addCheckLogToDB("ManageProductDetails", "ProductDetailsID", manageProduct);
+//                    ManageProductDTO manageProduct = new ManageProductDTO(productDetailID, user.getUserID(), new ArrayList<>(), newField, "Add");
+                    ManageProductDTO manageProduct = new ManageProductDTO(productDetailID,  user.getUserID(), new ArrayList<>(), newField, "Add", pdetail);
+                    DbUtils.addCheckLogToDB("OverseeProductDetail", "ProductDetailsID", manageProduct);
                 }
 
                 if (check) {

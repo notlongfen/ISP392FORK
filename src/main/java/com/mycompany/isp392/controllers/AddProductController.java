@@ -56,7 +56,7 @@ public class AddProductController extends HttpServlet {
                     newField.add(String.valueOf(brandID));
                     newField.add(String.valueOf(categoryArray));
                     ManageProductDTO manageProductDTO = new ManageProductDTO(productID, user.getUserID(), new ArrayList<>(),newField, "Add");
-                    DbUtils.addCheckLogToDB("ManageProducts", "ProductID", manageProductDTO);
+                    DbUtils.addCheckLogToDB("OverseeProducts", "ProductID", manageProductDTO);
 
                     request.setAttribute("SUCCESS_MESSAGE", "Product added successfully!");
                     request.setAttribute("PRODUCT_ID", productID);
