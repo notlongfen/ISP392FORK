@@ -22,7 +22,7 @@ import java.util.List;
 
 @WebServlet(name = "EditOrderController", urlPatterns = {"/EditOrderController"})
 public class EditOrderController extends HttpServlet {
-    private static final String ERROR = "GetOrderInfoController";
+    private static final String ERROR = "GetOrderInforController";
     private static final String SUCCESS = "GetOrderListController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -55,9 +55,8 @@ public class EditOrderController extends HttpServlet {
 
                 if(oldList.size() > 0 && newList.size() > 0) {
                     UserDTO user = (UserDTO) request.getSession().getAttribute("LOGIN_USER");
-                    String action = request.getParameter("action");
-                    ManageOrderDTO manageOrder = new ManageOrderDTO(orderID, user.getUserID(), oldList, newList, action);
-                    DbUtils.addCheckLogToDB("ManageProductDetails", "productDetailID", ProductDetailsDTO.class);
+                    ManageOrderDTO manageOrder = new ManageOrderDTO(orderID, 1 , oldList, newList, "Edit");
+                    DbUtils.addCheckLogToDB("ManageOrders", "OrderID", ManageOrderDTO.class);
                     
                 }
 

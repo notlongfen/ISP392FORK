@@ -103,7 +103,8 @@
                                                 <%
                                                     OrderDTO order = (OrderDTO) request.getAttribute("ORDER_INFOR");
                                                     if (order != null) {
-                                                %>
+                                                        %>
+                                                    <input type="hidden" name="oldStatus" value="<%= order.getStatus()%>">
                                                 <tr>
                                                     <td class="text-center"><%= order.getOrderID() %></td>
                                                     <td class="text-center"><%= order.getUserName() %></td>

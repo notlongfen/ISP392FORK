@@ -808,4 +808,45 @@ public class OrderDAO {
         }
         return total;
     }
+
+    public List<OrderDetailsDTO> getLastOrderDetails(int userID){
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        List<OrderDetailsDTO> list = new ArrayList<>();
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement("SELECT TOP 1 * FROM OrderDetails od JOIN Orders o ON od.OrderID = o.OrderID WHERE CustID = ? ORDER BY od.OrderID DESC");
+                ptm.setInt(1, userID);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    int orderID = rs.getInt("OrderID");
+                    int productDetailsID = rs.getInt("ProductDetailsID");
+                    int productID = rs.getInt("ProductID");
+                    int quantity = rs.getInt("quantity");
+                    int unitPrice = rs.getInt("unitPrice");
+                    list.add(new OrderDetailsDTO(productDetailsID, orderID, productID, quantity, unitPrice));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ptm != null) {
+                    ptm.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return list;
+        
+    }
 }

@@ -58,8 +58,15 @@ public class ManageOrderDTO {
         this.newList = newList;
         this.action = action;
     }
-
     
+    public int getEmpID() {
+        return empID;
+    }
+
+    public void setEmpID(int empID) {
+        this.empID = empID;
+    }
+  
 
     public int getOrderID() {
         return orderID;
