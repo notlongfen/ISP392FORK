@@ -131,10 +131,10 @@
         </a>
 
         <!-- Error Modal -->
-        <% if (request.getAttribute("PRODUCT_ERROR") != null) { %>
+        <% if (request.getAttribute("PRODUCT_ERROR") != null || request.getAttribute("ERROR_MESSAGE") != null) { %>
         <%@include file="errorModal.jsp" %>
         <% } %>
-        <% if (request.getAttribute("PRODUCT_ERROR") != null) { %>
+        <% if (request.getAttribute("PRODUCT_ERROR") != null || request.getAttribute("ERROR_MESSAGE") != null) { %>
         <script>
             $(document).ready(function () {
                 $('#errorModal').modal('show');

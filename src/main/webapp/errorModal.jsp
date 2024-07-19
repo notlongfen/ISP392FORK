@@ -11,12 +11,15 @@
                         <ul class="list-group list-group-flush">
                             <%
                                 ProductError productError = (ProductError) request.getAttribute("PRODUCT_ERROR");
+                                String Error = (String) request.getAttribute("ERROR_MESSAGE");
                                 if (productError != null && !productError.getProductNameError().isEmpty()) {
                             %>
                             <li class="list-group-item list-group-item-danger"><%= productError.getProductNameError() %></li>
+                            
                             <%
                                 }
                             %>
+                             <li class="list-group-item list-group-item-danger"><%= Error %></li>
                         </ul>
                     </div>
                     <div class="modal-footer">

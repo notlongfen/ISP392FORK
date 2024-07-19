@@ -99,7 +99,6 @@ public class EditProductController extends HttpServlet {
                 request.getSession().setAttribute("PRODUCT_ERROR", productError);
             }
         } catch (Exception e) {
-            log("Error at EditProductController: " + e.toString());
             request.getSession().setAttribute("ERROR_MESSAGE", "Error updating product: " + e.getMessage());
         }
         request.getRequestDispatcher(ERROR).forward(request, response);

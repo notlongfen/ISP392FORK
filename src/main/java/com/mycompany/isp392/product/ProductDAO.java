@@ -1679,7 +1679,7 @@ public class ProductDAO {
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(localeVN);
 
         try (Connection con = DbUtils.getConnection()) {
-            String query = "SELECT color, size, price, image FROM ProductDetails WHERE ProductID = ?";
+            String query = "SELECT color, size, price, image FROM ProductDetails WHERE ProductID = ?  and status = 1 and stockQuantity > 0";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setInt(1, productId);
             ResultSet rs = ps.executeQuery();

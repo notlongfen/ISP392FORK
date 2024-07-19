@@ -65,6 +65,7 @@ public class ViewAllProductController extends HttpServlet {
             for (ProductDTO product : filteredProducts) {
                 List<ProductDetailsDTO> details = productDAO.getProductDetails(product.getProductID());
                 Map<String, ProductDetailsDTO> detailsByColor = details.stream()
+                         .filter(detail -> detail.getStockQuantity() > 0 && detail.getStatus() == 1)
                         .collect(Collectors.toMap(ProductDetailsDTO::getColor, detail -> detail, (existing, replacement) -> existing));
                 productDetailsByColor.put(product.getProductID(), detailsByColor);
             }

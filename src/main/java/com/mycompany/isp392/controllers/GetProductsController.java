@@ -32,11 +32,6 @@ public class GetProductsController extends HttpServlet {
             CategoryDAO categoryDAO = new CategoryDAO();
 
             // Retrieve and clear success message from session
-            String successMessage = (String) request.getSession().getAttribute("SUCCESS_MESSAGE");
-            if (successMessage != null) {
-                request.setAttribute("SUCCESS_MESSAGE", successMessage);
-                request.getSession().removeAttribute("SUCCESS_MESSAGE");
-            }
 
             // Retrieve and clear error message from session
             ProductError productError = (ProductError) request.getSession().getAttribute("PRODUCT_ERROR");
@@ -90,10 +85,6 @@ public class GetProductsController extends HttpServlet {
                 request.setAttribute("TOTAL_PAGES", (int) Math.ceil((double) totalProducts / entriesPerPage));
 
                 for (ProductDTO product : productList) {
-                    int totalQuantity = productDAO.getTotalQuantityByProductID(product.getProductID());
-                    productDAO.updateNumberOfPurchasing(product.getProductID(), totalQuantity);
-                    product.setNumberOfPurchase(totalQuantity);
-
                     List<CategoryDTO> categories = categoryDAO.getCategoriesByProductID(product.getProductID());
                     request.setAttribute("CATEGORY_LIST_" + product.getProductID(), categories);
                 }
