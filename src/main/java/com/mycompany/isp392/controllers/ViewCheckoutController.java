@@ -23,8 +23,9 @@ import jakarta.servlet.http.HttpSession;
  *
  * @author notlongfen
  */
-@WebServlet(name = "ViewCheckoutController", urlPatterns = { "/ViewCheckoutController" })
+@WebServlet(name = "ViewCheckoutController", urlPatterns = {"/ViewCheckoutController"})
 public class ViewCheckoutController extends HttpServlet {
+
     private static final String ERROR = "US_Checkout.jsp";
     private static final String SUCCESS = "US_Checkout.jsp";
 
@@ -32,21 +33,20 @@ public class ViewCheckoutController extends HttpServlet {
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         HttpSession session = request.getSession();
-        
+
         try {
             UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
             CartDTO cart = (CartDTO) request.getAttribute("CART");
-
             if (cart == null) {
                 CartDAO cartDAO = new CartDAO();
                 cart = cartDAO.getCartByCustomerID(user.getUserID());
@@ -56,6 +56,7 @@ public class ViewCheckoutController extends HttpServlet {
 //            List<ProductDetailsDTO> productList = productDAO.getProductByCartID(cart.getCartID());
             List<CartDetailsDTO> cartList = cartDAO.getCartItems(cart.getCartID());
 //            request.setAttribute("PRODUCT_LIST", productList);
+//            session.setAttribute("CUST", user);
             request.setAttribute("CART_CHECKOUT", cartList);
             request.setAttribute("CART_INFO", cart);
 
@@ -72,10 +73,10 @@ public class ViewCheckoutController extends HttpServlet {
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -86,10 +87,10 @@ public class ViewCheckoutController extends HttpServlet {
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

@@ -264,9 +264,7 @@ public class MainController extends HttpServlet {
     private static final String ALL_PRODUCT = "All_Product";
     private static final String ALL_PRODUCT_PAGE = "ViewAllProductController";
 
-
-    private static final String PROMOTION_CHECKER = "CheckPromotion";
-
+    private static final String PROMOTION_CHECKER = "Check Promotion";
     private static final String PROMOTION_CHECKER_CONTROLLER = "PromotionCheckerController";
 
     private static final String VIEW_US_ORDER = "ViewUSOrder";

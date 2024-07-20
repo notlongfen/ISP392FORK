@@ -8,17 +8,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-import com.mycompany.isp392.cart.CartDAO;
-import com.mycompany.isp392.cart.CartDTO;
-import com.mycompany.isp392.cart.CartDetailsDTO;
-import com.mycompany.isp392.cart.CartError;
-import com.mycompany.isp392.product.ProductDAO;
-import com.mycompany.isp392.product.ProductDTO;
-import com.mycompany.isp392.promotion.PromotionDAO;
-import com.mycompany.isp392.promotion.PromotionDTO;
-import com.mycompany.isp392.promotion.PromotionError;
-import com.mycompany.isp392.user.UserDAO;
-import com.mycompany.isp392.user.UserDTO;
+import com.mycompany.isp392.cart.*;
+import com.mycompany.isp392.product.*;
+import com.mycompany.isp392.promotion.*;
+import com.mycompany.isp392.user.*;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -26,6 +19,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -37,35 +33,41 @@ public class PromotionCheckerController extends HttpServlet {
     private static final String ERROR = "US_Checkout.jsp";
     private static final String SUCCESS = "US_Checkout.jsp";
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+ 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession sesssion = request.getSession();
         String url = ERROR;
-        try {
-            UserDTO userDTO = (UserDTO) sesssion.getAttribute("LOGIN_USER");
-            UserDAO userDAO = new UserDAO();
-            PromotionDAO promotionDAO = new PromotionDAO();
+        UserDTO userDTO = (UserDTO) sesssion.getAttribute("LOGIN_USER");
+        CustomerDTO customer = (CustomerDTO) sesssion.getAttribute("CUST");
+        UserDAO userDAO = new UserDAO();
+        PromotionDAO promotionDAO = new PromotionDAO();
 
-            String promotionName = request.getParameter("promotionName");
-            request.setAttribute("PROMOTION_NAME", promotionName);
-            CartDTO cart = (CartDTO) sesssion.getAttribute("CART");
-            CartDAO cartDAO = new CartDAO();
+        String userName = request.getParameter("name");
+        int phoneNumber = Integer.parseInt(request.getParameter("phone"));
+        String address = request.getParameter("address");
+        String ward = request.getParameter("ward");
+        String district = request.getParameter("district");
+        String city = request.getParameter("city");
+        String note = request.getParameter("note");
+
+        String promotionName = request.getParameter("promotionName");
+        request.setAttribute("PROMOTION_NAME", promotionName);
+        CartDTO cart = (CartDTO) sesssion.getAttribute("CART");
+
+         CartDAO cartDAO = new CartDAO();
+        List<CartDetailsDTO> cartList =  null;
+        double originalPrice = 0.0;
+
+        try {
             if (cart == null) {
                 cart = cartDAO.getCartByCustomerID(userDTO.getUserID());
 //                request.setAttribute("CART_TOTAL_PRICE", cart);
-                cart.setPromotionID(promotionDAO.getPromotionByName(promotionName).getPromotionID());
+                PromotionDTO promotion = promotionDAO.getPromotionByName(promotionName);
+                cart.setPromotionID(promotion.getPromotionID());
                 boolean checkUpdate = cartDAO.updateCartPromotion(cart.getPromotionID(), cart.getCartID());
-                if(!checkUpdate){
+                if (!checkUpdate) {
                     request.setAttribute("UPDATE_ERROR", "Cannot update promotionID in cart");
                     return;
                 }
@@ -74,6 +76,8 @@ public class PromotionCheckerController extends HttpServlet {
                     error.setError("Your cart is empty");
                     request.getRequestDispatcher(url).forward(request, response);
                 }
+                cartList = cartDAO.getCartItems(cart.getCartID());
+                originalPrice = cart.getTotalPrice();
             }
             int userPoint = userDAO.getCustomerByID(userDTO.getUserID()).getPoints();
             PromotionDTO promotionDTO = promotionDAO.getPromotionByName(promotionName);
@@ -92,18 +96,13 @@ public class PromotionCheckerController extends HttpServlet {
                 double percentage = (double) promotionDTO.getDiscountPer() / 100.0;
                 // int point = userDAO.getCustomerByID(userDTO.getUserID()).getPoints() - 100;
                 // userDAO.updateUserPoint(userDTO.getUserID(), point);
-                double originalPrice = cart.getTotalPrice(); // Lưu lại giá gốc trước khi áp dụng khuyến mãi
                 double newPrice = cart.getTotalPrice() - (cart.getTotalPrice() * percentage) + 40000;
                 cart.setTotalPrice(newPrice);
-                List<CartDetailsDTO> cartList = cartDAO.getCartItems(cart.getCartID());
                 boolean checkUpdate = cartDAO.updateCartNewPrice(cart.getTotalPrice(), cart.getCartID());
-                if(!checkUpdate){
+                if (!checkUpdate) {
                     request.setAttribute("UPDATE_ERROR", "Cannot update total price in cart");
                     return;
                 }
-                request.setAttribute("CART_CHECKOUT", cartList);
-                request.setAttribute("CART_TOTAL_PRICE", originalPrice); // Đặt giá gốc vào thuộc tính request
-                request.setAttribute("CART_FINAL_PRICE", cart.getTotalPrice()); // Đặt giá sau khuyến mãi vào thuộc tính request
                 url = SUCCESS;
             } else {
                 PromotionError pe = new PromotionError();
@@ -115,6 +114,16 @@ public class PromotionCheckerController extends HttpServlet {
         } catch (Exception e) {
             log("ERROR at PromotionCheckerController: " + e.getMessage());
         } finally {
+            request.setAttribute("name", userName);
+            request.setAttribute("phone", phoneNumber);
+            request.setAttribute("address", address);
+            request.setAttribute("ward", ward);
+            request.setAttribute("district", district);
+            request.setAttribute("city", city);
+            request.setAttribute("note", note);
+            request.setAttribute("CART_CHECKOUT", cartList);
+            request.setAttribute("CART_TOTAL_PRICE", originalPrice); // Đặt giá gốc vào thuộc tính request
+            request.setAttribute("CART_FINAL_PRICE", cart.getTotalPrice()); // Đặt giá sau khuyến mãi vào thuộc tính request
             request.getRequestDispatcher(url).forward(request, response);
         }
 
@@ -133,7 +142,11 @@ public class PromotionCheckerController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(PromotionCheckerController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -147,7 +160,11 @@ public class PromotionCheckerController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(PromotionCheckerController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

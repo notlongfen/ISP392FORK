@@ -32,6 +32,7 @@ public class UserDAO {
     private static final String EDIT_CUSTOMER = "UPDATE Customers SET points = ?, birthday = ?, province_city = ?, district = ?, ward = ?, detailAddress = ? WHERE CustID = ?";
     private static final String GET_USER_BY_ID = "SELECT * FROM Users WHERE UserID = ?";
     private static final String GET_CUSTOMER_BY_ID = "SELECT * FROM Customers WHERE CustID = ?";
+    private static final String GET_ALL_INFO_CUSTOMER_BY_ID = "SELECT * FROM Users u INNER JOIN Customers c ON u.UserID = c.CustID WHERE CustID = ?";
     private static final String GET_EMPLOYEE_BY_ID = "SELECT * FROM Employees WHERE EmpID = ?";
     private static final String DELETE_USER = "UPDATE Users SET status = 0 WHERE UserID = ?";
     private static final String GET_USER_INFO_BASED_ON_SUPPORTID = "SELECT * FROM Supports s \n"
@@ -659,6 +660,47 @@ public class UserDAO {
                     String ward = rs.getString("ward");
                     String address = rs.getString("detailAddress");
                     customer = new CustomerDTO(CustID, points, birthday, city, district, ward, address);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return customer;
+    }
+    
+    public CustomerDTO getAllInfoCustomerByID(int CustID) throws SQLException {
+        CustomerDTO customer = null;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_ALL_INFO_CUSTOMER_BY_ID);
+                ptm.setInt(1, CustID);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    String name = rs.getString("userName");
+                    String email = rs.getString("email");
+                    int roleID = rs.getInt("roleID");
+                    int phone = rs.getInt("phone");
+                    int points = rs.getInt("points");
+                    Date birthday = rs.getDate("birthday");
+                    String city = rs.getString("province_city");
+                    String district = rs.getString("district");
+                    String ward = rs.getString("ward");
+                    String address = rs.getString("detailAddress");
+                    customer = new CustomerDTO(name, email, phone, roleID,  points, birthday, city, district, ward, address);
                 }
             }
         } catch (Exception e) {

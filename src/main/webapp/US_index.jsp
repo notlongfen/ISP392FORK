@@ -148,7 +148,7 @@
                                 <h8 class="collection_text">Spring / Summer Collection 2024</h8>
                                 <h1 style="color: #FFF; font-size: 90px; margin-bottom: 40px;">SALE UP TO 50%</h1>
                                 <h8 class="detail_text">View detail product below</h8>
-                                <div class="red_button shop_now_button"><a href="US_AllProducts.jsp">Shop now</a></div>
+                                <div class="red_button shop_now_button"><a href="MainController?action=All_Product">Shop now</a></div>
                             </div>
                         </div>
                     </div>

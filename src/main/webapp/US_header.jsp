@@ -117,7 +117,6 @@
                                         <li><a href="MainController">home</a></li>
                                         <li><a href="MainController?action=All_Product">shop</a></li>
                                         <li><a href="MainController?action=View promotion">promotion</a></li>
-                                        <li><a href="contact.html">contact</a></li>
                                     </ul>
                                     <ul class="navbar_user">
                                         <li>
@@ -170,7 +169,6 @@
                                     <li><a href="index.html">home</a></li>
                                     <li><a href="#">shop</a></li>
                                     <li><a href="#">promotion</a></li>
-                                    <li><a href="contact.html">contact</a></li>
                                 </ul>
                                 <ul class="navbar_user">
                                     <li><a href="#"><i class="fa fa-search" aria-hidden="true"></i></a></li>
