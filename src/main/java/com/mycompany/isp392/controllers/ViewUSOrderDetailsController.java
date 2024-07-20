@@ -44,11 +44,21 @@ public class ViewUSOrderDetailsController extends HttpServlet {
         try {
             UserDTO userDTO = (UserDTO) request.getSession().getAttribute("LOGIN_USER");
             OrderDAO orderDAO = new OrderDAO();
+            int orderID = Integer.parseInt(request.getParameter("orderID"));
+            if(orderID != 0){
+                OrderDTO order = orderDAO.getOrderInfo(orderID);
+                List<OrderDetailsDTO> orderDetails = orderDAO.getListOrderDetailsByOrderID(orderID);
+                request.setAttribute("DETAILS_OF_ORDER", order);
+                request.setAttribute("DETAILS_OF_ORDER_DETAILS", orderDetails);
+                url = SUCCESS;
+            }else{
             OrderDTO latestOrder = orderDAO.getRecentOrderOfCustomer(userDTO.getUserID());
             List<OrderDetailsDTO> orderDetails = orderDAO.getLastOrderDetails(latestOrder.getOrderID());
+
             request.setAttribute("LATEST_ORDER", latestOrder);
             request.setAttribute("ORDER_DETAILS", orderDetails);
             url = SUCCESS;
+            }
         } catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();
