@@ -287,6 +287,12 @@ public class MainController extends HttpServlet {
     
     private static final String VIEW_CART = "View_Cart";
     private static final String VIEW_CART_CONTROLLER = "ViewCartController";
+    
+    private static final String REMOVE_FROM_CART = "RemoveFromCart";
+    private static final String REMOVE_FROM_CART_CONTROLLER = "RemoveFromCartController";
+    
+    private static final String UPDATE_CART_QUANTITY = "UpdateCartQuantity";
+    private static final String UPDATE_CART_QUANTITY_CONTROLLER = "UpdateCartQuantityController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -486,6 +492,10 @@ public class MainController extends HttpServlet {
                 url = EDIT_EMP_PROFILE_CONTROLLER;
             } else if (VIEW_CART.equals(action)) {
                 url = VIEW_CART_CONTROLLER;
+            } else if (REMOVE_FROM_CART.equals(action)) {
+                url = REMOVE_FROM_CART_CONTROLLER;
+            } else if (UPDATE_CART_QUANTITY.equals(action)) {
+                url = UPDATE_CART_QUANTITY_CONTROLLER;
             }
         } catch (Exception e) {
             log("error at MainController: " + e.toString());

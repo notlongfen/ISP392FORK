@@ -128,19 +128,35 @@
 
                                     <div class="me-3">
                                         <label class ="col-auto no-border" for="quantity" class="form-label">Quantity</label>
-                                        <select class="col-auto no-border" id="quantity" name="quantity" class="form-select">
-                                            <option selected><%= cartItem.getQuantity()%></option>
+                                        <div class="col-auto no-border" style="display:inline;">
+                                            <form method="MainController" method="POST" style="display:inline;">
+                                                <input type="hidden" name="cartID" value="<%= cartItem.getCartID()%>"/>
+                                                <input type="hidden" name="productDetailsID" value="<%= cartItem.getProductDetailsID()%>"/>
+                                                <input type="hidden" name="quantity" value="<%= cartItem.getQuantity() - 1%>"/>
+                                                <button type="submit" name="action" value="UpdateCartQuantity" id="decrease" class="btn btn-dark me-2">-</button>
+                                            </form>
+                                            <span class="border px-3 py-2" id="quantity"><%= cartItem.getQuantity() %></span>
+                                             <form method="MainController" method="POST" style="display:inline;">
+                                                <input type="hidden" name="cartID" value="<%= cartItem.getCartID()%>"/>
+                                                <input type="hidden" name="productDetailsID" value="<%= cartItem.getProductDetailsID()%>"/>
+                                                <input type="hidden" name="quantity" value="<%= cartItem.getQuantity() + 1%>"/>
+                                                <button type="submit" name="action" value="UpdateCartQuantity" id="increase" class="btn btn-dark ms-2">+</button>
+                                            </form>
+                                        </div> 
+<!--                                        <select class="col-auto no-border" id="quantity" name="quantity" class="form-select">
+                                            <option selected>< cartItem.getQuantity()%></option>
                                             <option>1</option>
                                             <option>2</option>
                                             <option>3</option>
                                             <option>4</option>
-                                            <!-- Add more options if needed -->
-                                        </select>
+col-md-8 d-flex justify-content-center align-items-center
+                                             Add more options if needed 
+                                        </select>-->
                                     </div>
                                 </div>
                                 <div class="text-left">
                                     <a href="#" class="wishlist"><i class="fa fa-heart mr-2"></i></a>
-                                    <a href="#"class="remove"><i class="remove-btn fas fa-trash"></i></a>
+                                    <a href="#"class="remove" onclick="showConfirmDeleteModal(<%= cartItem.getCartID() %>, <%= cartItem.getProductDetailsID()%>)"><i class="remove-btn fas fa-trash"></i></a>
                                 </div>  
                             </div>
                         </div>
@@ -148,7 +164,7 @@
                             int price = cartItem.getPrice();
                             String formattedPrice = formatter.format(price);
                         %>
-                        <p class="text-danger fw-bold text-right" style="font-size: 20px;"><%= formattedPrice%> </p>
+                        <p class="text-danger fw-bold text-right" style="font-size: 20px; display:inline;"><%= formattedPrice%> </p>
                     </div>
                     <!--<i class="fas fa-clock mb-5 mt-5" style="color: #A5821D; font-weight: normal"></i><span style="color: #A5821D; font-weight: normal;"> Just a few left. Order soon.</span>-->
                     <%
@@ -204,19 +220,19 @@
         </div>
 
         <!-- Confirmation Modal -->
-        <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="confirmModalLabel">Confirm Removal</h5>
+                        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Removal</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         Are you sure you want to remove this item from the cart?
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                        <button type="button" class="btn btn-danger" id="confirmRemove">Yes</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-danger" id="confirmDeleteButton">Confirm</button>
                     </div>
                 </div>
             </div>
@@ -226,27 +242,43 @@
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script>
-            document.addEventListener('DOMContentLoaded', (event) => {
-                let targetCartItem;
+//            document.addEventListener('DOMContentLoaded', (event) => {
+//                let targetCartItem;
+//
+//                document.querySelectorAll('.remove-btn').forEach((button) => {
+//                    button.addEventListener('click', (event) => {
+//                        event.preventDefault();
+//                        targetCartItem = event.target.closest('.cart-item');// Để xác định phần tử mà sự kiện click đã được kích hoạt
+//                        let confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
+//                        confirmModal.show();
+//                    });
+//                });
+//
+//                document.getElementById('confirmRemove').addEventListener('click', () => {
+//                    if (targetCartItem) {
+//                        targetCartItem.remove();
+//                        targetCartItem = null;
+//                        let confirmModal = bootstrap.Modal.getInstance(document.getElementById('confirmModal'));
+//                        confirmModal.hide();
+//                    }
+//                });
+//            });
+            function showConfirmDeleteModal(cartID, productDetailsID) {
+                // Store the user ID in a global variable or data attribute
+                document.getElementById('confirmDeleteButton').setAttribute('data-cart-id', cartID);
+                document.getElementById('confirmDeleteButton').setAttribute('data-product-details-id', productDetailsID);
+                // Show the modal
+                var confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+                confirmDeleteModal.show();
+            }
 
-                document.querySelectorAll('.remove-btn').forEach((button) => {
-                    button.addEventListener('click', (event) => {
-                        event.preventDefault();
-                        targetCartItem = event.target.closest('.cart-item');// Để xác định phần tử mà sự kiện click đã được kích hoạt
-                        let confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
-                        confirmModal.show();
-                    });
-                });
-
-                document.getElementById('confirmRemove').addEventListener('click', () => {
-                    if (targetCartItem) {
-                        targetCartItem.remove();
-                        targetCartItem = null;
-                        let confirmModal = bootstrap.Modal.getInstance(document.getElementById('confirmModal'));
-                        confirmModal.hide();
-                    }
-                });
+            document.getElementById('confirmDeleteButton').addEventListener('click', function () {
+                var cartID = this.getAttribute('data-cart-id');
+                var productDetailsID = this.getAttribute('data-product-details-id');
+                var url = "MainController?action=RemoveFromCart&cartID=" + cartID + "&productDetailsID=" + productDetailsID;
+                window.location.href = url;
             });
+            
         </script>
     </body>
 </html>
