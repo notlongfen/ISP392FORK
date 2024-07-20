@@ -809,7 +809,55 @@ public class OrderDAO {
         return total;
     }
 
-    public List<OrderDetailsDTO> getLastOrderDetails(int userID){
+    public OrderDTO getRecentOrderOfCustomer(int userID){
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        OrderDTO order = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement("SELECT * FROM Orders WHERE CustID = ? ORDER BY OrderID DESC");
+                ptm.setInt(1, userID);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    int orderID = rs.getInt("OrderID");
+                    int status = rs.getInt("status");
+                    double total = rs.getDouble("total");
+                    Date orderDate = rs.getDate("orderDate");
+                    int promotionID = rs.getInt("promotionID");
+                    int cartID = rs.getInt("CartID");
+                    String userName = rs.getString("userName");
+                    String city = rs.getString("city");
+                    String district = rs.getString("district");
+                    String ward = rs.getString("ward");
+                    String address = rs.getString("address");
+                    int phone = rs.getInt("phone");
+                    String note = rs.getString("note");
+                    order = new OrderDTO(orderID, status, total, orderDate, userID, promotionID, cartID, userName, city, district, ward, address, phone, note);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ptm != null) {
+                    ptm.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return order;
+    }
+    
+    public List<OrderDetailsDTO> getLastOrderDetails(int orderID){
         Connection conn = null;
         PreparedStatement ptm = null;
         ResultSet rs = null;
@@ -817,11 +865,10 @@ public class OrderDAO {
         try {
             conn = DbUtils.getConnection();
             if (conn != null) {
-                ptm = conn.prepareStatement("SELECT TOP 1 * FROM OrderDetails od JOIN Orders o ON od.OrderID = o.OrderID WHERE CustID = ? ORDER BY od.OrderID DESC");
-                ptm.setInt(1, userID);
+                ptm = conn.prepareStatement("SELECT * FROM OrderDetails od JOIN Orders o ON od.OrderID = o.OrderID WHERE ordderID = ? ORDER BY od.OrderID DESC");
+                ptm.setInt(1, orderID);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
-                    int orderID = rs.getInt("OrderID");
                     int productDetailsID = rs.getInt("ProductDetailsID");
                     int productID = rs.getInt("ProductID");
                     int quantity = rs.getInt("quantity");

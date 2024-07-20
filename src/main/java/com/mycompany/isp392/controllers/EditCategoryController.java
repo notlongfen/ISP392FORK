@@ -54,11 +54,13 @@ public class EditCategoryController extends HttpServlet {
                 if (newStatus == 0 && oldStatus != newStatus) {
                     boolean checkChildren = categoryDAO.deleteAllChildren(categoryID);
                     if (checkChildren) {
+                        
                         request.setAttribute("SUCCESS_MESSAGE", "CATEGORY UPDATED SUCCESSFULLY !");
                         url = SUCCESS;
                     } else {
                         categoryError.setError("UNABLE TO UPDATE INFORMATION !");
-                        request.setAttribute("CATEGORY_ERROR", categoryError);
+                        request.setAttribute("CATEGORY_ERROR", categoryError); 
+                        return;
                     }
                 } else {
                     request.setAttribute("SUCCESS_MESSAGE", "CATEGORY UPDATED SUCCESSFULLY !");

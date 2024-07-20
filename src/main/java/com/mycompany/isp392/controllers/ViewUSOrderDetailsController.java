@@ -6,7 +6,11 @@ package com.mycompany.isp392.controllers;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
+import com.mycompany.isp392.order.OrderDAO;
+import com.mycompany.isp392.order.OrderDTO;
+import com.mycompany.isp392.order.OrderDetailsDTO;
 import com.mycompany.isp392.user.UserDTO;
 
 import jakarta.servlet.ServletException;
@@ -39,8 +43,12 @@ public class ViewUSOrderDetailsController extends HttpServlet {
 
         try {
             UserDTO userDTO = (UserDTO) request.getSession().getAttribute("LOGIN_USER");
-            
-            
+            OrderDAO orderDAO = new OrderDAO();
+            OrderDTO latestOrder = orderDAO.getRecentOrderOfCustomer(userDTO.getUserID());
+            List<OrderDetailsDTO> orderDetails = orderDAO.getLastOrderDetails(latestOrder.getOrderID());
+            request.setAttribute("LATEST_ORDER", latestOrder);
+            request.setAttribute("ORDER_DETAILS", orderDetails);
+            url = SUCCESS;
         } catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();

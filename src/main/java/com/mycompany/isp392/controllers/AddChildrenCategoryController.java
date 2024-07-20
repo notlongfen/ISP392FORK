@@ -1,12 +1,18 @@
 package com.mycompany.isp392.controllers;
 
 import com.mycompany.isp392.category.*;
+import com.mycompany.isp392.user.UserDTO;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import utils.DbUtils;
 
 @WebServlet(name = "AddChildrenCategoryController", urlPatterns = {"/AddChildrenCategoryController"})
 public class AddChildrenCategoryController extends HttpServlet {
@@ -35,6 +41,14 @@ public class AddChildrenCategoryController extends HttpServlet {
                 ChildrenCategoryDTO cdCategory = new ChildrenCategoryDTO(categoryID, cdCategoryName, parentID, 1);
                 boolean checkChildCategory = dao.addChildrenCategory(cdCategory);
                 if (checkChildCategory) {
+                    List<String> newList = new ArrayList<>();
+                    UserDTO user = (UserDTO) request.getSession().getAttribute("LOGIN_USER");
+                    newList.add(cdCategoryName);
+                    newList.add(String.valueOf(parentID));
+                    ManageCategoryDTO manageCategoryDTO = new ManageCategoryDTO(categoryID, user.getUserID(), new ArrayList<>(), newList, "Add");
+                    DbUtils.addCheckLogToDB("ManageCDCategories", "categoryID", ManageCategoryDTO.class);
+                    
+
                     request.setAttribute("SUCCESS_MESSAGE", "CHILDREN CATEGORY ADDED SUCCESSFULLY !");
                     url = SUCCESS;
                 } else {
