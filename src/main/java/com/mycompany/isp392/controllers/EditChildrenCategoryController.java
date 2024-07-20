@@ -1,12 +1,18 @@
 package com.mycompany.isp392.controllers;
 
 import com.mycompany.isp392.category.*;
+import com.mycompany.isp392.user.UserDTO;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import utils.DbUtils;
 
 public class EditChildrenCategoryController extends HttpServlet {
 
@@ -26,15 +32,40 @@ public class EditChildrenCategoryController extends HttpServlet {
             int parentID = Integer.parseInt(request.getParameter("parentID"));
             int newStatus = Integer.parseInt(request.getParameter("status"));
 
+            String oldName = request.getParameter("oldName");
+            int oldStatus = Integer.parseInt(request.getParameter("oldStatus"));
+
             CategoryDAO categoryDAO = new CategoryDAO();
             boolean check = categoryDAO.updateChildrenCategory(cdCategoryID, newName, newStatus);
             if (check) {
+                List<String> oldList = new ArrayList<>();
+                List<String> newList = new ArrayList<>();
+
+                if (!oldName.equals(newName)) {
+                    oldList.add(oldName);
+                    newList.add(newName);
+                }
+
+                if (oldStatus != newStatus) {
+                    oldList.add(String.valueOf(oldStatus));
+                    newList.add(String.valueOf(newStatus));
+                }
+
+                if (oldList.size() > 0 && newList.size() > 0) {
+                    UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
+                    ManageCategoryDTO manageCategory = new ManageCategoryDTO(cdCategoryID, user.getUserID(), oldList, newList, "Edit");
+                    DbUtils.addCheckLogToDB("ManageCDCategories", "categoryID", manageCategory);
+                }
+
+
+
                 session.setAttribute("PARENT_CATEGORY_ID", parentID);
                 request.setAttribute("SUCCESS_MESSAGE", "CHILDREN CATEGORY UPDATED SUCCESSFULLY !");
                 url = SUCCESS;
             } else {
                 categoryError.setError("UNABLE TO UPDATE INFORMATION !");
                 request.setAttribute("CATEGORY_ERROR", categoryError);
+                return;
             }
         } catch (Exception e) {
             log("Error at EditChildrenCategoryController: " + e.toString());

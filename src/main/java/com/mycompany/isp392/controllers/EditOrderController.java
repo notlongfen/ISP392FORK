@@ -55,8 +55,8 @@ public class EditOrderController extends HttpServlet {
 
                 if(oldList.size() > 0 && newList.size() > 0) {
                     UserDTO user = (UserDTO) request.getSession().getAttribute("LOGIN_USER");
-                    ManageOrderDTO manageOrder = new ManageOrderDTO(orderID, 1 , oldList, newList, "Edit");
-                    DbUtils.addCheckLogToDB("ManageOrders", "OrderID", ManageOrderDTO.class);
+                    ManageOrderDTO manageOrder = new ManageOrderDTO(orderID, user.getUserID() , oldList, newList, "Edit");
+                    DbUtils.addCheckLogToDB("ManageOrders", "OrderID", manageOrder);
                     
                 }
 

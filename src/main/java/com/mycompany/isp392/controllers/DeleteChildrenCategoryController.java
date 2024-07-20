@@ -5,14 +5,20 @@
 package com.mycompany.isp392.controllers;
 
 import com.mycompany.isp392.category.*;
+import com.mycompany.isp392.user.UserDTO;
+
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import utils.DbUtils;
 
 /**
  *
@@ -39,6 +45,16 @@ public class DeleteChildrenCategoryController extends HttpServlet {
             session.setAttribute("PARENT_CATEGORY_ID", parentID);
             boolean checkDelete = dao.deleteChildrenCategory(cdCategoryID);
             if (checkDelete) {
+                List<String> oldList = new ArrayList<>();
+                List<String> newList = new ArrayList<>();
+                UserDTO user = (UserDTO) request.getSession().getAttribute("LOGIN_USER");
+
+                oldList.add(String.valueOf(1));
+                newList.add(String.valueOf(0));
+
+                ManageCategoryDTO manageCategory = new ManageCategoryDTO(cdCategoryID, user.getUserID(), oldList, newList, "Delete");
+                DbUtils.addCheckLogToDB("ManageCDCategories", "categoryID", manageCategory);
+
                 request.setAttribute("SUCCESS_MESSAGE", "CHILDREN CATEGORY DELETED SUCCESSFULLY !");
                 url = SUCCESS;
             } else {
