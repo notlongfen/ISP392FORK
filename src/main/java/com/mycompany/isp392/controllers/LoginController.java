@@ -1,6 +1,7 @@
 
 package com.mycompany.isp392.controllers;
 
+import com.mycompany.isp392.user.CustomerDTO;
 import com.mycompany.isp392.user.UserDAO;
 import com.mycompany.isp392.user.UserDTO;
 import io.github.cdimascio.dotenv.Dotenv;
@@ -32,7 +33,7 @@ public class LoginController extends HttpServlet {
     public void initClientID() throws ServletException{
 
 
-        Dotenv dotenv = Dotenv.configure().directory("/home/notlongfen/code/java/ISP392/.env").load();
+        Dotenv dotenv = Dotenv.configure().directory("D:\\Document\\FPT\\HK5_SU24\\ISP392\\ISP392\\.env").load();
         clientID = dotenv.get("GOOGLE_CLIENT_ID");
     }
 
@@ -65,13 +66,13 @@ public class LoginController extends HttpServlet {
                             case "productDetail":
                                 url = PRODUCT_DETAIL_PAGE;
                                 break;
-
-                            
-
                             default:
                                 url = CUSTOMER_PAGE;
                                 break;
                         }
+                        CustomerDTO customer = dao.getAllInfoCustomerByID(loginUser.getUserID());
+                        session.setAttribute("CUST", customer);
+                        
                         break;
                     case SYSTEM_MANAGER:
                         url = SYSTEM_MANAGER_PAGE;
