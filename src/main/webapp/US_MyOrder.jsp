@@ -192,7 +192,7 @@
                     <div>
                         <div class="mb-3 border-bottom order-item">
                             <div class="row">
-                                <div class="col-md-3">
+                                <div class="col-md-3" style="margin-top: 10px;">
                                     <%
                                         if(firstProduct.getImage().contains(";")){
                                             String[] images = firstProduct.getImage().split(";");     
@@ -211,12 +211,12 @@
                                         <div class="d-flex">
                                             <h5 class="card-title"><%= firstProduct.getProductName()%></h5>
                                         </div>
-                                        <div class="d-flex justify-content-start">
-                                            <p class="card-text mb-0"><strong>Category:</strong> <%= firstProduct.getCategory()%></p>
-                                            <p class="card-text mb-0 pl-3"><strong> Size:</strong> <%= firstProduct.getSize()%></p>
-                                            <p class="card-text mb-0 pl-3"><strong> Quantity:</strong> <%= firstProduct.getQuantity()%></p>
+                                        <div>
+                                            <div class="card-text mb-0"><p class="card-text mb-0 pl-3"><strong>Category:</strong> <%= firstProduct.getCategory()%></p> </div>
+                                            <div class="card-text mb-0"><p class="card-text mb-0 pl-3"><strong> Size:</strong> <%= firstProduct.getSize()%></p> </div>
+                                            <div class="card-text mb-0"><p class="card-text mb-0 pl-3"><strong> Quantity:</strong> <%= firstProduct.getQuantity()%></p> </div>
                                         </div>
-                                        <div class="status-box mt-5"><%= order.getStatusDescription()%></div>
+                                        <div class="status-box mt-4"><%= order.getStatusDescription()%></div>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
@@ -240,8 +240,8 @@
                                         <% 
                                             } else {  
                                         %>
-                                        <a href="MainController?action=CancelOrder&orderID=<%=order.getOrderID()%>">     
-                                            <button class="btn btn-danger cancel-order" type="button">Cancel</button>
+                                        <a href="MainController?action=DeleteOrder&orderID=<%=order.getOrderID()%>&status=0">     
+                                            <button class="btn btn-danger cancel-order" type="button" style="width: 170px">Cancel</button>
                                         </a>
                                         <% 
                                             }

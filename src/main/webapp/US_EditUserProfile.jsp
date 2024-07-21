@@ -6,7 +6,7 @@
 <%@page import="com.mycompany.isp392.user.CustomerDTO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html lang="en">
+<html lang>
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -138,19 +138,21 @@
                         <div class="col-sm-6">
                             <h1 class="mb-4" left-element>My Profile</h1>
                         </div>
-                        <form action="MainController" method="POST">
-                            <input type="hidden" name="userID" value="<%= custID%>">
+                                                        <!--<input type="submit" name="action" value="Save profile" class=" middle bg-white" style="border: 2px solid black; width: 120px; height: 30px;"/>-->
+
+                      
                             <div class="btn-format right-element btn-format.right-element " style="width: 50px; height: 30px;" >
                                 <!--                                <a href="MainController?action=Save profile">Save</a>-->
                             
-                                <input type="submit" name="action" value="Save profile" class=" middle bg-white" style="border: 2px solid black; width: 120px; height: 30px;"/>
                         </div>
                         <div class="col-sm-6"></div>
 
-                            <div class="mb-3">
-                                <label for="fullName" class="form-label">FullName</label>
+                        <form action="MainController" method="POST">
+                            <input type="hidden" name="userID" value="<%= custID%>">
+                            <div class="mb-3">         
+                                <label for="userName" class="form-label">Full Name</label>
                                 <div class="input-group">
-                                    <input type="text" style="color: black; background-color: #fff" class="form-control" id="fullName" name="userName" value="<%= loginUser.getUserName()%>">
+                                    <input type="text" style="color: black; background-color: #fff" class="form-control" id="userName" name="userName" value="<%= loginUser.getUserName()%>" required="">
                                     <span class="input-group-text edit-icon btn-sm" style="background-color: #fff"><i class="fas fa-pencil-alt"></i></span>
                                 </div>
                             </div>
@@ -158,7 +160,7 @@
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email Address</label>
                                 <div class="input-group">
-                                    <input type="text" style="color: black; background-color: #fff" class="form-control" id="email" name="email" value="<%= loginUser.getEmail()%>">
+                                    <input type="text" style="color: black; background-color: #fff" class="form-control" id="email" name="email" value="<%= loginUser.getEmail()%>" required="">
                                     <span class="input-group-text edit-icon btn-sm" style="background-color: #fff"><i class="fas fa-pencil-alt"></i></span>
                                 </div>
                             </div>
@@ -166,7 +168,7 @@
                             <div class="mb-3">
                                 <label for="address" class="form-label">Address</label>
                                 <div class="input-group">
-                                    <input type="text" style="color: black; background-color: #fff"class="form-control" id="address" name="address" value="<%= loginUser.getAddress()%>">
+                                    <input type="text" style="color: black; background-color: #fff"class="form-control" id="address" name="address" value="<%= loginUser.getAddress()%>" required="">
                                     <span class="input-group-text edit-icon btn-sm"style="background-color: #fff"><i class="fas fa-pencil-alt"></i></span>
                                 </div>
                             </div>
@@ -176,21 +178,21 @@
                                 <div class="col-sm-4">
                                     <label for="ward" class="form-label">Ward</label>
                                     <div style="display: flex; align-content: center;">
-                                        <input type="text" style="color: black; background-color: #fff" class="form-control" id="ward" name="ward" value="<%= loginUser.getWard()%>">
+                                        <input type="text" style="color: black; background-color: #fff" class="form-control" id="ward" name="ward" value="<%= loginUser.getWard()%>" required="">
                                         <span class="input-group-text edit-icon btn-sm"style="background-color: #fff"><i class="fas fa-pencil-alt"></i></span>
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
                                     <label for="district" class="form-label">District</label>
                                     <div style="display: flex; align-content: center;">
-                                        <input type="text"style="color: black; background-color: #fff" class="form-control" id="district" name="district" value="<%= loginUser.getDistrict()%>">
+                                        <input type="text"style="color: black; background-color: #fff" class="form-control" id="district" name="district" value="<%= loginUser.getDistrict()%>" required="">
                                         <span class="input-group-text edit-icon btn-sm"style="background-color: #fff"><i class="fas fa-pencil-alt"></i></span>
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
                                     <label for="city" class="form-label">City</label>
                                     <div style="display: flex; align-content: center;">
-                                        <input type="text"style="color: black;  background-color: #fff" class="form-control" id="city" name="city" value="<%= loginUser.getCity()%>">
+                                        <input type="text"style="color: black;  background-color: #fff" class="form-control" id="city" name="city" value="<%= loginUser.getCity()%>" required="">
                                         <span class="input-group-text edit-icon btn-sm"style="background-color: #fff"><i class="fas fa-pencil-alt"></i></span>
                                     </div>
                                 </div>
@@ -199,18 +201,20 @@
                             <div class="mb-3">
                                 <label for="birthday" class="form-label">Birthday</label>
                                 <div class="input-group">
-                                    <input type="date"style="color: black; background-color: #fff" class="form-control" id="birthday" name="birthday" value="<%= loginUser.getBirthday()%>">
+                                    <input type="date"style="color: black; background-color: #fff" class="form-control" id="birthday" name="birthday" value="<%= loginUser.getBirthday()%>" required="">
                                     <span class="input-group-text edit-icon btn-sm"style="background-color: #fff"><i class="fas fa-pencil-alt"></i></span>
                                 </div>
                             </div>
 
                             <div class="mb-3">
-                                <label for="phoneNumber" class="form-label">Phone Number</label>
+                                <label for="phone" class="form-label">Phone Number</label>
                                 <div class="input-group">
-                                    <input type="int" style="color: black; background-color: #fff"class="form-control" id="phoneNumber" name="phone" value="<%= loginUser.getPhone()%>"> 
+                                    <input type="int" style="color: black; background-color: #fff"class="form-control" id="phone" name="phone" value="<%= loginUser.getPhone()%>" required=""> 
                                     <span class="input-group-text edit-icon btn-sm"style="background-color: #fff"><i class="fas fa-pencil-alt"></i></span>
                                 </div>
                             </div>
+                            <input type="hidden" name="action" value="Save profile"/>
+                            <button type="submit" class="btn btn-sm submit btn-danger" style="height: 35px; width: 75px;"><h5 style="font-size: 20px; color: white;">Save</h5></button>
                         </form>
                     </div>
                 </div>
@@ -238,6 +242,14 @@
 
         document.addEventListener('DOMContentLoaded', function () {
             var editIcons = document.querySelectorAll('.edit-icon');
+            var formControls = document.querySelectorAll('.form-control');
+            
+            // Disable all form controls by default and set a default color (optional)
+            formControls.forEach(function(input) {
+              input.disabled = true;
+              input.style.color = 'black'; // Optional default color
+            });
+
             editIcons.forEach(function (icon) {
                 icon.addEventListener('click', function () {
                     var input = this.parentNode.querySelector('.form-control');
@@ -253,18 +265,18 @@
         });
 
         document.addEventListener('DOMContentLoaded', function () {
-            var editProfileButton = document.querySelector('.btn.middle');
+            var editProfileButton = document.querySelector('.btn.submit');
             var inputs = document.querySelectorAll('.form-control');
             editProfileButton.addEventListener('click', function () {
                 inputs.forEach(function (input) {
-                    input.disabled = true;
+                    input.disabled = false;
                     if (input.disabled) {
-                        input.style.color = '#000';
-                    } else {
                         input.style.color = 'red';
+                    } else {
+                        input.style.color = '#000';
                     }
-                })
-            })
+                });
+            });
         });
     </script>
 </body>

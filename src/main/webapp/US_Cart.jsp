@@ -120,29 +120,37 @@
                             <div>
                                 <h5><%= cartItem.getProductName()%></h5>
                                 <p class="text-muted mb-0"><%= cartItem.getCategory()%></p>
-                                <div class="d-flex align-items-center left">
-                                    <div class="me-3">
-                                        <label class ="col-auto no-border" for="size" class="form-label">Size</label>
-                                        <div class="col-auto no-border" id="size" class="form-select" style="display:inline;"><%= cartItem.getSize()%></div>
+                               
+                                <div class="d-flex flex-column">
+                                    <div class="d-flex">
+                                        <div class="me-3">
+                                            <label for="size" class="form-label" style="margin-left: 10px;">Size</label>
+                                        </div>
+                                        <div class="me-3">
+                                            <label for="quantity" class="form-label"  style="margin-left: 70px;">Quantity</label>
+                                        </div>
                                     </div>
-
-                                    <div class="me-3">
-                                        <label class ="col-auto no-border" for="quantity" class="form-label">Quantity</label>
-                                        <div class="col-auto no-border" style="display:inline;">
-                                            <form method="MainController" method="POST" style="display:inline;">
-                                                <input type="hidden" name="cartID" value="<%= cartItem.getCartID()%>"/>
-                                                <input type="hidden" name="productDetailsID" value="<%= cartItem.getProductDetailsID()%>"/>
-                                                <input type="hidden" name="quantity" value="<%= cartItem.getQuantity() - 1%>"/>
+                                    <div class="d-flex">
+                                        <div class="me-3">
+                                            <div class="col-auto no-border" id="size" class="form-select" style="display:inline;"><%= cartItem.getSize() %></div>
+                                        </div>
+                                        <div class="me-3" style="margin-left: 40px;">
+                                            <form action="MainController" method="POST" style="display:inline;">
+                                                <input type="hidden" name="cartID" value="<%= cartItem.getCartID() %>"/>
+                                                <input type="hidden" name="productDetailsID" value="<%= cartItem.getProductDetailsID() %>"/>
+                                                <input type="hidden" name="quantity" value="<%= cartItem.getQuantity() - 1 %>"/>
                                                 <button type="submit" name="action" value="UpdateCartQuantity" id="decrease" class="btn btn-dark me-2">-</button>
                                             </form>
                                             <span class="border px-3 py-2" id="quantity"><%= cartItem.getQuantity() %></span>
-                                             <form method="MainController" method="POST" style="display:inline;">
-                                                <input type="hidden" name="cartID" value="<%= cartItem.getCartID()%>"/>
-                                                <input type="hidden" name="productDetailsID" value="<%= cartItem.getProductDetailsID()%>"/>
-                                                <input type="hidden" name="quantity" value="<%= cartItem.getQuantity() + 1%>"/>
+                                            <form action="MainController" method="POST" style="display:inline;">
+                                                <input type="hidden" name="cartID" value="<%= cartItem.getCartID() %>"/>
+                                                <input type="hidden" name="productDetailsID" value="<%= cartItem.getProductDetailsID() %>"/>
+                                                <input type="hidden" name="quantity" value="<%= cartItem.getQuantity() + 1 %>"/>
                                                 <button type="submit" name="action" value="UpdateCartQuantity" id="increase" class="btn btn-dark ms-2">+</button>
                                             </form>
-                                        </div> 
+                                        </div>
+                                    </div>
+                                </div>
 <!--                                        <select class="col-auto no-border" id="quantity" name="quantity" class="form-select">
                                             <option selected>< cartItem.getQuantity()%></option>
                                             <option>1</option>
@@ -152,8 +160,7 @@
 col-md-8 d-flex justify-content-center align-items-center
                                              Add more options if needed 
                                         </select>-->
-                                    </div>
-                                </div>
+                                 
                                 <div class="text-left">
                                     <a href="#" class="wishlist"><i class="fa fa-heart mr-2"></i></a>
                                     <a href="#"class="remove" onclick="showConfirmDeleteModal(<%= cartItem.getCartID() %>, <%= cartItem.getProductDetailsID()%>)"><i class="remove-btn fas fa-trash"></i></a>

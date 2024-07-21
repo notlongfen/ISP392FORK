@@ -28,7 +28,7 @@ public class PromotionDAO {
     private static final String CHECK_PROMOTION_DUPLICATE = "SELECT * FROM Promotions WHERE promotionName LIKE ? AND status = ?";
     private static final String GET_PROMOTION_BY_ID = "SELECT * FROM Promotions WHERE promotionID = ?";
     private static final String GET_ALL_PROMOTIONS = "SELECT * FROM Promotions";
-    private static final String VIEW_PROMOTION = "SELECT * FROM Promotions";
+    private static final String VIEW_PROMOTION = "SELECT * FROM Promotions WHERE status = 1 AND promotionID <> 1";
     private static final String GET_PROMOTION_BY_NAME = "SELECT promotionID, promotionName, startDate, endDate, discountPer, condition, description, status FROM Promotions WHERE promotionName = ? AND status = 1;";
 
     public boolean addPromotion(PromotionDTO promotion) throws SQLException {
@@ -95,9 +95,9 @@ public class PromotionDAO {
         }
         return check;
     }
-    
+
     public int deletePromotion1(int promotionID) throws SQLException {
-int newStatus = -1;
+        int newStatus = -1;
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -319,7 +319,7 @@ int newStatus = -1;
                     String image = rs.getString("image");
                     String description = rs.getString("description");
                     int status = rs.getInt("status");
-                    promotion = new PromotionDTO(promotionID, promotionName, startDate, endDate, discountPer,image, condition, description, status);
+                    promotion = new PromotionDTO(promotionID, promotionName, startDate, endDate, discountPer, image, condition, description, status);
                 }
             }
         } catch (Exception e) {
@@ -376,7 +376,7 @@ int newStatus = -1;
         return promotions;
     }
 
-    public List<PromotionDTO> selectAllPromotions() throws ClassNotFoundException {
+    public List<PromotionDTO> selectAllPromotions() throws ClassNotFoundException, SQLException {
         List<PromotionDTO> promotions = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -401,6 +401,16 @@ int newStatus = -1;
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
         }
         return promotions;
     }

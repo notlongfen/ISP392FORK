@@ -36,7 +36,7 @@
             }
             .main_slider_content {
                 text-align: left; /* Canh trái toàn b? n?i dung trong .main_slider_content */
-                color: white; /* ??i màu ch? thành tr?ng */
+                color: black; /* ??i màu ch? thành tr?ng */
                 /*position: relative;*/
                 top: 50px; /* ?i?u ch?nh v? trí c?a toàn b? n?i dung */
                 left: 30px; /* ?i?u ch?nh kho?ng cách t? l? trái */
@@ -51,7 +51,7 @@
 
             .collection_text {
                 display: block; /* ??m b?o r?ng các ph?n t? này là kh?i ?? d? c?n ch?nh */
-                color: white; /* ??i màu ch? thành tr?ng */
+                color: black; /* ??i màu ch? thành tr?ng */
                 /*margin: 50px 0;  Kho?ng cách gi?a các ph?n t? */
                 font-size: 15px;
                 margin-top: -190px; /* ?i?u ch?nh giá tr? này ?? d?ch chuy?n lên trên */
@@ -60,7 +60,7 @@
 
             .detail_text {
                 display: block; /* ??m b?o r?ng các ph?n t? này là kh?i ?? d? c?n ch?nh */
-                color: white; /* ??i màu ch? thành tr?ng */
+                color: black; /* ??i màu ch? thành tr?ng */
                 /*margin: 10px 0;  Kho?ng cách gi?a các ph?n t? */
                 font-size: 15px;
                 margin-bottom: 5px;
@@ -90,10 +90,24 @@
                 border: none; /* Adding border for similar look */
                 cursor: pointer; /* Adding cursor to indicate clickable button */
             }
-
-
-
-
+            
+/*            .promotion_text_box {
+                background-color: rgba(255, 255, 255, 0.8);  Semi-transparent white background 
+                padding: 20px;  Add padding for spacing 
+                border-radius: 5px;  Rounded corners for a smoother look 
+                margin: 0 auto;  Center the box horizontally 
+                width: fit-content;
+                height: 200px;           
+            }
+            */
+            .text-outline {
+                color: white;
+                text-shadow:
+                    -1px -1px 0 #000,  
+                    1px -1px 0 #000,
+                    -1px 1px 0 #000,
+                    1px 1px 0 #000; 
+            }
         </style>
     </head>
     <body>
@@ -106,18 +120,19 @@
                List<PromotionDTO> promotionList = (List<PromotionDTO>) request.getAttribute("PROMOTION_LIST");
                if (promotionList != null && !promotionList.isEmpty()) {
                    for (PromotionDTO promotion : promotionList) {
+                        String imagePath = promotion.getImage();
+                        String imageUrl = imagePath.replace("\\", "/");
             %>
 
-            <div class="main_slider mt-1" style="background-image: url('<%= promotion.getImage() %>')">
+            <div class="main_slider mt-1" style="background-image: url('<%= imageUrl%>')">
                 <div class="container fill_height">
                     <div class="row align-items-center fill_height">
                         <div class="col">
                             <div class="main_slider_content">
-
-                                <p class="collection_text">YOUR POINTS MUST BE HIGHER THAN <%= promotion.getCondition()%> 🌟</p>
-                                <h1 style="color: #FFF; font-size: 90px; margin-bottom: 40px;">SALE UP TO <%= promotion.getDiscountPer()%>%</h1>
-                                <h8 class="detail_text"><%= promotion.getDescription() %></h8>
-                                <div class="grey shop_now_button"><a href="#" style="font-size: 20px;"><b><%= promotion.getPromotionName()%></b></a></div>
+                                <p class="collection_text text-outline">YOUR POINTS MUST BE HIGHER THAN <%= promotion.getCondition()%> 🌟</p>
+                                <h1 class="text-outline" style= "font-size: 90px; margin-bottom: 40px;">SALE UP TO <%= promotion.getDiscountPer()%>%</h1>
+                                <h8 class="detail_text text-outline"><%= promotion.getDescription() %></h8>
+                                <div class="grey shop_now_button"><a style="font-size: 20px;"><b><%= promotion.getPromotionName()%></b></a></div>
                                 <button onclick="copyPromotionName('<%= promotion.getPromotionName() %>')" class="red shop_now_button" id="copyPromotionName" style="font-size: 20px; margin-top: 20px;">Get Coupon</button>
 
                             </div>
