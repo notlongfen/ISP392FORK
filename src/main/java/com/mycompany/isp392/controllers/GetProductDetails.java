@@ -1,5 +1,6 @@
 package com.mycompany.isp392.controllers;
 
+import com.mycompany.isp392.category.CategoryDTO;
 import com.mycompany.isp392.product.ProductDAO;
 import com.mycompany.isp392.product.ProductDTO;
 import jakarta.servlet.ServletException;
@@ -22,8 +23,12 @@ public class GetProductDetails extends HttpServlet {
         ProductDAO productDAO = new ProductDAO();
         Map<String, Map<String, Map<String, Object>>> colorSizeMap = productDAO.getProductDetailsByProductID2(productId);
         ProductDTO product = productDAO.selectProduct(productId);
+        CategoryDTO category = productDAO.getCategoryByProductID(productId); // Get the category details
+
         request.setAttribute("colorSizeMap", colorSizeMap);
         request.setAttribute("product", product);
+        request.setAttribute("category", category); // Set the category as a request attribute
+
         request.getRequestDispatcher("US_ProductDetail.jsp").forward(request, response);
     }
 
@@ -32,10 +37,8 @@ public class GetProductDetails extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
-
         } catch (SQLException ex) {
-            Logger.getLogger(GetProductDetails.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(GetProductDetails.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -44,10 +47,8 @@ public class GetProductDetails extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
-
         } catch (SQLException ex) {
-            Logger.getLogger(GetProductDetails.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(GetProductDetails.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -56,3 +57,4 @@ public class GetProductDetails extends HttpServlet {
         return "Product Details Controller";
     }
 }
+

@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 import com.mycompany.isp392.brand.BrandDTO;
+import com.mycompany.isp392.category.CategoryDTO;
 import com.mycompany.isp392.wishlist.WishlistDTO;
 import java.text.NumberFormat;
 import java.util.Arrays;
@@ -2050,6 +2051,109 @@ public class ProductDAO {
         }
 
         return products;
+    }
+
+    public List<ProductDetailsDTO> getProductDetailsByProductIDAndPrice(int productID, String[] priceFilters) throws SQLException {
+        List<ProductDetailsDTO> productDetailsList = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        StringBuilder query = new StringBuilder("SELECT * FROM ProductDetails WHERE ProductID = ? AND status = 1");
+
+        if (priceFilters != null && priceFilters.length > 0) {
+            query.append(" AND (");
+            for (int i = 0; i < priceFilters.length; i++) {
+                if (i > 0) {
+                    query.append(" OR ");
+                }
+                switch (priceFilters[i]) {
+                    case "0-2000000":
+                        query.append("price < 2000000");
+                        break;
+                    case "2000000-5000000":
+                        query.append("price BETWEEN 2000000 AND 5000000");
+                        break;
+                    case "5000000-10000000":
+                        query.append("price BETWEEN 5000000 AND 10000000");
+                        break;
+                    case "10000000plus":
+                        query.append("price > 10000000");
+                        break;
+                }
+            }
+            query.append(")");
+        }
+
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(query.toString());
+                ptm.setInt(1, productID);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    int productDetailID = rs.getInt("ProductDetailsID");
+                    String color = rs.getString("color");
+                    String size = rs.getString("size");
+                    int stockQuantity = rs.getInt("stockQuantity");
+                    int price = rs.getInt("price");
+                    Date importDate = rs.getDate("importDate");
+                    String image = rs.getString("image");
+                    int status = rs.getInt("status");
+
+                    productDetailsList.add(new ProductDetailsDTO(productDetailID, productID, color, size, stockQuantity, price, importDate, image, status));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return productDetailsList;
+    }
+
+    public CategoryDTO getCategoryByProductID(int productID) throws SQLException {
+        CategoryDTO category = null;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        String query = "SELECT c.CategoryID, c.CategoriesName FROM Categories c "
+                + "INNER JOIN ProductBelongtoCDCategories pbcc ON c.CategoryID = pbcc.CDCategoryID "
+                + "WHERE pbcc.ProductID = ?";
+
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(query);
+                ptm.setInt(1, productID);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    int categoryID = rs.getInt("CategoryID");
+                    String categoryName = rs.getString("CategoriesName");
+                    category = new CategoryDTO(categoryID, categoryName);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return category;
     }
 
 }

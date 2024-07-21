@@ -267,7 +267,7 @@
                 </div>
                 <div class="col-md-9">
                     <h5 style="color: grey;">
-                        <a style="color: grey; text-decoration: none" href="US_index.jsp">Home ></a>
+                        <a style="color: grey; text-decoration: none" href="HomePageController">Home ></a>
                         <a style="color: grey; text-decoration: none" href="ViewAllProductController">All Products</a>
                     </h5>
                     <div class="row" id="products-container">

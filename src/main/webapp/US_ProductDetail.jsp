@@ -6,6 +6,7 @@
 <%@page import="com.mycompany.isp392.product.ProductDTO"%>
 <%@page import="com.google.gson.Gson"%>
 <%@page import="com.mycompany.isp392.cart.CartError"%>
+<%@page import="com.mycompany.isp392.category.CategoryDTO"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -107,9 +108,12 @@
                     <div class="col">
                         <div class="breadcrumbs d-flex flex-row align-items-center">
                             <ul>
-                                <li><a href="index.html">Home</a></li>
-                                <li><a href="categories.html"><i class="fa fa-angle-right" aria-hidden="true"></i>Men's</a></li>
-                                <li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i><%= product.getProductName()%></a></li>
+                                <li><a href="HomePageController">Home</a></li>
+                                <li><a href="ViewAllProductController?categoryID=<%= ((CategoryDTO) request.getAttribute("category")).getCategoryID() %>">
+                                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                        <%= ((CategoryDTO) request.getAttribute("category")).getCategoryName() %>
+                                    </a></li>
+                                <li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i><%= product.getProductName() %></a></li>
                             </ul>
                         </div>
                     </div>

@@ -13,7 +13,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,9 +62,9 @@ public class ViewAllProductController extends HttpServlet {
             // Get all product details and group by product ID and color
             Map<Integer, Map<String, ProductDetailsDTO>> productDetailsByColor = new HashMap<>();
             for (ProductDTO product : filteredProducts) {
-                List<ProductDetailsDTO> details = productDAO.getProductDetails(product.getProductID());
+                List<ProductDetailsDTO> details = productDAO.getProductDetailsByProductIDAndPrice(product.getProductID(), priceFilters);
                 Map<String, ProductDetailsDTO> detailsByColor = details.stream()
-                         .filter(detail -> detail.getStockQuantity() > 0 && detail.getStatus() == 1)
+                        .filter(detail -> detail.getStockQuantity() > 0 && detail.getStatus() == 1)
                         .collect(Collectors.toMap(ProductDetailsDTO::getColor, detail -> detail, (existing, replacement) -> existing));
                 productDetailsByColor.put(product.getProductID(), detailsByColor);
             }
