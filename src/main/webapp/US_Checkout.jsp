@@ -125,7 +125,7 @@
                                 if( address !=null){ 
                             %>
                             <input type="text" style="color: black;" class="form-control" id="address" name="address" value="<%= address %>" required>
-                            <% } else if  (  loginUser.getAddress() != null ){ %>
+                            <% } else if  (loginUser.getAddress() != null){ %>
                             <input type="text" style="color: black;" class="form-control" id="address" name="address" value="<%= loginUser.getAddress() %>" required>
                             <% } else { %>
                             <input type="text" style="color: black;" class="form-control" id="address" name="address" value="" required>

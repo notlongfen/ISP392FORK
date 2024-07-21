@@ -33,7 +33,7 @@ import com.mycompany.isp392.user.*;
 public class CheckoutController extends HttpServlet {
     private static final String NOT_LOGED_IN = "US_SignIn.jsp";
     private static final String ERROR = "US_Checkout.jsp";
-    private static final String SUCCESS = "US_ViewOrderDetail.jsp";
+    private static final String SUCCESS = "ViewUSDetailsOrderController";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
