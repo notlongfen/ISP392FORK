@@ -17,6 +17,41 @@
 
         <!-- Custom CSS -->
         <link rel="stylesheet" href="styles/footer.css">
+        <style>
+            .shop-name {
+                text-decoration: none; /* Loại bỏ gạch chân của liên kết */
+                font-size: 50px; /* Kích thước chữ */
+                color: #000; /* Màu chữ mặc định cho phần đầu tiên */
+                font-weight: bold;
+            }
+            .shop-name span {
+                color: #f00; /* Màu đỏ cho phần chữ "no" */
+                background-color: #000; /* Màu nền đen cho phần chữ "Kro" */
+                padding: 0 5px; /* Khoảng cách xung quanh chữ để dễ nhìn hơn */
+                border-radius: 3px; /* Bo tròn các góc của nền */
+            }
+            .shop-name:hover {
+                text-decoration: underline; /* Gạch chân liên kết khi di chuột qua */
+            }
+
+            .contact-info {
+                display: flex; /* Sử dụng Flexbox để căn chỉnh các phần tử con */
+                align-items: center; /* Căn chỉnh các phần tử con theo chiều dọc */
+                color: #fff; /* Màu chữ trắng */
+                font-size: 16px; /* Kích thước chữ */
+                margin-bottom: 10px; /* Khoảng cách dưới mỗi thông tin liên lạc */
+            }
+
+            .contact-info i {
+                margin-right: 10px; /* Khoảng cách giữa biểu tượng và văn bản */
+                color: #fff; /* Màu của biểu tượng */
+            }
+
+            .contact-info p {
+                margin: 0; /* Loại bỏ khoảng cách mặc định trên và dưới của thẻ p */
+                color: #fff;
+            }
+        </style>
     </head>
     <body>
 
@@ -24,34 +59,19 @@
         <div class="myapp-footer">
             <div class="container footer">
                 <div class="container">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <h5 style="color: #FFF">About</h5>
-                            <ul class="list-unstyled">
-                                <li><a href="#">Lorem ipsum</a></li>
-                                <li><a href="#">Lorem ipsum</a></li>
-                                <li><a href="#">Lorem ipsum</a></li>
-                                <li><a href="#">Lorem ipsum</a></li>
-                                <li><a href="#">Lorem ipsum</a></li>
-                            </ul>
+                    <div class="row justify-content-between">
+                        <div class="col-md-5">
+                            <!-- Tên shop -->
+                            <a href="HomePageController" class="shop-name">Kro<span>no</span></a>
                         </div>
-                        <div class="col-md-4">
-                            <h5 style="color: #FFF">Support</h5>
-                            <ul class="list-unstyled">
-                                <li><a href="#">Lorem ipsum</a></li>
-                                <li><a href="#">Lorem ipsum</a></li>
-                                <li><a href="#">Lorem ipsum</a></li>
-                                <li><a href="#">Lorem ipsum</a></li>
-                                <li><a href="#">Lorem ipsum</a></li>
-                            </ul>
-                        </div>
-                        <div class="col-md-4">
-                            <h5 style="color: #FFF">Contact</h5>
-                            <div class="social-icons">
-                                <a href="#"><i class="fab fa-youtube"></i></a>
-                                <a href="#"><i class="fab fa-facebook"></i></a>
-                                <a href="#"><i class="fab fa-tiktok"></i></a>
-                                <a href="#"><i class="fab fa-instagram"></i></a>
+                        <div class="col-md-5">
+                            <div class="contact-info">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <p>Lô E2a-7, Đường D1 Khu Công nghệ cao, P. Long Thạnh Mỹ, TP. Thủ Đức, TP. Hồ Chí Minh</p>
+                            </div>
+                            <div class="contact-info">
+                                <i class="fas fa-phone"></i>
+                                <p>Phone: (123) 456-7890</p>
                             </div>
                         </div>
                     </div>
@@ -64,7 +84,7 @@
                     </div>
                 </div>
             </div>
-            
+
         </div>
 
         <!-- Bootstrap và jQuery JavaScript -->
