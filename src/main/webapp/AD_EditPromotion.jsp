@@ -49,9 +49,16 @@
                     <div class="container-fluid" id="container-wrapper">
                         <div class="form-container">
                             <h2 class="text-center" style="color: #000; font-weight: bold;">Edit Promotion</h2>
-                            <form action="MainController">
+                            <form action="EditPromotionController" method="post" enctype="multipart/form-data">
                                 <div class="form-row">
                                     <input type="hidden" name="promotionID" value="<%= promotion.getPromotionID() %>" readonly=""/>
+                                    <input type="hidden" name="oldPromotionName" value="<%= promotion.getPromotionName() %>" readonly=""/>
+                                    <input type="hidden" name="oldStartDate" value="<%= promotion.getStartDate() %>" readonly=""/>
+                                    <input type="hidden" name="oldEndDate" value="<%= promotion.getEndDate() %>" readonly=""/>
+                                    <input type="hidden" name="oldDiscountPer" value="<%= promotion.getDiscountPer() %>" readonly=""/>
+                                    <input type="hidden" name="oldCondition" value="<%= promotion.getCondition() %>" readonly=""/>
+                                    <input type="hidden" name="oldDescription" value="<%= promotion.getDescription() %>" readonly=""/>
+                                    <input type="hidden" name="oldStatus" value="<%= promotion.getStatus() %>" readonly=""/>
                                     <div class="form-group col-md-6">
                                         <label for="promotionName">Code Name</label>
                                         <input type="text" class="form-control" id="promotionName" name="promotionName" value="<%= promotion.getPromotionName() %>" required=""/>

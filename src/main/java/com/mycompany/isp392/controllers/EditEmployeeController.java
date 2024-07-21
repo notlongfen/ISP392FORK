@@ -74,7 +74,6 @@ public class EditEmployeeController extends HttpServlet {
 
                 if (!oldList.isEmpty() && !newList.isEmpty()) {
                     String action = request.getParameter("edit");
-//                    manage = new ManageBrandDTO(userID, empID, oldList, newList, action);
                     manage = new ManageUserDTO(userID, empID, oldList, newList, action);
                     boolean checkAdd = DbUtils.addCheckLogToDB("SuperviseEmployees", "UserID", manage);
                     if (checkUpdate) {

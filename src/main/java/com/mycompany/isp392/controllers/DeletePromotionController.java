@@ -1,12 +1,17 @@
 package com.mycompany.isp392.controllers;
 
 import com.mycompany.isp392.promotion.*;
+import com.mycompany.isp392.user.UserDTO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
+import utils.DbUtils;
 
 @WebServlet(name = "DeletePromotionController", urlPatterns = {"/DeletePromotionController"})
 public class DeletePromotionController extends HttpServlet {
@@ -22,9 +27,19 @@ public class DeletePromotionController extends HttpServlet {
         PromotionDAO dao = new PromotionDAO();
         PromotionError error = new PromotionError();
         try {
+            HttpSession session = request.getSession();
+            UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
+            int empID = user.getUserID();
             int promotionID = Integer.parseInt(request.getParameter("id"));
-            boolean checkDelete = dao.deletePromotion(promotionID);
-            if (checkDelete) {
+            boolean check = dao.deletePromotion(promotionID);
+
+            if (check) {
+                List<String> oldList = new ArrayList<>();
+                List<String> newList = new ArrayList<>();
+                oldList.add(String.valueOf(1));
+                newList.add(String.valueOf(0));
+                ManagePromotionDTO manage = new ManagePromotionDTO(promotionID, empID, oldList, newList, "Delete");
+                DbUtils.addCheckLogToDB("ManagePromotions", "PromotionID", manage);
                 request.setAttribute("SUCCESS_MESSAGE", "PROMOTION DELETED SUCCESSFULLY !");
                 url = SUCCESS;
             } else {

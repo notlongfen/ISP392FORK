@@ -1,5 +1,6 @@
 package com.mycompany.isp392.controllers;
 
+import com.mycompany.isp392.product.ManageProductDTO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -10,13 +11,17 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import com.mycompany.isp392.promotion.*;
+import com.mycompany.isp392.user.UserDTO;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.Part;
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 import net.coobird.thumbnailator.Thumbnails;
+import utils.DbUtils;
 
 @MultipartConfig
 @WebServlet(name = "AddPromotionController", urlPatterns = {"/AddPromotionController"})
@@ -98,6 +103,21 @@ public class AddPromotionController extends HttpServlet {
                 int promotionID = dao.getLatestPromotionID() + 1;
                 PromotionDTO promotion = new PromotionDTO(promotionID, promotionName, startDate, endDate, discountPer, imagePaths, condition, description, 1);
                 boolean checkPromotion = dao.addPromotion(promotion);
+                
+                List<String> newField = new ArrayList<>();
+                    UserDTO user = (UserDTO) request.getSession().getAttribute("LOGIN_USER");
+                    int empID = user.getUserID();
+                    newField.add(promotionName);
+                    newField.add(description);
+                    newField.add(String.valueOf(startDate));
+                    newField.add(String.valueOf(endDate));
+                    newField.add(String.valueOf(discountPer));
+                    newField.add(String.valueOf(imagePaths));
+                    newField.add(String.valueOf(condition));
+                    
+                    ManagePromotionDTO manage = new ManagePromotionDTO(promotionID, empID, new ArrayList<>(), newField, "Edit");
+                    DbUtils.addCheckLogToDB("ManagePromotions", "PromotionID", manage);
+                    
                 if (checkPromotion) {
                     request.setAttribute("SUCCESS_MESSAGE", "PROMOTION ADDED SUCCESSFULLY !");
                     url = SUCCESS;

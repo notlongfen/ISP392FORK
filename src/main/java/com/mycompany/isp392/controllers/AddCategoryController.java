@@ -75,7 +75,7 @@ public class AddCategoryController extends HttpServlet {
                     newList.add(description);
                     newList.add(imagePath);
                     ManageCategoryDTO manageCategory = new ManageCategoryDTO(categoryID, user.getUserID(), new ArrayList<>(), newList, "Add");
-                    DbUtils.addCheckLogToDB("ManageCategories", "CategoryID", manageCategory);
+                    DbUtils.addCheckLogToDB("ManageCategories", "Categories", manageCategory);
 
                    request.setAttribute("SUCCESS_MESSAGE", "CATEGORY ADDED SUCCESSFULLY !");
                     url = SUCCESS;

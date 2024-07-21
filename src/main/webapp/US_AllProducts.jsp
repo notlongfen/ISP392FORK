@@ -110,6 +110,7 @@
                 height: 38px;
                 display: block;
                 transition: all 0.3s;
+                border: none; /* Add this line to remove the border */
             }
             .product-grid .product-links li button:hover {
                 color: #c53337;
@@ -283,28 +284,32 @@
                         %>
                         <div class="col-md-4 mb-4">
                             <div class="product-grid">
-                                <div class="product-image">
-                                    <a href="MainController?action=Get_product_detail&productID=<%= product.getProductID() %>&color=<%= detail.getColor() %>" >
-                                        <div class="product_image1">
-                                            <img src="<%= detail.getImage().split(";")[0] %>" alt="<%= product.getProductName() %>">
-                                        </div>
-                                    </a>
-                                    <ul class="product-links">
-                                        <li><button type="submit" name="action" value="AddToWishlist"><i class="fa fa-heart"></i></button></li>
-                                    </ul>
-                                </div>
-                                <div class="product-content">
-                                    <h3 class="title"><a href="MainController?action=Get_product_detail&productID=<%= product.getProductID() %>&color=<%= detail.getColor() %>"><%= product.getProductName() %></a></h3>
-                                    <div class="price">
-                                        <%
-                                            NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+                                <form action="MainController">
+                                    <div class="product-image">
+                                        <a href="MainController?action=Get_product_detail&productID=<%= product.getProductID() %>&color=<%= detail.getColor() %>" >
+                                            <div class="product_image1">
+                                                <img src="<%= detail.getImage().split(";")[0] %>" alt="<%= product.getProductName() %>">
+                                            </div>
+                                        </a>
+                                        <ul class="product-links">
+                                            <li><button type="submit" name="action" value="AddToWishlist"><i class="fa fa-heart"></i></button></li>
+                                            <input type="hidden" name="productDetailID" value="<%= detail.getProductDetailsID() %>">
+                                            <input type="hidden" name="productID" value="<%= product.getProductID() %>">
+                                        </ul>
+                                    </div>
+                                    <div class="product-content">
+                                        <h3 class="title"><a href="MainController?action=Get_product_detail&productID=<%= product.getProductID() %>&color=<%= detail.getColor() %>"><%= product.getProductName() %></a></h3>
+                                        <div class="price">
+                                            <%
+                                                NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
 
-                                            int price = detail.getPrice();
-                                            String formattedPrice = formatter.format(price);
-                                        %>
-                                        <%= formattedPrice %>
-                                        <span></span></div>
-                                </div>
+                                                int price = detail.getPrice();
+                                                String formattedPrice = formatter.format(price);
+                                            %>
+                                            <%= formattedPrice %>
+                                            <span></span></div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                         <%
@@ -346,6 +351,7 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script>
+
             $(document).ready(function () {                
                 function getSelectedValues(selector) {
                     return $(selector + ':checked').map(function () {
@@ -378,46 +384,46 @@
                     });
                 }
 
-                // Check the brand filter if brandID is present in the URL
-                var brandID = new URLSearchParams(window.location.search).get('brandID');
-                if (brandID) {
-                    $('input[name="brand"][value="' + brandID + '"]').prop('checked', true);
-                }
+                                            // Check the brand filter if brandID is present in the URL
+                                            var brandID = new URLSearchParams(window.location.search).get('brandID');
+                                            if (brandID) {
+                                                $('input[name="brand"][value="' + brandID + '"]').prop('checked', true);
+                                            }
 
-                // Check the category filter if categoryID is present in the URL
-                var categoryID = new URLSearchParams(window.location.search).get('categoryID');
-                if (categoryID) {
-                    $('input[name="category"][value="' + categoryID + '"]').prop('checked', true);
-                }
+                                            // Check the category filter if categoryID is present in the URL
+                                            var categoryID = new URLSearchParams(window.location.search).get('categoryID');
+                                            if (categoryID) {
+                                                $('input[name="category"][value="' + categoryID + '"]').prop('checked', true);
+                                            }
 
-                // Event listeners for the checkboxes
-                $('.brand-filter, .price-filter, .category-filter').on('change', function () {
-                    loadFilteredProducts();
-                });
+                                            // Event listeners for the checkboxes
+                                            $('.brand-filter, .price-filter, .category-filter').on('change', function () {
+                                                loadFilteredProducts();
+                                            });
 
-                // Initial load
-                loadFilteredProducts();
-            });
+                                            // Initial load
+                                            loadFilteredProducts();
+                                        });
 
-            function resetFilters() {
-                $('input[type="checkbox"]').prop('checked', false);
-                window.location.href = "MainController?action=All_Product";
-                loadFilteredProducts();
-            }
+                                        function resetFilters() {
+                                            $('input[type="checkbox"]').prop('checked', false);
+                                            window.location.href = "MainController?action=All_Product";
+                                            loadFilteredProducts();
+                                        }
 
-            // L?y giá s?n ph?m t? ph?n t? HTML/JSP
-            let priceElement = document.getElementById('productPrice');
-            let price = parseFloat(priceElement.innerText.replace('$', '')); // L?y giá và b? ?i ký t? '$'
+                                        // L?y giá s?n ph?m t? ph?n t? HTML/JSP
+                                        let priceElement = document.getElementById('productPrice');
+                                        let price = parseFloat(priceElement.innerText.replace('$', '')); // L?y giá và b? ?i ký t? '$'
 
-            // ??nh d?ng l?i giá sang ti?n t? Vi?t Nam
-            const formatter = new Intl.NumberFormat('vi-VN', {
-                style: 'currency',
-                currency: 'VND'
-            });
-            let formattedPrice = formatter.format(price);
+                                        // ??nh d?ng l?i giá sang ti?n t? Vi?t Nam
+                                        const formatter = new Intl.NumberFormat('vi-VN', {
+                                            style: 'currency',
+                                            currency: 'VND'
+                                        });
+                                        let formattedPrice = formatter.format(price);
 
-            // C?p nh?t n?i dung c?a ph?n t? HTML/JSP
-            priceElement.innerText = formattedPrice;
+                                        // C?p nh?t n?i dung c?a ph?n t? HTML/JSP
+                                        priceElement.innerText = formattedPrice;
         </script>
     </body>
 </html>

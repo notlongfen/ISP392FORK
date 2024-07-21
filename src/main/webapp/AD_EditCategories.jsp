@@ -64,6 +64,10 @@
                             <h2 class="text-center mb-5" style="color: #000; font-weight: bold;">Edit Categories</h2>
                             <form id="categoryForm" action="EditCategoryController" method="POST" enctype="multipart/form-data">
                                 <input type="hidden" name="categoryID" value="<%= category.getCategoryID()%>" readonly=""/>
+                                <input type="hidden" name="oldName" value="<%= category.getCategoryName()%>" readonly=""/>
+                                <input type="hidden" name="oldDescription" value="<%= category.getDescription()%>" readonly=""/>
+                                <input type="hidden" name="oldStatus" value="<%= category.getStatus()%>" readonly=""/>
+                                <input type="hidden" name="oldImage" value="<%= category.getImage()%>" readonly=""/>
                                 <div class="form-row">
                                     <div class="form-group col-md-8">
                                         <label for="productName">Category Name</label>
@@ -77,7 +81,7 @@
                                     <textarea class="form-control" name="description"  id="description" rows="3" required=""><%= category.getDescription()%></textarea>
                                 </div>
 
-                                <input type="hidden" name="oldImage" value="<%= category.getImage()%>" readonly=""/>
+                                
                                 <div class="form-group">
                                     <label for="image">Category Image</label>
                                     <div class="col-md-3">

@@ -22,6 +22,7 @@ import java.util.List;
 
 @WebServlet(name = "EditOrderController", urlPatterns = {"/EditOrderController"})
 public class EditOrderController extends HttpServlet {
+
     private static final String ERROR = "GetOrderInforController";
     private static final String SUCCESS = "GetOrderListController";
 
@@ -48,14 +49,19 @@ public class EditOrderController extends HttpServlet {
                 List<String> oldList = new ArrayList<>();
                 List<String> newList = new ArrayList<>();
 
-                if(oldStatus != status) {
+                if (oldStatus != status) {
                     oldList.add(String.valueOf(oldStatus));
                     newList.add(String.valueOf(status));
                 }
 
-                if(oldList.size() > 0 && newList.size() > 0) {
+                if (oldList.size() > 0 && newList.size() > 0) {
                     UserDTO user = (UserDTO) request.getSession().getAttribute("LOGIN_USER");
-                    ManageOrderDTO manageOrder = new ManageOrderDTO(orderID, user.getUserID() , oldList, newList, "Edit");
+                    ManageOrderDTO manageOrder = null;
+                    if (orderID == 0) {
+                        manageOrder = new ManageOrderDTO(orderID, user.getUserID(), oldList, newList, "Delete");
+                    } else {
+                        manageOrder = new ManageOrderDTO(orderID, user.getUserID(), oldList, newList, "Edit");
+                    }
                     DbUtils.addCheckLogToDB("ManageOrders", "OrderID", manageOrder);
                     
                 }
@@ -77,10 +83,10 @@ public class EditOrderController extends HttpServlet {
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -91,10 +97,10 @@ public class EditOrderController extends HttpServlet {
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

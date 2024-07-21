@@ -4,7 +4,8 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public class ManageCategoryDTO {
-    public int categoryID;
+    public int categories;
+    public int CDCategoryID;
     public int empID;
     public List<String> oldField;
     public List<String> newField; 
@@ -16,8 +17,8 @@ public class ManageCategoryDTO {
     public ManageCategoryDTO() {
     }
 
-    public ManageCategoryDTO(int categoryID, int empID, List<String> oldField, List<String> newField, String loadNewField, String loadOldField, String action, Timestamp changeDate) {
-        this.categoryID = categoryID;
+    public ManageCategoryDTO(int categories, int empID, List<String> oldField, List<String> newField, String loadNewField, String loadOldField, String action, Timestamp changeDate) {
+        this.categories = categories;
         this.empID = empID;
         this.oldField = oldField;
         this.newField = newField;
@@ -27,8 +28,8 @@ public class ManageCategoryDTO {
         this.changeDate = changeDate;
     }
 
-    public ManageCategoryDTO(int categoryID, int empID, List<String> oldField, List<String> newField, String action, Timestamp changeDate) {
-        this.categoryID = categoryID;
+    public ManageCategoryDTO(int categories, int empID, List<String> oldField, List<String> newField, String action, Timestamp changeDate) {
+        this.categories = categories;
         this.empID = empID;
         this.oldField = oldField;
         this.newField = newField;
@@ -36,32 +37,52 @@ public class ManageCategoryDTO {
         this.changeDate = changeDate;
     }
 
-    public ManageCategoryDTO(int categoryID, int empID, List<String> oldField, List<String> newField, String action) {
-        this.categoryID = categoryID;
+    public ManageCategoryDTO(int categories, int empID, List<String> oldField, List<String> newField, String action) {
+        this.categories = categories;
+        this.empID = empID;
+        this.oldField = oldField;
+        this.newField = newField;
+        this.action = action;
+    }
+    
+    public ManageCategoryDTO(int CDCategoryID, int empID, List<String> oldField, List<String> newField, String action, boolean isCD) {
+        this.CDCategoryID = CDCategoryID;
         this.empID = empID;
         this.oldField = oldField;
         this.newField = newField;
         this.action = action;
     }
 
-    public ManageCategoryDTO(int categoryID, int empID, String loadOldField, String loadNewField,  String action, Timestamp changeDate) {
-        this.categoryID = categoryID;
+    public ManageCategoryDTO(int categories, int empID, String loadOldField, String loadNewField,  String action, Timestamp changeDate) {
+        this.categories = categories;
         this.empID = empID;
         this.loadNewField = loadNewField;
         this.loadOldField = loadOldField;
         this.action = action;
         this.changeDate = changeDate;
+    }
+    
+    
+    
+    public int getCategories() {
+        return categories;
+    }
+
+    public void setCategories(int categories) {
+        this.categories = categories;
+    }
+
+    public int getCDCategoryID() {
+        return CDCategoryID;
+    }
+
+    public void setCDCategoryID(int CDCategoryID) {
+        this.CDCategoryID = CDCategoryID;
     }
 
     
 
-    public int getCategoryID() {
-        return categoryID;
-    }
 
-    public void setCategoryID(int categoryID) {
-        this.categoryID = categoryID;
-    }
 
     public int getEmpID() {
         return empID;

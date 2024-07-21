@@ -53,8 +53,9 @@ public class EditChildrenCategoryController extends HttpServlet {
 
                 if (oldList.size() > 0 && newList.size() > 0) {
                     UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
-                    ManageCategoryDTO manageCategory = new ManageCategoryDTO(cdCategoryID, user.getUserID(), oldList, newList, "Edit");
-                    DbUtils.addCheckLogToDB("ManageCDCategories", "categoryID", manageCategory);
+                    boolean isCD = true;
+                    ManageCategoryDTO manageCategory = new ManageCategoryDTO(cdCategoryID, user.getUserID(), oldList, newList, "Edit", isCD);
+                    DbUtils.addCheckLogToDB("ManageCDCategories", "CDCategoryID", manageCategory);
                 }
 
 

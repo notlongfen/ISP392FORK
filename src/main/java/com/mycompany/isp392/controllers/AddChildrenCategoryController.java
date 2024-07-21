@@ -45,10 +45,10 @@ public class AddChildrenCategoryController extends HttpServlet {
                     UserDTO user = (UserDTO) request.getSession().getAttribute("LOGIN_USER");
                     newList.add(cdCategoryName);
                     newList.add(String.valueOf(parentID));
-                    ManageCategoryDTO manageCategoryDTO = new ManageCategoryDTO(categoryID, user.getUserID(), new ArrayList<>(), newList, "Add");
-                    DbUtils.addCheckLogToDB("ManageCDCategories", "categoryID", ManageCategoryDTO.class);
+                    boolean isCD = true;
+                    ManageCategoryDTO manageCategoryDTO = new ManageCategoryDTO(categoryID, user.getUserID(), new ArrayList<>(), newList, "Add", isCD);
+                    DbUtils.addCheckLogToDB("ManageCDCategories", "CDCategoryID", manageCategoryDTO);
                     
-
                     request.setAttribute("SUCCESS_MESSAGE", "CHILDREN CATEGORY ADDED SUCCESSFULLY !");
                     url = SUCCESS;
                 } else {

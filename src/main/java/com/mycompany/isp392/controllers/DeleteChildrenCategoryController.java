@@ -52,8 +52,9 @@ public class DeleteChildrenCategoryController extends HttpServlet {
                 oldList.add(String.valueOf(1));
                 newList.add(String.valueOf(0));
 
-                ManageCategoryDTO manageCategory = new ManageCategoryDTO(cdCategoryID, user.getUserID(), oldList, newList, "Delete");
-                DbUtils.addCheckLogToDB("ManageCDCategories", "categoryID", manageCategory);
+                boolean isCD = true;
+                ManageCategoryDTO manageCategory = new ManageCategoryDTO(cdCategoryID, user.getUserID(), oldList, newList, "Delete", isCD);
+                DbUtils.addCheckLogToDB("ManageCDCategories", "CDCategoryID", manageCategory);
 
                 request.setAttribute("SUCCESS_MESSAGE", "CHILDREN CATEGORY DELETED SUCCESSFULLY !");
                 url = SUCCESS;

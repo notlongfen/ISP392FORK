@@ -1866,12 +1866,13 @@ public class ProductDAO {
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(localeVN);
 
         try (Connection con = DbUtils.getConnection()) {
-            String query = "SELECT color, size, price, image FROM ProductDetails WHERE ProductID = ?  and status = 1 and stockQuantity > 0";
+            String query = "SELECT ProductDetailsID, color, size, price, image FROM ProductDetails WHERE ProductID = ?  and status = 1 and stockQuantity > 0";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setInt(1, productId);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
+                int ProductDetailsID = rs.getInt("ProductDetailsID");
                 String color = rs.getString("color");
                 String size = rs.getString("size");
                 int price = rs.getInt("price");
@@ -1879,6 +1880,7 @@ public class ProductDAO {
 
                 colorSizeMap.putIfAbsent(color, new HashMap<>());
                 Map<String, Object> sizeDetails = new HashMap<>();
+                sizeDetails.put("ProductDetailsID", ProductDetailsID);
                 sizeDetails.put("price", currencyFormatter.format(price));
                 sizeDetails.put("images", images.split(";"));
                 colorSizeMap.get(color).put(size, sizeDetails);

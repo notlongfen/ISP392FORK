@@ -165,13 +165,13 @@
                                                     <td> 
                                                         <!-- DELETE -->
                                                         <% 
-                                                            if (order.getStatus() == 0 || order.getStatus() == 3 || order.getStatus() == 2){  
+                                                            if (order.getStatus() == 0 || order.getStatus() == 2 || order.getStatus() == 3 || order.getStatus() == 4){  
                                                         %>
                                                         <a href="#" class="btn btn-sm btn-danger disabled" aria-disabled="true">Delete</a> 
                                                         <% 
                                                             } else {  
                                                         %>
-                                                        <a href="MainController?action=DeleteOrder&orderID=<%= order.getOrderID()%>&status=0" class="btn btn-sm btn-danger">Delete</a> 
+                                                        <a href="MainController?action=DeleteOrder&orderID=<%= order.getOrderID()%>&status=0&oldStatus=<%= order.getStatus()%>" class="btn btn-sm btn-danger">Delete</a> 
                                                         <% 
                                                             }
                                                         %>

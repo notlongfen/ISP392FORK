@@ -47,7 +47,7 @@ public class DeleteCategoryController extends HttpServlet {
 
                 UserDTO user = (UserDTO) request.getSession().getAttribute("LOGIN_USER");
                 ManageCategoryDTO manageCategory = new ManageCategoryDTO(categoryID, user.getUserID(), oldList, newList, "Delete");
-                DbUtils.addCheckLogToDB("ManageCategories", "categoryID", manageCategory);
+                DbUtils.addCheckLogToDB("ManageCategories", "Categories", manageCategory);
 
                 request.setAttribute("SUCCESS_MESSAGE", "CATEGORY DELETED SUCCESSFULLY !");
                 url = SUCCESS;
@@ -55,38 +55,7 @@ public class DeleteCategoryController extends HttpServlet {
                 error.setError("UNABLE TO DELETE CATEGORY !");
                 request.setAttribute("CATEGORY_ERROR", error);
             }
-//            List<ChildrenCategoryDTO> childrenList = dao.getActiveChildrenCategoriesByID(categoryID);
-//            if (!childrenList.isEmpty()) {
-//                boolean allChildrenDeleted = true;
-//                for (ChildrenCategoryDTO child : childrenList) {
-//                    boolean checkDeleteChild = dao.deleteChildrenCategory(child.getCdCategoryID());
-//                    if (!checkDeleteChild) {
-//                        allChildrenDeleted = false;
-//                        error.setError("Unable to delete child category " + child.getCdCategoryID());
-//                        request.setAttribute("CHILDREN_CATEGORY_ERROR", error);
-//                        break;
-//                    }
-//                }
-//                if (allChildrenDeleted) {
-//                    boolean checkDelete = dao.deleteCategory(categoryID);
-//                    if (checkDelete) {
-//                        request.setAttribute("MESSAGE", "CATEGORY DELETED SUCCESSFULLY !");
-//                        url = SUCCESS;
-//                    } else {
-//                        error.setError("UNABLE TO DELETE CATEGORY !");
-//                        request.setAttribute("CATEGORY_ERROR", error);
-//                    }
-//                }
-//            } else {
-//                boolean checkDelete = dao.deleteCategory(categoryID);
-//                if (checkDelete) {
-//                    request.setAttribute("MESSAGE", "CATEGORY DELETED SUCCESSFULLY !");
-//                    url = SUCCESS;
-//                } else {
-//                    error.setError("UNABLE TO DELETE CATEGORY !");
-//                    request.setAttribute("CATEGORY_ERROR", error);
-//                }
-//            }
+
         } catch (Exception e) {
             log("Error at DeleteCategoryController: " + e.toString());
         } finally {

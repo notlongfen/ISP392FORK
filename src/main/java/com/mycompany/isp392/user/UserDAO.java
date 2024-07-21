@@ -34,6 +34,7 @@ public class UserDAO {
     private static final String GET_CUSTOMER_BY_ID = "SELECT * FROM Customers WHERE CustID = ?";
     private static final String GET_ALL_INFO_CUSTOMER_BY_ID = "SELECT * FROM Users u INNER JOIN Customers c ON u.UserID = c.CustID WHERE CustID = ?";
     private static final String GET_EMPLOYEE_BY_ID = "SELECT * FROM Employees WHERE EmpID = ?";
+    private static final String GET_LAST_EMPLOYEE_BY_ID = "SELECT TOP 1 * FROM Employees ORDER BY EmpID DESC";
     private static final String DELETE_USER = "UPDATE Users SET status = 0 WHERE UserID = ?";
     private static final String GET_USER_INFO_BASED_ON_SUPPORTID = "SELECT * FROM Supports s \n"
             + "INNER JOIN Customers c ON s.CustID = c.CustID\n"
@@ -732,6 +733,36 @@ public class UserDAO {
                 rs = ptm.executeQuery();
                 if (rs.next()) {
                     employee = new EmployeeDTO(EmpID);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return employee;
+    }
+    
+        public EmployeeDTO getLastEmployeeByID() throws SQLException {
+        EmployeeDTO employee = null;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_LAST_EMPLOYEE_BY_ID);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    employee = new EmployeeDTO(rs.getInt("EmpID"));
                 }
             }
         } catch (Exception e) {

@@ -166,6 +166,12 @@
                                     </span>
                                 </div>
 
+                                <!--  productDetailID -->
+                                <input type="hidden" name="productDetailID" value="<%= colorSizeMap.get(selectedColor).get(selectedSize).get("ProductDetailsID") %>" >
+                                         
+                                    
+                                
+
                                 <div style="margin-top: 30px;">
                                     <label style="font-size: 20px;">Select size:</label>
                                     <div class="sizes">
@@ -225,7 +231,7 @@
                                 <div class="row mt-2 justify-content-center">
                                     <div class="col">
                                         <div class="d-grid gap-2">
-                                            <button id="add_to_wishlist" class="btn btn-outline-dark" style="background: white; border: 2px solid black;"><b>Favorite</b></button>
+                                            <button  type="submit" name="action" value="AddToWishlist" class="btn btn-outline-dark" style="background: white; border: 2px solid black;"><b>Favorite</b></button>
                                         </div>
                                     </div>
                                 </div>

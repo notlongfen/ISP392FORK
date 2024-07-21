@@ -56,6 +56,8 @@
                             <form style="margin-top: 50px;" action="MainController" method="POST">
                                 <input type="hidden" name="cdCategoryID" value="<%= cdCategory.getCdCategoryID()%>" readonly=""/>
                                 <input type="hidden" name="parentID" value="<%= cdCategory.getParentID()%>" readonly=""/>
+                                <input type="hidden" name="oldName" value="<%= cdCategory.getCategoryName()%>" readonly=""/>
+                                <input type="hidden" name="oldStatus" value="<%= cdCategory.getStatus()%>" readonly=""/>
                                 <div class="form-row">
                                     <div class="form-group col-md-12">
                                         <label for="categoryName">Children Category Name</label>
