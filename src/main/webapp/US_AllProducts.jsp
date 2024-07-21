@@ -346,26 +346,27 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script>
-            $(document).ready(function () {
+            $(document).ready(function () {                
                 function getSelectedValues(selector) {
                     return $(selector + ':checked').map(function () {
                         return this.value;
                     }).get();
                 }
-
+               
                 function loadFilteredProducts(page = 1) {
                     var selectedBrands = getSelectedValues('.brand-filter');
                     var selectedPrices = getSelectedValues('.price-filter');
                     var selectedCategories = getSelectedValues('.category-filter');
 
                     $.ajax({
-                        url: 'ViewAllProductController',
+                        url: 'SearchProductForHeaderController',
                         type: 'GET',
                         data: {
                             brands: selectedBrands,
                             prices: selectedPrices,
                             categories: selectedCategories,
-                            page: page
+                            page: page,
+                            search: $('#search-form input[name="search"]').val() // Get search term from input field
                         },
                         success: function (data) {
                             $('#products-container').html($(data).find('#products-container').html());

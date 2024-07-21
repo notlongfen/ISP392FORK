@@ -47,7 +47,7 @@
                 width: 300px; /* Set the desired width */
             }
 
-            input, textarea, input.btn {
+            #checkout-form input, #checkout-form textarea, #checkout-form input.btn {
                 color: white;
                 background-color: black;
                 border-color: black;
@@ -85,7 +85,7 @@
                    }
         %>
         <%@include file="US_header.jsp" %>
-        <form action="MainController" method="POST">
+        <form action="MainController" method="POST" id="checkout-form">
             <div class="container mt-5" style="margin-top: 20px; margin-bottom: 20px;">
                 <h1 class="text-center mb-5 border-bottom " style="font-weight: bold">Checkout</h1>
                 <div class="row">

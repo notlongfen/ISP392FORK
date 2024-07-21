@@ -57,9 +57,38 @@
                 .search-container .fa-search {
                     margin-right: 5px;
                 }*/
+        
+                .search-btn {
+                    background: none; /* Remove default background */
+                    border: none; /* Remove default border */
+                    padding: 0; /* Adjust padding if needed */
+                    cursor: pointer; /* Change cursor to pointer */
+                    font-size: 1.2rem; /* Adjust font size if needed */
+                    color: inherit; /* Use inherited text color */
+                    margin-left: 10px; /* Add margin to move the button to the right */
+                    margin-right: 5px;
+                }
+
+                .search-btn i {
+                    color: black; /* Change icon color if needed */
+                }
+
+                .search-btn:focus {
+                    outline: none; /* Remove default focus outline */
+                }
+
+                .search-btn:hover {
+                    /* Add hover effects if desired */
+                    color: gray; /* Change color on hover */
+                }
     </style>
     <body>
-
+        <%
+            String search = request.getParameter("search");
+            if (search == null) {
+                search = "";
+            }
+        %>
         <div class="super_container">
 
             <!-- Header -->
@@ -121,10 +150,11 @@
                                     <ul class="navbar_user">
                                         <li>
                                             <div class="search-container">                                      
-                                                <form action="MainController" method="get">
+                                                <form action="MainController" method="POST" id="search-form">
                                                     <!-- <a href="#"><i class="fa fa-search" aria-hidden="true"></i></a> -->
-                                                     <button type="submit" name= "action" value="findProduct"><i class="fa fa-search" aria-hidden="true"></i></button>
-                                                    <input type="text" placeholder="Search" name="search"> 
+                                                    <input type="hidden" id="search-button" value="SearchProductForHeaderController"/>
+                                                    <button type="submit" name= "action" value="FindProduct" class="search-btn"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                                    <input type="text" placeholder="Search..." name="search" value="<%= search%>"> 
                                                 </form>
                                             </div>
                                         </li>

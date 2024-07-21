@@ -1557,6 +1557,105 @@ public class ProductDAO {
         return productList;
     }
 
+    public List<ProductDTO> getFilteredProducts(String[] brandFilters, String[] priceFilters, String[] categoryFilters, String searchQuery, int page, int recordsPerPage) throws SQLException {
+        List<ProductDTO> productList = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+
+        StringBuilder sql = new StringBuilder("SELECT DISTINCT p.* FROM Products p JOIN ProductDetails pd ON p.ProductID = pd.ProductID");
+
+        if (categoryFilters != null && categoryFilters.length > 0) {
+            sql.append(" JOIN ProductBelongtoCDCategories pbcc ON p.ProductID = pbcc.ProductID");
+            sql.append(" JOIN ChildrenCategories cc ON pbcc.CDCategoryID = cc.CDCategoryID");
+        }
+
+        sql.append(" WHERE p.status = 1");
+
+        if (brandFilters != null && brandFilters.length > 0) {
+            sql.append(" AND p.BrandID IN (").append(String.join(",", brandFilters)).append(")");
+        }
+
+        if (priceFilters != null && priceFilters.length > 0) {
+            sql.append(" AND (");
+            for (int i = 0; i < priceFilters.length; i++) {
+                if (i > 0) {
+                    sql.append(" OR ");
+                }
+                switch (priceFilters[i]) {
+                    case "0-2000000":
+                        sql.append("pd.price < 2000000");
+                        break;
+                    case "2000000-5000000":
+                        sql.append("pd.price BETWEEN 2000000 AND 5000000");
+                        break;
+                    case "5000000-10000000":
+                        sql.append("pd.price BETWEEN 5000000 AND 10000000");
+                        break;
+                    case "10000000plus":
+                        sql.append("pd.price > 10000000");
+                        break;
+                }
+            }
+            sql.append(")");
+        }
+
+        if (categoryFilters != null && categoryFilters.length > 0) {
+            sql.append(" AND cc.ParentID IN (");
+            for (int i = 0; i < categoryFilters.length; i++) {
+                if (i > 0) {
+                    sql.append(",");
+                }
+                sql.append(categoryFilters[i]);
+            }
+            sql.append(")");
+        }
+
+        if (searchQuery != null && !searchQuery.isEmpty()) {
+            sql.append(" AND p.productName LIKE ?");
+        }
+
+        sql.append(" ORDER BY p.ProductID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+
+        try {
+            conn = DbUtils.getConnection();
+            ptm = conn.prepareStatement(sql.toString());
+
+            int paramIndex = 1;
+            if (searchQuery != null && !searchQuery.isEmpty()) {
+                ptm.setString(paramIndex++, "%" + searchQuery + "%");
+            }
+            ptm.setInt(paramIndex++, (page - 1) * recordsPerPage);
+            ptm.setInt(paramIndex, recordsPerPage);
+
+            rs = ptm.executeQuery();
+            while (rs.next()) {
+                int productID = rs.getInt("ProductID");
+                String productName = rs.getString("ProductName");
+                String description = rs.getString("Description");
+                int numberOfPurchasing = rs.getInt("NumberOfPurchasing");
+                int status = rs.getInt("Status");
+                int brandID = rs.getInt("BrandID");
+
+                ProductDTO product = new ProductDTO(productID, productName, description, numberOfPurchasing, status, brandID);
+                productList.add(product);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return productList;
+    }
+
     public int getTotalFilteredProductsCount(String[] brandFilters, String[] priceFilters, String[] categoryFilters) throws SQLException {
         int totalProducts = 0;
         Connection conn = null;
@@ -1614,6 +1713,93 @@ public class ProductDAO {
         try {
             conn = DbUtils.getConnection();
             ptm = conn.prepareStatement(sql.toString());
+            rs = ptm.executeQuery();
+            if (rs.next()) {
+                totalProducts = rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return totalProducts;
+    }
+
+    public int getTotalFilteredProductsCount(String[] brandFilters, String[] priceFilters, String[] categoryFilters, String searchQuery) throws SQLException {
+        int totalProducts = 0;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+
+        StringBuilder sql = new StringBuilder("SELECT COUNT(DISTINCT p.ProductID) FROM Products p JOIN ProductDetails pd ON p.ProductID = pd.ProductID");
+
+        if (categoryFilters != null && categoryFilters.length > 0) {
+            sql.append(" JOIN ProductBelongtoCDCategories pbcc ON p.ProductID = pbcc.ProductID");
+            sql.append(" JOIN ChildrenCategories cc ON pbcc.CDCategoryID = cc.CDCategoryID");
+        }
+
+        sql.append(" WHERE p.status = 1");
+
+        if (brandFilters != null && brandFilters.length > 0) {
+            sql.append(" AND p.BrandID IN (").append(String.join(",", brandFilters)).append(")");
+        }
+
+        if (priceFilters != null && priceFilters.length > 0) {
+            sql.append(" AND (");
+            for (int i = 0; i < priceFilters.length; i++) {
+                if (i > 0) {
+                    sql.append(" OR ");
+                }
+                switch (priceFilters[i]) {
+                    case "0-2000000":
+                        sql.append("pd.price < 2000000");
+                        break;
+                    case "2000000-5000000":
+                        sql.append("pd.price BETWEEN 2000000 AND 5000000");
+                        break;
+                    case "5000000-10000000":
+                        sql.append("pd.price BETWEEN 5000000 AND 10000000");
+                        break;
+                    case "10000000plus":
+                        sql.append("pd.price > 10000000");
+                        break;
+                }
+            }
+            sql.append(")");
+        }
+
+        if (categoryFilters != null && categoryFilters.length > 0) {
+            sql.append(" AND cc.ParentID IN (");
+            for (int i = 0; i < categoryFilters.length; i++) {
+                if (i > 0) {
+                    sql.append(",");
+                }
+                sql.append(categoryFilters[i]);
+            }
+            sql.append(")");
+        }
+
+        if (searchQuery != null && !searchQuery.isEmpty()) {
+            sql.append(" AND p.productName LIKE ?");
+        }
+
+        try {
+            conn = DbUtils.getConnection();
+            ptm = conn.prepareStatement(sql.toString());
+
+            int paramIndex = 1;
+            if (searchQuery != null && !searchQuery.isEmpty()) {
+                ptm.setString(paramIndex++, "%" + searchQuery + "%");
+            }
+
             rs = ptm.executeQuery();
             if (rs.next()) {
                 totalProducts = rs.getInt(1);
@@ -1762,7 +1948,7 @@ public class ProductDAO {
         return id;
     }
 
-    public int getProductDetailsIDByProductIDColorSize(int productID, String color, String size) throws SQLException{
+    public int getProductDetailsIDByProductIDColorSize(int productID, String color, String size) throws SQLException {
         int id = -1;
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -1782,21 +1968,20 @@ public class ProductDAO {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-                if (rs != null) {
-                    rs.close();
-                }
-                if (ptm != null) {
-                    ptm.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
+            if (rs != null) {
+                rs.close();
             }
-            return id;
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return id;
     }
 
-
-    public List<ProductDTO> searchProductByName (String productName){
+    public List<ProductDTO> searchProductByName(String productName) {
         List<ProductDTO> list = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -1840,15 +2025,13 @@ public class ProductDAO {
 
     public List<ProductDTO> getTop5ProductsByPurchases() throws ClassNotFoundException {
         List<ProductDTO> products = new ArrayList<>();
-        String query = "SELECT top(5) productID, productName, description, numberOfPurchasing, status, brandID " +
-                       "FROM Products " +
-                       "WHERE status = 1 " + // Assuming status 1 means active
-                       "ORDER BY numberOfPurchasing DESC ";
-                       
+        String query = "SELECT top(5) productID, productName, description, numberOfPurchasing, status, brandID "
+                + "FROM Products "
+                + "WHERE status = 1 "
+                + // Assuming status 1 means active
+                "ORDER BY numberOfPurchasing DESC ";
 
-        try (Connection conn = DbUtils.getConnection();
-             PreparedStatement ps = conn.prepareStatement(query);
-             ResultSet rs = ps.executeQuery()) {
+        try (Connection conn = DbUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 int productID = rs.getInt("productID");

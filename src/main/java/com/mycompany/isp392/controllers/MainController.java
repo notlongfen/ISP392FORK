@@ -293,6 +293,9 @@ public class MainController extends HttpServlet {
     
     private static final String UPDATE_CART_QUANTITY = "UpdateCartQuantity";
     private static final String UPDATE_CART_QUANTITY_CONTROLLER = "UpdateCartQuantityController";
+    
+    private static final String FIND_PRODUCT = "FindProduct";
+    private static final String FIND_PRODUCT_CONTROLLER = "SearchProductForHeaderController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -496,6 +499,8 @@ public class MainController extends HttpServlet {
                 url = REMOVE_FROM_CART_CONTROLLER;
             } else if (UPDATE_CART_QUANTITY.equals(action)) {
                 url = UPDATE_CART_QUANTITY_CONTROLLER;
+            } else if (FIND_PRODUCT.equals(action)) {
+                url = FIND_PRODUCT_CONTROLLER;
             }
         } catch (Exception e) {
             log("error at MainController: " + e.toString());

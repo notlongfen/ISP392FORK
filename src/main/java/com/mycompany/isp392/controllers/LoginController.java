@@ -18,7 +18,7 @@ public class LoginController extends HttpServlet {
 
     private static final String ERROR = "US_SignIn.jsp";
     private static final int CUSTOMER = 4;
-    private static final String CUSTOMER_PAGE = "US_index.jsp";
+    private static final String CUSTOMER_PAGE = "HomePageController";
     private static final int SYSTEM_MANAGER = 1;
     private static final int SHOP_MANAGER = 2;
     private static final int SHOP_STAFF = 3;
@@ -33,7 +33,7 @@ public class LoginController extends HttpServlet {
     public void initClientID() throws ServletException{
 
 
-        Dotenv dotenv = Dotenv.configure().directory("D:\\Document\\FPT\\HK5_SU24\\ISP392\\ISP392\\.env").load();
+        Dotenv dotenv = Dotenv.configure().directory("C:\\Users\\TTNHAT\\Documents\\GitHub\\ISP392\\.env").load();
         clientID = dotenv.get("GOOGLE_CLIENT_ID");
     }
 
@@ -62,7 +62,6 @@ public class LoginController extends HttpServlet {
                             case "wishlist":
                                 url = WISHLIST_PAGE;
                                 break;
-                            
                             case "productDetail":
                                 url = PRODUCT_DETAIL_PAGE;
                                 break;

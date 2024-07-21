@@ -142,7 +142,6 @@
                                 if (search == null) {
                                     search = "";
                                 }
-                                UserDAO dao = new UserDAO();
                     %>
                     <div class="container-fluid" id="container-wrapper">
                         <div class="d-sm-flex align-items-center justify-content-between mb-4">
