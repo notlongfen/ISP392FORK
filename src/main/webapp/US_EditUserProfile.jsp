@@ -92,7 +92,7 @@
                 position: inherit;
                 right: 0;
             }
-            .btn-format.right-element button {
+            .btn-format.right-element input[type="submit"] {
                 display: inline-block;
                 margin-left: 5px; /* Điều chỉnh khoảng cách giữa hai nút */
             }
@@ -120,17 +120,14 @@
                             </div>
                             <hr>
                             <div>
-                                <ul class="nav flex-column">
+                               <ul class="nav flex-column">
                                     <li class="nav-item">
-                                        <a class="nav-link active" aria-current="page" href="MyProfile.jsp"><div class="fas fa-user mr-2"></div> Personal Information</a>
+                                        <a class="nav-link active" aria-current="page" href="US_MyProfile.jsp"><div class="fas fa-user mr-2"></div> Personal Information</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link " href="MyOrder.jsp"><div class="fas fa-box mr-2"></div> My Order</a>
+                                        <a class="nav-link " href="MainController?action=ViewUSOrder"><div class="fas fa-box mr-2"></div> My Order</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="MyWishlist.jsp"><div class="fas fa-heart mr-2"></div> ️My Wishlists</a>
-                                    </li>
-                                </ul>
+                               </ul>
                             </div>
                         </div>
                     </div>
@@ -143,11 +140,12 @@
                         </div>
                         <form action="MainController" method="POST">
                             <input type="hidden" name="userID" value="<%= custID%>">
-                            <div class="btn-format right-element btn-format.right-element button" >
+                            <div class="btn-format right-element btn-format.right-element " style="width: 50px; height: 30px;" >
                                 <!--                                <a href="MainController?action=Save profile">Save</a>-->
-                                <input type="submit" name="action" value="Save profile"/>
-                            </div>
-                            <div class="col-sm-6"></div>
+                            
+                                <input type="submit" name="action" value="Save profile" class=" middle bg-white" style="border: 2px solid black; width: 120px; height: 30px;"/>
+                        </div>
+                        <div class="col-sm-6"></div>
 
                             <div class="mb-3">
                                 <label for="fullName" class="form-label">FullName</label>

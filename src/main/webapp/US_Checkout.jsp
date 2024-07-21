@@ -47,7 +47,7 @@
                 width: 300px; /* Set the desired width */
             }
 
-            #checkout-form input, #checkout-form textarea, #checkout-form input.btn {
+            #checkout-button input[type="submit"] {
                 color: white;
                 background-color: black;
                 border-color: black;
@@ -85,7 +85,7 @@
                    }
         %>
         <%@include file="US_header.jsp" %>
-        <form action="MainController" method="POST" id="checkout-form">
+        <form action="MainController" method="POST">
             <div class="container mt-5" style="margin-top: 20px; margin-bottom: 20px;">
                 <h1 class="text-center mb-5 border-bottom " style="font-weight: bold">Checkout</h1>
                 <div class="row">
@@ -222,7 +222,7 @@
 
                             <div class="mb-3" >
                                 <label for="coupon" class="form-label" >You have a coupon? Click here to enter your code</label>
-                                <div class="form-inline">
+                                <div class="form-inline" id="checkout-button">
                                     <% if (request.getAttribute("PROMOTION_NAME") ==null){ %>
                                     <input type="text" class="form-control mb-2 mr-sm-2" id="coupon" name="promotionName" value="">
                                     <input type="submit" class="btn btn-primary mb-2" name="action" value="Check Promotion">
@@ -280,7 +280,7 @@
                                 <p style="color: red">Ensure that the above information is completely correct </p>
                             </div>
                             <div class="row justify-content-center">
-                                <div class="col-auto">
+                                <div class="col-auto" id="checkout-button">
                                     <input type="submit" class="btn mb-5" name="action" value="Place Order"></input>
                                 </div>
                             </div>

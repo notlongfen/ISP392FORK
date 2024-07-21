@@ -228,7 +228,6 @@
                                                 <img src="<%= firstDetail.getImage().split(";")[0] %>" alt="<%= product.getProductName() %>">
                                             </a>
                                         </div>
-                                        <div class="favorite favorite_left"></div>
                                         <div class="product_info">
                                             <h6 class="product_name"><a href="MainController?action=Get_product_detail&productID=<%= product.getProductID() %>&color=<%= firstDetail.getColor() %>"><%= product.getProductName() %></a></h6>
                                             <div class="product_price" style="color: #C53337">
@@ -282,7 +281,6 @@
                                                         <img src="<%= firstDetail.getImage().split(";")[0] %>" alt="<%= product.getProductName() %>">
                                                     </a>
                                                 </div>
-                                                <div class="favorite favorite_left"></div>
                                                 <div class="product_info">
                                                     <h6 class="product_name"><a href="MainController?action=Get_product_detail&productID=<%= product.getProductID() %>&color=<%= firstDetail.getColor() %>"><%= product.getProductName() %></a></h6>
                                                     <div class="product_price" style="color: #C53337">
