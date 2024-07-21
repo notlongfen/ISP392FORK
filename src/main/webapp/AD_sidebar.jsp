@@ -118,13 +118,6 @@
                     </a>
                 </li>
                 
-                 <li class="nav-item mt-3">
-                    <a class="nav-link" href="AD_StatisticCustomer.jsp">
-                        <i class="fas fa-tshirt"></i>
-                        <span>AD_StatisticCustomer</span>
-                    </a>
-                </li>
-
                 <hr class="sidebar-divider">
 
                 <button type="submit" class="logout-btn btn btn-link" name="action" value="Logout">

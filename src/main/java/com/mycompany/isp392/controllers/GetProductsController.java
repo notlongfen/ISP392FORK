@@ -32,7 +32,11 @@ public class GetProductsController extends HttpServlet {
             CategoryDAO categoryDAO = new CategoryDAO();
 
             // Retrieve and clear success message from session
-
+             String successMessage = (String) request.getSession().getAttribute("SUCCESS_MESSAGE");
+            if (successMessage != null) {
+                request.setAttribute("SUCCESS_MESSAGE", successMessage);
+                request.getSession().removeAttribute("SUCCESS_MESSAGE");
+            }
             // Retrieve and clear error message from session
             ProductError productError = (ProductError) request.getSession().getAttribute("PRODUCT_ERROR");
             if (productError != null) {
