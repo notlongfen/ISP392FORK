@@ -157,20 +157,24 @@ public class CheckoutController extends HttpServlet {
             PromotionDAO promotionDAO = new PromotionDAO();
             PromotionDTO promotionInCart = promotionDAO.getPromotionByID(cart.getPromotionID());
             String promotionNameInCart = promotionInCart.getPromotionName();
-            if (!promotionName.equals(promotionNameInCart)) {
-                PromotionError pe = new PromotionError();
-                pe.setConditionError("You should apply your current voucher first or retype the voucher code");
-                request.setAttribute("PROMOTION_ERROR", pe);
-                return;
-            } else if (promotionName.equals(promotionNameInCart) && promotionInCart.getDiscountPer() != 0) {
-                int point = userDAO.getCustomerByID(userDTO.getUserID()).getPoints() - 100;
-                userDAO.updateUserPoint(userDTO.getUserID(), point);
+            double percentage = promotionInCart.getDiscountPer() / 100;
+            // if (!promotionName.equals(promotionNameInCart)) {
+            //     PromotionError pe = new PromotionError();
+            //     pe.setConditionError("You should apply your current voucher first or retype the voucher code");
+            //     request.setAttribute("PROMOTION_ERROR", pe);
+            //     return;
+            // } else if (promotionName.equals(promotionNameInCart) && promotionInCart.getDiscountPer() != 0) {
+            if(percentage != 0){ //Check if promotion is applied
+                int pointa = userDAO.getCustomerByID(userDTO.getUserID()).getPoints() - 100;
+                userDAO.updateUserPoint(userDTO.getUserID(), pointa);
+                cart.setTotalPrice(cart.getTotalPrice() - (cart.getTotalPrice() * percentage) );
             }
+            // }
 
             // Add Order
             OrderDAO orderDAO = new OrderDAO();
             ProductDAO productDAO = new ProductDAO();
-            OrderDTO order = orderDAO.insertOrder(cart.getTotalPrice(), user.getUserID(),
+            OrderDTO order = orderDAO.insertOrder(cart.getTotalPrice() + 40_000, user.getUserID(),
                     promotionInCart.getPromotionID(), cart.getCartID(),
                     name, city, district, ward, address, phone, note);
 
@@ -194,22 +198,22 @@ public class CheckoutController extends HttpServlet {
                 priceAndPoint.put(1000000, 20);
 
                 double total = cart.getTotalPrice();
-                int point = userDAO.getCustomerByID(userDTO.getUserID()).getPoints();
+                int points = userDAO.getCustomerByID(userDTO.getUserID()).getPoints();
 
                 if (check) {
                     while (total >= 0) {
                         if (total >= 1000000) {
-                            point += priceAndPoint.get(1000000);
+                            points += priceAndPoint.get(1000000);
                             total -= 1000000;
                         } else if (total >= 500000) {
-                            point += priceAndPoint.get(500000);
+                            points += priceAndPoint.get(500000);
                             total -= 500000;
                         } else {
                             break;
                         }
                     }
 
-                    int finalUserPoint = userDAO.updateUserPoint(userDTO.getUserID(), point);
+                    int finalUserPoint = userDAO.updateUserPoint(userDTO.getUserID(), points);
 
                     if (finalUserPoint != 0) {
                         // Update best sellet attribute
@@ -217,21 +221,21 @@ public class CheckoutController extends HttpServlet {
                             productDAO.updateProductNumberOfPurchasedItems(cartDetail.getProductID(),
                                     cartDetail.getQuantity());
                         }
-                        List<String> newList = new ArrayList<>();
-                        newList.add(String.valueOf(order.getOrderID()));
-                        newList.add(String.valueOf(order.getTotal()));
-                        newList.add(String.valueOf(order.getPromotionID()));
-                        newList.add(String.valueOf(order.getCartID()));
-                        newList.add(order.getUserName());
-                        newList.add(order.getCity());
-                        newList.add(order.getDistrict());
-                        newList.add(order.getWard());
-                        newList.add(order.getAddress());
-                        newList.add(String.valueOf(order.getPhone()));
-                        newList.add(order.getNote());
+                        // List<String> newList = new ArrayList<>();
+                        // newList.add(String.valueOf(order.getOrderID()));
+                        // newList.add(String.valueOf(order.getTotal()));
+                        // newList.add(String.valueOf(order.getPromotionID()));
+                        // newList.add(String.valueOf(order.getCartID()));
+                        // newList.add(order.getUserName());
+                        // newList.add(order.getCity());
+                        // newList.add(order.getDistrict());
+                        // newList.add(order.getWard());
+                        // newList.add(order.getAddress());
+                        // newList.add(String.valueOf(order.getPhone()));
+                        // newList.add(order.getNote());
                         
-                        ManageOrderDTO manageOrder = new ManageOrderDTO(order.getOrderID(), user.getUserID(), new ArrayList<>(), newList,"checkout");
-                        DbUtils.addCheckLogToDB("ManageOrders", "orderID", manageOrder);
+                        // ManageOrderDTO manageOrder = new ManageOrderDTO(order.getOrderID(), user.getUserID(), new ArrayList<>(), newList,"checkout");
+                        // DbUtils.addCheckLogToDB("ManageOrders", "orderID", manageOrder);
                         url = SUCCESS;
                     }
                 }

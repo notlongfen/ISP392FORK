@@ -10,6 +10,8 @@ import java.util.List;
 
 import com.mycompany.isp392.cart.*;
 import com.mycompany.isp392.product.*;
+import com.mycompany.isp392.promotion.PromotionDAO;
+import com.mycompany.isp392.promotion.PromotionDTO;
 import com.mycompany.isp392.user.*;
 
 import jakarta.servlet.ServletException;
@@ -53,8 +55,11 @@ public class ViewCheckoutController extends HttpServlet {
             }
             ProductDAO productDAO = new ProductDAO();
             CartDAO cartDAO = new CartDAO();
+            PromotionDAO promotionDAO = new PromotionDAO();
 //            List<ProductDetailsDTO> productList = productDAO.getProductByCartID(cart.getCartID());
             List<CartDetailsDTO> cartList = cartDAO.getCartItems(cart.getCartID());
+            PromotionDTO promotionDTO = promotionDAO.getPromotionByID(cart.getPromotionID());
+            request.setAttribute("PROMOTION", promotionDTO);
 //            request.setAttribute("PRODUCT_LIST", productList);
 //            session.setAttribute("CUST", user);
             request.setAttribute("CART_CHECKOUT", cartList);

@@ -107,11 +107,12 @@ public class PromotionCheckerController extends HttpServlet {
                 // userDAO.updateUserPoint(userDTO.getUserID(), point);
                 newPrice = cart.getTotalPrice() - (cart.getTotalPrice() * percentage);
                 cart.setTotalPrice(newPrice);
-                boolean checkUpdate = cartDAO.updateCartNewPrice(cart.getTotalPrice(), cart.getCartID());
-                if (!checkUpdate) {
-                    request.setAttribute("UPDATE_ERROR", "Cannot update total price in cart");
-                    return;
-                }
+                // boolean checkUpdate = cartDAO.updateCartNewPrice(cart.getTotalPrice(), cart.getCartID());
+                // if (!checkUpdate) {
+                //     request.setAttribute("UPDATE_ERROR", "Cannot update total price in cart");
+                //     return;
+                // }
+                request.setAttribute("CARTAFTERPROMOTION", cart);
                 url = SUCCESS;
             } else {
                 PromotionError pe = new PromotionError();
