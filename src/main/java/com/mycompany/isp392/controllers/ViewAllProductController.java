@@ -51,7 +51,7 @@ public class ViewAllProductController extends HttpServlet {
 
             // Get pagination parameters
             int page = 1;
-            int recordsPerPage = 4;
+            int recordsPerPage = 7;
             if (request.getParameter("page") != null) {
                 page = Integer.parseInt(request.getParameter("page"));
             }

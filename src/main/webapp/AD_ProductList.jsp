@@ -107,10 +107,7 @@
                                                         <option value="Deleted">Deleted</option>
                                                     </select>
                                                 </div>
-                                            </div>
-                                        </form>
-                                        <form action="MainController" method="post">
-                                            <div class="row mb-4 mx-2 justify-content-between">
+
                                                 <div class="col">
                                                     <div class="input-group">
                                                         <input type="text" name="searchText" class="form-control" placeholder="Search...">
