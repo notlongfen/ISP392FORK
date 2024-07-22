@@ -110,13 +110,15 @@
                     </button>
                 </li>
                 <% } %>
-
+                
+                <% if (roleID == 2) { %> <!-- Shop Manager -->
                 <li class="nav-item mt-3">
                     <a class="nav-link" href="DashboardController">
                         <i class="fas fa-tshirt"></i>
-                        <span>AD_Statistic</span>
+                        <span>Statistic</span>
                     </a>
                 </li>
+                <% } %>
                 
                 <hr class="sidebar-divider">
 
