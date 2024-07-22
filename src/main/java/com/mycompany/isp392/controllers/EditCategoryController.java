@@ -68,18 +68,18 @@ public class EditCategoryController extends HttpServlet {
                 UserDTO user = (UserDTO) request.getSession().getAttribute("LOGIN_USER");
 
                 if (!oldName.equals(newName)) {
-                    oldList.add(oldName);
-                    newList.add(newName);
+                    oldList.add("Name: " + oldName);
+                    newList.add("Name: " + newName);
                 }
 
                 if (!oldDescription.equals(newDescription)) {
-                    oldList.add(oldDescription);
-                    newList.add(newDescription);
+                    oldList.add("Description: " + oldDescription);
+                    newList.add("Description: " + newDescription);
                 }
 
                 if (oldStatus != newStatus) {
-                    oldList.add(String.valueOf(oldStatus));
-                    newList.add(String.valueOf(newStatus));
+                    oldList.add(String.valueOf("Status: " + oldStatus));
+                    newList.add(String.valueOf("Status: " + newStatus));
                 }
 
                 if (!oldImage.equals(imagePath)) {

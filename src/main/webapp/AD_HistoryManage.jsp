@@ -9,6 +9,10 @@
 <%@page import="java.util.List"%>
 <%@page import="java.sql.Timestamp"%>
 <%@page import="com.mycompany.isp392.brand.ManageBrandDTO"%>
+<%@page import="com.mycompany.isp392.product.ManageProductDTO"%>
+<%@page import="com.mycompany.isp392.promotion.ManagePromotionDTO"%>
+<%@page import="com.mycompany.isp392.category.ManageCategoryDTO"%>
+<%@page import="com.mycompany.isp392.order.ManageOrderDTO"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -92,9 +96,7 @@
                             <!-- Invoice Example -->
                             <div class="col-xl-12 mb-4">
                                 <div class="card">
-
                                     <div class="table-responsive">
-
                                         <table class="table align-items-center table-flush">
                                             <thead class="thead-light">
                                                 <tr>
@@ -110,39 +112,51 @@
 
                                                 <tr>
                                                     <%
- List<ManageBrandDTO> manage = (List<ManageBrandDTO>) session.getAttribute("manageBrand");
- if (manage != null && manage.size() > 0) {
-     for (ManageBrandDTO list : manage) {
-         String[] oldFields = list.getLoadOldField().replace("[", "").replace("]", "").split(", ");
-         String[] newFields = list.getLoadNewField().replace("[", "").replace("]", "").split(", ");
-        
-         String oldName = "", oldStatus = "", oldImage = "";
-         String newName = "", newStatus = "", newImage = "";
+    // Fetch the list of ManageBrandDTO objects from the session
+    List<ManageBrandDTO> manage = (List<ManageBrandDTO>) session.getAttribute("manageBrand");
+    if (manage != null && !manage.isEmpty()) {
+        // Iterate over each ManageBrandDTO object in the list
+        for (ManageBrandDTO list : manage) {
+            // Retrieve and process the old fields
+            String[] oldFields = list.getLoadOldField().replace("[", "").replace("]", "").split(", ");
+            String[] newFields = list.getLoadNewField().replace("[", "").replace("]", "").split(", ");
 
-         for (String field : oldFields) {
-             if (field.matches(".*\\.(png|jpg|jpeg|gif)$")) {
-                 oldImage = field;
-             } else if (field.matches("\\d+")) {
-                 oldStatus = field;
-             } else {
-                 oldName = field;
-             }
-         }
+            String oldName = "", oldStatus = "", oldImage = "", oldBrandID = "";
+            String newName = "", newStatus = "", newImage = "", newBrandID = "";
 
-         for (String field : newFields) {
-             if (field.matches(".*\\.(png|jpg|jpeg|gif)$")) {
-                 newImage = field;
-             } else if (field.matches("\\d+")) {
-                 newStatus = field;
-             } else {
-                 newName = field;
-             }
-         }
+            // Determine old fields (name, status, image, brandID)
+            for (String field : oldFields) {
+                if (field.matches(".*\\.(png|jpg|jpeg|gif)$")) {
+                    oldImage = field;
+                } else if (field.matches("Status:.*")) {
+                    oldStatus = field.replace("Status:", "").trim();
+                } else if (field.matches("BrandID:.*")) {
+                    oldBrandID = field.replace("BrandID:", "").trim();
+                } else if(field.matches("Name:.*")) {
+                    oldName = field.replace("Name:", "").trim();
+                }
+            }
+
+            // Determine new fields (name, status, image, brandID)
+            for (String field : newFields) {
+                if (field.matches(".*\\.(png|jpg|jpeg|gif)$")) {
+                    newImage = field;
+                } else if (field.matches("Status:.*")) {
+                    newStatus = field.replace("Status:", "").trim();
+                } else if (field.matches("BrandID:.*")) {
+                    newBrandID = field.replace("BrandID:", "").trim();
+                } else if(field.matches("Name:.*")){
+                    newName = field.replace("Name:", "").trim();
+                }
+            }
                                                     %>
                                                 <tr>
                                                     <td><%= list.getBrandID() %></td>
                                                     <td><%= list.getEmpID() %></td>
                                                     <td>
+                                                        <% if (!oldBrandID.isEmpty()) { %>
+                                                        BrandID: <%= oldBrandID %><br>
+                                                        <% } %>
                                                         <% if (!oldName.isEmpty()) { %>
                                                         Name: <%= oldName %><br>
                                                         <% } %>
@@ -154,6 +168,9 @@
                                                         <% } %>
                                                     </td>
                                                     <td>
+                                                        <% if (!newBrandID.isEmpty()) { %>
+                                                        BrandID: <%= newBrandID %><br>
+                                                        <% } %>
                                                         <% if (!newName.isEmpty()) { %>
                                                         Name: <%= newName %><br>
                                                         <% } %>
@@ -168,15 +185,16 @@
                                                     <td><%= list.getChangeDate() %></td>
                                                 </tr>
                                                 <%
-                                                    }
-                                                } else {
+                                                        }
+                                                    } else {
                                                 %>
                                                 <tr>
                                                     <td colspan="8" class="text-center">No Update !!!</td>
                                                 </tr>
                                                 <%
-                                                }
+                                                    }
                                                 %>
+
                                             </tbody>
                                         </table>
                                         <hr>
@@ -223,88 +241,107 @@
                                             <tbody id="tableBody">
                                                 <tr>
                                                     <%
- List<ManageUserDTO> employee = (List<ManageUserDTO>) session.getAttribute("manageEmployee");
- if (employee != null && employee.size() > 0) {
-     for (ManageUserDTO list : employee) {
-         String[] oldFields = list.getLoadOldField().replace("[", "").replace("]", "").split(", ");
-         String[] newFields = list.getLoadNewField().replace("[", "").replace("]", "").split(", ");
-        
+                                                        List<ManageUserDTO> employee = (List<ManageUserDTO>) session.getAttribute("manageEmployee");
+                                                        if (employee != null && employee.size() > 0) {
+                                                            for (ManageUserDTO list : employee) {
+                                                                String[] oldFields = list.getLoadOldField().replace("[", "").replace("]", "").split(", ");
+                                                                String[] newFields = list.getLoadNewField().replace("[", "").replace("]", "").split(", ");
 
-            String oldRole = "";
-            String oldStatus = "";
-            String newRole = "";
-            String newStatus = "";
+                                                                String oldName = "", oldStatus = "", oldEmail = "", oldPassword = "", oldPhone = "", oldRoleID = "";
+                                                                String newName = "", newStatus = "", newEmail = "", newPassword = "", newPhone = "", newRoleID = "";
 
-            // Assign role and status for old fields
-            if (oldFields.length > 0) {
-                if (oldFields.length == 1) {
-                    oldStatus = oldFields[0];
-                } else {
-                    oldRole = oldFields[0];
-                    oldStatus = oldFields[1];
-                }
-            }
+                                                                // Determine old fields (name, status, email, password, phone, roleID)
+                                                                for (String field : oldFields) {
+                                                                    if (field.matches("Status:.*")) {
+                                                                        oldStatus = field.replace("Status:", "").trim();
+                                                                    } else if (field.matches("Email:.*")) {
+                                                                        oldEmail = field.replace("Email:", "").trim();
+                                                                    } else if (field.matches("Name:.*")) {
+                                                                        oldName = field.replace("Name:", "").trim();
+                                                                    } else if (field.matches("Password:.*")) {
+                                                                        oldPassword = field.replace("Password:", "").trim();
+                                                                    } else if (field.matches("Phone:.*")) {
+                                                                        oldPhone = field.replace("Phone:", "").trim();
+                                                                    } else if (field.matches("RoleID:.*")) {
+                                                                        oldRoleID = field.replace("RoleID:", "").trim();
+                                                                    }
+                                                                }
 
-            // Assign role and status for new fields
-            if (newFields.length > 0) {
-                if (newFields.length == 1) {
-                    newStatus = newFields[0];
-                } else {
-                    newRole = newFields[0];
-                    newStatus = newFields[1];
-                }
-            }
-            
-               // Mapping role IDs to role names
-            String oldRoleName = "";
-            switch (oldRole) {
-                case "1": oldRoleName = "System Manager"; break;
-                case "2": oldRoleName = "Shop Manager"; break;
-                case "3": oldRoleName = "Staff"; break;
-                
-            }
-
-            String newRoleName = "";
-            switch (newRole) {
-                case "1": newRoleName = "System Manager"; break;
-                case "2": newRoleName = "Shop Manager"; break;
-                case "3": newRoleName = "Staff"; break;
-                
-            }
+                                                                // Determine new fields (name, status, email, password, phone, roleID)
+                                                                for (String field : newFields) {
+                                                                    if (field.matches("Status:.*")) {
+                                                                        newStatus = field.replace("Status:", "").trim();
+                                                                    } else if (field.matches("Email:.*")) {
+                                                                        newEmail = field.replace("Email:", "").trim();
+                                                                    } else if (field.matches("Name:.*")) {
+                                                                        newName = field.replace("Name:", "").trim();
+                                                                    } else if (field.matches("Password:.*")) {
+                                                                        newPassword = field.replace("Password:", "").trim();
+                                                                    } else if (field.matches("Phone:.*")) {
+                                                                        newPhone = field.replace("Phone:", "").trim();
+                                                                    } else if (field.matches("RoleID:.*")) {
+                                                                        newRoleID = field.replace("RoleID:", "").trim();
+                                                                    }
+                                                                }
                                                     %>
                                                 <tr>
                                                     <td><%= list.getUserID() %></td>
                                                     <td><%= list.getEmpID() %></td>
                                                     <td>
-                                                        <% if (!oldRole.isEmpty()) { %>
-                                                        Role: <%= oldRoleName %><br>
+                                                        <% if (!oldName.isEmpty()) { %>
+                                                        Name: <%= oldName %><br>
+                                                        <% } %>
+                                                        <% if (!oldEmail.isEmpty()) { %>
+                                                        Email: <%= oldEmail %><br>
+                                                        <% } %>
+                                                        <% if (!oldPassword.isEmpty()) { %>
+                                                        Password: <%= oldPassword %><br>
+                                                        <% } %>
+                                                        <% if (!oldPhone.isEmpty()) { %>
+                                                        Phone: <%= oldPhone %><br>
                                                         <% } %>
                                                         <% if (!oldStatus.isEmpty()) { %>
                                                         Status: <%= oldStatus %><br>
                                                         <% } %>
+                                                        <% if (!oldRoleID.isEmpty()) { %>
+                                                        RoleID: <%= oldRoleID %><br>
+                                                        <% } %>
                                                     </td>
                                                     <td>
-                                                        <% if (!newRole.isEmpty()) { %>
-                                                        Role: <%= newRoleName %><br>
+                                                        <% if (!newName.isEmpty()) { %>
+                                                        Name: <%= newName %><br>
+                                                        <% } %>
+                                                        <% if (!newEmail.isEmpty()) { %>
+                                                        Email: <%= newEmail %><br>
+                                                        <% } %>
+                                                        <% if (!newPassword.isEmpty()) { %>
+                                                        Password: <%= newPassword %><br>
+                                                        <% } %>
+                                                        <% if (!newPhone.isEmpty()) { %>
+                                                        Phone: <%= newPhone %><br>
                                                         <% } %>
                                                         <% if (!newStatus.isEmpty()) { %>
                                                         Status: <%= newStatus %><br>
                                                         <% } %>
-
+                                                        <% if (!newRoleID.isEmpty()) { %>
+                                                        RoleID: <%= newRoleID %><br>
+                                                        <% } %>
                                                     </td>
                                                     <td><%= list.getAction() %></td>
                                                     <td><%= list.getChangeDate() %></td>
                                                 </tr>
                                                 <%
-                                                    }
-                                                } else {
+                                                        }
+                                                    } else {
                                                 %>
                                                 <tr>
                                                     <td colspan="8" class="text-center">No Update !!!</td>
                                                 </tr>
                                                 <%
-                                                }
+                                                    }
                                                 %>
+                                                </tr>
+
                                             </tbody>
                                         </table>
                                         <hr>
@@ -361,10 +398,10 @@
                                                     <td><%= list.getUserID() %></td>
                                                     <td><%= list.getEmpID() %></td>
                                                     <td>
-                                                        Status: <%= list.getLoadOldField().replace("[", "").replace("]", "")  %>
+                                                        Status: <%= list.getLoadOldField().replace("[Status:", "").replace("]", "")  %>
                                                     </td>
                                                     <td>
-                                                        Status: <%= list.getLoadNewField().replace("[", "").replace("]", "")  %>
+                                                        Status: <%= list.getLoadNewField().replace("[Status:", "").replace("]", "")  %>
                                                     </td>
                                                     <td><%= list.getAction() %></td>
                                                     <td><%= list.getChangeDate() %></td>
@@ -404,6 +441,817 @@
                                         <!-- End Pagination -->
                                     </div>
                                 </div>
+
+                                <div class="d-sm-flex align-items-center justify-content-between mb-4 " style="margin-top: 20px;">
+                                    <h1 class="h3 mb-0 text-gray-900"><b>History of Product</b></h1>
+                                </div>
+                                <div class="card" style="margin-top: 20px;">
+                                    <div class="table-responsive">
+                                        <table class="table align-items-center table-flush">
+                                            <thead class="thead-light">
+                                                <tr>
+                                                    <th>ProductID</th>
+                                                    <th>EmployeeID</th>
+                                                    <th>FieldOld</th>
+                                                    <th>FieldNew</th>
+                                                    <th>Action</th>
+                                                    <th>Change Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tableBody">
+                                                <tr>
+                                                    <%
+                                                        List<ManageProductDTO> product = (List<ManageProductDTO>) session.getAttribute("manageProduct");
+                                                        if (product != null && product.size() > 0) {
+                                                            for (ManageProductDTO list : product) {
+                                                                String[] oldFields = list.getLoadOldField().replace("[", "").replace("]", "").split(", ");
+                                                                String[] newFields = list.getLoadNewField().replace("[", "").replace("]", "").split(", ");
+
+                                                                String oldName = "", oldStatus = "", oldDescription = "", oldNumber= "", oldBrandID = "", oldCategories = "";
+                                                                String newName = "", newStatus = "", newDescription = "", newNumber= "", newBrandID = "", newCategories = "";
+
+                                                                // Determine old fields (name, status, description, number of purchasing, brandID, categories)
+                                                                for (String field : oldFields) {
+                                                                    if (field.matches("Status:.*")) {
+                                                                        oldStatus = field.replace("Status:", "").trim();
+                                                                    } else if (field.matches("Description:.*")) {
+                                                                        oldDescription = field.replace("Description:", "").trim();
+                                                                    } else if (field.matches("Name:.*")) {
+                                                                        oldName = field.replace("Name:", "").trim();
+                                                                    } else if (field.matches("Number of purchasing:.*")) {
+                                                                        oldNumber = field.replace("Number of purchasing:", "").trim();
+                                                                    } else if (field.matches("BrandID:.*")) {
+                                                                        oldBrandID = field.replace("BrandID:", "").trim();
+                                                                    } else if (field.matches("Categories:.*")) {
+                                                                        oldCategories = field.replace("Categories:", "").trim();
+                                                                    }
+                                                                }
+
+                                                                // Determine new fields (name, status, description, number of purchasing, brandID, categories)
+                                                                for (String field : newFields) {
+                                                                    if (field.matches("Status:.*")) {
+                                                                        newStatus = field.replace("Status:", "").trim();
+                                                                    } else if (field.matches("Description:.*")) {
+                                                                        newDescription = field.replace("Description:", "").trim();
+                                                                    } else if (field.matches("Name:.*")) {
+                                                                        newName = field.replace("Name:", "").trim();
+                                                                    } else if (field.matches("Number of purchasing:.*")) {
+                                                                        newNumber = field.replace("Number of purchasing:", "").trim();
+                                                                    } else if (field.matches("BrandID:.*")) {
+                                                                        newBrandID = field.replace("BrandID:", "").trim();
+                                                                    } else if (field.matches("Categories:.*")) {
+                                                                        newCategories = field.replace("Categories:", "").trim();
+                                                                    }
+                                                                }
+                                                    %>
+                                                <tr>
+                                                    <td><%= list.getProductID() %></td>
+                                                    <td><%= list.getEmpID() %></td>
+                                                    <td>
+                                                        <% if (!oldName.isEmpty()) { %>
+                                                        Name: <%= oldName %><br>
+                                                        <% } %>
+                                                        <% if (!oldDescription.isEmpty()) { %>
+                                                        Description: <%= oldDescription %><br>
+                                                        <% } %>
+                                                        <% if (!oldNumber.isEmpty()) { %>
+                                                        Number of purchasing: <%= oldNumber %><br>
+                                                        <% } %>
+                                                        <% if (!oldBrandID.isEmpty()) { %>
+                                                        BrandID: <%= oldBrandID %><br>
+                                                        <% } %>
+                                                        <% if (!oldCategories.isEmpty()) { %>
+                                                        Categories: <%= oldCategories %><br>
+                                                        <% } %>
+                                                        <% if (!oldStatus.isEmpty()) { %>
+                                                        Status: <%= oldStatus %><br>
+                                                        <% } %>
+                                                    </td>
+                                                    <td>
+                                                        <% if (!newName.isEmpty()) { %>
+                                                        Name: <%= newName %><br>
+                                                        <% } %>
+                                                        <% if (!newDescription.isEmpty()) { %>
+                                                        Description: <%= newDescription %><br>
+                                                        <% } %>
+                                                        <% if (!newNumber.isEmpty()) { %>
+                                                        Number of purchasing: <%= newNumber %><br>
+                                                        <% } %>
+                                                        <% if (!newBrandID.isEmpty()) { %>
+                                                        BrandID: <%= newBrandID %><br>
+                                                        <% } %>
+                                                        <% if (!newCategories.isEmpty()) { %>
+                                                        Categories: <%= newCategories %><br>
+                                                        <% } %>
+                                                        <% if (!newStatus.isEmpty()) { %>
+                                                        Status: <%= newStatus %><br>
+                                                        <% } %>
+                                                    </td>
+                                                    <td><%= list.getAction() %></td>
+                                                    <td><%= list.getChangeDate() %></td>
+                                                </tr>
+                                                <%
+                                                        }
+                                                    } else {
+                                                %>
+                                                <tr>
+                                                    <td colspan="8" class="text-center">No Update !!!</td>
+                                                </tr>
+                                                <%
+                                                    }
+                                                %>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                        <hr>
+
+                                        <!-- Pagination -->
+                                        <nav aria-label="Page navigation">
+                                            <ul class="pagination justify-content-center mt-3">
+                                                <li class="page-item">
+                                                    <a class="page-link" href="#" aria-label="Previous" style="color: #C43337">
+                                                        <span aria-hidden="true">&laquo;</span>
+                                                    </a>
+                                                </li>
+                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">1</a></li>
+                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">2</a></li>
+                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">3</a></li>
+                                                <li class="page-item" >
+                                                    <a class="page-link" href="#" aria-label="Next" style="color: #C43337">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                        <!-- End Pagination -->
+                                    </div>
+                                </div>
+
+
+                                <div class="d-sm-flex align-items-center justify-content-between mb-4 " style="margin-top: 20px;">
+                                    <h1 class="h3 mb-0 text-gray-900"><b>History of Product Detail</b></h1>
+                                </div>
+                                <div class="card" style="margin-top: 20px;">
+                                    <div class="table-responsive">
+
+                                        <table class="table align-items-center table-flush">
+                                            <thead class="thead-light">
+                                                <tr>
+                                                    <th>ProductDetailID</th>
+                                                    <th>EmployeeID</th>
+                                                    <th>FieldOld</th>
+                                                    <th>FieldNew</th>
+                                                    <th>Action</th>
+                                                    <th>Change Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tableBody">
+                                                <tr>
+                                                    <%
+                                                        List<ManageProductDTO> productDetail = (List<ManageProductDTO>) session.getAttribute("manageProductDetails");
+                                                        if (productDetail != null && productDetail.size() > 0) {
+                                                            for (ManageProductDTO list : productDetail) {
+                                                                String[] oldFields = list.getLoadOldField().replace("[", "").replace("]", "").split(", ");
+                                                                String[] newFields = list.getLoadNewField().replace("[", "").replace("]", "").split(", ");
+
+                                                                String oldColor = "", oldStatus = "", oldSize = "", oldStock = "", oldPrice = "", oldDate = "", oldImage = "";
+                                                                String newColor = "", newStatus = "", newSize = "", newStock = "", newPrice = "", newDate = "", newImage = "";
+
+                                                                // Determine old fields (color, status, size, stock quantity, price, import date, image)
+                                                                for (String field : oldFields) {
+                                                                    if (field.matches("Status:.*")) {
+                                                                        oldStatus = field.replace("Status:", "").trim();
+                                                                    } else if (field.matches("Color:.*")) {
+                                                                        oldColor = field.replace("Color:", "").trim();
+                                                                    } else if (field.matches("Size:.*")) {
+                                                                        oldSize = field.replace("Size:", "").trim();
+                                                                    } else if (field.matches("Stock Quantity:.*")) {
+                                                                        oldStock = field.replace("Stock Quantity:", "").trim();
+                                                                    } else if (field.matches("Price:.*")) {
+                                                                        oldPrice = field.replace("Price:", "").trim();
+                                                                    } else if (field.matches("Import Date:.*")) {
+                                                                        oldDate = field.replace("Import Date:", "").trim();
+                                                                    } else if (field.matches(".*\\.(png|jpg|jpeg|gif)$")) {
+                                                                        oldImage = field.trim();
+                                                                    }
+                                                                }
+
+                                                                // Determine new fields (color, status, size, stock quantity, price, import date, image)
+                                                                for (String field : newFields) {
+                                                                    if (field.matches("Status:.*")) {
+                                                                        newStatus = field.replace("Status:", "").trim();
+                                                                    } else if (field.matches("Color:.*")) {
+                                                                        newColor = field.replace("Color:", "").trim();
+                                                                    } else if (field.matches("Size:.*")) {
+                                                                        newSize = field.replace("Size:", "").trim();
+                                                                    } else if (field.matches("Stock Quantity:.*")) {
+                                                                        newStock = field.replace("Stock Quantity:", "").trim();
+                                                                    } else if (field.matches("Price:.*")) {
+                                                                        newPrice = field.replace("Price:", "").trim();
+                                                                    } else if (field.matches("Import Date:.*")) {
+                                                                        newDate = field.replace("Import Date:", "").trim();
+                                                                    } else if (field.matches(".*\\.(png|jpg|jpeg|gif)$")) {
+                                                                        newImage = field.trim();
+                                                                    }
+                                                                }
+                                                    %>
+                                                <tr>
+                                                    <td><%= list.getProductDetailsID() %></td>
+                                                    <td><%= list.getEmpID() %></td>
+                                                    <td>
+                                                        <% if (!oldColor.isEmpty()) { %>
+                                                        Color: <%= oldColor %><br>
+                                                        <% } %>
+                                                        <% if (!oldSize.isEmpty()) { %>
+                                                        Size: <%= oldSize %><br>
+                                                        <% } %>
+                                                        <% if (!oldStock.isEmpty()) { %>
+                                                        Stock Quantity: <%= oldStock %><br>
+                                                        <% } %>
+                                                        <% if (!oldPrice.isEmpty()) { %>
+                                                        Price: <%= oldPrice %><br>
+                                                        <% } %>
+                                                        <% if (!oldDate.isEmpty()) { %>
+                                                        Import Date: <%= oldDate %><br>
+                                                        <% } %>
+                                                        <% if (!oldImage.isEmpty()) { %>
+                                                        <img src="<%= oldImage %>" alt="Old Image" width="100" height="100"><br>
+                                                        <% } %>
+                                                        <% if (!oldStatus.isEmpty()) { %>
+                                                        Status: <%= oldStatus %><br>
+                                                        <% } %>
+                                                    </td>
+                                                    <td>
+                                                        <% if (!newColor.isEmpty()) { %>
+                                                        Color: <%= newColor %><br>
+                                                        <% } %>
+                                                        <% if (!newSize.isEmpty()) { %>
+                                                        Size: <%= newSize %><br>
+                                                        <% } %>
+                                                        <% if (!newStock.isEmpty()) { %>
+                                                        Stock Quantity: <%= newStock %><br>
+                                                        <% } %>
+                                                        <% if (!newPrice.isEmpty()) { %>
+                                                        Price: <%= newPrice %><br>
+                                                        <% } %>
+                                                        <% if (!newDate.isEmpty()) { %>
+                                                        Import Date: <%= newDate %><br>
+                                                        <% } %>
+                                                        <% if (!newImage.isEmpty()) { %>
+                                                        <img src="<%= newImage %>" alt="Old Image" width="100" height="100"><br>
+                                                        <% } %>
+                                                        <% if (!newStatus.isEmpty()) { %>
+                                                        Status: <%= newStatus %><br>
+                                                        <% } %>
+                                                    </td>
+                                                    <td><%= list.getAction() %></td>
+                                                    <td><%= list.getChangeDate() %></td>
+                                                </tr>
+                                                <%
+                                                        }
+                                                    } else {
+                                                %>
+                                                <tr>
+                                                    <td colspan="8" class="text-center">No Update !!!</td>
+                                                </tr>
+                                                <%
+                                                    }
+                                                %>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                        <hr>
+
+                                        <!-- Pagination -->
+                                        <nav aria-label="Page navigation">
+                                            <ul class="pagination justify-content-center mt-3">
+                                                <li class="page-item">
+                                                    <a class="page-link" href="#" aria-label="Previous" style="color: #C43337">
+                                                        <span aria-hidden="true">&laquo;</span>
+                                                    </a>
+                                                </li>
+                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">1</a></li>
+                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">2</a></li>
+                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">3</a></li>
+                                                <li class="page-item" >
+                                                    <a class="page-link" href="#" aria-label="Next" style="color: #C43337">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                        <!-- End Pagination -->
+                                    </div>
+                                </div>
+
+
+                                <div class="d-sm-flex align-items-center justify-content-between mb-4 " style="margin-top: 20px;">
+                                    <h1 class="h3 mb-0 text-gray-900"><b>History of Promotion</b></h1>
+                                </div>
+                                <div class="card" style="margin-top: 20px;">
+                                    <div class="table-responsive">
+
+                                        <table class="table align-items-center table-flush">
+                                            <thead class="thead-light">
+                                                <tr>
+                                                    <th>PromotionID</th>
+                                                    <th>EmployeeID</th>
+                                                    <th>FieldOld</th>
+                                                    <th>FieldNew</th>
+                                                    <th>Action</th>
+                                                    <th>Change Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tableBody">
+                                                <tr>
+                                                    <%
+                                                        List<ManagePromotionDTO> promotion = (List<ManagePromotionDTO>) session.getAttribute("managePromotion");
+                                                        if (promotion != null && promotion.size() > 0) {
+                                                            for (ManagePromotionDTO list : promotion) {
+                                                                String[] oldFields = list.getLoadOldField().replace("[", "").replace("]", "").split(", ");
+                                                                String[] newFields = list.getLoadNewField().replace("[", "").replace("]", "").split(", ");
+
+                                                                String oldPromotion = "", oldStatus = "", oldDescription = "", oldStartDate = "", oldEndDate = "", oldPer = "", oldImage = "", oldCondition = "";
+                                                                String newPromotion = "", newStatus = "", newDescription = "", newStartDate = "", newEndDate = "", newPer = "", newImage = "", newCondition = "";
+
+                                                                // Determine old fields (promotion, status, description, start date, end date, discount per, image, condition)
+                                                                for (String field : oldFields) {
+                                                                    if (field.matches("Promotion:.*")) {
+                                                                        oldPromotion = field.replace("Promotion:", "").trim();
+                                                                    } else if (field.matches("Status:.*")) {
+                                                                        oldStatus = field.replace("Status:", "").trim();
+                                                                    } else if (field.matches("Description:.*")) {
+                                                                        oldDescription = field.replace("Description:", "").trim();
+                                                                    } else if (field.matches("Start Date:.*")) {
+                                                                        oldStartDate = field.replace("Start Date:", "").trim();
+                                                                    } else if (field.matches("End Date:.*")) {
+                                                                        oldEndDate = field.replace("End Date:", "").trim();
+                                                                    } else if (field.matches("Discount Per:.*")) {
+                                                                        oldPer = field.replace("Discount Per:", "").trim();
+                                                                    } else if (field.matches("Condition:.*")) {
+                                                                        oldCondition = field.replace("Condition:", "").trim();
+                                                                    } else if (field.matches(".*\\.(png|jpg|jpeg|gif)$")) {
+                                                                        oldImage = field.trim();
+                                                                    }
+                                                                }
+
+                                                                // Determine new fields (promotion, status, description, start date, end date, discount per, image, condition)
+                                                                for (String field : newFields) {
+                                                                    if (field.matches("Promotion:.*")) {
+                                                                        newPromotion = field.replace("Promotion:", "").trim();
+                                                                    } else if (field.matches("Status:.*")) {
+                                                                        newStatus = field.replace("Status:", "").trim();
+                                                                    } else if (field.matches("Description:.*")) {
+                                                                        newDescription = field.replace("Description:", "").trim();
+                                                                    } else if (field.matches("Start Date:.*")) {
+                                                                        newStartDate = field.replace("Start Date:", "").trim();
+                                                                    } else if (field.matches("End Date:.*")) {
+                                                                        newEndDate = field.replace("End Date:", "").trim();
+                                                                    } else if (field.matches("Discount Per:.*")) {
+                                                                        newPer = field.replace("Discount Per:", "").trim();
+                                                                    } else if (field.matches("Condition:.*")) {
+                                                                        newCondition = field.replace("Condition:", "").trim();
+                                                                    } else if (field.matches(".*\\.(png|jpg|jpeg|gif)$")) {
+                                                                        newImage = field.trim();
+                                                                    }
+                                                                }
+                                                    %>
+                                                <tr>
+                                                    <td><%= list.getPromotionID() %></td>
+                                                    <td><%= list.getEmpID() %></td>
+                                                    <td>
+                                                        <% if (!oldPromotion.isEmpty()) { %>
+                                                        Promotion: <%= oldPromotion %><br>
+                                                        <% } %>
+                                                        <% if (!oldStatus.isEmpty()) { %>
+                                                        Status: <%= oldStatus %><br>
+                                                        <% } %>
+                                                        <% if (!oldDescription.isEmpty()) { %>
+                                                        Description: <%= oldDescription %><br>
+                                                        <% } %>
+                                                        <% if (!oldStartDate.isEmpty()) { %>
+                                                        Start Date: <%= oldStartDate %><br>
+                                                        <% } %>
+                                                        <% if (!oldEndDate.isEmpty()) { %>
+                                                        End Date: <%= oldEndDate %><br>
+                                                        <% } %>
+                                                        <% if (!oldPer.isEmpty()) { %>
+                                                        Discount Per: <%= oldPer %><br>
+                                                        <% } %>
+                                                        <% if (!oldCondition.isEmpty()) { %>
+                                                        Condition: <%= oldCondition %><br>
+                                                        <% } %>
+                                                        <% if (!oldImage.isEmpty()) { %>
+                                                        <img src="<%= oldImage %>" alt="Old Image" width="100" height="100"><br>
+                                                        <% } %>
+                                                    </td>
+                                                    <td>
+                                                        <% if (!newPromotion.isEmpty()) { %>
+                                                        Promotion: <%= newPromotion %><br>
+                                                        <% } %>
+                                                        <% if (!newStatus.isEmpty()) { %>
+                                                        Status: <%= newStatus %><br>
+                                                        <% } %>
+                                                        <% if (!newDescription.isEmpty()) { %>
+                                                        Description: <%= newDescription %><br>
+                                                        <% } %>
+                                                        <% if (!newStartDate.isEmpty()) { %>
+                                                        Start Date: <%= newStartDate %><br>
+                                                        <% } %>
+                                                        <% if (!newEndDate.isEmpty()) { %>
+                                                        End Date: <%= newEndDate %><br>
+                                                        <% } %>
+                                                        <% if (!newPer.isEmpty()) { %>
+                                                        Discount Per: <%= newPer %><br>
+                                                        <% } %>
+                                                        <% if (!newCondition.isEmpty()) { %>
+                                                        Condition: <%= newCondition %><br>
+                                                        <% } %>
+                                                        <% if (!newImage.isEmpty()) { %>
+                                                        <img src="<%= newImage %>" alt="Old Image" width="100" height="100"><br>
+                                                        <% } %>
+                                                    </td>
+                                                    <td><%= list.getAction() %></td>
+                                                    <td><%= list.getChangeDate() %></td>
+                                                </tr>
+                                                <%
+                                                        }
+                                                    } else {
+                                                %>
+                                                <tr>
+                                                    <td colspan="8" class="text-center">No Update !!!</td>
+                                                </tr>
+                                                <%
+                                                    }
+                                                %>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                        <hr>
+
+                                        <!-- Pagination -->
+                                        <nav aria-label="Page navigation">
+                                            <ul class="pagination justify-content-center mt-3">
+                                                <li class="page-item">
+                                                    <a class="page-link" href="#" aria-label="Previous" style="color: #C43337">
+                                                        <span aria-hidden="true">&laquo;</span>
+                                                    </a>
+                                                </li>
+                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">1</a></li>
+                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">2</a></li>
+                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">3</a></li>
+                                                <li class="page-item" >
+                                                    <a class="page-link" href="#" aria-label="Next" style="color: #C43337">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                        <!-- End Pagination -->
+                                    </div>
+                                </div>
+
+                                <div class="d-sm-flex align-items-center justify-content-between mb-4 " style="margin-top: 20px;">
+                                    <h1 class="h3 mb-0 text-gray-900"><b>History of Category</b></h1>
+                                </div>
+                                <div class="card" style="margin-top: 20px;">
+                                    <div class="table-responsive">
+
+                                        <table class="table align-items-center table-flush">
+                                            <thead class="thead-light">
+                                                <tr>
+                                                    <th>PromotionID</th>
+                                                    <th>EmployeeID</th>
+                                                    <th>FieldOld</th>
+                                                    <th>FieldNew</th>
+                                                    <th>Action</th>
+                                                    <th>Change Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tableBody">
+                                                <tr>
+                                                    <%
+                                                        List<ManageCategoryDTO> category = (List<ManageCategoryDTO>) session.getAttribute("manageCategory");
+                                                        if (category != null && category.size() > 0) {
+                                                            for (ManageCategoryDTO list : category) {
+                                                                String[] oldFields = list.getLoadOldField().replace("[", "").replace("]", "").split(", ");
+                                                                String[] newFields = list.getLoadNewField().replace("[", "").replace("]", "").split(", ");
+
+                                                                String oldName = "", oldStatus = "", oldDescription = "", oldImage = "";
+                                                                String newName = "", newStatus = "", newDescription = "", newImage = "";
+
+                                                                // Determine old fields (name, status, description, image)
+                                                                for (String field : oldFields) {
+                                                                    if (field.matches("Name:.*")) {
+                                                                        oldName = field.replace("Name:", "").trim();
+                                                                    } else if (field.matches("Status:.*")) {
+                                                                        oldStatus = field.replace("Status:", "").trim();
+                                                                    } else if (field.matches("Description:.*")) {
+                                                                        oldDescription = field.replace("Description:", "").trim();
+                                                                    } else if (field.matches(".*\\.(png|jpg|jpeg|gif)$")) {
+                                                                        oldImage = field.trim();
+                                                                    }
+                                                                }
+
+                                                                // Determine new fields (name, status, description, image)
+                                                                for (String field : newFields) {
+                                                                    if (field.matches("Name:.*")) {
+                                                                        newName = field.replace("Name:", "").trim();
+                                                                    } else if (field.matches("Status:.*")) {
+                                                                        newStatus = field.replace("Status:", "").trim();
+                                                                    } else if (field.matches("Description:.*")) {
+                                                                        newDescription = field.replace("Description:", "").trim();
+                                                                    } else if (field.matches(".*\\.(png|jpg|jpeg|gif)$")) {
+                                                                        newImage = field.trim();
+                                                                    }
+                                                                }
+                                                    %>
+                                                <tr>
+                                                    <td><%= list.getCategories() %></td>
+                                                    <td><%= list.getEmpID() %></td>
+                                                    <td>
+                                                        <% if (!oldName.isEmpty()) { %>
+                                                        Name: <%= oldName %><br>
+                                                        <% } %>
+                                                        <% if (!oldStatus.isEmpty()) { %>
+                                                        Status: <%= oldStatus %><br>
+                                                        <% } %>
+                                                        <% if (!oldDescription.isEmpty()) { %>
+                                                        Description: <%= oldDescription %><br>
+                                                        <% } %>
+                                                        <% if (!oldImage.isEmpty()) { %>
+                                                        <img src="<%= oldImage %>" alt="Old Image" width="100" height="100"><br>
+                                                        <% } %>
+                                                    </td>
+                                                    <td>
+                                                        <% if (!newName.isEmpty()) { %>
+                                                        Name: <%= newName %><br>
+                                                        <% } %>
+                                                        <% if (!newStatus.isEmpty()) { %>
+                                                        Status: <%= newStatus %><br>
+                                                        <% } %>
+                                                        <% if (!newDescription.isEmpty()) { %>
+                                                        Description: <%= newDescription %><br>
+                                                        <% } %>
+                                                        <% if (!newImage.isEmpty()) { %>
+                                                        <img src="<%= newImage %>" alt="Old Image" width="100" height="100"><br>
+                                                        <% } %>
+                                                    </td>
+                                                    <td><%= list.getAction() %></td>
+                                                    <td><%= list.getChangeDate() %></td>
+                                                </tr>
+                                                <%
+                                                        }
+                                                    } else {
+                                                %>
+                                                <tr>
+                                                    <td colspan="6" class="text-center">No Update !!!</td>
+                                                </tr>
+                                                <%
+                                                    }
+                                                %>
+                                                </tr>
+
+
+                                            </tbody>
+                                        </table>
+                                        <hr>
+
+                                        <!-- Pagination -->
+                                        <nav aria-label="Page navigation">
+                                            <ul class="pagination justify-content-center mt-3">
+                                                <li class="page-item">
+                                                    <a class="page-link" href="#" aria-label="Previous" style="color: #C43337">
+                                                        <span aria-hidden="true">&laquo;</span>
+                                                    </a>
+                                                </li>
+                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">1</a></li>
+                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">2</a></li>
+                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">3</a></li>
+                                                <li class="page-item" >
+                                                    <a class="page-link" href="#" aria-label="Next" style="color: #C43337">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                        <!-- End Pagination -->
+                                    </div>
+                                </div>
+
+                                <div class="d-sm-flex align-items-center justify-content-between mb-4 " style="margin-top: 20px;">
+                                    <h1 class="h3 mb-0 text-gray-900"><b>History of Product Detail</b></h1>
+                                </div>
+                                <div class="card" style="margin-top: 20px;">
+                                    <div class="table-responsive">
+
+                                        <table class="table align-items-center table-flush">
+                                            <thead class="thead-light">
+                                                <tr>
+                                                    <th>Children Category ID</th>
+                                                    <th>EmployeeID</th>
+                                                    <th>FieldOld</th>
+                                                    <th>FieldNew</th>
+                                                    <th>Action</th>
+                                                    <th>Change Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tableBody">
+                                                <tr>
+                                                    <%
+                                                        List<ManageCategoryDTO> cdCategory = (List<ManageCategoryDTO>) session.getAttribute("manageCDCategory");
+                                                        if (cdCategory != null && cdCategory.size() > 0) {
+                                                            for (ManageCategoryDTO list : cdCategory) {
+                                                                String[] oldFields = list.getLoadOldField().replace("[", "").replace("]", "").split(", ");
+                                                                String[] newFields = list.getLoadNewField().replace("[", "").replace("]", "").split(", ");
+
+                                                                String oldName = "", oldStatus = "";
+                                                                String newName = "", newStatus = "";
+
+                                                                // Determine old fields (status, name)
+                                                                for (String field : oldFields) {
+                                                                    if (field.matches("Status:.*")) {
+                                                                        oldStatus = field.replace("Status:", "").trim();
+                                                                    } else if (field.matches("Name:.*")) {
+                                                                        oldName = field.replace("Name:", "").trim();
+                                                                    }
+                                                                }
+
+                                                                // Determine new fields (status, name)
+                                                                for (String field : newFields) {
+                                                                    if (field.matches("Status:.*")) {
+                                                                        newStatus = field.replace("Status:", "").trim();
+                                                                    } else if (field.matches("Name:.*")) {
+                                                                        newName = field.replace("Name:", "").trim();
+                                                                    }
+                                                                }
+                                                    %>
+                                                <tr>
+                                                    <td><%= list.getCDCategoryID() %></td>
+                                                    <td><%= list.getEmpID() %></td>
+                                                    <td>
+                                                        <% if (!oldName.isEmpty()) { %>
+                                                        Name: <%= oldName %><br>
+                                                        <% } %>
+                                                        <% if (!oldStatus.isEmpty()) { %>
+                                                        Status: <%= oldStatus %><br>
+                                                        <% } %>
+                                                    </td>
+                                                    <td>
+                                                        <% if (!newName.isEmpty()) { %>
+                                                        Name: <%= newName %><br>
+                                                        <% } %>
+                                                        <% if (!newStatus.isEmpty()) { %>
+                                                        Status: <%= newStatus %><br>
+                                                        <% } %>
+                                                    </td>
+                                                    <td><%= list.getAction() %></td>
+                                                    <td><%= list.getChangeDate() %></td>
+                                                </tr>
+                                                <%
+                                                        }
+                                                    } else {
+                                                %>
+                                                <tr>
+                                                    <td colspan="6" class="text-center">No Update !!!</td>
+                                                </tr>
+                                                <%
+                                                    }
+                                                %>
+                                                </tr>
+
+
+                                            </tbody>
+                                        </table>
+                                        <hr>
+
+                                        <!-- Pagination -->
+                                        <nav aria-label="Page navigation">
+                                            <ul class="pagination justify-content-center mt-3">
+                                                <li class="page-item">
+                                                    <a class="page-link" href="#" aria-label="Previous" style="color: #C43337">
+                                                        <span aria-hidden="true">&laquo;</span>
+                                                    </a>
+                                                </li>
+                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">1</a></li>
+                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">2</a></li>
+                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">3</a></li>
+                                                <li class="page-item" >
+                                                    <a class="page-link" href="#" aria-label="Next" style="color: #C43337">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                        <!-- End Pagination -->
+                                    </div>
+                                </div>
+
+                                <div class="d-sm-flex align-items-center justify-content-between mb-4 " style="margin-top: 20px;">
+                                    <h1 class="h3 mb-0 text-gray-900"><b>History of Order</b></h1>
+                                </div>
+                                <div class="card" style="margin-top: 20px;">
+                                    <div class="table-responsive">
+
+                                        <table class="table align-items-center table-flush">
+                                            <thead class="thead-light">
+                                                <tr>
+                                                    <th>OrderID</th>
+                                                    <th>EmployeeID</th>
+                                                    <th>FieldOld</th>
+                                                    <th>FieldNew</th>
+                                                    <th>Action</th>
+                                                    <th>Change Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tableBody">
+                                                <tr>
+                                                    <%
+                                                        List<ManageOrderDTO> order = (List<ManageOrderDTO>) session.getAttribute("manageOrder");
+                                                        if (order != null && order.size() > 0) {
+                                                            for (ManageOrderDTO list : order) {
+                                                                String[] oldFields = list.getLoadOldField().replace("[", "").replace("]", "").split(", ");
+                                                                String[] newFields = list.getLoadNewField().replace("[", "").replace("]", "").split(", ");
+
+                                                                String oldStatus = "";
+                                                                String newStatus = "";
+
+                                                                // Determine old fields (status)
+                                                                for (String field : oldFields) {
+                                                                    if (field.matches("Status:.*")) {
+                                                                        oldStatus = field.replace("Status:", "").trim();
+                                                                    }
+                                                                }
+
+                                                                // Determine new fields (status)
+                                                                for (String field : newFields) {
+                                                                    if (field.matches("Status:.*")) {
+                                                                        newStatus = field.replace("Status:", "").trim();
+                                                                    }
+                                                                }
+                                                    %>
+                                                <tr>
+                                                    <td><%= list.getOrderID() %></td>
+                                                    <td><%= list.getEmpID() %></td>
+                                                    <td>
+                                                        <% if (!oldStatus.isEmpty()) { %>
+                                                        Status: <%= oldStatus %><br>
+                                                        <% } %>
+                                                    </td>
+                                                    <td>
+                                                        <% if (!newStatus.isEmpty()) { %>
+                                                        Status: <%= newStatus %><br>
+                                                        <% } %>
+                                                    </td>
+                                                    <td><%= list.getAction() %></td>
+                                                    <td><%= list.getChangeDate() %></td>
+                                                </tr>
+                                                <%
+                                                        }
+                                                    } else {
+                                                %>
+                                                <tr>
+                                                    <td colspan="6" class="text-center">No Update !!!</td>
+                                                </tr>
+                                                <%
+                                                    }
+                                                %>
+                                                </tr>
+
+
+
+                                            </tbody>
+                                        </table>
+                                        <hr>
+
+                                        <!-- Pagination -->
+                                        <nav aria-label="Page navigation">
+                                            <ul class="pagination justify-content-center mt-3">
+                                                <li class="page-item">
+                                                    <a class="page-link" href="#" aria-label="Previous" style="color: #C43337">
+                                                        <span aria-hidden="true">&laquo;</span>
+                                                    </a>
+                                                </li>
+                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">1</a></li>
+                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">2</a></li>
+                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">3</a></li>
+                                                <li class="page-item" >
+                                                    <a class="page-link" href="#" aria-label="Next" style="color: #C43337">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                        <!-- End Pagination -->
+                                    </div>
+                                </div>
+
+
+
+
                                 <!---Container Fluid-->
                             </div>
                             <!-- Footer -->
@@ -416,7 +1264,7 @@
                         <i class="fas fa-angle-up"></i>
                     </a>
 
-                    
+
                     <script src="vendor/jquery/jquery.min.js"></script>
                     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
                     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>

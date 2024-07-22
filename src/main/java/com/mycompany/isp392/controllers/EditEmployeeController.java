@@ -63,13 +63,13 @@ public class EditEmployeeController extends HttpServlet {
                 List<String> newList = new ArrayList<>();
 
                 if (roleID != oldRoleID) {
-                    oldList.add(String.valueOf(oldRoleID));
-                    newList.add(String.valueOf(roleID));
+                    oldList.add("RoleID: " + String.valueOf(oldRoleID));
+                    newList.add("RoleID: " + String.valueOf(roleID));
                 }
 
                 if (oldStatus != status) {
-                    oldList.add(String.valueOf(oldStatus));
-                    newList.add(String.valueOf(status));
+                    oldList.add("Status: " + String.valueOf(oldStatus));
+                    newList.add("Status: " + String.valueOf(status));
                 }
 
                 if (!oldList.isEmpty() && !newList.isEmpty()) {

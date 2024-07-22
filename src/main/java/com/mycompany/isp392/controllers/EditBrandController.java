@@ -88,13 +88,13 @@ public class EditBrandController extends HttpServlet {
                     List<String> newList = new ArrayList<>();
 
                     if (!oldBrandName.equals(newBrandName)) {
-                        oldList.add(oldBrandName);
-                        newList.add(newBrandName);
+                        oldList.add("Name: " + oldBrandName);
+                        newList.add("Name: " + newBrandName);
                     }
 
                     if (oldStatus != newStatus) {
-                        oldList.add(String.valueOf(oldStatus));
-                        newList.add(String.valueOf(newStatus));
+                        oldList.add("Status: " + String.valueOf(oldStatus));
+                        newList.add("Status: " + String.valueOf(newStatus));
                     }
 
                     if (!oldImagePath.equals(imagePath)) {

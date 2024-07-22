@@ -112,16 +112,15 @@ public class AddProductDetailsController extends HttpServlet {
                     }
                     UserDTO user = (UserDTO) request.getSession().getAttribute("LOGIN_USER");
                     List<String> newField = new ArrayList<>();
-                    newField.add(color);
-                    newField.add(size);
-                    newField.add(String.valueOf(stockQuantity));
-                    newField.add(String.valueOf(price));
-                    newField.add(importDate.toString());
+                    newField.add("Color: " + color);
+                    newField.add("Size: " + size);
+                    newField.add("Stock Quantity:" + String.valueOf(stockQuantity));
+                    newField.add("Price: " + String.valueOf(price));
+                    newField.add("Import Date: " + importDate.toString());
                     newField.add(imagePaths);
-                    newField.add(String.valueOf(1));
+                    newField.add("Status: " + String.valueOf(1));
                     boolean pdetail = true;
                     int productDetailID = productDAO.getProductDetailsIDByProductIDColorSize(productID, color, size);
-//                    ManageProductDTO manageProduct = new ManageProductDTO(productDetailID, user.getUserID(), new ArrayList<>(), newField, "Add");
                     ManageProductDTO manageProduct = new ManageProductDTO(productDetailID,  user.getUserID(), new ArrayList<>(), newField, "Add", pdetail);
                     DbUtils.addCheckLogToDB("OverseeProductDetail", "ProductDetailsID", manageProduct);
                 }

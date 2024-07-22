@@ -4,7 +4,7 @@
  */
 package com.mycompany.isp392.order;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -58,7 +58,18 @@ public class ManageOrderDTO {
         this.newField = newField;
         this.action = action;
     }
+
+    public ManageOrderDTO(int orderID, int empID, String loadOldField, String loadNewField, String action, Timestamp changeDate) {
+        this.orderID = orderID;
+        this.empID = empID;
+        this.loadOldField = loadOldField;
+        this.loadNewField = loadNewField;
+        this.action = action;
+        this.changeDate = changeDate;
+    }
     
+    
+
     public int getEmpID() {
         return empID;
     }
@@ -66,6 +77,8 @@ public class ManageOrderDTO {
     public void setEmpID(int empID) {
         this.empID = empID;
     }
+    
+
   
 
     public int getOrderID() {

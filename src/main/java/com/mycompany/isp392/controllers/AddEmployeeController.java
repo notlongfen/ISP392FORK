@@ -63,11 +63,11 @@ public class AddEmployeeController extends HttpServlet {
                     EmployeeDTO empl = dao.getLastEmployeeByID();
                     UserDTO user = (UserDTO) request.getSession().getAttribute("LOGIN_USER");
                     int empID = user.getUserID();
-                    newField.add(userName);
-                    newField.add(email);
-                    newField.add(password);
-                    newField.add(String.valueOf(phone));
-                    newField.add(String.valueOf(roleID));
+                    newField.add("Name: " + userName);
+                    newField.add("Email: " + email);
+                    newField.add("Password: " + password);
+                    newField.add("Phone: " + String.valueOf(phone));
+                    newField.add("RoleID: " + String.valueOf(roleID));
 
 
                     ManageUserDTO manage = new ManageUserDTO(empl.getEmpID(), empID, new ArrayList<>(), newField, "Add");

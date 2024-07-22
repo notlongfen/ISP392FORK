@@ -13,6 +13,7 @@ public class ManageCategoryDTO {
     public String loadOldField; 
     public String action;
     public Timestamp changeDate;
+    private boolean check;
     
     public ManageCategoryDTO() {
     }
@@ -61,6 +62,18 @@ public class ManageCategoryDTO {
         this.action = action;
         this.changeDate = changeDate;
     }
+
+    public ManageCategoryDTO(int CDCategoryID, int empID,  String loadOldField, String loadNewField, String action, Timestamp changeDate, boolean check) {
+        this.CDCategoryID = CDCategoryID;
+        this.empID = empID;
+        this.loadNewField = loadNewField;
+        this.loadOldField = loadOldField;
+        this.action = action;
+        this.changeDate = changeDate;
+        this.check = check;
+    }
+    
+    
     
     
     

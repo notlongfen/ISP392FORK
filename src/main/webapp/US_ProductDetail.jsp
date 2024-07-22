@@ -65,7 +65,9 @@
             }
 
             .carousel-item img {
-                max-height: 500px;
+                width: 600px;
+                height: 450px;
+                object-fit: cover;
             }
 
             .carousel-control-prev-icon, .carousel-control-next-icon {
@@ -74,6 +76,18 @@
 
             .selected {
                 border: 2px solid #c53337;
+            }
+
+            .product_image1 {
+                width: 220px;
+                height: 200px;
+                overflow: hidden;
+            }
+
+            .product_image1 img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
             }
         </style>
     </head>
@@ -158,6 +172,8 @@
                                 <p><%= product.getDescription()%></p>
                             </div>
                             <form action="MainController" method="POST">
+                                <input type="hidden" name="page" value="detail">
+
                                 <div class="free_delivery d-flex flex-row align-items-center justify-content-center">
                                     <span class="ti-truck"></span><span>free delivery</span>
                                 </div>
@@ -168,9 +184,9 @@
 
                                 <!--  productDetailID -->
                                 <input type="hidden" name="productDetailID" value="<%= colorSizeMap.get(selectedColor).get(selectedSize).get("ProductDetailsID") %>" >
-                                         
-                                    
-                                
+
+
+
 
                                 <div style="margin-top: 30px;">
                                     <label style="font-size: 20px;">Select size:</label>
@@ -263,6 +279,27 @@
             </div>
             <% } %>
             <!-- Error Modal -->
+            <% if (request.getAttribute("ERROR_MESSAGE") != null) { %>
+            <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger text-white">
+                            <h5 class="modal-title" id="errorModalLabel">Error</h5>
+                            <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <span id="errorMessage"><%= request.getAttribute("ERROR_MESSAGE") %></span>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+
             <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
@@ -434,6 +471,11 @@
                 <% }%>
 
                 });
+
+                <% if (request.getAttribute("ERROR_MESSAGE") != null) { %>
+                var errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+                errorModal.show();
+                <% } %>
             </script>.
         </div>
     </body>

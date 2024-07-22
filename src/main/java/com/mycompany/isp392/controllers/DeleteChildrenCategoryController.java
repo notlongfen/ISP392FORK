@@ -49,8 +49,8 @@ public class DeleteChildrenCategoryController extends HttpServlet {
                 List<String> newList = new ArrayList<>();
                 UserDTO user = (UserDTO) request.getSession().getAttribute("LOGIN_USER");
 
-                oldList.add(String.valueOf(1));
-                newList.add(String.valueOf(0));
+                oldList.add("Status: " + String.valueOf(1));
+                newList.add("Status: " + String.valueOf(0));
 
                 boolean isCD = true;
                 ManageCategoryDTO manageCategory = new ManageCategoryDTO(cdCategoryID, user.getUserID(), oldList, newList, "Delete", isCD);

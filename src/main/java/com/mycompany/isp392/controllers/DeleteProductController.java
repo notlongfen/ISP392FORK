@@ -32,10 +32,12 @@ public class DeleteProductController extends HttpServlet {
             boolean check = productDAO.deleteProduct(productID) && productDAO.deleteProductDetails(productID);
             if (check) {
                 List<String>oldField = new ArrayList<>();
+                List<String>newField = new ArrayList<>();
                 UserDTO user = (UserDTO) request.getSession().getAttribute("LOGIN_USER");
-                oldField.add(String.valueOf(productID));
-                ManageProductDTO manageProductDTO = new ManageProductDTO(productID,user.getUserID(), oldField, new ArrayList<>(), "Delete"); 
-                DbUtils.addCheckLogToDB("ManageProducts", "ProductID", manageProductDTO);
+                oldField.add("Status: " + String.valueOf(1));
+                newField.add("Status: " + String.valueOf(0));
+                ManageProductDTO manageProductDTO = new ManageProductDTO(productID,user.getUserID(), oldField, newField, "Delete"); 
+                DbUtils.addCheckLogToDB("OverseeProducts", "ProductID", manageProductDTO);
                 request.setAttribute("SUCCESS_MESSAGE", "Product deleted successfully!");
                 url = SUCCESS;
             }

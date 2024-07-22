@@ -42,8 +42,8 @@ public class DeleteCategoryController extends HttpServlet {
             if(checkDelete){
                 List<String> oldList = new ArrayList<>();
                 List<String> newList = new ArrayList<>();
-                oldList.add(String.valueOf(1));
-                newList.add(String.valueOf(0));
+                oldList.add("Status: " + String.valueOf(1));
+                newList.add("Status: " + String.valueOf(0));
 
                 UserDTO user = (UserDTO) request.getSession().getAttribute("LOGIN_USER");
                 ManageCategoryDTO manageCategory = new ManageCategoryDTO(categoryID, user.getUserID(), oldList, newList, "Delete");

@@ -55,30 +55,30 @@ public class EditProductController extends HttpServlet {
                     List<String> oldList = new ArrayList<>();
                     List<String> newList = new ArrayList<>();
                     if (!oldProductName.equals(productName) && !oldDescription.equals(description) && oldNumberOfPurchasing != numberOfPurchasing && oldBrandID != brandID) {
-                        oldList.add(oldProductName);
-                        oldList.add(oldDescription);
-                        oldList.add(String.valueOf(oldNumberOfPurchasing));
-                        oldList.add(String.valueOf(oldBrandID));
-                        newList.add(productName);
-                        newList.add(description);
-                        newList.add(String.valueOf(numberOfPurchasing));
-                        newList.add(String.valueOf(brandID));
+                        oldList.add("Name: " + oldProductName);
+                        oldList.add("Description: " + oldDescription);
+                        oldList.add("Number of purchasing: " + String.valueOf(oldNumberOfPurchasing));
+                        oldList.add("BrandID: " + String.valueOf(oldBrandID));
+                        newList.add("Name: " +productName);
+                        newList.add("Description: " + description);
+                        newList.add("Number of purchasing: " + String.valueOf(numberOfPurchasing));
+                        newList.add("BrandID: " + String.valueOf(brandID));
                     } else {
                         if (!oldProductName.equals(productName)) {
-                            oldList.add(oldProductName);
-                            newList.add(productName);
+                            oldList.add("Name: " + oldProductName);
+                            newList.add("Name: " +productName);
                         }
                         if (!oldDescription.equals(description)) {
-                            oldList.add(oldDescription);
-                            newList.add(description);
+                            oldList.add("Description: " + oldDescription);
+                            newList.add("Description: " + description);
                         }
                         if (oldNumberOfPurchasing != numberOfPurchasing) {
-                            oldList.add(String.valueOf(oldNumberOfPurchasing));
-                            newList.add(String.valueOf(numberOfPurchasing));
+                            oldList.add("Number of purchasing: " + String.valueOf(oldNumberOfPurchasing));
+                            newList.add("Number of purchasing: " + String.valueOf(numberOfPurchasing));
                         }
                         if (oldBrandID != brandID) {
-                            oldList.add(String.valueOf(oldBrandID));
-                            newList.add(String.valueOf(brandID));
+                            oldList.add("BrandID: " + String.valueOf(oldBrandID));
+                            newList.add("BrandID: " + String.valueOf(brandID));
                         }
                     }
                     if (oldList.size() > 0 && newList.size() > 0) {

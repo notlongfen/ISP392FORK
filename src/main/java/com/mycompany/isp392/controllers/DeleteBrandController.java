@@ -32,16 +32,15 @@ public class DeleteBrandController extends HttpServlet {
             int empID = user.getUserID();
             int brandID = Integer.parseInt(request.getParameter("id"));
             int oldStatus = Integer.parseInt(request.getParameter("status"));
-            String action = request.getParameter("delete");
             BrandDAO brandDAO = new BrandDAO();
             int newStatus = brandDAO.deleteBrand1(brandID);
 
             if (newStatus != -1) {
                 List<String> oldList = new ArrayList<>();
                 List<String> newList = new ArrayList<>();
-                oldList.add(String.valueOf(oldStatus));
-                newList.add(String.valueOf(newStatus));
-                ManageBrandDTO manage = new ManageBrandDTO(brandID, empID, oldList, newList, action);
+                oldList.add("Status: " + String.valueOf(oldStatus));
+                newList.add("Status: " + String.valueOf(newStatus));
+                ManageBrandDTO manage = new ManageBrandDTO(brandID, empID, oldList, newList, "Delete");
                 boolean checkAdd = DbUtils.addCheckLogToDB("ManageBrands", "BrandID", manage);
                 request.setAttribute("SUCCESS_MESSAGE", "BRAND DELETED SUCCESSFULLY !");
                 url = SUCCESS;

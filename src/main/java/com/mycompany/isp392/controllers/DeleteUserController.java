@@ -59,8 +59,8 @@ public class DeleteUserController extends HttpServlet {
                 if (newStatus != -1) {
                     List<String> oldList = new ArrayList<>();
                     List<String> newList = new ArrayList<>();
-                    oldList.add(String.valueOf(oldStatus));
-                    newList.add(String.valueOf(newStatus));
+                    oldList.add(String.valueOf("Status: " + oldStatus));
+                    newList.add(String.valueOf("Status: " + newStatus));
                     manage = new ManageUserDTO(UserID, empID, oldList, newList, action);
                     if(roleID != 4) {
                     boolean checkAdd = DbUtils.addCheckLogToDB("SuperviseEmployees", "UserID", manage);

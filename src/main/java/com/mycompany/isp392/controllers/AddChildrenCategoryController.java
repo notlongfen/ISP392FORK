@@ -43,8 +43,8 @@ public class AddChildrenCategoryController extends HttpServlet {
                 if (checkChildCategory) {
                     List<String> newList = new ArrayList<>();
                     UserDTO user = (UserDTO) request.getSession().getAttribute("LOGIN_USER");
-                    newList.add(cdCategoryName);
-                    newList.add(String.valueOf(parentID));
+                    newList.add("Name: " + cdCategoryName);
+                    newList.add("ParentID: " + String.valueOf(parentID));
                     boolean isCD = true;
                     ManageCategoryDTO manageCategoryDTO = new ManageCategoryDTO(categoryID, user.getUserID(), new ArrayList<>(), newList, "Add", isCD);
                     DbUtils.addCheckLogToDB("ManageCDCategories", "CDCategoryID", manageCategoryDTO);

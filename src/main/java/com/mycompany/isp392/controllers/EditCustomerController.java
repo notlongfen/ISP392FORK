@@ -54,8 +54,8 @@ public class EditCustomerController extends HttpServlet {
                 List<String> newList = new ArrayList<>();
 
                 if (oldStatus != status) {
-                    oldList.add(String.valueOf(oldStatus));
-                    newList.add(String.valueOf(status));
+                    oldList.add("Status: " + String.valueOf(oldStatus));
+                    newList.add("Status: " + String.valueOf(status));
                 }
 
                 if (!oldList.isEmpty() && !newList.isEmpty()) {

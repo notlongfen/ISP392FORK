@@ -36,8 +36,8 @@ public class DeletePromotionController extends HttpServlet {
             if (check) {
                 List<String> oldList = new ArrayList<>();
                 List<String> newList = new ArrayList<>();
-                oldList.add(String.valueOf(1));
-                newList.add(String.valueOf(0));
+                oldList.add("Status: " + String.valueOf(1));
+                newList.add("Status: " + String.valueOf(0));
                 ManagePromotionDTO manage = new ManagePromotionDTO(promotionID, empID, oldList, newList, "Delete");
                 DbUtils.addCheckLogToDB("ManagePromotions", "PromotionID", manage);
                 request.setAttribute("SUCCESS_MESSAGE", "PROMOTION DELETED SUCCESSFULLY !");

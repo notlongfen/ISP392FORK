@@ -4,7 +4,7 @@
  */
 package com.mycompany.isp392.product;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -21,6 +21,7 @@ public class ManageProductDTO {
     private String loadOldField;
     private String action;
     private Timestamp changeDate;
+    private boolean check;
 
     public ManageProductDTO() {
     }
@@ -68,6 +69,16 @@ public class ManageProductDTO {
         this.loadOldField = loadOldField;
         this.action = action;
         this.changeDate = changeDate;
+    }
+
+    public ManageProductDTO(int productDetailsID, int empID, String loadOldField, String loadNewField, String action, Timestamp changeDate, boolean check) {
+        this.productDetailsID = productDetailsID;
+        this.empID = empID;
+        this.loadNewField = loadNewField;
+        this.loadOldField = loadOldField;
+        this.action = action;
+        this.changeDate = changeDate;
+        this.check = check;
     }
 
     

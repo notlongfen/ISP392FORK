@@ -115,6 +115,13 @@
             .product-grid .product-links li button:hover {
                 color: #c53337;
             }
+
+             .product-links li button:focus,
+             .product-links li button:active {
+                color: #c53337;
+            }
+
+
             .product-grid .add-to-cart {
                 background: black;
                 color: #fff;
@@ -285,6 +292,7 @@
                         <div class="col-md-4 mb-4">
                             <div class="product-grid">
                                 <form action="MainController">
+                                    <input type="hidden" name="page" value="allProduct">
                                     <div class="product-image">
                                         <a href="MainController?action=Get_product_detail&productID=<%= product.getProductID() %>&color=<%= detail.getColor() %>" >
                                             <div class="product_image1">
@@ -345,6 +353,26 @@
                         </nav>
                     </div>
                 </div>
+                <% if (request.getAttribute("SUCCESS_MESSAGE") != null) { %>
+                <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header bg-success text-white">
+                                <h5 class="modal-title" id="successModalLabel">Success</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <span id="successMessage"></span>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <% } %>
             </div>
         </div>
         <jsp:include page="US_footer.jsp" />
@@ -352,37 +380,37 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script>
 
-            $(document).ready(function () {                
-                function getSelectedValues(selector) {
-                    return $(selector + ':checked').map(function () {
-                        return this.value;
-                    }).get();
-                }
-               
-                function loadFilteredProducts(page = 1) {
-                    var selectedBrands = getSelectedValues('.brand-filter');
-                    var selectedPrices = getSelectedValues('.price-filter');
-                    var selectedCategories = getSelectedValues('.category-filter');
+                                        $(document).ready(function () {
+                                            function getSelectedValues(selector) {
+                                                return $(selector + ':checked').map(function () {
+                                                    return this.value;
+                                                }).get();
+                                            }
 
-                    $.ajax({
-                        url: 'SearchProductForHeaderController',
-                        type: 'GET',
-                        data: {
-                            brands: selectedBrands,
-                            prices: selectedPrices,
-                            categories: selectedCategories,
-                            page: page,
-                            search: $('#search-form input[name="search"]').val() // Get search term from input field
-                        },
-                        success: function (data) {
-                            $('#products-container').html($(data).find('#products-container').html());
-                            $('#pagination-container').html($(data).find('#pagination-container').html());
-                        },
-                        error: function () {
-                            alert('Error loading products. Please try again.');
-                        }
-                    });
-                }
+                                            function loadFilteredProducts(page = 1) {
+                                                var selectedBrands = getSelectedValues('.brand-filter');
+                                                var selectedPrices = getSelectedValues('.price-filter');
+                                                var selectedCategories = getSelectedValues('.category-filter');
+
+                                                $.ajax({
+                                                    url: 'SearchProductForHeaderController',
+                                                    type: 'GET',
+                                                    data: {
+                                                        brands: selectedBrands,
+                                                        prices: selectedPrices,
+                                                        categories: selectedCategories,
+                                                        page: page,
+                                                        search: $('#search-form input[name="search"]').val() // Get search term from input field
+                                                    },
+                                                    success: function (data) {
+                                                        $('#products-container').html($(data).find('#products-container').html());
+                                                        $('#pagination-container').html($(data).find('#pagination-container').html());
+                                                    },
+                                                    error: function () {
+                                                        alert('Error loading products. Please try again.');
+                                                    }
+                                                });
+                                            }
 
                                             // Check the brand filter if brandID is present in the URL
                                             var brandID = new URLSearchParams(window.location.search).get('brandID');

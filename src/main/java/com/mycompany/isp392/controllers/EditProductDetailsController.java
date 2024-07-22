@@ -113,20 +113,20 @@ public class EditProductDetailsController extends HttpServlet {
                 List<String> FieldNew = new ArrayList<>();
 
                 if (oldStockQuantity != stockQuantity) {
-                    FieldOld.add(String.valueOf(oldStockQuantity));
-                    FieldNew.add(String.valueOf(stockQuantity));
+                    FieldOld.add(String.valueOf("Stock Quantity: " + oldStockQuantity));
+                    FieldNew.add(String.valueOf("Stock Quantity: " + stockQuantity));
                 }
                 if (oldPrice != price) {
-                    FieldOld.add(String.valueOf(oldPrice));
-                    FieldNew.add(String.valueOf(price));
+                    FieldOld.add(String.valueOf("Price: " + oldPrice));
+                    FieldNew.add(String.valueOf("Price: " + price));
                 }
                 if (!oldImportDate.equals(importDate)) {
-                    FieldOld.add(String.valueOf(oldImportDate));
-                    FieldNew.add(String.valueOf(importDate));
+                    FieldOld.add("Import Date: " + String.valueOf(oldImportDate));
+                    FieldNew.add("Import Date: " + String.valueOf(importDate));
                 }
                 if (oldDetailStatus != detailStatus) {
-                    FieldOld.add(String.valueOf(oldDetailStatus));
-                    FieldNew.add(String.valueOf(detailStatus));
+                    FieldOld.add("Status: " + String.valueOf(oldDetailStatus));
+                    FieldNew.add("Status: " + String.valueOf(detailStatus));
                 }
                 
                 if (oldImage != imagePaths) {

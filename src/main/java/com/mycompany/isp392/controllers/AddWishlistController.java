@@ -26,8 +26,9 @@ import java.util.List;
 @WebServlet(name = "AddWishlistController", urlPatterns = {"/AddWishlistController"})
 public class AddWishlistController extends HttpServlet {
 
-    private static final String ERROR = "US_index.jsp";
-    private static final String SUCCESS = "WishlistController";
+    private static final String ERROR = "GetProductDetails";
+    private static final String SUCCESS1 = "GetProductDetails";
+    private static final String SUCCESS2 = "WishlistController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -40,7 +41,7 @@ public class AddWishlistController extends HttpServlet {
             int cusID = user.getUserID();
             int productID = Integer.parseInt(request.getParameter("productID"));
             int productDetailID = Integer.parseInt(request.getParameter("productDetailID"));
-
+            String page = request.getParameter("page");
 
             boolean customerExists = dao.checkCustomerExists(cusID);
             boolean addWishlist = false;
@@ -55,17 +56,25 @@ public class AddWishlistController extends HttpServlet {
                 WishlistDTO wishlist = dao.SelectWishlist(cusID);
                 int wishlistID = wishlist.getWishlistID();
 
-                boolean wishlistDetailExists = dao.checkWishlistDetailExists(wishlistID, productID);
+                boolean wishlistDetailExists = dao.checkWishlistDetailExists(wishlistID, productDetailID);
                 boolean addWishlistDetail = false;
 
                 if (wishlistDetailExists) {
-                    addWishlistDetail = dao.updateWishlistDetailStatus(wishlistID, productID, productDetailID ,1);
+                    addWishlistDetail = dao.updateWishlistDetailStatus(wishlistID, productID, productDetailID, 1);
                 } else {
                     addWishlistDetail = dao.addToWishlistDetail(wishlistID, productID, productDetailID);
                 }
 
                 if (addWishlistDetail) {
-                    url = SUCCESS;
+                    if (page.equals("detail")) {
+                        request.setAttribute("SUCCESS_MESSAGE", "ADD TO WISHLIST SUCCESSFULLY!!!");
+                        url = SUCCESS1;
+                    } else {
+                        request.setAttribute("SUCCESS_MESSAGE", "ADD TO WISHLIST SUCCESSFULLY!!!");
+                        url = SUCCESS2;
+                    }
+                } else {
+                    request.setAttribute("ERROR_MESSAGE", "THIS PRODUCT ALREADY HAD IN WISHLIST!!!");
                 }
             }
 

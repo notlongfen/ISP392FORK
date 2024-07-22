@@ -51,10 +51,10 @@ public class AddProductController extends HttpServlet {
                     }
                     List<String> newField = new ArrayList<>();
                     UserDTO user = (UserDTO) request.getSession().getAttribute("LOGIN_USER");
-                    newField.add(productName);
-                    newField.add(description);
-                    newField.add(String.valueOf(brandID));
-                    newField.add(String.valueOf(categoryArray));
+                    newField.add("Name: " + productName);
+                    newField.add("Discription: " + description);
+                    newField.add("BrandID: " + String.valueOf(brandID));
+                    newField.add("Categories: " + String.join("/ ", categoryArray));
                     ManageProductDTO manageProductDTO = new ManageProductDTO(productID, user.getUserID(), new ArrayList<>(),newField, "Add");
                     DbUtils.addCheckLogToDB("OverseeProducts", "ProductID", manageProductDTO);
 

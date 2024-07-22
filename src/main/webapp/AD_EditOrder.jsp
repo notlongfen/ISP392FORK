@@ -149,7 +149,9 @@
                                                     }
                                                 %>
                                             </tbody>
-                                            <input type="submit" name="action" value="Update_Order_Status">
+                                            <div class="d-flex justify-content-end mb-4 mr-3">
+                                                <input type="submit" name="action" value="Update Order Status" style="background-color: #C53337; border: none; color: white;">
+                                            </div>                            
                                         </table>
                                     </form>
 

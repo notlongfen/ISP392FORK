@@ -107,15 +107,15 @@ public class AddPromotionController extends HttpServlet {
                 List<String> newField = new ArrayList<>();
                     UserDTO user = (UserDTO) request.getSession().getAttribute("LOGIN_USER");
                     int empID = user.getUserID();
-                    newField.add(promotionName);
-                    newField.add(description);
-                    newField.add(String.valueOf(startDate));
-                    newField.add(String.valueOf(endDate));
-                    newField.add(String.valueOf(discountPer));
+                    newField.add("Promotion: " + promotionName);
+                    newField.add("Description: " + description);
+                    newField.add("Start Date: " + String.valueOf(startDate));
+                    newField.add("End Date: " + String.valueOf(endDate));
+                    newField.add("Discount Per: " + String.valueOf(discountPer));
                     newField.add(String.valueOf(imagePaths));
-                    newField.add(String.valueOf(condition));
+                    newField.add("Condition: "+ String.valueOf(condition));
                     
-                    ManagePromotionDTO manage = new ManagePromotionDTO(promotionID, empID, new ArrayList<>(), newField, "Edit");
+                    ManagePromotionDTO manage = new ManagePromotionDTO(promotionID, empID, new ArrayList<>(), newField, "Add");
                     DbUtils.addCheckLogToDB("ManagePromotions", "PromotionID", manage);
                     
                 if (checkPromotion) {

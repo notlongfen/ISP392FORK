@@ -80,13 +80,13 @@ public class AddBrandController extends HttpServlet {
                 if (check) {
                     List<String> newList = new ArrayList<>();
                     BrandDTO brand = brandDAO.getBrandByName(brandName);
-                    String action = request.getParameter("action");
+                    
                     UserDTO user = (UserDTO) request.getSession().getAttribute("LOGIN_USER");
-                    newList.add(brandName);
+                    newList.add("Name: " + brandName);
                     newList.add(imagePath);
-                    newList.add(String.valueOf(brand.getBrandID()));
-                    newList.add(String.valueOf(brand.getStatus()));
-                    ManageBrandDTO manage = new ManageBrandDTO(brand.getBrandID(), user.getUserID(), new ArrayList<>(), newList, action);
+                    newList.add("BrandID: " + String.valueOf(brand.getBrandID()));
+                    newList.add("Status: " + String.valueOf(brand.getStatus()));
+                    ManageBrandDTO manage = new ManageBrandDTO(brand.getBrandID(), user.getUserID(), new ArrayList<>(), newList, "Add");
                     DbUtils.addCheckLogToDB("ManageBrands", "BrandID", manage);
                     request.setAttribute("SUCCESS_MESSAGE", "BRAND ADDED SUCCESSFULLY !");
                     url = SUCCESS;

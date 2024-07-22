@@ -135,7 +135,7 @@
                     %>
                     <div class="wishlist-item row mb-4 d-flex">
                         <div class="col-md-2 text-center">
-                            <img src="<%= list.getImage() %>" alt="Image" class="img-fluid resized-image">
+                            <img src="<%= list.getImage().split(";")[0] %>" alt="Image" class="img-fluid resized-image">
                         </div>
                         <div class="col-md-7">
                             <h5><%= list.getProductName() %></h5>

@@ -8,7 +8,10 @@ package com.mycompany.isp392.controllers;
 import com.mycompany.isp392.brand.BrandDAO;
 import com.mycompany.isp392.brand.BrandDTO;
 import com.mycompany.isp392.brand.ManageBrandDTO;
+import com.mycompany.isp392.category.ManageCategoryDTO;
+import com.mycompany.isp392.order.ManageOrderDTO;
 import com.mycompany.isp392.product.ManageProductDTO;
+import com.mycompany.isp392.promotion.ManagePromotionDTO;
 import com.mycompany.isp392.user.ManageUserDTO;
 import com.mycompany.isp392.user.UserDTO;
 import java.io.IOException;
@@ -40,16 +43,7 @@ public class ShowHistoryController extends HttpServlet {
             HttpSession session = request.getSession();
 
 //            List<ManageBrandDTO> manage = dao.getManageBrand();
-
-            List<ManageBrandDTO> manage = (List<ManageBrandDTO>) DbUtils.getCheckLogFromDB("ManageBrands", "BrandID", ManageBrandDTO.class);
-            List<ManageProductDTO> manageProduct = (List<ManageProductDTO>) DbUtils.getCheckLogFromDB("ManageProducts", "ProductID", ManageProductDTO.class);
-            List<ManageProductDTO> manageProductDetails = (List<ManageProductDTO>) DbUtils.getCheckLogFromDB("ManageProductDetails", "ProductDetailsID", ManageProductDTO.class);
-            // List<UserDTO> manageUser = (List<UserDTO>) DbUtils.getCheckLogFromDB("ManageUsers", "UserID", UserDTO.class);
-
-            session.setAttribute("manageProduct", manageProduct);
-            session.setAttribute("manageBrand", manage);
-            session.setAttribute("manageProductDetails", manageProductDetails);
-
+            
             List<ManageBrandDTO> brand = (List<ManageBrandDTO>) DbUtils.getCheckLogFromDB("ManageBrands", "BrandID", ManageBrandDTO.class);
             session.setAttribute("manageBrand", brand);
             
@@ -58,6 +52,24 @@ public class ShowHistoryController extends HttpServlet {
             
             List<ManageUserDTO> customer = (List<ManageUserDTO>) DbUtils.getCheckLogFromDB("SuperviseCustomers", "UserID", ManageUserDTO.class);
             session.setAttribute("manageCustomer", customer);
+            
+            List<ManageProductDTO> manageProduct = (List<ManageProductDTO>) DbUtils.getCheckLogFromDB("OverseeProducts", "ProductID", ManageProductDTO.class);
+            session.setAttribute("manageProduct", manageProduct);
+            
+            List<ManageProductDTO> manageProductDetails = (List<ManageProductDTO>) DbUtils.getCheckLogFromDB2("OverseeProductDetail", "ProductDetailsID", ManageProductDTO.class);
+            session.setAttribute("manageProductDetails", manageProductDetails);
+            
+            List<ManagePromotionDTO> managePromotion = (List<ManagePromotionDTO>) DbUtils.getCheckLogFromDB("ManagePromotions", "PromotionID", ManagePromotionDTO.class);
+            session.setAttribute("managePromotion", managePromotion);
+
+            List<ManageCategoryDTO> manageCategory = (List<ManageCategoryDTO>) DbUtils.getCheckLogFromDB("ManageCategories", "Categories", ManageCategoryDTO.class);
+            session.setAttribute("manageCategory", manageCategory);
+            
+            List<ManageCategoryDTO> manageCDCategory = (List<ManageCategoryDTO>) DbUtils.getCheckLogFromDB2("ManageCDCategories", "CDCategoryID", ManageCategoryDTO.class);
+            session.setAttribute("manageCDCategory", manageCDCategory);
+            
+            List<ManageOrderDTO> manageOrder = (List<ManageOrderDTO>) DbUtils.getCheckLogFromDB("ManageOrders", "OrderID", ManageOrderDTO.class);
+            session.setAttribute("manageOrder", manageOrder);
             
 
         } catch (Exception e) {

@@ -98,38 +98,38 @@ public class EditPromotionController extends HttpServlet {
                 List<String> oldList = new ArrayList<>();
                 List<String> newList = new ArrayList<>();
                 if (!promotionName.equals(oldPromotionName)) {
-                    oldList.add(oldPromotionName);
-                    newList.add(promotionName);
+                    oldList.add("Name: " + oldPromotionName);
+                    newList.add("Name: " + promotionName);
                 }
 
                 if (!startDate.equals(oldStartDate)) {
-                    oldList.add(oldStartDate.toString());
-                    newList.add(startDate.toString());
+                    oldList.add("Start Date: " + oldStartDate.toString());
+                    newList.add("Start Date: " + startDate.toString());
                 }
 
                 if (!endDate.equals(oldEndDate)) {
-                    oldList.add(oldEndDate.toString());
-                    newList.add(endDate.toString());
+                    oldList.add("End Date: " + oldEndDate.toString());
+                    newList.add("End Date: " + endDate.toString());
                 }
 
                 if (discountPer != oldDiscountPer) {
-                    oldList.add(String.valueOf(oldDiscountPer));
-                    newList.add(String.valueOf(discountPer));
+                    oldList.add("Discount Per: " + String.valueOf(oldDiscountPer));
+                    newList.add("Discount Per: " + String.valueOf(discountPer));
                 }
 
                 if (condition != oldCondition) {
-                    oldList.add(String.valueOf(oldCondition));
-                    newList.add(String.valueOf(condition));
+                    oldList.add("Condition: "+ String.valueOf(oldCondition));
+                    newList.add("Condition: "+ String.valueOf(condition));
                 }
 
                 if (!description.equals(oldDescription)) {
-                    oldList.add(oldDescription);
-                    newList.add(description);
+                    oldList.add("Description: " + oldDescription);
+                    newList.add("Description: " + description);
                 }
 
                 if (status != oldStatus) {
-                    oldList.add(String.valueOf(oldStatus));
-                    newList.add(String.valueOf(status));
+                    oldList.add("Status: " + String.valueOf(oldStatus));
+                    newList.add("Status: " + String.valueOf(status));
                 }
                 if (!oldImage.equals(imagePath)) {
                     oldList.add(oldImage);

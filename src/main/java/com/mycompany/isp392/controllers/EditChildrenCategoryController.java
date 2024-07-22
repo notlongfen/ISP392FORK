@@ -42,13 +42,13 @@ public class EditChildrenCategoryController extends HttpServlet {
                 List<String> newList = new ArrayList<>();
 
                 if (!oldName.equals(newName)) {
-                    oldList.add(oldName);
-                    newList.add(newName);
+                    oldList.add("Name: " + oldName);
+                    newList.add("Name: " + newName);
                 }
 
                 if (oldStatus != newStatus) {
-                    oldList.add(String.valueOf(oldStatus));
-                    newList.add(String.valueOf(newStatus));
+                    oldList.add("Status: " + String.valueOf(oldStatus));
+                    newList.add("Status: " + String.valueOf(newStatus));
                 }
 
                 if (oldList.size() > 0 && newList.size() > 0) {

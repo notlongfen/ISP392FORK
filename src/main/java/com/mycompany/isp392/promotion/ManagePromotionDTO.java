@@ -4,7 +4,7 @@
  */
 package com.mycompany.isp392.promotion;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -29,6 +29,17 @@ public class ManagePromotionDTO {
         this.action = action;
     }
 
+    public ManagePromotionDTO(int promotionID, int empID,  String loadOldField, String loadNewField, String action, Timestamp changeDate) {
+        this.promotionID = promotionID;
+        this.empID = empID;
+        this.loadNewField = loadNewField;
+        this.loadOldField = loadOldField;
+        this.action = action;
+        this.changeDate = changeDate;
+    }
+    
+    
+    
     public int getPromotionID() {
         return promotionID;
     }

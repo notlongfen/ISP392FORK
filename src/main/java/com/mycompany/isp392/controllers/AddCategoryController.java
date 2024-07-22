@@ -71,8 +71,8 @@ public class AddCategoryController extends HttpServlet {
                 boolean checkCategory = dao.addCategory(category);
                 if(checkCategory){
                     List<String> newList = new ArrayList<>();
-                    newList.add(categoryName);
-                    newList.add(description);
+                    newList.add("Name: " + categoryName);
+                    newList.add("Description: " + description);
                     newList.add(imagePath);
                     ManageCategoryDTO manageCategory = new ManageCategoryDTO(categoryID, user.getUserID(), new ArrayList<>(), newList, "Add");
                     DbUtils.addCheckLogToDB("ManageCategories", "Categories", manageCategory);

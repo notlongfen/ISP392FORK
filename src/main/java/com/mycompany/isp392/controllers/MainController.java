@@ -140,7 +140,7 @@ public class MainController extends HttpServlet {
     private static final String EDIT_ORDER_PAGE = "EditOrder";
     private static final String EDIT_ORDER_PAGE_VIEW = "GetOrderInforController";
 
-    private static final String EDIT_ORDER = "Update_Order_Status";
+    private static final String EDIT_ORDER = "Update Order Status";
     private static final String DELETE_ORDER = "DeleteOrder";
     private static final String EDIT_ORDER_CONTROLLER = "EditOrderController";
 
