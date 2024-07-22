@@ -90,16 +90,14 @@
                                     <form action="MainController">
                                         <div class="table-responsive">
                                             <div class="container">
-                                                <input type="date" id="ngayBatDau" placeholder="Start Date">
-                                                <input type="date" id="ngayKetThuc" placeholder="End Date">
-                                                <div class="input-group">
+                                                <div class="input-group" style="width: 500px">
                                                     <input type="text" class="form-control" placeholder="Search..." name="search" value="<%= search%>">
                                                     <div class="input-group-append">
                                                         <button class="btn btn-outline-secondary" type="submit" name="action" value="Search promotion">Search</button>
                                                     </div>
                                                 </div>
                                             </div>
-
+                                                    </br>
                                             <table class="table align-items-center table-flush">
                                                 <thead class="thead-light">
                                                     <tr>

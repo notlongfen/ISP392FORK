@@ -22,7 +22,7 @@ public class PromotionDAO {
 
     private static final String ADD_PROMOTION = "INSERT INTO Promotions (PromotionID, promotionName, startDate, endDate, discountPer, image, condition,description, status) VALUES (?, ?, ?, ?, ?,?, ?,?, ?)";
     private static final String DELETE_PROMOTION = "UPDATE Promotions SET status = 0 WHERE status = 1 AND promotionID LIKE ?";
-    private static final String SEARCH_PROMOTION = "SELECT promotionID, promotionName, startDate, endDate, discountPer, condition,description, status FROM Promotions WHERE promotionName LIKE ?";
+    private static final String SEARCH_PROMOTION = "SELECT * FROM Promotions WHERE promotionName LIKE ?";
     private static final String EDIT_PROMOTION = "UPDATE Promotions Set promotionName=?, startDate=?, endDate=?, discountPer=?, condition=?, description=?, status=?, image=? WHERE promotionID = ?";
     private static final String GET_LATEST_PROMOTION_ID = "SELECT MAX(PromotionID) AS PromotionID FROM Promotions";
     private static final String CHECK_PROMOTION_DUPLICATE = "SELECT * FROM Promotions WHERE promotionName LIKE ? AND status = ?";
