@@ -7,6 +7,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="com.mycompany.isp392.product.ProductDetailsDTO"%>
+<%@page import="java.text.NumberFormat"%>
+<%@page import="java.util.Locale"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -129,6 +131,7 @@
                         <h1>My Wishlist</h1>
                     </div>
                     <%
+                                               NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
      List<ProductDetailsDTO> listProduct = (List<ProductDetailsDTO>) session.getAttribute("wishlist");
      if (listProduct != null && listProduct.size() > 0) {
      for (ProductDetailsDTO list : listProduct) {
@@ -141,13 +144,13 @@
                             <h5><%= list.getProductName() %></h5>
                             <p style="margin-top: 20px;"><%= list.getBrandName() %></p>
                             <div class="text-left">
-                                    <a  onclick="showConfirmDeleteModal(<%=list.getProductID()%>, <%=list.getProductDetailsID()%>)" class="remove">
-                                        <i class="remove-btn fas fa-trash"></i>
-                                    </a>
+                                <a  onclick="showConfirmDeleteModal(<%=list.getProductID()%>, <%=list.getProductDetailsID()%>)" class="remove">
+                                    <i class="remove-btn fas fa-trash"></i>
+                                </a>
                             </div>
                         </div>
                         <div class="col-md-3 text-end">
-                            <p class="inline text-danger fs-4 same-size" >$<%= list.getPrice() %></p>
+                            <p class="inline text-danger fs-4 same-size" ><%= formatter.format(list.getPrice()) %></p>
                             <br>
                             <button class="btn btn-dark" style="width: 150px; margin-top: 90px;">Add to Cart</button>
                         </div>
@@ -164,25 +167,25 @@
 
                 </div>
             </div>
-                    
-                     <!-- Modal Xác nhận Xóa -->
-                        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Delete</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        Are you sure you want to delete this product?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                        <button type="button" class="btn btn-danger" id="confirmDeleteButton">Confirm</button>
-                                    </div>
-                                </div>
-                            </div>
+
+            <!-- Modal Xác nhận Xóa -->
+            <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Delete</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
+                        <div class="modal-body">
+                            Are you sure you want to delete this product?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-danger" id="confirmDeleteButton">Confirm</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <%@include file="US_footer.jsp" %>
         <%@include file="US_RequestSupport.jsp" %>
@@ -190,17 +193,17 @@
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js"></script>
         <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                var navLinks = document.querySelectorAll('.profile-sidebar .nav-link');
-                navLinks.forEach(function (link) {
-                    link.addEventListener('click', function () {
-                        navLinks.forEach(function (nav) {
-                            nav.classList.remove('active');
-                        });
-                        link.classList.add('active');
-                    });
-                });
-            });
+                                        document.addEventListener('DOMContentLoaded', function () {
+                                            var navLinks = document.querySelectorAll('.profile-sidebar .nav-link');
+                                            navLinks.forEach(function (link) {
+                                                link.addEventListener('click', function () {
+                                                    navLinks.forEach(function (nav) {
+                                                        nav.classList.remove('active');
+                                                    });
+                                                    link.classList.add('active');
+                                                });
+                                            });
+                                        });
 
 
 //            document.getElementById('deleteBtn').addEventListener('click', function (event) {
@@ -215,24 +218,24 @@
 //                }
 //                // If user clicked "No", do nothing
 //            });
-            
-            function showConfirmDeleteModal(productID, productDetailID) {
-                // Store the product ID and product detail ID in the data attributes of the button
-                document.getElementById('confirmDeleteButton').setAttribute('data-product-id', productID);
-                document.getElementById('confirmDeleteButton').setAttribute('data-product-detail-id', productDetailID);
-                // Show the modal
-                var confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
-                confirmDeleteModal.show();
-            }
 
-            document.addEventListener('DOMContentLoaded', function () {
-                document.getElementById('confirmDeleteButton').addEventListener('click', function () {
-                    var productID = this.getAttribute('data-product-id');
-                    var productDetailID = this.getAttribute('data-product-detail-id');
-                    var url = "MainController?action=deleteWishlist&productID=" + productID + "&productDetailID=" + productDetailID;
-                    window.location.href = url;
-                });
-            });
+                                        function showConfirmDeleteModal(productID, productDetailID) {
+                                            // Store the product ID and product detail ID in the data attributes of the button
+                                            document.getElementById('confirmDeleteButton').setAttribute('data-product-id', productID);
+                                            document.getElementById('confirmDeleteButton').setAttribute('data-product-detail-id', productDetailID);
+                                            // Show the modal
+                                            var confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+                                            confirmDeleteModal.show();
+                                        }
+
+                                        document.addEventListener('DOMContentLoaded', function () {
+                                            document.getElementById('confirmDeleteButton').addEventListener('click', function () {
+                                                var productID = this.getAttribute('data-product-id');
+                                                var productDetailID = this.getAttribute('data-product-detail-id');
+                                                var url = "MainController?action=deleteWishlist&productID=" + productID + "&productDetailID=" + productDetailID;
+                                                window.location.href = url;
+                                            });
+                                        });
         </script>
     </body>
 </html>

@@ -109,7 +109,7 @@
                                                 <td class="text-center"><%= promotion.getStartDate() %></td>
                                                 <td class="text-center"><%= promotion.getEndDate() %></td>
                                                 <td class="text-center"><%= promotion.getDiscountPer() %></td>
-                                                <td class="text-center"><%= promotion.getDescription() %></td>
+                                                <td class="text-center">Point >= <%= promotion.getCondition() %></td>
                                                 <td class="text-center">
                                                     <% 
                                                             String[] images = promotion.getImage().split(";"); // Assuming images are stored as a semicolon-separated string

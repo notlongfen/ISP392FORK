@@ -118,7 +118,7 @@
                                                 <form action="MainController" >
                                                     <div class="col-md-3">
                                                         <div class="input-group">
-                                                            <input type="text" class="form-control" placeholder="Search..." name="search" value="<%= search%>">
+                                                            <input type="text" class="form-control" placeholder="Search..." name="searchText" value="<%= search%>">
                                                             <div class="input-group-append">
                                                                 <button class="btn btn-outline-secondary" type="submit" name="action" value="Search Order">Search</button> 
                                                             </div>
@@ -140,6 +140,7 @@
                                                 </tr>
                                             </thead>
                                             <%
+                                                
                                                List<OrderDTO> orderList = (List<OrderDTO>) request.getAttribute("LIST_ORDER");
                                                NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
                                                if (orderList != null) {
@@ -189,7 +190,7 @@
                                             %>
                                         </table>
                                         <hr>
-                                       
+
                                     </div>
                                     <div class="card-footer"></div>
                                 </div>
@@ -227,7 +228,7 @@
                                         <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Delete</h5>
                                     </div>
                                     <div class="modal-body">
-                                        Are you sure you want to delete this user?
+                                        Are you sure you want to change this order's status to canceled?
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -236,7 +237,6 @@
                                 </div>
                             </div>
                         </div>
-
 
                     </div>
                     <!---Container Fluid-->
@@ -334,3 +334,4 @@
     </body>
 
 </html>
+

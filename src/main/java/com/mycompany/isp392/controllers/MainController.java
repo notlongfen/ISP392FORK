@@ -133,8 +133,8 @@ public class MainController extends HttpServlet {
     private static final String GET_ORDER_LIST_CONTROLLER = "GetOrderListController";
 
     private static final String SEARCH_ORDER_PAGE = "Search_Order_View";
-    private static final String SEARCH_ORDER_VIEW = "order.jsp";
-    private static final String SEARCH_ORDER = "Search_Order";
+    private static final String SEARCH_ORDER_VIEW = "AD_OrderList.jsp";
+    private static final String SEARCH_ORDER = "Search Order";
     private static final String SEARCH_ORDER_CONTROLLER = "SearchOrderController";
 
     private static final String EDIT_ORDER_PAGE = "EditOrder";

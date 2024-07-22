@@ -11,8 +11,8 @@ import java.util.List;
 
 public class SearchOrderController extends HttpServlet {
 
-    private static final String ERROR = "order.jsp";
-    private static final String SUCCESS = "order.jsp";
+    private static final String ERROR = "AD_OrderList.jsp";
+    private static final String SUCCESS = "AD_OrderList.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -23,8 +23,7 @@ public class SearchOrderController extends HttpServlet {
             OrderDAO orderDAO = new OrderDAO();
             List<OrderDTO> orders = orderDAO.searchOrders(searchText);
             if (orders != null && !orders.isEmpty()) {
-                request.setAttribute("orders", orders);
-                request.setAttribute("MESSAGE", "ORDER FOUND !");
+                request.setAttribute("LIST_ORDER", orders);
                 url = SUCCESS;
             } else {
                 request.setAttribute("MESSAGE", "NO ORDER FOUND !");

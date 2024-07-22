@@ -218,8 +218,7 @@ col-md-8 d-flex justify-content-center align-items-center
                         <%
                             } else {
                         %>
-                        <input class="btn btn-dark w-100 mt-1 disabled" aria-disabled="true" style="border-radius: 10px; font-size: 20px; pointer-events: none;">Checkout
-                        
+                        <a class="btn btn-dark w-100 mt-1 disabled" style="border-radius: 10px; font-size: 20px" aria-disabled="true" href="#">️Check out</a>                        
                         <%
                             }
                         %>

@@ -31,7 +31,7 @@ public class OrderDAO {
     private static final String ADD_ORDER = "INSERT INTO Orders (status, total, orderDate, CustID, promotionID, CartID, userName, city, district, ward, address, phone, note) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
     private static final String GET_LAST_ORDER_ID = "SELECT MAX(orderID) FROM Orders";
     private static final String ADD_ORDER_DETAILS = "INSERT INTO OrderDetails (productDetailsID, orderID, productID, quantity, unitPrice) VALUES (?,?,?,?,?)";
-    private static final String SEARCH_ORDERS = "SELECT * FROM Orders WHERE orderID LIKE ? OR orderDate LIKE ? OR total LIKE ? OR CustID LIKE ? OR CartID LIKE ?";
+    private static final String SEARCH_ORDERS = "SELECT * FROM Orders WHERE orderID = ?";
     private static final String EDIT_ORDER_STATUS = "UPDATE Orders SET status = ? WHERE orderID = ?";
     private static final String GET_ORDER_INFO_BY_ORDERID = "SELECT * FROM Orders WHERE orderID = ?";
     private static final String GET_LIST_ORDER_DETAIL_INFO_BY_ORDERID = "SELECT * FROM OrderDetails WHERE orderID = ?";
@@ -355,11 +355,7 @@ public class OrderDAO {
             conn = DbUtils.getConnection();
             if (conn != null) {
                 ptm = conn.prepareStatement(SEARCH_ORDERS);
-                ptm.setString(1, "%" + searchText + "%");
-                ptm.setString(2, "%" + searchText + "%");
-                ptm.setString(3, "%" + searchText + "%");
-                ptm.setString(4, "%" + searchText + "%");
-                ptm.setString(5, "%" + searchText + "%");
+                ptm.setString(1,  searchText );
                 rs = ptm.executeQuery();
                 while (rs.next()) {
                     int orderID = rs.getInt("orderID");
@@ -375,7 +371,7 @@ public class OrderDAO {
                     String ward = rs.getString("ward");
                     String address = rs.getString("address");
                     int phone = rs.getInt("phone");
-                    String note = rs.getString(phone);
+                    String note = rs.getString("note");
                     orders.add(new OrderDTO(orderID, status, total, orderDate, custID, promotionID, cartID, userName,
                             city, district, ward, address, phone, note));
                 }
