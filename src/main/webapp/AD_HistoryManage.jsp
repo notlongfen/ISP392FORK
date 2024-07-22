@@ -615,8 +615,9 @@
                                                                 String[] oldFields = list.getLoadOldField().replace("[", "").replace("]", "").split(", ");
                                                                 String[] newFields = list.getLoadNewField().replace("[", "").replace("]", "").split(", ");
 
-                                                                String oldColor = "", oldStatus = "", oldSize = "", oldStock = "", oldPrice = "", oldDate = "", oldImage = "";
-                                                                String newColor = "", newStatus = "", newSize = "", newStock = "", newPrice = "", newDate = "", newImage = "";
+                                                                String oldColor = "", oldStatus = "", oldSize = "", oldStock = "", oldPrice = "", oldDate = "";
+                                                                String newColor = "", newStatus = "", newSize = "", newStock = "", newPrice = "", newDate = "";
+                                                                String[] oldImages = new String[0], newImages = new String[0];
 
                                                                 // Determine old fields (color, status, size, stock quantity, price, import date, image)
                                                                 for (String field : oldFields) {
@@ -632,8 +633,8 @@
                                                                         oldPrice = field.replace("Price:", "").trim();
                                                                     } else if (field.matches("Import Date:.*")) {
                                                                         oldDate = field.replace("Import Date:", "").trim();
-                                                                    } else if (field.matches(".*\\.(png|jpg|jpeg|gif)$")) {
-                                                                        oldImage = field.trim();
+                                                                    } else if (field.matches(".*\\.(png|jpg|jpeg|gif)(;.*\\.(png|jpg|jpeg|gif))*$")) {
+                                                                        oldImages = field.split(";");
                                                                     }
                                                                 }
 
@@ -651,8 +652,8 @@
                                                                         newPrice = field.replace("Price:", "").trim();
                                                                     } else if (field.matches("Import Date:.*")) {
                                                                         newDate = field.replace("Import Date:", "").trim();
-                                                                    } else if (field.matches(".*\\.(png|jpg|jpeg|gif)$")) {
-                                                                        newImage = field.trim();
+                                                                    } else if (field.matches(".*\\.(png|jpg|jpeg|gif)(;.*\\.(png|jpg|jpeg|gif))*$")) {
+                                                                        newImages = field.split(";");
                                                                     }
                                                                 }
                                                     %>
@@ -675,8 +676,10 @@
                                                         <% if (!oldDate.isEmpty()) { %>
                                                         Import Date: <%= oldDate %><br>
                                                         <% } %>
-                                                        <% if (!oldImage.isEmpty()) { %>
-                                                        <img src="<%= oldImage %>" alt="Old Image" width="100" height="100"><br>
+                                                        <% if (oldImages.length > 0) { %>
+                                                        <% for (String image : oldImages) { %>
+                                                        <img src="<%= image.trim() %>" alt="Old Image" width="100" height="100"><br>
+                                                        <% } %>
                                                         <% } %>
                                                         <% if (!oldStatus.isEmpty()) { %>
                                                         Status: <%= oldStatus %><br>
@@ -698,8 +701,10 @@
                                                         <% if (!newDate.isEmpty()) { %>
                                                         Import Date: <%= newDate %><br>
                                                         <% } %>
-                                                        <% if (!newImage.isEmpty()) { %>
-                                                        <img src="<%= newImage %>" alt="Old Image" width="100" height="100"><br>
+                                                        <% if (newImages.length > 0) { %>
+                                                        <% for (String image : newImages) { %>
+                                                        <img src="<%= image.trim() %>" alt="New Image" width="100" height="100"><br>
+                                                        <% } %>
                                                         <% } %>
                                                         <% if (!newStatus.isEmpty()) { %>
                                                         Status: <%= newStatus %><br>
@@ -719,6 +724,7 @@
                                                     }
                                                 %>
                                                 </tr>
+
 
                                             </tbody>
                                         </table>
@@ -773,8 +779,9 @@
                                                                 String[] oldFields = list.getLoadOldField().replace("[", "").replace("]", "").split(", ");
                                                                 String[] newFields = list.getLoadNewField().replace("[", "").replace("]", "").split(", ");
 
-                                                                String oldPromotion = "", oldStatus = "", oldDescription = "", oldStartDate = "", oldEndDate = "", oldPer = "", oldImage = "", oldCondition = "";
-                                                                String newPromotion = "", newStatus = "", newDescription = "", newStartDate = "", newEndDate = "", newPer = "", newImage = "", newCondition = "";
+                                                                String oldPromotion = "", oldStatus = "", oldDescription = "", oldStartDate = "", oldEndDate = "", oldPer = "", oldCondition = "";
+                                                                String newPromotion = "", newStatus = "", newDescription = "", newStartDate = "", newEndDate = "", newPer = "", newCondition = "";
+                                                                String[] oldImages = new String[0], newImages = new String[0];
 
                                                                 // Determine old fields (promotion, status, description, start date, end date, discount per, image, condition)
                                                                 for (String field : oldFields) {
@@ -792,8 +799,8 @@
                                                                         oldPer = field.replace("Discount Per:", "").trim();
                                                                     } else if (field.matches("Condition:.*")) {
                                                                         oldCondition = field.replace("Condition:", "").trim();
-                                                                    } else if (field.matches(".*\\.(png|jpg|jpeg|gif)$")) {
-                                                                        oldImage = field.trim();
+                                                                    } else if (field.matches(".*\\.(png|jpg|jpeg|gif)(;.*\\.(png|jpg|jpeg|gif))*$")) {
+                                                                        oldImages = field.split(";");
                                                                     }
                                                                 }
 
@@ -813,8 +820,8 @@
                                                                         newPer = field.replace("Discount Per:", "").trim();
                                                                     } else if (field.matches("Condition:.*")) {
                                                                         newCondition = field.replace("Condition:", "").trim();
-                                                                    } else if (field.matches(".*\\.(png|jpg|jpeg|gif)$")) {
-                                                                        newImage = field.trim();
+                                                                    } else if (field.matches(".*\\.(png|jpg|jpeg|gif)(;.*\\.(png|jpg|jpeg|gif))*$")) {
+                                                                        newImages = field.split(";");
                                                                     }
                                                                 }
                                                     %>
@@ -843,8 +850,10 @@
                                                         <% if (!oldCondition.isEmpty()) { %>
                                                         Condition: <%= oldCondition %><br>
                                                         <% } %>
-                                                        <% if (!oldImage.isEmpty()) { %>
-                                                        <img src="<%= oldImage %>" alt="Old Image" width="100" height="100"><br>
+                                                        <% if (oldImages.length > 0) { %>
+                                                        <% for (String image : oldImages) { %>
+                                                        <img src="<%= image.trim() %>" alt="Old Image" width="100" height="100"><br>
+                                                        <% } %>
                                                         <% } %>
                                                     </td>
                                                     <td>
@@ -869,8 +878,10 @@
                                                         <% if (!newCondition.isEmpty()) { %>
                                                         Condition: <%= newCondition %><br>
                                                         <% } %>
-                                                        <% if (!newImage.isEmpty()) { %>
-                                                        <img src="<%= newImage %>" alt="Old Image" width="100" height="100"><br>
+                                                        <% if (newImages.length > 0) { %>
+                                                        <% for (String image : newImages) { %>
+                                                        <img src="<%= image.trim() %>" alt="New Image" width="100" height="100"><br>
+                                                        <% } %>
                                                         <% } %>
                                                     </td>
                                                     <td><%= list.getAction() %></td>
@@ -887,6 +898,7 @@
                                                     }
                                                 %>
                                                 </tr>
+
 
                                             </tbody>
                                         </table>
@@ -923,7 +935,7 @@
                                         <table class="table align-items-center table-flush">
                                             <thead class="thead-light">
                                                 <tr>
-                                                    <th>PromotionID</th>
+                                                    <th>CategoryID</th>
                                                     <th>EmployeeID</th>
                                                     <th>FieldOld</th>
                                                     <th>FieldNew</th>
@@ -969,7 +981,7 @@
                                                                     }
                                                                 }
                                                     %>
-                                                <tr>
+                                                <tr data-change-date="<%= list.getChangeDate() %>">
                                                     <td><%= list.getCategories() %></td>
                                                     <td><%= list.getEmpID() %></td>
                                                     <td>
@@ -1275,6 +1287,23 @@
                     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
                     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            var table = document.querySelector('table'); // Chọn bảng
+                            var rows = Array.from(table.querySelectorAll('tr[data-change-date]')); // Lấy tất cả các hàng có thuộc tính data-change-date
+
+                            rows.sort(function (a, b) {
+                                var dateA = new Date(a.getAttribute('data-change-date'));
+                                var dateB = new Date(b.getAttribute('data-change-date'));
+                                return dateB - dateA; // Sắp xếp từ xa nhất đến gần nhất
+                            });
+
+                            // Di chuyển các hàng đã sắp xếp lại vào bảng
+                            rows.forEach(function (row) {
+                                table.appendChild(row);
+                            });
+                        });
+                    </script>
 
                     </body>
 
