@@ -72,8 +72,10 @@ public class HomePageController extends HttpServlet {
             });
 
             // Sorting for best sellers by number of purchases
-            List<ProductDTO> bestSellers = new ArrayList<>(activeProducts);
-            bestSellers.sort(Comparator.comparingInt(ProductDTO::getNumberOfPurchase).reversed());
+            List<ProductDTO> bestSellers = activeProducts.stream()
+                    .sorted(Comparator.comparingInt(ProductDTO::getNumberOfPurchase).reversed())
+                    .limit(5)
+                    .collect(Collectors.toList());
 
             request.setAttribute("NEW_ARRIVALS_LIST", newArrivals);
             request.setAttribute("BEST_SELLERS_LIST", bestSellers);

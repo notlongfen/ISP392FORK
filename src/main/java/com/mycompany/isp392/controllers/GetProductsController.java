@@ -51,7 +51,7 @@ public class GetProductsController extends HttpServlet {
                 request.getSession().removeAttribute("ERROR_MESSAGE");
             }
 
-            int entriesPerPage = 10; // Fixed number of entries per page
+            int entriesPerPage = 15; // Fixed number of entries per page
             int currentPage = 1;
             if (request.getParameter("page") != null) {
                 currentPage = Integer.parseInt(request.getParameter("page"));

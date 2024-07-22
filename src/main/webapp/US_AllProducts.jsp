@@ -116,8 +116,8 @@
                 color: #c53337;
             }
 
-             .product-links li button:focus,
-             .product-links li button:active {
+            .product-links li button:focus,
+            .product-links li button:active {
                 color: #c53337;
             }
 
@@ -331,26 +331,25 @@
                         <nav aria-label="Page navigation">
                             <ul class="pagination justify-content-center mt-3">
                                 <li class="page-item <%= (request.getAttribute("currentPage") != null && (int) request.getAttribute("currentPage") == 1) ? "disabled" : "" %>">
-                                    <a class="page-link" href="#" onclick="loadFilteredProducts(<%= (int) request.getAttribute("currentPage") - 1 %>)" aria-label="Previous">
+                                    <a class="page-link" href="javascript:void(0);" data-page="<%= (int) request.getAttribute("currentPage") - 1 %>" aria-label="Previous">
                                         <span aria-hidden="true">&laquo;</span>
                                     </a>
                                 </li>
-                                <%
-                                    int totalPages = (int) request.getAttribute("totalPages");
-                                    int currentPage = (int) request.getAttribute("currentPage");
-                                    for (int i = 1; i <= totalPages; i++) {
-                                %>
+                                <% int totalPages = (int) request.getAttribute("totalPages");
+                                   int currentPage = (int) request.getAttribute("currentPage");
+                                   for (int i = 1; i <= totalPages; i++) { %>
                                 <li class="page-item <%= currentPage == i ? "active" : "" %>">
-                                    <a class="page-link" href="#" onclick="loadFilteredProducts(<%= i %>)"><%= i %></a>
+                                    <a class="page-link" href="javascript:void(0);" data-page="<%= i %>"><%= i %></a>
                                 </li>
                                 <% } %>
                                 <li class="page-item <%= currentPage == totalPages ? "disabled" : "" %>">
-                                    <a class="page-link" href="#" onclick="loadFilteredProducts(<%= currentPage + 1 %>)" aria-label="Next">
+                                    <a class="page-link" href="javascript:void(0);" data-page="<%= currentPage + 1 %>" aria-label="Next">
                                         <span aria-hidden="true">&raquo;</span>
                                     </a>
                                 </li>
                             </ul>
                         </nav>
+
                     </div>
                 </div>
                 <% if (request.getAttribute("SUCCESS_MESSAGE") != null) { %>
@@ -379,79 +378,93 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script>
+            $(document).ready(function () {
+                function getSelectedValues(selector) {
+                    return $(selector + ':checked').map(function () {
+                        return this.value;
+                    }).get();
+                }
 
-                                        $(document).ready(function () {
-                                            function getSelectedValues(selector) {
-                                                return $(selector + ':checked').map(function () {
-                                                    return this.value;
-                                                }).get();
-                                            }
+                function loadFilteredProducts(page = 1) {
+                    var selectedBrands = getSelectedValues('.brand-filter');
+                    var selectedPrices = getSelectedValues('.price-filter');
+                    var selectedCategories = getSelectedValues('.category-filter');
 
-                                            function loadFilteredProducts(page = 1) {
-                                                var selectedBrands = getSelectedValues('.brand-filter');
-                                                var selectedPrices = getSelectedValues('.price-filter');
-                                                var selectedCategories = getSelectedValues('.category-filter');
+                    $.ajax({
+                        url: 'SearchProductForHeaderController',
+                        type: 'GET',
+                        data: {
+                            brands: selectedBrands,
+                            prices: selectedPrices,
+                            categories: selectedCategories,
+                            page: page,
+                            search: $('#search-form input[name="search"]').val() // Get search term from input field
+                        },
+                        success: function (data) {
+                            $('#products-container').html($(data).find('#products-container').html());
+                            $('#pagination-container').html($(data).find('#pagination-container').html());
 
-                                                $.ajax({
-                                                    url: 'SearchProductForHeaderController',
-                                                    type: 'GET',
-                                                    data: {
-                                                        brands: selectedBrands,
-                                                        prices: selectedPrices,
-                                                        categories: selectedCategories,
-                                                        page: page,
-                                                        search: $('#search-form input[name="search"]').val() // Get search term from input field
-                                                    },
-                                                    success: function (data) {
-                                                        $('#products-container').html($(data).find('#products-container').html());
-                                                        $('#pagination-container').html($(data).find('#pagination-container').html());
-                                                    },
-                                                    error: function () {
-                                                        alert('Error loading products. Please try again.');
-                                                    }
-                                                });
-                                            }
+                            // Attach the click event handler again after updating the pagination
+                            $('.page-link').click(function (e) {
+                                e.preventDefault();
+                                var page = $(this).data('page');
+                                loadFilteredProducts(page);
+                            });
+                        },
+                        error: function () {
+                            alert('Error loading products. Please try again.');
+                        }
+                    });
+                }
 
-                                            // Check the brand filter if brandID is present in the URL
-                                            var brandID = new URLSearchParams(window.location.search).get('brandID');
-                                            if (brandID) {
-                                                $('input[name="brand"][value="' + brandID + '"]').prop('checked', true);
-                                            }
+                // Attach the click event handler to pagination links
+                $(document).on('click', '.page-link', function (e) {
+                    e.preventDefault();
+                    var page = $(this).data('page');
+                    loadFilteredProducts(page);
+                });
 
-                                            // Check the category filter if categoryID is present in the URL
-                                            var categoryID = new URLSearchParams(window.location.search).get('categoryID');
-                                            if (categoryID) {
-                                                $('input[name="category"][value="' + categoryID + '"]').prop('checked', true);
-                                            }
+                // Check the brand filter if brandID is present in the URL
+                var brandID = new URLSearchParams(window.location.search).get('brandID');
+                if (brandID) {
+                    $('input[name="brand"][value="' + brandID + '"]').prop('checked', true);
+                }
 
-                                            // Event listeners for the checkboxes
-                                            $('.brand-filter, .price-filter, .category-filter').on('change', function () {
-                                                loadFilteredProducts();
-                                            });
+                // Check the category filter if categoryID is present in the URL
+                var categoryID = new URLSearchParams(window.location.search).get('categoryID');
+                if (categoryID) {
+                    $('input[name="category"][value="' + categoryID + '"]').prop('checked', true);
+                }
 
-                                            // Initial load
-                                            loadFilteredProducts();
-                                        });
+                // Event listeners for the checkboxes
+                $('.brand-filter, .price-filter, .category-filter').on('change', function () {
+                    loadFilteredProducts();
+                });
 
-                                        function resetFilters() {
-                                            $('input[type="checkbox"]').prop('checked', false);
-                                            window.location.href = "MainController?action=All_Product";
-                                            loadFilteredProducts();
-                                        }
+                // Initial load
+                loadFilteredProducts();
+            });
 
-                                        // L?y giá s?n ph?m t? ph?n t? HTML/JSP
-                                        let priceElement = document.getElementById('productPrice');
-                                        let price = parseFloat(priceElement.innerText.replace('$', '')); // L?y giá và b? ?i ký t? '$'
+            function resetFilters() {
+                $('input[type="checkbox"]').prop('checked', false);
+                window.location.href = "MainController?action=All_Product";
+                loadFilteredProducts();
+            }
 
-                                        // ??nh d?ng l?i giá sang ti?n t? Vi?t Nam
-                                        const formatter = new Intl.NumberFormat('vi-VN', {
-                                            style: 'currency',
-                                            currency: 'VND'
-                                        });
-                                        let formattedPrice = formatter.format(price);
+// Format prices to Vietnamese currency
+            let priceElement = document.getElementById('productPrice');
+            let price = parseFloat(priceElement.innerText.replace('$', ''));
 
-                                        // C?p nh?t n?i dung c?a ph?n t? HTML/JSP
-                                        priceElement.innerText = formattedPrice;
+// Format price to Vietnamese currency
+            const formatter = new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+            });
+            let formattedPrice = formatter.format(price);
+
+// Update HTML/JSP element content
+            priceElement.innerText = formattedPrice;
+
         </script>
     </body>
 </html>
