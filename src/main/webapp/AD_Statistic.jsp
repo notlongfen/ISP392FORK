@@ -1,3 +1,5 @@
+<%@page import="java.text.NumberFormat"%>
+<%@page import="java.util.Locale"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,20 +29,15 @@
                 background-color: #f9f9f9;
                 color: #333;
             }
-
-
             .product:nth-child(odd) {
                 background-color: #e9ecef;
             }
             .product:nth-child(even) {
                 background-color: #f8f9fa;
             }
-
-
             .product:last-child {
                 border-bottom: none;
             }
-
             .product span:first-child {
                 display: inline-block;
                 max-width: 80%;
@@ -50,7 +47,6 @@
                 color: #007bff;
                 font-weight: bold;
             }
-
             .product span:last-child {
                 display: inline-block;
                 font-size: 13px;
@@ -87,8 +83,21 @@
                                             <div class="row align-items-center">
                                                 <div class="col mr-2">
                                                     <div class="mb-0 font-weight-bold text-gray mb-2" style="font-size: 17px;color: #000;font-weight: bold;">TOTAL INCOMES</div>
-                                                    <div class="mb-0 font-weight-bold text-gray mb-2" style="font-size: 15px; color: black;">Today: $<c:out value="${totalIncomeToday}" /></div>
-                                                    <div class="mb-0 font-weight-bold text-gray" style="font-size: 15px; color: black">Yesterday: $<c:out value="${totalIncomeYesterday}" /></div>                            
+                                                    <div class="mb-0 font-weight-bold text-gray mb-2" style="font-size: 15px; color: black;">
+                                                        Today: 
+                                                        <%
+                                                            NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+                                                            String formattedIncomeToday = formatter.format((Integer)request.getAttribute("totalIncomeToday"));
+                                                        %>
+                                                        <%= formattedIncomeToday %>
+                                                    </div>
+                                                    <div class="mb-0 font-weight-bold text-gray" style="font-size: 15px; color: black;">
+                                                        Yesterday: 
+                                                        <%
+                                                            String formattedIncomeYesterday = formatter.format((Integer)request.getAttribute("totalIncomeYesterday"));
+                                                        %>
+                                                        <%= formattedIncomeYesterday %>
+                                                    </div>
                                                 </div>
                                                 <div class="col-auto">
                                                     <i class="far fa-file-alt fa-2x text-warning"></i>
@@ -105,7 +114,7 @@
                                                 <div class="col mr-2">
                                                     <div class="mb-0 font-weight-bold text-gray mb-2" style="font-size: 15px;color: #000;font-weight: bold;">NUMBER OF ORDERS</div>
                                                     <div class="mb-0 font-weight-bold text-gray mb-2" style="font-size: 15px; color: black;">Today: <c:out value="${numberOfOrdersToday}" /></div>
-                                                    <div class="mb-0 font-weight-bold text-gray" style="font-size: 15px; color: black;">Yesterday: <c:out value="${numberOfOrdersYesterday}" /></div>                            
+                                                    <div class="mb-0 font-weight-bold text-gray" style="font-size: 15px; color: black;">Yesterday: <c:out value="${numberOfOrdersYesterday}" /></div>
                                                 </div>
                                                 <div class="col-auto">
                                                     <i class="fas fa-calendar fa-2x text-primary"></i>
@@ -201,7 +210,7 @@
                                 <div class="col-xl-4 col-lg-5">
                                     <div class="card mb-4" style="height: 473px;">
                                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                            <h6 class="m-0 font-weight-bold text-primary">Top 5 Products Sold</h6>                                    
+                                            <h6 class="m-0 font-weight-bold text-primary">Top 5 Products Sold</h6>
                                         </div>
                                         <div class="card-body">
                                             <div class="mb-3">
@@ -275,14 +284,14 @@
             function number_format(number, decimals, dec_point, thousands_sep) {
                 number = (number + '').replace(',', '').replace(' ', '');
                 var n = !isFinite(+number) ? 0 : +number,
-                        prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
-                        sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
-                        dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
-                        s = '',
-                        toFixedFix = function (n, prec) {
-                            var k = Math.pow(10, prec);
-                            return '' + Math.round(n * k) / k;
-                        };
+                    prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+                    sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+                    dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+                    s = '',
+                    toFixedFix = function (n, prec) {
+                        var k = Math.pow(10, prec);
+                        return '' + Math.round(n * k) / k;
+                    };
                 s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
                 if (s[0].length > 3) {
                     s[0] = s[0].replace(/\B(?=(?:d{3})+(?!\d))/g, sep);
@@ -292,6 +301,11 @@
                     s[1] += new Array(prec - s[1].length + 1).join('0');
                 }
                 return s.join(dec);
+            }
+
+            // Formatter for VND
+            function formatCurrency(value) {
+                return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
             }
 
             // Area Chart Example
@@ -359,7 +373,7 @@
                                     maxTicksLimit: 5,
                                     padding: 10,
                                     callback: function (value, index, values) {
-                                        return '$' + number_format(value);
+                                        return formatCurrency(value);
                                     }
                                 },
                                 gridLines: {
@@ -391,7 +405,11 @@
                         callbacks: {
                             label: function (tooltipItem, chart) {
                                 var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-                                return datasetLabel + ': ' + number_format(tooltipItem.yLabel);
+                                if (datasetLabel === "Earnings") {
+                                    return datasetLabel + ': ' + formatCurrency(tooltipItem.yLabel);
+                                } else {
+                                    return datasetLabel + ': ' + number_format(tooltipItem.yLabel, 0, '.', ',');
+                                }
                             }
                         }
                     }

@@ -1,3 +1,5 @@
+<%@page import="java.text.NumberFormat"%>
+<%@page import="java.util.Locale"%>
 <%@page import="com.mycompany.isp392.product.ProductDetailsDTO"%>
 <%@page import="com.mycompany.isp392.product.ProductDTO"%>
 <%@page import="java.util.List"%>
@@ -108,7 +110,14 @@
                                                     <td class="text-center"><%= details.getProductDetailsID() %></td>
                                                     <td class="text-center"><%= details.getColor() %></td>
                                                     <td class="text-center"><%= details.getSize() %></td>
-                                                    <td class="text-center"><%= details.getPrice() %>$</td>
+                                                    <td class="text-center">
+                                                        <%
+                                                            NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+                                                            int price = details.getPrice();
+                                                            String formattedPrice = formatter.format(price);
+                                                        %>
+                                                        <%= formattedPrice %>
+                                                    </td>
                                                     <td class="text-center"><%= details.getStockQuantity() %></td>
                                                     <td class="text-center">
                                                         <% 
@@ -204,7 +213,7 @@
         <script src="vendor/chart.js/Chart.min.js"></script>
         <script src="AD_js/demo/chart-area-demo.js"></script>
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDzwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDzwrnQq4Yf86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     </body>
 </html>
