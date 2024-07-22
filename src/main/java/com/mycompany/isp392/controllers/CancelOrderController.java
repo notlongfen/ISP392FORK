@@ -21,8 +21,8 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet(name = "CancelOrderController", urlPatterns = {"/CancelOrderController"})
 public class CancelOrderController extends HttpServlet {
     
-    private static final String ERROR = "US_MyOrder.jsp";
-    private static final String SUCCESS = "US_MyOrder.jsp";
+    private static final String ERROR = "ViewUSOrderController";
+    private static final String SUCCESS = "ViewUSOrderController";
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

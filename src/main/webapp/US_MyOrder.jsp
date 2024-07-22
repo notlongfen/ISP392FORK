@@ -237,11 +237,16 @@
                                         <% 
                                                       if (order.getStatus() == 0 || order.getStatus() == 3 || order.getStatus() == 2 || order.getStatus() == 4){  
                                         %>
-                                        <a href="#" class="btn btn-sm btn-danger disabled" aria-disabled="true">Cancel</a> 
+                                        <a href="#" class="disabled" aria-disabled="true" style="pointer-events: none">
+                                            <button class="btn btn-danger cancel-order" type="button" style="width: 170px" disabled="">Cancel</button>
+                                        </a> 
                                         <% 
                                             } else {  
                                         %>
-                                        <a href="MainController?action=DeleteOrder&orderID=<%=order.getOrderID()%>&status=0">     
+<!--                                        <a href="MainController?action=CancelOrder&orderID=%=order.getOrderID()%>">     
+                                            <button class="btn btn-danger cancel-order" type="button" style="width: 170px">Cancel</button>
+                                        </a>-->
+                                        <a href="#" onclick="showConfirmDeleteModal(<%= order.getOrderID() %>)">
                                             <button class="btn btn-danger cancel-order" type="button" style="width: 170px">Cancel</button>
                                         </a>
                                         <% 
@@ -274,6 +279,25 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Cancellation</h5>
+                        <!--                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>-->
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to cancel this order?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-danger" id="confirmDeleteButton">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+                    
         <button onclick="topFunction()" id="myBtn" title="Go to top">
             <i class="fas fa-arrow-up"></i>
         </button>
@@ -320,6 +344,21 @@
             document.documentElement.scrollTop = 0;
         }
 
+        function showConfirmDeleteModal(orderID) {
+            // Store the user ID in a global variable or data attribute
+            document.getElementById('confirmDeleteButton').setAttribute('data-order-id', orderID);
+            // Show the modal
+            var confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+            confirmDeleteModal.show();
+        }
+
+        document.getElementById('confirmDeleteButton').addEventListener('click', function () {
+            var orderID = this.getAttribute('data-order-id');
+            var url = "MainController?action=CancelOrder&orderID=" + orderID;
+            window.location.href = url;
+        });
     </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

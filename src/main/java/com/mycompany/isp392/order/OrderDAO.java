@@ -39,7 +39,7 @@ public class OrderDAO {
     private static final String VIEW_ORDER = "SELECT * FROM Orders o JOIN OrderDetails od ON o.OrderID = od.OrderID JOIN ProductDetails pd ON pd.ProductDetailsID = od.ProductDetailsID WHERE custID = ?";
     private static final String VIEW_PD_IN_ORDER = "SELECT * FROM ProductDetails pd JOIN Products p ON pd.ProductID = p.ProductID WHERE p.ProductID = ?";
     private static final String VIEW_CATE_OF_PRODUCT = "SELECT *,  cdc.CategoriesName AS CDCategoryName FROM ProductBelongtoCDCategories pc JOIN Categories c ON pc.CDCategoryID = c.CategoryID JOIN ChildrenCategories cdc ON c.CategoryID = cdc.ParentID WHERE pc.ProductID = ? ";
-    private static final String CANCEL_ORDER = "UPDATE Orders SET status = 4 WHERE orderID = ? AND status NOT IN (0, 2, 3)";
+    private static final String CANCEL_ORDER = "UPDATE Orders SET status = 0 WHERE orderID = ? AND status = 1";
     private static final String GET_TOTAL_INCOME_TODAY = "SELECT SUM(total) AS totalIncome FROM Orders WHERE orderDate = CAST(GETDATE() AS DATE) AND status = 4";
     private static final String GET_TOTAL_INCOME_YESTERDAY = "SELECT SUM(total) AS totalIncome FROM Orders WHERE orderDate = DATEADD(DAY, -1, CAST(GETDATE() AS DATE)) AND status = 4";
     private static final String GET_NUMBER_OF_ORDERS_TODAY = "SELECT COUNT(orderID) AS numberOfOrders FROM Orders WHERE orderDate = CAST(GETDATE() AS DATE) AND status = 4";

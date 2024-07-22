@@ -99,18 +99,6 @@
                                         <form action="MainController" method="POST">
                                             <div class="row mb-4 mx-2 justify-content-between">
                                                 <div class="col-md-3">
-                                                    <div class="input-group">
-                                                        <select id="entriesSelect" class="custom-select">
-                                                            <option value="Select Entries">Select Entries</option>
-                                                            <option value="5">5</option>
-                                                            <option value="10">10</option>
-                                                            <option value="15">15</option>
-                                                            <option value="20">20</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-3">
                                                     <select id="statusSelect" class="custom-select">
                                                         <option value="Select Status">Select Status</option>
                                                         <option value="Active">Active</option>
@@ -308,23 +296,7 @@
                 document.getElementById('sortIconProduct').textContent = ascending ? '▲' : '▼';
             }
 
-            document.getElementById('entriesSelect').addEventListener('change', function () {
-                const numEntries = parseInt(this.value);
-                const tableBody = document.getElementById('tableBody');
-                const rows = Array.from(tableBody.rows);
-
-                rows.forEach((row, index) => {
-                    if (isNaN(numEntries) || this.value === "Select Entries") {
-                        row.style.display = '';
-                    } else if (index < numEntries) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
-                });
-            });
-
-
+           
 //Select theo status
             document.getElementById('statusSelect').addEventListener('change', function () {
                 const status = this.value;
@@ -332,7 +304,7 @@
                 const rows = Array.from(tableBody.rows);
 
                 rows.forEach(row => {
-                    const rowStatus = row.querySelector('td:nth-child(4) .badge').textContent.trim();
+                    const rowStatus = row.querySelector('td:nth-child(5) .badge').textContent.trim();
                     if (status === "Select Status") {
                         row.style.display = '';
                     } else if (rowStatus === status) {

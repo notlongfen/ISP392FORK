@@ -91,22 +91,13 @@
                                         <form>
                                             <div class="row mb-4 mx-2 justify-content-between">
                                                 <div class="col-md-3">
-                                                    <div class="input-group">
-                                                        <select id="entriesSelect" class="custom-select">
-                                                            <option value="Select Entries">Select Entries</option>
-                                                            <option value="5">5</option>
-                                                            <option value="10">10</option>
-                                                            <option value="15">15</option>
-                                                            <option value="20">20</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-3">
                                                     <select id="statusSelect" class="custom-select">
                                                         <option value="Select Status">Select Status</option>
-                                                        <option value="True">True</option>
-                                                        <option value="False">False</option>
+                                                        <option value="Cancelled">Cancelled</option>
+                                                        <option value="Pending">Pending</option>
+                                                        <option value="Processing">Processing</option>
+                                                        <option value="Delivering">Delivering</option>
+                                                        <option value="Completed">Completed</option>
                                                     </select>
                                                 </div>
                                                 <%
@@ -159,9 +150,9 @@
                                                                   order.getStatus() == 2 ? "badge-warning" : 
                                                                   order.getStatus() == 3 ? "badge-info" : 
                                                                   order.getStatus() == 4 ? "badge-success" : "" %>">
-                                                            <%= order.getStatus() == 0 ? "Canceled" : 
+                                                            <%= order.getStatus() == 0 ? "Cancelled" : 
                                                                 order.getStatus() == 1 ? "Pending" : 
-                                                                order.getStatus() == 2 ? "In processing" : 
+                                                                order.getStatus() == 2 ? "Processing" : 
                                                                 order.getStatus() == 3 ? "Delivering" : 
                                                                 order.getStatus() == 4 ? "Completed" : "" %>
                                                         </span>
@@ -254,23 +245,6 @@
         <script>
             let ascending = true;
 
-            document.getElementById('entriesSelect').addEventListener('change', function () {
-                const numEntries = parseInt(this.value);
-                const tableBody = document.getElementById('tableBody');
-                const rows = Array.from(tableBody.rows);
-
-                rows.forEach((row, index) => {
-                    if (isNaN(numEntries) || this.value === "Select Entries") {
-                        row.style.display = '';
-                    } else if (index < numEntries) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
-                });
-            });
-
-
 //Select theo status
             document.getElementById('statusSelect').addEventListener('change', function () {
                 const status = this.value;
@@ -278,7 +252,7 @@
                 const rows = Array.from(tableBody.rows);
 
                 rows.forEach(row => {
-                    const rowStatus = row.querySelector('td:nth-child(4) .badge').textContent.trim();
+                    const rowStatus = row.querySelector('td:nth-child(5) .badge').textContent.trim();
                     if (status === "Select Status") {
                         row.style.display = '';
                     } else if (rowStatus === status) {
