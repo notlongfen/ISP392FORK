@@ -67,7 +67,7 @@ public class DeleteUserController extends HttpServlet {
                     } else {
                     boolean checkAdd = DbUtils.addCheckLogToDB("SuperviseCustomers", "UserID", manage);    
                     }
-                    request.setAttribute("SUCCESS_MESSAGE", "BRAND DELETED SUCCESSFULLY !");
+                    request.setAttribute("SUCCESS_MESSAGE", "USER DELETED SUCCESSFULLY !");
                     url = SUCCESS;
                 } else {
                     userError.setError("UNABLE TO DELETE USER !");

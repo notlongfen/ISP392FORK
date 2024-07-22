@@ -25,12 +25,14 @@ import jakarta.servlet.http.HttpSession;
 @WebServlet(name = "AddToCartController", urlPatterns = {"/AddToCartController"})
 public class AddToCartController extends HttpServlet {
     
-    private static final String ERROR = "GetProductDetails";
-    private static final String SUCCESS = "GetProductDetails";
+    private static final String ERROR_PRODUCT_DETAILS = "GetProductDetails";
+    private static final String SUCCESS_PRODUCT_DETAILS = "GetProductDetails";
+    private static final String ERROR_WISHLIST = "WishlistController";
+    private static final String SUCCESS_WISHLIST = "WishlistController";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = ERROR;
+        String url = null;
         CartDAO cartDao = new CartDAO();
         CartError error = new CartError();
         ProductDAO productDao = new ProductDAO();
@@ -45,22 +47,42 @@ public class AddToCartController extends HttpServlet {
         try{
             boolean checkValidation = true;
             int custID = loginUser.getUserID();
-            int productID = Integer.parseInt(request.getParameter("productID"));
+            int productDetailsID;
+            int productID;
+            String size;
+            String color;
+            int price;
             int quantity = Integer.parseInt(request.getParameter("quantity"));
-            String size = request.getParameter("selectedSize");
-            String color = request.getParameter("selectedColor");
+            String page = request.getParameter("page");
             
-            String unitPricePara = request.getParameter("price");
-            unitPricePara = unitPricePara.replaceAll("[^0-9]", "");
-            int unitPrice = Integer.parseInt(unitPricePara);
+            if(page.equals("Wishlist")){
+                url = ERROR_WISHLIST;
+            } else {
+                url = ERROR_PRODUCT_DETAILS;
+            }
             
-            int price = quantity * unitPrice;
+            if(request.getParameter("productDetailsID") == null){
+                productID = Integer.parseInt(request.getParameter("productID"));
+                size = request.getParameter("selectedSize");
+                color = request.getParameter("selectedColor");
+
+                String unitPricePara = request.getParameter("price");
+                unitPricePara = unitPricePara.replaceAll("[^0-9]", "");
+                int unitPrice = Integer.parseInt(unitPricePara);
+                price = quantity * unitPrice;
+                
+                productDetailsID = productDao.getProductDetailsID(productID, unitPrice, size, color);
+            } else {
+                productDetailsID = Integer.parseInt(request.getParameter("productDetailsID"));
+                productID = Integer.parseInt(request.getParameter("productID"));
+                price = Integer.parseInt(request.getParameter("price"));    
+            }
+            
             int cartID = cartDao.getCartIDByCustomer(custID);
-            int productDetailsID = productDao.getProductDetailsID(productID, unitPrice, size, color);
             //check if customer have cart already, if not, create new one
             if(cartID ==-1){
                 cartID = cartDao.getLatestCartID() + 1;
-                CartDTO cart = new CartDTO(cartID, 0, custID, 0,1);
+                CartDTO cart = new CartDTO(cartID, 0, custID, 0, 1);
                 boolean checkCart = cartDao.createCart(cart);
                 if(!checkCart){
                     error.setError("Unable to create new cart");
@@ -82,12 +104,16 @@ public class AddToCartController extends HttpServlet {
                 CartDetailsDTO existingDetails = cartDao.getCartDetails(cartID, productDetailsID);
                 if(existingDetails != null){
                     int newQuantity = existingDetails.getQuantity() + quantity;
-                    int newPrice = newQuantity * unitPrice;
+                    int newPrice = newQuantity * productDetails.getPrice();
                     CartDetailsDTO newDetails = new CartDetailsDTO(cartID, productID, productDetailsID, newQuantity, newPrice);
                     boolean updateCartDetails = cartDao.updateCartDetails(newDetails);
                     if(updateCartDetails){
                         request.setAttribute("SUCCESS_MESSAGE", "Product added to cart");
-                        url = SUCCESS;
+                        if(page.equals("Wishlist")){
+                            url = SUCCESS_WISHLIST;
+                        } else {
+                            url = SUCCESS_PRODUCT_DETAILS;
+                        }
                     } else {
                         error.setError("Unable to update database");
                         request.setAttribute("CART_ERROR",error);
@@ -97,7 +123,11 @@ public class AddToCartController extends HttpServlet {
                     boolean checkCartDetails = cartDao.addToCart(details);
                     if(checkCartDetails){
                         request.setAttribute("SUCCESS_MESSAGE", "Product added to cart");
-                        url=SUCCESS;
+                        if(page.equals("Wishlist")){
+                            url = SUCCESS_WISHLIST;
+                        } else {
+                            url = SUCCESS_PRODUCT_DETAILS;
+                        }
                     }else{
                         error.setError("Unable to update database");
                         request.setAttribute("CART_ERROR", error);

@@ -132,9 +132,9 @@
                     </div>
                     <%
                                                NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
-     List<ProductDetailsDTO> listProduct = (List<ProductDetailsDTO>) session.getAttribute("wishlist");
-     if (listProduct != null && listProduct.size() > 0) {
-     for (ProductDetailsDTO list : listProduct) {
+                                List<ProductDetailsDTO> listProduct = (List<ProductDetailsDTO>) session.getAttribute("wishlist");
+                                if (listProduct != null && listProduct.size() > 0) {
+                                for (ProductDetailsDTO list : listProduct) {
                     %>
                     <div class="wishlist-item row mb-4 d-flex">
                         <div class="col-md-2 text-center">
@@ -152,12 +152,21 @@
                         <div class="col-md-3 text-end">
                             <p class="inline text-danger fs-4 same-size" ><%= formatter.format(list.getPrice()) %></p>
                             <br>
-                            <button class="btn btn-dark" style="width: 150px; margin-top: 90px;">Add to Cart</button>
+                            <form action="MainController" method="POST">
+                                <input type="hidden" name="productDetailsID" value="<%=list.getProductDetailsID()%>"/>
+                                <input type="hidden" name="productID" value="<%= list.getProductID()%>"/>
+                                <input type="hidden" name="size" value="<%= list.getSize()%>"/>
+                                <input type="hidden" name="color" value="<%= list.getColor()%>"/>
+                                <input type="hidden" name="price" value="<%= list.getPrice()%>"/>
+                                <input type="hidden" name="quantity" value="1"/>
+                                <input type="hidden" name="page" value="Wishlist"/>
+                                <button type="submit" name="action" value="Add_To_Cart" class="btn btn-dark" style="width: 150px; margin-top: 90px;">Add to Cart</button>
+                            </form>
                         </div>
                     </div>
                     <%
                         }
-} else {
+                    } else {
                     %>
                     <h1>No products found</h1>
 
@@ -186,12 +195,36 @@
                     </div>
                 </div>
             </div>
+            
+             <!-- Success Modal -->
+            <% if (request.getAttribute("SUCCESS_MESSAGE") != null) { %>
+            <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-success text-white">
+                            <h5 class="modal-title" id="successModalLabel">Success</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <span id="successMessage"></span>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% } %>
         </div>
         <%@include file="US_footer.jsp" %>
         <%@include file="US_RequestSupport.jsp" %>
 
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
         <script>
                                         document.addEventListener('DOMContentLoaded', function () {
                                             var navLinks = document.querySelectorAll('.profile-sidebar .nav-link');
@@ -235,6 +268,14 @@
                                                 var url = "MainController?action=deleteWishlist&productID=" + productID + "&productDetailID=" + productDetailID;
                                                 window.location.href = url;
                                             });
+                                        });
+                                        
+                                         $(document).ready(function () {
+                                            const successMessage = '<%= request.getAttribute("SUCCESS_MESSAGE")%>';
+                                            if (successMessage) {
+                                                document.getElementById('successMessage').innerText = successMessage;
+                                                $('#successModal').modal('show');
+                                            }
                                         });
         </script>
     </body>
