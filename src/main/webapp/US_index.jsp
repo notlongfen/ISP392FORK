@@ -337,6 +337,7 @@
             </div>
 
             <%@include file="US_footer.jsp" %>
+            <%@include file="US_RequestSupport.jsp" %>
 
             <!-- Initialize Owl Carousel -->
             <script>
