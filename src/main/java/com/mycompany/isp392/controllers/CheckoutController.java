@@ -195,6 +195,12 @@ public class CheckoutController extends HttpServlet {
                         
                         // ManageOrderDTO manageOrder = new ManageOrderDTO(order.getOrderID(), user.getUserID(), new ArrayList<>(), newList,"checkout");
                         // DbUtils.addCheckLogToDB("ManageOrders", "orderID", manageOrder);
+                        url = "SendMailServlet?email=" + user.getEmail() + "&orderID=" + order.getOrderID() + "&action=checkout";
+                        request.getRequestDispatcher(url).include(request, response);
+                        if(request.getAttribute("ERROR_SEND_MAIL") != null) {
+                            url = ERROR;
+                            return;
+                        }
                         url = SUCCESS;
                     }
                 }
