@@ -2126,9 +2126,11 @@ public class ProductDAO {
         Connection conn = null;
         PreparedStatement ptm = null;
         ResultSet rs = null;
-        String query = "SELECT c.CategoryID, c.CategoriesName FROM Categories c "
-                + "INNER JOIN ProductBelongtoCDCategories pbcc ON c.CategoryID = pbcc.CDCategoryID "
-                + "WHERE pbcc.ProductID = ?";
+        String query = "SELECT c.CategoryID, c.CategoriesName, pbcc.ProductID \n"
+                + "FROM Categories c\n"
+                + "INNER JOIN ChildrenCategories cd ON c.CategoryID = cd.ParentID\n"
+                + "INNER JOIN ProductBelongtoCDCategories pbcc ON cd.CDCategoryID = pbcc.CDCategoryID\n"
+                + "WHERE pbcc.ProductID = ?;";
 
         try {
             conn = DbUtils.getConnection();
