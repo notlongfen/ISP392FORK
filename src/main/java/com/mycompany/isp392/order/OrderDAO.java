@@ -16,6 +16,7 @@ import java.util.List;
 import com.mycompany.isp392.user.UserDTO;
 import com.mycompany.isp392.order.*;
 import com.mycompany.isp392.product.ProductDetailsDTO;
+import java.security.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,7 +53,13 @@ public class OrderDAO {
             + "JOIN ChildrenCategories cc ON cc.CDCategoryID = pbtc.CDCategoryID "
             + "WHERE od.OrderID = ?";
     private static final String GET_TOTAL_QUANTITY_BY_ORDER = "SELECT SUM(quantity) AS totalQuantity FROM OrderDetails WHERE OrderID = ?";
-
+    private static final String GET_ALL_ORDER_STATUS_BY_ORDERID = "SELECT FieldNew, ChangeDate FROM ManageOrders WHERE OrderID =?";
+    private static final String GET_PRODUCT_DETAILS_BY_ORDERID = "SELECT p.productName,pd.image, pd.size, pd.color FROM ProductDetails pd "
+            + "INNER JOIN Products p ON p.ProductID=pd.ProductID "
+            + "INNER JOIN OrderDetails od ON pd.ProductDetailsID = od.ProductDetailsID "
+            + "WHERE od.OrderID=? ;";
+    private static final String GET_TOTAL_PRICE_IN_CART_BY_ORDERID = "SELECT c.totalPrice FROM Orders o JOIN Carts C ON o.CartID = C.CartID WHERE o.OrderID=?;";
+    
     public boolean cancelOrder(int orderID) throws ClassNotFoundException {
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -865,7 +872,7 @@ public class OrderDAO {
         try {
             conn = DbUtils.getConnection();
             if (conn != null) {
-                ptm = conn.prepareStatement("SELECT * FROM OrderDetails od JOIN Orders o ON od.OrderID = o.OrderID WHERE ordderID = ? ORDER BY od.OrderID DESC");
+                ptm = conn.prepareStatement("SELECT * FROM OrderDetails od JOIN Orders o ON od.OrderID = o.OrderID WHERE o.orderID = ? ORDER BY od.OrderID DESC");
                 ptm.setInt(1, orderID);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
@@ -895,5 +902,108 @@ public class OrderDAO {
         }
         return list;
         
+    }
+
+    public List<ManageOrderDTO> getListOrderStatusByOrderID(int orderID) {
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        List<ManageOrderDTO> list = new ArrayList<>();
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_ALL_ORDER_STATUS_BY_ORDERID);
+                ptm.setInt(1, orderID);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    String loadNewField = rs.getString("FieldNew");
+                    java.sql.Timestamp changeDate = rs.getTimestamp("ChangeDate");
+                    list.add(new ManageOrderDTO(orderID, loadNewField, changeDate));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ptm != null) {
+                    ptm.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return list;
+    }
+    
+    public List<OrderDetailsDTO> getOrderItems(int orderID) throws SQLException {
+        List<OrderDetailsDTO> list = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_PRODUCT_DETAILS_BY_ORDERID);
+                ptm.setInt(1, orderID);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    String productName = rs.getString("productName");
+                    String size = rs.getString("size");
+                    String image = rs.getString("image");
+                    String color = rs.getString("color");
+                    list.add(new OrderDetailsDTO(orderID, productName, size, image, color));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return list;
+    }
+    
+    public double getTotalPriceInCartByOrderID(int orderID) throws SQLException {
+        double totalPrice = 0.0;
+        Connection conn = null;
+        ResultSet rs = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DbUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_TOTAL_PRICE_IN_CART_BY_ORDERID);
+                ptm.setInt(1, orderID);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    totalPrice = rs.getDouble("totalPrice");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return totalPrice;
     }
 }

@@ -39,6 +39,16 @@ public class CustomerDTO extends UserDTO{
         this.ward = ward;
         this.address = address;    
     }
+    public CustomerDTO(int CustID, String userName, String email, int phone,int roleID, int points, Date birthday, String city, String district, String ward, String address) {
+        super(userName, email, phone);
+        this.CustID = CustID;
+        this.points = points;
+        this.birthday = birthday;
+        this.city = city;
+        this.district = district;
+        this.ward = ward;
+        this.address = address;    
+    }
     
     public CustomerDTO(int userID, String userName, String email, String address, String ward, String district, String city, Date birthday, int phone){
         super(userID, userName, email, phone);

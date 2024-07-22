@@ -230,11 +230,12 @@
                                 </div>
                                 <div class="col-md-3 d-flex flex-column justify-content-center align-items-center ">
                                     <div class="d-grid gap-2">
-                                        <button class="btn btn-primary mb-2" type="button" style="background: white; color: black; border: 2px solid black;">View Order</button>
-
+                                        <a href="MainController?action=View_Order_Detail&orderID=<%=order.getOrderID()%>">
+                                            <button class="btn btn-primary mb-2" type="button" style="background: white; color: black; border: 2px solid black;">View Order</button>
+                                        </a>
 
                                         <% 
-                                                      if (order.getStatus() == 0 || order.getStatus() == 3 || order.getStatus() == 2){  
+                                                      if (order.getStatus() == 0 || order.getStatus() == 3 || order.getStatus() == 2 || order.getStatus() == 4){  
                                         %>
                                         <a href="#" class="btn btn-sm btn-danger disabled" aria-disabled="true">Cancel</a> 
                                         <% 

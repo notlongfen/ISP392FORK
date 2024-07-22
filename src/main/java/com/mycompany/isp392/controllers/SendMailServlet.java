@@ -62,6 +62,8 @@ public class SendMailServlet extends HttpServlet {
             url = requestForSupport(request, response);
         } else if ("registerGoogle".equals(action)) {
             url = newGoogleUser(request, response);
+        } else if ("checkout".equals(action)) {
+            url = checkoutSuccess(request, response);
         }
         response.sendRedirect(url);
     }
@@ -256,6 +258,18 @@ public class SendMailServlet extends HttpServlet {
             return SUCCESS_SEND_MAIL_GOOGLE_USER;
         }
         return ERROR_SEND_MAIL_GOOGLE_USER;
+    }
+
+    private String checkoutSuccess(HttpServletRequest request, HttpServletResponse response) {
+        String toEmail = request.getParameter("toEmail");
+        String subject = "Order Confirmation";
+        String messageBody = "Thank you for ordering from our website. We are pleased to confirm the receipt of your order. We will send you a notification when the order is confirmed.";
+        boolean result = sendEmail(toEmail, subject, messageBody,false);
+        if (result) {
+            return "CheckoutController";
+        }
+        request.setAttribute("ERROR_SEND_MAIL", "FAIL TO SEND MAIL.");
+        return "CheckoutController";
     }
 
     @Override

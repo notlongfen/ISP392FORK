@@ -256,7 +256,7 @@
                                     <span>Discount:</span>
                                     <% 
                                         if (originalPrice != null && finalPrice != null) {
-                                            double discountMoney = originalPrice - (finalPrice - 40000) ;
+                                            double discountMoney = originalPrice - finalPrice ;
                                     %>
                                     <strong style="color: grey"><%= formatter.format(discountMoney) %> </strong>
                                     <% }else{ %>
@@ -269,13 +269,15 @@
                                         double price = cart.getTotalPrice() + 40000;
                                     %>
                                     <strong style="color: red; font-weight: bold;"><%= formatter.format(price) %> </strong>
+                                    <input type="hidden" name="finalPrice" value="<%= price %>">
                                     <% }else{ %>
-                                    <strong style="color: red; font-weight: bold;"><%= formatter.format(finalPrice) %> </strong>
+                                    <strong style="color: red; font-weight: bold;"><%= formatter.format(finalPrice + 40000) %> </strong>
+                                    <input type="hidden" name="finalPrice" value="<%= finalPrice + 40000 %>">
                                     <% } %>
 
                                 </li>
                             </ul>
-
+                                    
                             <div class="form-check mb-3">
                                 <p style="color: red">Ensure that the above information is completely correct </p>
                             </div>

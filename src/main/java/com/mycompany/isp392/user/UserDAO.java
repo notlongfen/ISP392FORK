@@ -701,7 +701,7 @@ public class UserDAO {
                     String district = rs.getString("district");
                     String ward = rs.getString("ward");
                     String address = rs.getString("detailAddress");
-                    customer = new CustomerDTO(name, email, phone, roleID,  points, birthday, city, district, ward, address);
+                    customer = new CustomerDTO(CustID, name, email, phone, roleID,  points, birthday, city, district, ward, address);
                 }
             }
         } catch (Exception e) {

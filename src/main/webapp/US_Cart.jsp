@@ -178,7 +178,7 @@ col-md-8 d-flex justify-content-center align-items-center
                             }
                         } else {
                     %>
-                        <h2>There are no items in your cart!</h2>
+                    <h2>There are no items in your cart!</h2>
                     <%
                         }
                     %>
@@ -196,15 +196,15 @@ col-md-8 d-flex justify-content-center align-items-center
                                     double totalPrice = (double) request.getAttribute("TOTAL_PRICE");                                     
                                     String formattedTotalPrice = formatter.format(totalPrice);
                             %>
-                               <div class="col text-right">
-                                   <h5 style="font-weight: normal"><%= formattedTotalPrice%></h5>
-                               </div>
+                            <div class="col text-right">
+                                <h5 style="font-weight: normal"><%= formattedTotalPrice%></h5>
+                            </div>
                             <%
                                 } else {
                             %>
-                               <div class="col text-right">
-                                   <h5 style="font-weight: normal">N/A</h5>
-                               </div>
+                            <div class="col text-right">
+                                <h5 style="font-weight: normal">N/A</h5>
+                            </div>
                             <%
                                 }
                             %>
@@ -213,11 +213,13 @@ col-md-8 d-flex justify-content-center align-items-center
                         <%
                             if(listCartItems != null && listCartItems.size() > 0){
                         %>
-                           <button class="btn btn-dark w-100 mt-1" style="border-radius: 10px; font-size: 20px">Checkout</button>
+                            <a class="btn btn-dark w-100 mt-1" style="border-radius: 10px; font-size: 20px" href="MainController?action=Checkout">️Check out</a>
+                       
                         <%
                             } else {
                         %>
-                           <button class="btn btn-dark w-100 mt-1 disabled" aria-disabled="true" style="border-radius: 10px; font-size: 20px; pointer-events: none;">Checkout</button>
+                        <input class="btn btn-dark w-100 mt-1 disabled" aria-disabled="true" style="border-radius: 10px; font-size: 20px; pointer-events: none;">Checkout
+                        
                         <%
                             }
                         %>
@@ -245,7 +247,7 @@ col-md-8 d-flex justify-content-center align-items-center
             </div>
         </div>
         <div class="footer-space">
-        <%@include file="US_footer.jsp" %>
+            <%@include file="US_footer.jsp" %>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script>

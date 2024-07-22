@@ -156,25 +156,6 @@
                                             </table>
                                             <hr>
 
-                                            <!-- Pagination -->
-                                            <nav aria-label="Page navigation">
-                                                <ul class="pagination justify-content-center mt-3">
-                                                    <li class="page-item">
-                                                        <a class="page-link" href="#" aria-label="Previous" style="color: #C43337">
-                                                            <span aria-hidden="true">&laquo;</span>
-                                                        </a>
-                                                    </li>
-                                                    <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">1</a></li>
-                                                    <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">2</a></li>
-                                                    <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">3</a></li>
-                                                    <li class="page-item">
-                                                        <a class="page-link" href="#" aria-label="Next" style="color: #C43337">
-                                                            <span aria-hidden="true">&raquo;</span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </nav>
-                                            <!-- End Pagination -->
                                         </div>
                                     </form>
                                     <div class="card-footer"></div>

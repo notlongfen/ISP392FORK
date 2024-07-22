@@ -12,6 +12,7 @@ import java.util.List;
  * @author notlongfen
  */
 public class ManageOrderDTO {
+
     private int orderID;
     private int empID;
     private List<String> oldField;
@@ -44,7 +45,13 @@ public class ManageOrderDTO {
         this.changeDate = changeDate;
     }
 
-    public ManageOrderDTO(int orderID, int empID, String newField, String action){
+    public ManageOrderDTO(int orderID, String loadNewField, Timestamp changeDate) {
+        this.orderID = orderID;
+        this.loadNewField = loadNewField;
+        this.changeDate = changeDate;
+    }
+
+    public ManageOrderDTO(int orderID, int empID, String newField, String action) {
         this.orderID = orderID;
         this.empID = empID;
         this.loadNewField = newField;
@@ -77,8 +84,6 @@ public class ManageOrderDTO {
     public void setEmpID(int empID) {
         this.empID = empID;
     }
-    
-
   
 
     public int getOrderID() {

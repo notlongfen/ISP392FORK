@@ -9,6 +9,8 @@
 <%@ page import="com.mycompany.isp392.order.*" %>
 <%@ page import="com.mycompany.isp392.user.*" %>
 <%@ page import="java.sql.Date" %>
+<%@page import="java.text.NumberFormat"%>
+<%@page import="java.util.Locale"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -139,6 +141,7 @@
                                             </thead>
                                             <%
                                                List<OrderDTO> orderList = (List<OrderDTO>) request.getAttribute("LIST_ORDER");
+                                               NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
                                                if (orderList != null) {
                                                    for (OrderDTO order : orderList) {
                                             %>
@@ -147,7 +150,7 @@
                                                     <td class="text-center"><a href="MainController?action=ViewOrderDetail&orderID=<%= order.getOrderID()%>"><%= order.getOrderID() %></a></td>
                                                     <td class="text-center"><%= order.getCustID() %></td>
                                                     <td class="text-center"><%= order.getOrderDate() %></td>
-                                                    <td class="text-center"><%= order.getTotal() %></td>
+                                                    <td class="text-center"><%= formatter.format(order.getTotal()) %></td>
                                                     <td class="text-left">
                                                         <span class="badge 
                                                               <%= order.getStatus() == 0 ? "badge-secondary" : 
@@ -186,25 +189,7 @@
                                             %>
                                         </table>
                                         <hr>
-                                        <!-- Pagination -->
-                                        <nav aria-label="Page navigation">
-                                            <ul class="pagination justify-content-center mt-3">
-                                                <li class="page-item">
-                                                    <a class="page-link" href="#" aria-label="Previous" style="color: #C43337">
-                                                        <span aria-hidden="true">&laquo;</span>
-                                                    </a>
-                                                </li>
-                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">1</a></li>
-                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">2</a></li>
-                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">3</a></li>
-                                                <li class="page-item" >
-                                                    <a class="page-link" href="#" aria-label="Next" style="color: #C43337">
-                                                        <span aria-hidden="true">&raquo;</span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                        <!-- End Pagination -->
+                                       
                                     </div>
                                     <div class="card-footer"></div>
                                 </div>

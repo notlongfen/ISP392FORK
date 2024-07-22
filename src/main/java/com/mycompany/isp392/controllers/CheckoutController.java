@@ -33,7 +33,7 @@ import com.mycompany.isp392.user.*;
 public class CheckoutController extends HttpServlet {
     private static final String NOT_LOGED_IN = "US_SignIn.jsp";
     private static final String ERROR = "US_Checkout.jsp";
-    private static final String SUCCESS = "ViewUSDetailsOrderController";
+    private static final String SUCCESS = "ViewUSOrderDetailsController";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -47,48 +47,6 @@ public class CheckoutController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet CheckoutController</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet CheckoutController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the
-    // + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request  servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request  servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
         String url = ERROR;
         HttpSession session = request.getSession();
         CartDTO cart = (CartDTO) request.getAttribute("CART_INFO");
@@ -130,6 +88,7 @@ public class CheckoutController extends HttpServlet {
             String address = request.getParameter("address");
             String note = request.getParameter("note");
             int phone = Integer.parseInt(request.getParameter("phone"));
+            double finalPrice = Double.parseDouble(request.getParameter("finalPrice"));
 
             List<CartDetailsDTO> cartDetails = cartDAO.getCartItems(cart.getCartID());
             // int userPoint = userDAO.getCustomerByID(userDTO.getUserID()).getPoints();
@@ -157,7 +116,7 @@ public class CheckoutController extends HttpServlet {
             PromotionDAO promotionDAO = new PromotionDAO();
             PromotionDTO promotionInCart = promotionDAO.getPromotionByID(cart.getPromotionID());
             String promotionNameInCart = promotionInCart.getPromotionName();
-            double percentage = promotionInCart.getDiscountPer() / 100;
+            double percentage = promotionInCart.getDiscountPer() / 100.0;
             // if (!promotionName.equals(promotionNameInCart)) {
             //     PromotionError pe = new PromotionError();
             //     pe.setConditionError("You should apply your current voucher first or retype the voucher code");
@@ -174,7 +133,7 @@ public class CheckoutController extends HttpServlet {
             // Add Order
             OrderDAO orderDAO = new OrderDAO();
             ProductDAO productDAO = new ProductDAO();
-            OrderDTO order = orderDAO.insertOrder(cart.getTotalPrice() + 40_000, user.getUserID(),
+            OrderDTO order = orderDAO.insertOrder(finalPrice, user.getUserID(),
                     promotionInCart.getPromotionID(), cart.getCartID(),
                     name, city, district, ward, address, phone, note);
 
@@ -236,6 +195,12 @@ public class CheckoutController extends HttpServlet {
                         
                         // ManageOrderDTO manageOrder = new ManageOrderDTO(order.getOrderID(), user.getUserID(), new ArrayList<>(), newList,"checkout");
                         // DbUtils.addCheckLogToDB("ManageOrders", "orderID", manageOrder);
+                        url = "SendMailServlet?email=" + user.getEmail() + "&orderID=" + order.getOrderID() + "&action=checkout";
+                        request.getRequestDispatcher(url).include(request, response);
+                        if(request.getAttribute("ERROR_SEND_MAIL") != null) {
+                            url = ERROR;
+                            return;
+                        }
                         url = SUCCESS;
                     }
                 }
@@ -248,6 +213,36 @@ public class CheckoutController extends HttpServlet {
             request.getRequestDispatcher(url).forward(request, response);
         }
 
+    }
+
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the
+    // + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request  servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException      if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request  servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException      if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
     }
 
     /**

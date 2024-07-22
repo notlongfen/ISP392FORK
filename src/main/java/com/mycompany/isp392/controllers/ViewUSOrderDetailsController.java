@@ -8,10 +8,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-import com.mycompany.isp392.order.OrderDAO;
-import com.mycompany.isp392.order.OrderDTO;
-import com.mycompany.isp392.order.OrderDetailsDTO;
-import com.mycompany.isp392.user.UserDTO;
+import com.mycompany.isp392.order.*;
+import com.mycompany.isp392.user.*;
+import com.mycompany.isp392.product.*;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -25,8 +24,10 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "ViewUSOrderDetailsController", urlPatterns = {"/ViewUSOrderDetailsController"})
 public class ViewUSOrderDetailsController extends HttpServlet {
-    private static final String ERROR = "US_OrderDetails.jsp";
+
+    private static final String ERROR = "US_MyOrder.jsp";
     private static final String SUCCESS = "US_OrderDetails.jsp";
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -42,22 +43,34 @@ public class ViewUSOrderDetailsController extends HttpServlet {
         String url = ERROR;
 
         try {
-            UserDTO userDTO = (UserDTO) request.getSession().getAttribute("LOGIN_USER");
+            CustomerDTO userDTO = (CustomerDTO) request.getSession().getAttribute("CUST");
+            UserDTO user = (UserDTO) request.getSession().getAttribute("LOGIN_USER");
             OrderDAO orderDAO = new OrderDAO();
-            int orderID = Integer.parseInt(request.getParameter("orderID"));
-            if(orderID != 0){
-                OrderDTO order = orderDAO.getOrderInfo(orderID);
-                List<OrderDetailsDTO> orderDetails = orderDAO.getListOrderDetailsByOrderID(orderID);
+            String orderID = request.getParameter("orderID");
+            if (orderID != null) {
+                int orderIDInt = Integer.parseInt(orderID);
+                OrderDTO order = orderDAO.getOrderInfo(orderIDInt);
+                List<OrderDetailsDTO> orderDetails = orderDAO.getListOrderDetailsByOrderID(orderIDInt);
+                List<ManageOrderDTO> orderStatus = orderDAO.getListOrderStatusByOrderID(orderIDInt);
+                List<OrderDetailsDTO> orderItems = orderDAO.getOrderItems(orderIDInt);
+                double cartTotalPrice = orderDAO.getTotalPriceInCartByOrderID(orderIDInt);
                 request.setAttribute("DETAILS_OF_ORDER", order);
                 request.setAttribute("DETAILS_OF_ORDER_DETAILS", orderDetails);
+                request.setAttribute("ITEMS_OF_ORDER", orderItems);
+                request.setAttribute("STATUS_OF_ORDER", orderStatus);
+                request.setAttribute("CART_TOTAL_PRICE", cartTotalPrice);
                 url = SUCCESS;
-            }else{
-            OrderDTO latestOrder = orderDAO.getRecentOrderOfCustomer(userDTO.getUserID());
-            List<OrderDetailsDTO> orderDetails = orderDAO.getLastOrderDetails(latestOrder.getOrderID());
-
-            request.setAttribute("LATEST_ORDER", latestOrder);
-            request.setAttribute("ORDER_DETAILS", orderDetails);
-            url = SUCCESS;
+            } else {
+                int custID = user.getUserID();
+                OrderDTO latestOrder = orderDAO.getRecentOrderOfCustomer(custID);
+                List<OrderDetailsDTO> orderDetails = orderDAO.getLastOrderDetails(latestOrder.getOrderID());
+                List<OrderDetailsDTO> orderItems = orderDAO.getOrderItems(latestOrder.getOrderID());
+                double cartTotalPrice = orderDAO.getTotalPriceInCartByOrderID(latestOrder.getOrderID());
+                request.setAttribute("DETAILS_OF_ORDER", latestOrder);
+                request.setAttribute("DETAILS_OF_ORDER_DETAILS", orderDetails);
+                request.setAttribute("ITEMS_OF_ORDER", orderItems);
+                request.setAttribute("CART_TOTAL_PRICE", cartTotalPrice);
+                url = SUCCESS;
             }
         } catch (Exception e) {
             // TODO: handle exception

@@ -215,13 +215,13 @@ public class OrderDTO {
             case 0:
                 return "Cancelled";
             case 1:
-                return "Confirming";
+                return "Pending";
             case 2:
-                return "Delivering";
+                return "In Processing";
             case 3:
-                return "Completed";
+                return "Delivering";
             default:
-                return "Unknown";
+                return "Completed";
         }
     }
 
@@ -229,4 +229,6 @@ public class OrderDTO {
     public String toString() {
         return "OrderDTO{" + "orderID=" + orderID + ", status=" + status + ", total=" + total + ", orderDate=" + orderDate + ", custID=" + custID + ", promotionID=" + promotionID + ", cartID=" + cartID + '}';
     }
+    
+   
 }

@@ -269,6 +269,9 @@ public class MainController extends HttpServlet {
 
     private static final String VIEW_US_ORDER = "ViewUSOrder";
     private static final String VIEW_US_ORDER_CONTROLLER = "ViewUSOrderController";
+    
+    private static final String VIEW_US_ORDER_DETAIL = "View_Order_Detail";
+    private static final String VIEW_US_ORDER_DETAIL_CONTROLLER = "ViewUSOrderDetailsController";
 
     private static final String CANCEL_ORDER = "CancelOrder";
     private static final String CANCEL_ORDER_CONTROLLER = "CancelOrderController";
@@ -485,6 +488,8 @@ public class MainController extends HttpServlet {
                 url = EDIT_PRODUCT_DETAIL_PAGE_VIEW;
             } else if (VIEW_US_ORDER.equals(action)) {
                 url = VIEW_US_ORDER_CONTROLLER;
+            } else if (VIEW_US_ORDER_DETAIL.equals(action)) {
+                url = VIEW_US_ORDER_DETAIL_CONTROLLER;
             } else if (CANCEL_ORDER.equals(action)) {
                 url = CANCEL_ORDER_CONTROLLER;
             } else if (ADD_TO_CART.equals(action)) {
