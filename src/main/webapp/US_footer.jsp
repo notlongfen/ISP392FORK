@@ -26,8 +26,7 @@
             }
             .shop-name span {
                 color: #f00; /* Màu đỏ cho phần chữ "no" */
-                background-color: #000; /* Màu nền đen cho phần chữ "Kro" */
-                padding: 0 5px; /* Khoảng cách xung quanh chữ để dễ nhìn hơn */
+                background-color: #1c1c1e; /* Màu nền đen cho phần chữ "Kro" */
                 border-radius: 3px; /* Bo tròn các góc của nền */
             }
             .shop-name:hover {
@@ -62,7 +61,7 @@
                     <div class="row justify-content-between">
                         <div class="col-md-5">
                             <!-- Tên shop -->
-                            <a href="HomePageController" class="shop-name">Kro<span>no</span></a>
+                            <a href="HomePageController" class="shop-name">KRO<span>NO</span></a>
                         </div>
                         <div class="col-md-5">
                             <div class="contact-info">

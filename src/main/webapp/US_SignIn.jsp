@@ -104,7 +104,7 @@
                 <div class="col-12">
                     <div class="header text-center bg-custom1">
                         <div class="logo">
-                            <h1><span>ISP392</span>SHOP</h1>
+                            <h1><span>KRO</span>NO</h1>
                         </div>
                     </div>
                 </div>

@@ -1,5 +1,5 @@
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="com.mycompany.isp392.user.UserDTO"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -88,6 +88,8 @@
             if (search == null) {
                 search = "";
             }
+            
+            UserDTO checkLogin = (UserDTO) session.getAttribute("LOGIN_USER");
         %>
         <div class="super_container">
 
@@ -121,8 +123,18 @@
                                                 <i class="fa fa-angle-down"></i>
                                             </a>
                                             <ul class="account_selection">
+                                                <%
+                                                    if(checkLogin == null){
+                                                %>
                                                 <li><a href="US_SignIn.jsp"><i class="fa fa-sign-in" aria-hidden="true" ></i>Sign In</a></li>
                                                 <li><a href="US_SignUp.jsp"><i class="fa fa-user-plus" aria-hidden="true" ></i>Register</a></li>
+                                                <%
+                                                    } else {
+                                                %>
+                                                <li><a href="MainController?action=Logout"><i class="fa fa-sign-in" aria-hidden="true" ></i>Logout</a></li>
+                                                <%
+                                                    }
+                                                %>
                                             </ul>
                                         </li>
                                     </ul>

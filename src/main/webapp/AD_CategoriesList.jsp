@@ -99,18 +99,6 @@
                                         <form action="MainController" method="POST">
                                             <div class="row mb-4 mx-2 justify-content-between">
                                                 <div class="col-md-3">
-                                                    <div class="input-group">
-                                                        <select id="entriesSelect" class="custom-select">
-                                                            <option value="Select Entries">Select Entries</option>
-                                                            <option value="5">5</option>
-                                                            <option value="10">10</option>
-                                                            <option value="15">15</option>
-                                                            <option value="20">20</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-3">
                                                     <select id="statusSelect" class="custom-select">
                                                         <option value="Select Status">Select Status</option>
                                                         <option value="Active">Active</option>
