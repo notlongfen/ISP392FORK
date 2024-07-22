@@ -9,6 +9,9 @@
 <%@ page import="com.mycompany.isp392.order.*" %>
 <%@ page import="com.mycompany.isp392.user.*" %>
 <%@ page import="java.sql.Date" %>
+<%@page import="java.text.NumberFormat"%>
+<%@page import="java.util.Locale"%>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -103,51 +106,56 @@
                                                 <%
                                                     OrderDTO order = (OrderDTO) request.getAttribute("ORDER_INFOR");
                                                     if (order != null) {
-                                                        %>
-                                                    <input type="hidden" name="oldStatus" value="<%= order.getStatus()%>">
-                                                <tr>
-                                                    <td class="text-center"><%= order.getOrderID() %></td>
-                                                    <td class="text-center"><%= order.getUserName() %></td>
-                                                    <td class="text-center"><%= order.getAddress() %></td>
-                                                    <td class="text-center"><%= order.getWard() %></td>
-                                                    <td class="text-center"><%= order.getDistrict() %></td>
-                                                    <td class="text-center"><%= order.getCity() %></td>
-                                                    <td class="text-center"><%= order.getPhone() %></td>
-                                                    <td class="text-center"><%= order.getNote() %></td>
-                                                    <td class="text-center">
-                                                        <input type="hidden" name="orderID" value="<%= order.getOrderID() %>">    
-                                                        <select name="status" class="form-control">
-                                                            <%
-                                                                int currentStatus = order.getStatus();
-                                                                if (currentStatus == 1) {
-                                                            %>
-                                                            <option value="0" <%= currentStatus == 0 ? "selected" : "" %> >Canceled</option>
-                                                            <option value="1" <%= currentStatus == 1 ? "selected" : "" %>>Pending</option>
-                                                            <option value="2" <%= currentStatus == 2 ? "selected" : "" %>>In processing</option>
-                                                            <%
-                                                                } if (currentStatus == 2) {
-                                                            %>
-                                                            <option value="2" <%= currentStatus == 2 ? "selected" : "" %>>In processing</option>
-                                                            <option value="3" <%= currentStatus == 3 ? "selected" : "" %>>Delivering</option>
-                                                            <%
-                                                                } if (currentStatus == 3) {
-                                                            %>
-                                                            <option value="3" <%= currentStatus == 3 ? "selected" : "" %>>Delivering</option>
-                                                            <option value="4" <%= currentStatus == 4 ? "selected" : "" %>>Completed</option>
-                                                            <%
-                                                                } if (currentStatus == 4) {
-                                                            %>
-                                                            <option value="4" <%= currentStatus == 4 ? "selected" : "" %>>Completed</option>
-                                                            <option value="0" <%= currentStatus == 0 ? "selected" : "" %> >Canceled</option>
-                                                            <%
-                                                                }
-                                                            %>
-                                                        </select>
-                                                    </td>
-                                                </tr>
-                                                <%
-                                                    }
                                                 %>
+                                            <input type="hidden" name="oldStatus" value="<%= order.getStatus()%>">
+                                            <tr>
+                                                <td class="text-center"><%= order.getOrderID() %></td>
+                                                <td class="text-center"><%= order.getUserName() %></td>
+                                                <td class="text-center"><%= order.getAddress() %></td>
+                                                <td class="text-center"><%= order.getWard() %></td>
+                                                <td class="text-center"><%= order.getDistrict() %></td>
+                                                <td class="text-center"><%= order.getCity() %></td>
+                                                <td class="text-center"><%= order.getPhone() %></td>
+                                                <td class="text-center"><%= order.getNote() %></td>
+                                                <td class="text-center">
+                                                    <input type="hidden" name="orderID" value="<%= order.getOrderID() %>">    
+                                                    <select name="status" class="form-control">
+                                                        <%
+                                                            int currentStatus = order.getStatus();
+                                                            if (currentStatus == 0) {
+                                                        %>
+                                                        <option value="0" <%= currentStatus == 0 ? "selected" : "" %> >Canceled</option>
+                                                        <%    
+                                                            } if (currentStatus == 1) {
+                                                        %>
+                                                        <option value="0" <%= currentStatus == 0 ? "selected" : "" %> >Canceled</option>
+                                                        <option value="1" <%= currentStatus == 1 ? "selected" : "" %>>Pending</option>
+                                                        <option value="2" <%= currentStatus == 2 ? "selected" : "" %>>In processing</option>
+                                                        <%
+                                                            } if (currentStatus == 2) {
+                                                        %>
+                                                        <option value="2" <%= currentStatus == 2 ? "selected" : "" %>>In processing</option>
+                                                        <option value="3" <%= currentStatus == 3 ? "selected" : "" %>>Delivering</option>
+                                                        <%
+                                                            } if (currentStatus == 3) {
+                                                        %>
+                                                        <option value="3" <%= currentStatus == 3 ? "selected" : "" %>>Delivering</option>
+                                                        <option value="4" <%= currentStatus == 4 ? "selected" : "" %>>Completed</option>
+                                                        <%
+                                                            } if (currentStatus == 4) {
+                                                        %>
+                                                        <option value="4" <%= currentStatus == 4 ? "selected" : "" %>>Completed</option>
+                                                        <option value="0" <%= currentStatus == 0 ? "selected" : "" %> >Canceled</option>
+                                                        <%
+                                                            } 
+                                                        %>
+
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <%
+                                                }
+                                            %>
                                             </tbody>
                                             <div class="d-flex justify-content-end mb-4 mr-3">
                                                 <input type="submit" name="action" value="Update Order Status" style="background-color: #C53337; border: none; color: white;">
@@ -166,13 +174,14 @@
                                         <tbody id="tableBodyDetails">
                                             <%
                                                 List<OrderDetailsDTO> orderDetailsList = (List<OrderDetailsDTO>) request.getAttribute("ORDER_DETAIL_LIST");
+                                                NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
                                                 if (orderDetailsList != null) {
                                                     for (OrderDetailsDTO orderDetails : orderDetailsList) {
                                             %>
                                             <tr>
                                                 <td class="text-center"><%= orderDetails.getProductDetailsID() %></td>
                                                 <td class="text-center"><%= orderDetails.getQuantity() %></td>
-                                                <td class="text-center"><%= orderDetails.getUnitPrice() %></td>
+                                                <td class="text-center"><%= formatter.format(orderDetails.getUnitPrice()) %></td>
                                             </tr>
                                             <%
                                                     }
@@ -190,7 +199,7 @@
                     </div>
                     <!--Row-->
 
-                 
+
                     <!---Mode up delete item in voice -->
                     <!-- Modal Xác nhận Xóa -->
                     <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">

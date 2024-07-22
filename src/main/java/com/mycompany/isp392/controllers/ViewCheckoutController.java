@@ -29,7 +29,7 @@ import jakarta.servlet.http.HttpSession;
 public class ViewCheckoutController extends HttpServlet {
 
     private static final String ERROR = "US_Checkout.jsp";
-    private static final String SUCCESS = "US_Checkout.jsp";
+    private static final String SUCCESS = "US_MyOrder.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

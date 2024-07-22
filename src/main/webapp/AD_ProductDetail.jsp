@@ -59,7 +59,7 @@
                     %>
                     <div class="container-fluid" id="container-wrapper">
                         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                            <h1 class="h3 mb-0 text-gray-900">Product Details</h1>
+                            <h1 class="h3 mb-0 text-gray-900"><b>Product Details</b></h1>
                         </div>
                         <div class="d-flex justify-content-end mb-4">
                             <% 

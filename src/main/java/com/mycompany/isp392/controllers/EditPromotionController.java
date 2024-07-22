@@ -69,11 +69,12 @@ public class EditPromotionController extends HttpServlet {
             } else {
                 imagePath = request.getParameter("oldImage");
             }
-            
-//            if (dao.checkPromotionDuplicate(promotionName, status)) {
-//                error.setPromotionNameError("This promotion already exists.");
-//                checkValidation = false;
-//            }
+
+            // Check for duplicate promotion name, excluding the current promotion being edited
+            if (!promotionName.equals(oldPromotionName) && dao.checkPromotionDuplicate(promotionName, status)) {
+                error.setPromotionNameError("This promotion already exists.");
+                checkValidation = false;
+            }
             if (promotionName.contains(" ")) {
                 error.setPromotionNameError("Promotion name cannot contain any spaces.");
                 checkValidation = false;
@@ -93,7 +94,6 @@ public class EditPromotionController extends HttpServlet {
 
             if (checkValidation) {
                 PromotionDTO promotion = new PromotionDTO(promotionID, promotionName, startDate, endDate, discountPer, condition, description, status, imagePath);
-//                PromotionDTO promotion = new PromotionDTO(promotionID, promotionName, startDate, endDate, discountPer, condition, description, status);
                 boolean check = dao.editPromotion(promotion);
                 List<String> oldList = new ArrayList<>();
                 List<String> newList = new ArrayList<>();
@@ -141,7 +141,6 @@ public class EditPromotionController extends HttpServlet {
                         ManagePromotionDTO manage = new ManagePromotionDTO(promotionID, empID, oldList, newList, "Edit");
                         DbUtils.addCheckLogToDB("ManagePromotions", "PromotionID", manage);
                     }
-                
                 
                 if (check) {
                     request.setAttribute("SUCCESS_MESSAGE", "INFORMATION UPDATED SUCCESSFULLY !");
