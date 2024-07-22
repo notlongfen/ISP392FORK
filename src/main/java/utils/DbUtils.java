@@ -21,7 +21,7 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.mindrot.jbcrypt.BCrypt;
 
 public class DbUtils {
-    private static Dotenv dotenv = Dotenv.configure().directory("/home/notlongfen/code/java/ISP392/.env").load();
+    private static Dotenv dotenv = Dotenv.configure().directory("D:\\FPT\\K5\\ISP392\\ISP392_Test").load();
     private static final String CHECK_LOG_FORMAT = "INSERT INTO %s (EmpID, %s, FieldOld, FieldNew, Action) VALUES (?, ?, ?, ?, ?)";
     private static final String CHECK_LOG_GET = "SELECT * FROM %s";
 
@@ -79,6 +79,38 @@ public class DbUtils {
 
                      T instance = clazz.getDeclaredConstructor(int.class, int.class, String.class, String.class, String.class, Timestamp.class)
                                .newInstance(diffAttributeID, empID, oldField, newField, action, changeDate);
+
+            list.add(instance);
+            }
+        } catch (ClassNotFoundException | SQLException | IllegalArgumentException | SecurityException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection(conn, ptm, rs);
+        }
+        return list;
+    }
+    
+    public static <T> List<T>  getCheckLogFromDB2(String tableName, String attributeName, Class<T> clazz) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+        List<T> list = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = getConnection();
+            String query = String.format(CHECK_LOG_GET, tableName);
+            ptm = conn.prepareStatement(query);
+            rs = ptm.executeQuery();
+            while (rs.next()) {
+                 int diffAttributeID = rs.getInt(attributeName);
+                    int empID = rs.getInt("EmpID");
+                    String oldField = rs.getString("FieldOld");
+                    String newField = rs.getString("FieldNew");
+                    String action = rs.getString("Action");
+                    Timestamp changeDate = rs.getTimestamp("ChangeDate");
+                    
+                     T instance = clazz.getDeclaredConstructor(int.class, int.class, String.class, String.class, String.class, Timestamp.class, boolean.class)
+                  .newInstance(diffAttributeID, empID, oldField, newField, action, changeDate, true);
+
 
             list.add(instance);
             }
