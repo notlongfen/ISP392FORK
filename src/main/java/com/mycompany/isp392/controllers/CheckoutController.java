@@ -141,32 +141,34 @@ public class CheckoutController extends HttpServlet {
                 // OrderDetailsDTO odDTO = new OrderDetailsDTO(order.getOrderID(), cart.prod,
                 // promotionID, phone); //not done
                 // OrderDetailsDTO orderDetailsDTO = orderDAO.insertOrderDetails()
-                for (CartDetailsDTO cartDetail : cartDetails) { // Add order details
+
+                // FIXME: NEED CHECK
+                for (CartDetailsDTO cartDetail : cartDetails) { // Add order details 
                     OrderDetailsDTO orderDetailsDTO = new OrderDetailsDTO(cartDetail.getProductDetailsID(),
                             order.getOrderID(), cartDetail.getProductID(), cartDetail.getQuantity(),
                             cartDetail.getPrice());
                     orderDAO.insertOrderDetails(orderDetailsDTO);
-                    productDAO.updateQuantittyAfterCheckout(cartDetail.getProductID(), cartDetail.getQuantity());
+                    // productDAO.updateQuantittyAfterCheckout(cartDetail.getProductID(), cartDetail.getQuantity());
                 }
 
                 session.removeAttribute("cart");
                 boolean check = cartDAO.updateCartStaus(cart.getCartID(), 0);
                 // Update user point
                 HashMap<Integer, Integer> priceAndPoint = new HashMap<>();
-                priceAndPoint.put(500000, 10);
-                priceAndPoint.put(1000000, 20);
+                priceAndPoint.put(500_000, 10);
+                priceAndPoint.put(1_000_000, 20);
 
                 double total = cart.getTotalPrice();
                 int points = userDAO.getCustomerByID(userDTO.getUserID()).getPoints();
 
                 if (check) {
                     while (total >= 0) {
-                        if (total >= 1000000) {
-                            points += priceAndPoint.get(1000000);
-                            total -= 1000000;
-                        } else if (total >= 500000) {
-                            points += priceAndPoint.get(500000);
-                            total -= 500000;
+                        if (total >= 1_000_000) {
+                            points += priceAndPoint.get(1_000_000);
+                            total -= 1_000_000;
+                        } else if (total >= 500_000) {
+                            points += priceAndPoint.get(500_000);
+                            total -= 500_000;
                         } else {
                             break;
                         }

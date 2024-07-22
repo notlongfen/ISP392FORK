@@ -837,17 +837,18 @@ public class ProductDAO {
         return latestImportDates;
     }
 
-    public boolean updateQuantittyAfterCheckout(int productID, int quantity) throws SQLException {
+    public boolean updateQuantittyAfterCheckout(int productID, int productDetailsID, int quantity) throws SQLException {
         boolean result = false;
         Connection conn = null;
         PreparedStatement stm = null;
         try {
             conn = DbUtils.getConnection();
             if (conn != null) {
-                String query = "UPDATE ProductDetails SET stockQuantity = stockQuantity - ? WHERE ProductID = ?";
+                String query = "UPDATE ProductDetails SET stockQuantity = stockQuantity - ? WHERE ProductID = ? AND productDetailsID = ?";
                 stm = conn.prepareStatement(query);
                 stm.setInt(1, quantity);
                 stm.setInt(2, productID);
+                stm.setInt(3, productDetailsID);
                 int value = stm.executeUpdate();
                 result = value > 0 ? true : false;
             }

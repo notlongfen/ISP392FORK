@@ -261,9 +261,10 @@ public class SendMailServlet extends HttpServlet {
     }
 
     private String checkoutSuccess(HttpServletRequest request, HttpServletResponse response) {
-        String toEmail = request.getParameter("toEmail");
+        String toEmail = request.getParameter("email");
         String subject = "Order Confirmation";
-        String messageBody = "Thank you for ordering from our website. We are pleased to confirm the receipt of your order. We will send you a notification when the order is confirmed.";
+        String orderID = request.getParameter("orderID");
+        String messageBody = "Thank you for ordering from our website. We are pleased to confirm the receipt of your order. We will send you a notification when the order is confirmed. Here's your orderID" + orderID;
         boolean result = sendEmail(toEmail, subject, messageBody,false);
         if (result) {
             return "CheckoutController";
