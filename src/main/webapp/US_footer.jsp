@@ -21,11 +21,16 @@
             .shop-name {
                 text-decoration: none; /* Loại bỏ gạch chân của liên kết */
                 font-size: 50px; /* Kích thước chữ */
-                color: #000; /* Màu chữ mặc định cho phần đầu tiên */
-                font-weight: bold;
+                color: #b21f2d !important;/* Màu chữ mặc định cho phần đầu tiên */
+                margin: 0;
+                font-size: 3em;
+                color: #333;
+                position: relative;
+                display: inline-block;
+                font-weight: normal;
             }
             .shop-name span {
-                color: #f00; /* Màu đỏ cho phần chữ "no" */
+                color: #ffffff; /* Màu đỏ cho phần chữ "no" */
                 background-color: #1c1c1e; /* Màu nền đen cho phần chữ "Kro" */
                 border-radius: 3px; /* Bo tròn các góc của nền */
             }

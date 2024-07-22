@@ -81,6 +81,20 @@
                     /* Add hover effects if desired */
                     color: gray; /* Change color on hover */
                 }
+                
+                 .logo_container a {
+                    color: #b21f2d; /* Default color for "Kro" */
+                    text-decoration: none; /* Removes underline */
+                }
+
+                .logo_container a span {
+                    color: black; /* Color for "no" */
+                }
+                
+                .logo_container a:hover {
+                    color: #b21f2d; 
+                    text-decoration: underline;
+                }
     </style>
     <body>
         <%
