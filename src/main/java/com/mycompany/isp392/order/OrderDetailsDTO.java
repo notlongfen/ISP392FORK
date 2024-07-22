@@ -17,17 +17,15 @@ public class OrderDetailsDTO extends OrderDTO {
     private int productID;
     private int quantity;
     private int unitPrice;
-    
+
     private String productName;
     private String size;
     private String image;
+    private String color;
     private String category;
-    
 
     public OrderDetailsDTO() {
     }
-    
-    
 
     public OrderDetailsDTO(int productDetailsID, int orderID, int productID, int quantity, int unitPrice) {
         this.productDetailsID = productDetailsID;
@@ -44,6 +42,7 @@ public class OrderDetailsDTO extends OrderDTO {
         this.quantity = quantity;
         this.unitPrice = unitPrice;
     }
+
     public OrderDetailsDTO(int productDetailsID, int orderID, int productID, int quantity, int unitPrice, int status, double total, Date orderDate, int promotionID, int cartID, String userName, String city, String district, String ward, String address, int phone, String note) {
         super(orderID, status, total, orderDate, promotionID, cartID, userName, city, district, ward, address, phone, note);
         this.productDetailsID = productDetailsID;
@@ -51,8 +50,7 @@ public class OrderDetailsDTO extends OrderDTO {
         this.quantity = quantity;
         this.unitPrice = unitPrice;
     }
-    
-    
+
     public OrderDetailsDTO(int productDetailsID, int orderID, int quantity, int unitPrice) {
         this.productDetailsID = productDetailsID;
         this.orderID = orderID;
@@ -71,6 +69,14 @@ public class OrderDetailsDTO extends OrderDTO {
         this.size = size;
         this.image = image;
         this.category = category;
+    }
+
+    public OrderDetailsDTO(int orderID, String productName, String size, String image, String color) {
+        this.orderID = orderID;
+        this.size = size;
+        this.productName = productName;
+        this.image = image;
+        this.color = color;
     }
 
     public int getProductDetailsID() {
@@ -112,8 +118,6 @@ public class OrderDetailsDTO extends OrderDTO {
     public String getCategory() {
         return category;
     }
-    
-    
 
     public void setOrderID(int orderID) {
         this.orderID = orderID;
