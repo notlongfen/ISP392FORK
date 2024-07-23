@@ -31,6 +31,13 @@
                 flex-wrap: wrap;
                 gap: 10px;
             }
+
+            .image-preview {
+                width: 150px; /* Set the desired width */
+                height: 150px; /* Set the desired height */
+                object-fit: cover; /* This ensures the image covers the area without distortion */
+                margin: 5px; /* Add some spacing between images */
+            }
         </style>
     </head>
     <body>
