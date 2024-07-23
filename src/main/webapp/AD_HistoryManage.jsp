@@ -199,25 +199,7 @@
                                         </table>
                                         <hr>
 
-                                        <!-- Pagination -->
-                                        <nav aria-label="Page navigation">
-                                            <ul class="pagination justify-content-center mt-3">
-                                                <li class="page-item">
-                                                    <a class="page-link" href="#" aria-label="Previous" style="color: #C43337">
-                                                        <span aria-hidden="true">&laquo;</span>
-                                                    </a>
-                                                </li>
-                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">1</a></li>
-                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">2</a></li>
-                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">3</a></li>
-                                                <li class="page-item" >
-                                                    <a class="page-link" href="#" aria-label="Next" style="color: #C43337">
-                                                        <span aria-hidden="true">&raquo;</span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                        <!-- End Pagination -->
+
                                     </div>
                                 </div>
 
@@ -346,25 +328,7 @@
                                         </table>
                                         <hr>
 
-                                        <!-- Pagination -->
-                                        <nav aria-label="Page navigation">
-                                            <ul class="pagination justify-content-center mt-3">
-                                                <li class="page-item">
-                                                    <a class="page-link" href="#" aria-label="Previous" style="color: #C43337">
-                                                        <span aria-hidden="true">&laquo;</span>
-                                                    </a>
-                                                </li>
-                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">1</a></li>
-                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">2</a></li>
-                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">3</a></li>
-                                                <li class="page-item" >
-                                                    <a class="page-link" href="#" aria-label="Next" style="color: #C43337">
-                                                        <span aria-hidden="true">&raquo;</span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                        <!-- End Pagination -->
+
                                     </div>
                                 </div>
 
@@ -420,25 +384,7 @@
                                         </table>
                                         <hr>
 
-                                        <!-- Pagination -->
-                                        <nav aria-label="Page navigation">
-                                            <ul class="pagination justify-content-center mt-3">
-                                                <li class="page-item">
-                                                    <a class="page-link" href="#" aria-label="Previous" style="color: #C43337">
-                                                        <span aria-hidden="true">&laquo;</span>
-                                                    </a>
-                                                </li>
-                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">1</a></li>
-                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">2</a></li>
-                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">3</a></li>
-                                                <li class="page-item" >
-                                                    <a class="page-link" href="#" aria-label="Next" style="color: #C43337">
-                                                        <span aria-hidden="true">&raquo;</span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                        <!-- End Pagination -->
+
                                     </div>
                                 </div>
 
@@ -566,25 +512,7 @@
                                         </table>
                                         <hr>
 
-                                        <!-- Pagination -->
-                                        <nav aria-label="Page navigation">
-                                            <ul class="pagination justify-content-center mt-3">
-                                                <li class="page-item">
-                                                    <a class="page-link" href="#" aria-label="Previous" style="color: #C43337">
-                                                        <span aria-hidden="true">&laquo;</span>
-                                                    </a>
-                                                </li>
-                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">1</a></li>
-                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">2</a></li>
-                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">3</a></li>
-                                                <li class="page-item" >
-                                                    <a class="page-link" href="#" aria-label="Next" style="color: #C43337">
-                                                        <span aria-hidden="true">&raquo;</span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                        <!-- End Pagination -->
+
                                     </div>
                                 </div>
 
@@ -677,9 +605,18 @@
                                                         Import Date: <%= oldDate %><br>
                                                         <% } %>
                                                         <% if (oldImages.length > 0) { %>
-                                                        <% for (String image : oldImages) { %>
-                                                        <img src="<%= image.trim() %>" alt="Old Image" width="100" height="100"><br>
-                                                        <% } %>
+                                                        <table>
+                                                            <tr>
+                                                                <% for (int i = 0; i < oldImages.length; i++) { %>
+                                                                <td>
+                                                                    <img src="<%= oldImages[i].trim() %>" alt="Old Image" style="width: 100px; height: 100px;">
+                                                                </td>
+                                                                <% if ((i + 1) % 2 == 0) { %>
+                                                            </tr><tr>
+                                                                <% } %>
+                                                                <% } %>
+                                                            </tr>
+                                                        </table>
                                                         <% } %>
                                                         <% if (!oldStatus.isEmpty()) { %>
                                                         Status: <%= oldStatus %><br>
@@ -702,9 +639,18 @@
                                                         Import Date: <%= newDate %><br>
                                                         <% } %>
                                                         <% if (newImages.length > 0) { %>
-                                                        <% for (String image : newImages) { %>
-                                                        <img src="<%= image.trim() %>" alt="New Image" width="100" height="100"><br>
-                                                        <% } %>
+                                                        <table>
+                                                            <tr>
+                                                                <% for (int i = 0; i < newImages.length; i++) { %>
+                                                                <td>
+                                                                    <img src="<%= newImages[i].trim() %>" alt="New Image" style="width: 100px; height: 100px;">
+                                                                </td>
+                                                                <% if ((i + 1) % 2 == 0) { %>
+                                                            </tr><tr>
+                                                                <% } %>
+                                                                <% } %>
+                                                            </tr>
+                                                        </table>
                                                         <% } %>
                                                         <% if (!newStatus.isEmpty()) { %>
                                                         Status: <%= newStatus %><br>
@@ -730,25 +676,7 @@
                                         </table>
                                         <hr>
 
-                                        <!-- Pagination -->
-                                        <nav aria-label="Page navigation">
-                                            <ul class="pagination justify-content-center mt-3">
-                                                <li class="page-item">
-                                                    <a class="page-link" href="#" aria-label="Previous" style="color: #C43337">
-                                                        <span aria-hidden="true">&laquo;</span>
-                                                    </a>
-                                                </li>
-                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">1</a></li>
-                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">2</a></li>
-                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">3</a></li>
-                                                <li class="page-item" >
-                                                    <a class="page-link" href="#" aria-label="Next" style="color: #C43337">
-                                                        <span aria-hidden="true">&raquo;</span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                        <!-- End Pagination -->
+
                                     </div>
                                 </div>
 
@@ -771,158 +699,159 @@
                                                 </tr>
                                             </thead>
                                             <tbody id="tableBody">
-                                                <tr>
-                                                    <%
-                                                        List<ManagePromotionDTO> promotion = (List<ManagePromotionDTO>) session.getAttribute("managePromotion");
-                                                        if (promotion != null && promotion.size() > 0) {
-                                                            for (ManagePromotionDTO list : promotion) {
-                                                                String[] oldFields = list.getLoadOldField().replace("[", "").replace("]", "").split(", ");
-                                                                String[] newFields = list.getLoadNewField().replace("[", "").replace("]", "").split(", ");
+                                               <tr>
+    <%
+        List<ManagePromotionDTO> promotion = (List<ManagePromotionDTO>) session.getAttribute("managePromotion");
+        if (promotion != null && promotion.size() > 0) {
+            for (ManagePromotionDTO list : promotion) {
+                String[] oldFields = list.getLoadOldField().replace("[", "").replace("]", "").split(", ");
+                String[] newFields = list.getLoadNewField().replace("[", "").replace("]", "").split(", ");
 
-                                                                String oldPromotion = "", oldStatus = "", oldDescription = "", oldStartDate = "", oldEndDate = "", oldPer = "", oldCondition = "";
-                                                                String newPromotion = "", newStatus = "", newDescription = "", newStartDate = "", newEndDate = "", newPer = "", newCondition = "";
-                                                                String[] oldImages = new String[0], newImages = new String[0];
+                String oldPromotion = "", oldStatus = "", oldDescription = "", oldStartDate = "", oldEndDate = "", oldPer = "", oldCondition = "";
+                String newPromotion = "", newStatus = "", newDescription = "", newStartDate = "", newEndDate = "", newPer = "", newCondition = "";
+                String[] oldImages = new String[0], newImages = new String[0];
 
-                                                                // Determine old fields (promotion, status, description, start date, end date, discount per, image, condition)
-                                                                for (String field : oldFields) {
-                                                                    if (field.matches("Promotion:.*")) {
-                                                                        oldPromotion = field.replace("Promotion:", "").trim();
-                                                                    } else if (field.matches("Status:.*")) {
-                                                                        oldStatus = field.replace("Status:", "").trim();
-                                                                    } else if (field.matches("Description:.*")) {
-                                                                        oldDescription = field.replace("Description:", "").trim();
-                                                                    } else if (field.matches("Start Date:.*")) {
-                                                                        oldStartDate = field.replace("Start Date:", "").trim();
-                                                                    } else if (field.matches("End Date:.*")) {
-                                                                        oldEndDate = field.replace("End Date:", "").trim();
-                                                                    } else if (field.matches("Discount Per:.*")) {
-                                                                        oldPer = field.replace("Discount Per:", "").trim();
-                                                                    } else if (field.matches("Condition:.*")) {
-                                                                        oldCondition = field.replace("Condition:", "").trim();
-                                                                    } else if (field.matches(".*\\.(png|jpg|jpeg|gif)(;.*\\.(png|jpg|jpeg|gif))*$")) {
-                                                                        oldImages = field.split(";");
-                                                                    }
-                                                                }
+                // Determine old fields (promotion, status, description, start date, end date, discount per, image, condition)
+                for (String field : oldFields) {
+                    if (field.matches("Promotion:.*")) {
+                        oldPromotion = field.replace("Promotion:", "").trim();
+                    } else if (field.matches("Status:.*")) {
+                        oldStatus = field.replace("Status:", "").trim();
+                    } else if (field.matches("Description:.*")) {
+                        oldDescription = field.replace("Description:", "").trim();
+                    } else if (field.matches("Start Date:.*")) {
+                        oldStartDate = field.replace("Start Date:", "").trim();
+                    } else if (field.matches("End Date:.*")) {
+                        oldEndDate = field.replace("End Date:", "").trim();
+                    } else if (field.matches("Discount Per:.*")) {
+                        oldPer = field.replace("Discount Per:", "").trim();
+                    } else if (field.matches("Condition:.*")) {
+                        oldCondition = field.replace("Condition:", "").trim();
+                    } else if (field.matches(".*\\.(png|jpg|jpeg|gif)(;.*\\.(png|jpg|jpeg|gif))*$")) {
+                        oldImages = field.split(";");
+                    }
+                }
 
-                                                                // Determine new fields (promotion, status, description, start date, end date, discount per, image, condition)
-                                                                for (String field : newFields) {
-                                                                    if (field.matches("Promotion:.*")) {
-                                                                        newPromotion = field.replace("Promotion:", "").trim();
-                                                                    } else if (field.matches("Status:.*")) {
-                                                                        newStatus = field.replace("Status:", "").trim();
-                                                                    } else if (field.matches("Description:.*")) {
-                                                                        newDescription = field.replace("Description:", "").trim();
-                                                                    } else if (field.matches("Start Date:.*")) {
-                                                                        newStartDate = field.replace("Start Date:", "").trim();
-                                                                    } else if (field.matches("End Date:.*")) {
-                                                                        newEndDate = field.replace("End Date:", "").trim();
-                                                                    } else if (field.matches("Discount Per:.*")) {
-                                                                        newPer = field.replace("Discount Per:", "").trim();
-                                                                    } else if (field.matches("Condition:.*")) {
-                                                                        newCondition = field.replace("Condition:", "").trim();
-                                                                    } else if (field.matches(".*\\.(png|jpg|jpeg|gif)(;.*\\.(png|jpg|jpeg|gif))*$")) {
-                                                                        newImages = field.split(";");
-                                                                    }
-                                                                }
-                                                    %>
-                                                <tr>
-                                                    <td><%= list.getPromotionID() %></td>
-                                                    <td><%= list.getEmpID() %></td>
-                                                    <td>
-                                                        <% if (!oldPromotion.isEmpty()) { %>
-                                                        Promotion: <%= oldPromotion %><br>
-                                                        <% } %>
-                                                        <% if (!oldStatus.isEmpty()) { %>
-                                                        Status: <%= oldStatus %><br>
-                                                        <% } %>
-                                                        <% if (!oldDescription.isEmpty()) { %>
-                                                        Description: <%= oldDescription %><br>
-                                                        <% } %>
-                                                        <% if (!oldStartDate.isEmpty()) { %>
-                                                        Start Date: <%= oldStartDate %><br>
-                                                        <% } %>
-                                                        <% if (!oldEndDate.isEmpty()) { %>
-                                                        End Date: <%= oldEndDate %><br>
-                                                        <% } %>
-                                                        <% if (!oldPer.isEmpty()) { %>
-                                                        Discount Per: <%= oldPer %><br>
-                                                        <% } %>
-                                                        <% if (!oldCondition.isEmpty()) { %>
-                                                        Condition: <%= oldCondition %><br>
-                                                        <% } %>
-                                                        <% if (oldImages.length > 0) { %>
-                                                        <% for (String image : oldImages) { %>
-                                                        <img src="<%= image.trim() %>" alt="Old Image" width="100" height="100"><br>
-                                                        <% } %>
-                                                        <% } %>
-                                                    </td>
-                                                    <td>
-                                                        <% if (!newPromotion.isEmpty()) { %>
-                                                        Promotion: <%= newPromotion %><br>
-                                                        <% } %>
-                                                        <% if (!newStatus.isEmpty()) { %>
-                                                        Status: <%= newStatus %><br>
-                                                        <% } %>
-                                                        <% if (!newDescription.isEmpty()) { %>
-                                                        Description: <%= newDescription %><br>
-                                                        <% } %>
-                                                        <% if (!newStartDate.isEmpty()) { %>
-                                                        Start Date: <%= newStartDate %><br>
-                                                        <% } %>
-                                                        <% if (!newEndDate.isEmpty()) { %>
-                                                        End Date: <%= newEndDate %><br>
-                                                        <% } %>
-                                                        <% if (!newPer.isEmpty()) { %>
-                                                        Discount Per: <%= newPer %><br>
-                                                        <% } %>
-                                                        <% if (!newCondition.isEmpty()) { %>
-                                                        Condition: <%= newCondition %><br>
-                                                        <% } %>
-                                                        <% if (newImages.length > 0) { %>
-                                                        <% for (String image : newImages) { %>
-                                                        <img src="<%= image.trim() %>" alt="New Image" width="100" height="100"><br>
-                                                        <% } %>
-                                                        <% } %>
-                                                    </td>
-                                                    <td><%= list.getAction() %></td>
-                                                    <td><%= list.getChangeDate() %></td>
-                                                </tr>
-                                                <%
-                                                        }
-                                                    } else {
-                                                %>
-                                                <tr>
-                                                    <td colspan="8" class="text-center">No Update !!!</td>
-                                                </tr>
-                                                <%
-                                                    }
-                                                %>
-                                                </tr>
+                // Determine new fields (promotion, status, description, start date, end date, discount per, image, condition)
+                for (String field : newFields) {
+                    if (field.matches("Promotion:.*")) {
+                        newPromotion = field.replace("Promotion:", "").trim();
+                    } else if (field.matches("Status:.*")) {
+                        newStatus = field.replace("Status:", "").trim();
+                    } else if (field.matches("Description:.*")) {
+                        newDescription = field.replace("Description:", "").trim();
+                    } else if (field.matches("Start Date:.*")) {
+                        newStartDate = field.replace("Start Date:", "").trim();
+                    } else if (field.matches("End Date:.*")) {
+                        newEndDate = field.replace("End Date:", "").trim();
+                    } else if (field.matches("Discount Per:.*")) {
+                        newPer = field.replace("Discount Per:", "").trim();
+                    } else if (field.matches("Condition:.*")) {
+                        newCondition = field.replace("Condition:", "").trim();
+                    } else if (field.matches(".*\\.(png|jpg|jpeg|gif)(;.*\\.(png|jpg|jpeg|gif))*$")) {
+                        newImages = field.split(";");
+                    }
+                }
+    %>
+    <tr>
+        <td><%= list.getPromotionID() %></td>
+        <td><%= list.getEmpID() %></td>
+        <td>
+            <% if (!oldPromotion.isEmpty()) { %>
+            Promotion: <%= oldPromotion %><br>
+            <% } %>
+            <% if (!oldStatus.isEmpty()) { %>
+            Status: <%= oldStatus %><br>
+            <% } %>
+            <% if (!oldDescription.isEmpty()) { %>
+            Description: <%= oldDescription %><br>
+            <% } %>
+            <% if (!oldStartDate.isEmpty()) { %>
+            Start Date: <%= oldStartDate %><br>
+            <% } %>
+            <% if (!oldEndDate.isEmpty()) { %>
+            End Date: <%= oldEndDate %><br>
+            <% } %>
+            <% if (!oldPer.isEmpty()) { %>
+            Discount Per: <%= oldPer %><br>
+            <% } %>
+            <% if (!oldCondition.isEmpty()) { %>
+            Condition: <%= oldCondition %><br>
+            <% } %>
+            <% if (oldImages.length > 0) { %>
+            <table>
+                <tr>
+                    <% for (int i = 0; i < oldImages.length; i++) { %>
+                        <td>
+                            <img src="<%= oldImages[i].trim() %>" alt="Old Image" width="100" height="100">
+                        </td>
+                        <% if ((i + 1) % 2 == 0) { %>
+                            </tr><tr>
+                        <% } %>
+                    <% } %>
+                </tr>
+            </table>
+            <% } %>
+        </td>
+        <td>
+            <% if (!newPromotion.isEmpty()) { %>
+            Promotion: <%= newPromotion %><br>
+            <% } %>
+            <% if (!newStatus.isEmpty()) { %>
+            Status: <%= newStatus %><br>
+            <% } %>
+            <% if (!newDescription.isEmpty()) { %>
+            Description: <%= newDescription %><br>
+            <% } %>
+            <% if (!newStartDate.isEmpty()) { %>
+            Start Date: <%= newStartDate %><br>
+            <% } %>
+            <% if (!newEndDate.isEmpty()) { %>
+            End Date: <%= newEndDate %><br>
+            <% } %>
+            <% if (!newPer.isEmpty()) { %>
+            Discount Per: <%= newPer %><br>
+            <% } %>
+            <% if (!newCondition.isEmpty()) { %>
+            Condition: <%= newCondition %><br>
+            <% } %>
+            <% if (newImages.length > 0) { %>
+            <table>
+                <tr>
+                    <% for (int i = 0; i < newImages.length; i++) { %>
+                        <td>
+                            <img src="<%= newImages[i].trim() %>" alt="New Image" width="100" height="100">
+                        </td>
+                        <% if ((i + 1) % 2 == 0) { %>
+                            </tr><tr>
+                        <% } %>
+                    <% } %>
+                </tr>
+            </table>
+            <% } %>
+        </td>
+        <td><%= list.getAction() %></td>
+        <td><%= list.getChangeDate() %></td>
+    </tr>
+    <%
+            }
+        } else {
+    %>
+    <tr>
+        <td colspan="8" class="text-center">No Update !!!</td>
+    </tr>
+    <%
+        }
+    %>
+</tr>
+
 
 
                                             </tbody>
                                         </table>
                                         <hr>
 
-                                        <!-- Pagination -->
-                                        <nav aria-label="Page navigation">
-                                            <ul class="pagination justify-content-center mt-3">
-                                                <li class="page-item">
-                                                    <a class="page-link" href="#" aria-label="Previous" style="color: #C43337">
-                                                        <span aria-hidden="true">&laquo;</span>
-                                                    </a>
-                                                </li>
-                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">1</a></li>
-                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">2</a></li>
-                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">3</a></li>
-                                                <li class="page-item" >
-                                                    <a class="page-link" href="#" aria-label="Next" style="color: #C43337">
-                                                        <span aria-hidden="true">&raquo;</span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                        <!-- End Pagination -->
+
                                     </div>
                                 </div>
 
@@ -1032,30 +961,12 @@
                                         </table>
                                         <hr>
 
-                                        <!-- Pagination -->
-                                        <nav aria-label="Page navigation">
-                                            <ul class="pagination justify-content-center mt-3">
-                                                <li class="page-item">
-                                                    <a class="page-link" href="#" aria-label="Previous" style="color: #C43337">
-                                                        <span aria-hidden="true">&laquo;</span>
-                                                    </a>
-                                                </li>
-                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">1</a></li>
-                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">2</a></li>
-                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">3</a></li>
-                                                <li class="page-item" >
-                                                    <a class="page-link" href="#" aria-label="Next" style="color: #C43337">
-                                                        <span aria-hidden="true">&raquo;</span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                        <!-- End Pagination -->
+
                                     </div>
                                 </div>
 
                                 <div class="d-sm-flex align-items-center justify-content-between mb-4 " style="margin-top: 20px;">
-                                    <h1 class="h3 mb-0 text-gray-900"><b>History of Product Detail</b></h1>
+                                    <h1 class="h3 mb-0 text-gray-900"><b>History of Children Category</b></h1>
                                 </div>
                                 <div class="card" style="margin-top: 20px;">
                                     <div class="table-responsive">
@@ -1140,25 +1051,7 @@
                                         </table>
                                         <hr>
 
-                                        <!-- Pagination -->
-                                        <nav aria-label="Page navigation">
-                                            <ul class="pagination justify-content-center mt-3">
-                                                <li class="page-item">
-                                                    <a class="page-link" href="#" aria-label="Previous" style="color: #C43337">
-                                                        <span aria-hidden="true">&laquo;</span>
-                                                    </a>
-                                                </li>
-                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">1</a></li>
-                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">2</a></li>
-                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">3</a></li>
-                                                <li class="page-item" >
-                                                    <a class="page-link" href="#" aria-label="Next" style="color: #C43337">
-                                                        <span aria-hidden="true">&raquo;</span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                        <!-- End Pagination -->
+
                                     </div>
                                 </div>
 
@@ -1239,25 +1132,7 @@
                                         </table>
                                         <hr>
 
-                                        <!-- Pagination -->
-                                        <nav aria-label="Page navigation">
-                                            <ul class="pagination justify-content-center mt-3">
-                                                <li class="page-item">
-                                                    <a class="page-link" href="#" aria-label="Previous" style="color: #C43337">
-                                                        <span aria-hidden="true">&laquo;</span>
-                                                    </a>
-                                                </li>
-                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">1</a></li>
-                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">2</a></li>
-                                                <li class="page-item mx-1"><a class="page-link" href="#" style="color: #C43337">3</a></li>
-                                                <li class="page-item" >
-                                                    <a class="page-link" href="#" aria-label="Next" style="color: #C43337">
-                                                        <span aria-hidden="true">&raquo;</span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                        <!-- End Pagination -->
+
                                     </div>
                                 </div>
 
