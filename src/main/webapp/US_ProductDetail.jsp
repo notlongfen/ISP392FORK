@@ -252,6 +252,11 @@
                                     </div>
                                 </div>
                             </form>
+                            <%
+                            CartError error = (CartError) request.getAttribute("CART_ERROR");
+                            String stockError = error.getQuantityError();
+                            %>
+                            <p class="danger"> <%= stockError></p>
                         </div>
                     </div>
                 </div>

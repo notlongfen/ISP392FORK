@@ -111,6 +111,16 @@ public class EditOrderController extends HttpServlet {
                         productDAO.updateQuantittyAfterCheckout(orderDetailsDTO.getProductID(), productDetailID, orderDetailsDTO.getQuantity());
                         productDAO.updateNumberOfPurchasing(orderDetailsDTO.getProductID(), productDTO.getNumberOfPurchase() + orderDetailsDTO.getQuantity());
                     }
+                } else if( status == 4){ //cancel
+                    for (OrderDetailsDTO orderDetailsDTO : listOrderDetails) {
+                        ProductDAO productDAO = new ProductDAO();
+                        ProductDetailsDTO productDetailsDTO = productDAO.getProductDetailsByID(orderDetailsDTO.getProductDetailsID());
+                        ProductDTO productDTO = productDAO.getProductByID(orderDetailsDTO.getProductID());
+                        int productDetailID = productDetailsDTO.getProductDetailsID();
+                        // int quantity = productDetailsDTO.getStockQuantity() - orderDetailsDTO.getQuantity(); WRONG CAUSE THE DATABASE DAO
+                        productDAO.updateQuantittyAfterCheckout(orderDetailsDTO.getProductID(), productDetailID, -orderDetailsDTO.getQuantity());
+                        productDAO.updateNumberOfPurchasing(orderDetailsDTO.getProductID(), productDTO.getNumberOfPurchase() - orderDetailsDTO.getQuantity());
+                    }
                 }
 
                 List<String> oldList = new ArrayList<>();
