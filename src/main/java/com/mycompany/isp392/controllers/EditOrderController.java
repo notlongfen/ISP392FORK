@@ -10,6 +10,7 @@ import com.mycompany.isp392.product.ManageProductDTO;
 import com.mycompany.isp392.product.ProductDAO;
 import com.mycompany.isp392.product.ProductDetailsDTO;
 import com.mycompany.isp392.promotion.PromotionDAO;
+import com.mycompany.isp392.promotion.PromotionDTO;
 import com.mycompany.isp392.user.CustomerDTO;
 import com.mycompany.isp392.user.UserDAO;
 import com.mycompany.isp392.user.UserDTO;
@@ -70,10 +71,15 @@ public class EditOrderController extends HttpServlet {
                 List<OrderDetailsDTO> listOrderDetails = orderDAO.getListOrderDetailsByOrderID(orderID);
 
                 int promotionID = orderDTO.getPromotionID();
-                double percentage = promotionDAO.getPromotionByID(promotionID).getDiscountPer() / 100.0;
+                double percentage = 0.0;
+                PromotionDTO promotionDTO = promotionDAO.getPromotionByID(promotionID);
+                if(promotionDTO != null){
+                    percentage = promotionDTO.getDiscountPer() / 100.0;
+                }
 
                 if (percentage != 0) { // if have promotion
-                    double total = (orderDTO.getTotal() - 40_000) / (1 - percentage);
+                    // double total = (orderDTO.getTotal() - 40_000) / (1 - percentage);
+                    double total = orderDTO.getTotal();
                     int point = 0;
                     CustomerDTO customer = userDAO.getCustomerByID(orderDTO.getCustID());
                     int userPointBefore = customer.getPoints();
@@ -102,6 +108,7 @@ public class EditOrderController extends HttpServlet {
                         int productDetailID = productDetailsDTO.getProductDetailsID();
                         // int quantity = productDetailsDTO.getStockQuantity() - orderDetailsDTO.getQuantity(); WRONG CAUSE THE DATABASE DAO
                         productDAO.updateQuantittyAfterCheckout(orderDetailsDTO.getProductID(), productDetailID, orderDetailsDTO.getQuantity());
+                        productDAO.updateNumberOfPurchasing(orderDetailsDTO.getProductID(), orderDetailsDTO.getQuantity());
                     }
                 }
 

@@ -31,7 +31,7 @@ import stackjava.com.accessgoogle.common.GoogleUtils;
 public class LoginGoogleServlet extends HttpServlet {
 
     private static final String ERROR = "US_SignIn.jsp";
-    private static final String SUCCESS = "US_index.jsp";
+    private static final String SUCCESS = "HomePageController";
 
     private static final long serialVersionUID = 1L;
 

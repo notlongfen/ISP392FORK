@@ -178,10 +178,10 @@ public class CheckoutController extends HttpServlet {
 
                     if (finalUserPoint != 0) {
                         // Update best sellet attribute
-                        for (CartDetailsDTO cartDetail : cartDetails) {
-                            productDAO.updateProductNumberOfPurchasedItems(cartDetail.getProductID(),
-                                    cartDetail.getQuantity());
-                        }
+                        // for (CartDetailsDTO cartDetail : cartDetails) { // TODO: NEED CHECK
+                        //     productDAO.updateProductNumberOfPurchasedItems(cartDetail.getProductID(),
+                        //             cartDetail.getQuantity());
+                        // }
                         // List<String> newList = new ArrayList<>();
                         // newList.add(String.valueOf(order.getOrderID()));
                         // newList.add(String.valueOf(order.getTotal()));
