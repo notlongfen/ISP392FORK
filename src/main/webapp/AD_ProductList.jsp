@@ -46,7 +46,6 @@
         </style>
     </head>
     <body id="page-top">
-
         <div id="wrapper">
             <!-- Sidebar -->
             <%@include file="AD_sidebar.jsp" %>
@@ -203,35 +202,6 @@
                                         </tbody>
                                     </table>
                                     <hr>
-                                    <!-- Pagination -->
-                                    <nav aria-label="Page navigation">
-                                        <ul class="pagination justify-content-center mt-3">
-                                            <% 
-                                                int currentPage = (int) request.getAttribute("CURRENT_PAGE");
-                                                int totalPages = (int) request.getAttribute("TOTAL_PAGES");
-                                                if (currentPage > 1) { 
-                                            %>
-                                            <li class="page-item">
-                                                <a class="page-link" href="GetProductsController?page=<%= currentPage - 1 %>" aria-label="Previous" style="color: #C43337">
-                                                    <span aria-hidden="true">&laquo;</span>
-                                                </a>
-                                            </li>
-                                            <% } %>
-                                            <% for (int i = 1; i <= totalPages; i++) { %>
-                                            <li class="page-item <%= (i == currentPage) ? "active" : "" %>">
-                                                <a class="page-link" href="GetProductsController?page=<%= i %>" style="color: #C43337"><%= i %></a>
-                                            </li>
-                                            <% } %>
-                                            <% if (currentPage < totalPages) { %>
-                                            <li class="page-item">
-                                                <a class="page-link" href="GetProductsController?page=<%= currentPage + 1 %>" aria-label="Next" style="color: #C43337">
-                                                    <span aria-hidden="true">&raquo;</span>
-                                                </a>
-                                            </li>
-                                            <% } %>
-                                        </ul>
-                                    </nav>
-                                    <!-- End Pagination -->
                                 </div>
                                 <div class="card-footer"></div>
                             </div>

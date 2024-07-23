@@ -12,10 +12,10 @@
                     <%
                         ProductError productError = (ProductError) request.getAttribute("PRODUCT_ERROR");
                         String Error = (String) request.getAttribute("ERROR_MESSAGE");
-                        if (productError != null && !productError.getProductNameError().isEmpty()) {
+                        if (productError != null) {
                     %>
                     <li class="list-group-item list-group-item-danger"><%= productError.getProductNameError() %></li>
-
+                     <li class="list-group-item list-group-item-danger"><%= productError.getError() %></li>
                     <%
                         }
                         if (Error != null && !Error.isEmpty()){

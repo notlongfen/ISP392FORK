@@ -32,11 +32,12 @@ public class GetProductsController extends HttpServlet {
             CategoryDAO categoryDAO = new CategoryDAO();
 
             // Retrieve and clear success message from session
-             String successMessage = (String) request.getSession().getAttribute("SUCCESS_MESSAGE");
+            String successMessage = (String) request.getSession().getAttribute("SUCCESS_MESSAGE");
             if (successMessage != null) {
                 request.setAttribute("SUCCESS_MESSAGE", successMessage);
                 request.getSession().removeAttribute("SUCCESS_MESSAGE");
             }
+
             // Retrieve and clear error message from session
             ProductError productError = (ProductError) request.getSession().getAttribute("PRODUCT_ERROR");
             if (productError != null) {
@@ -49,12 +50,6 @@ public class GetProductsController extends HttpServlet {
             if (errorMessage != null) {
                 request.setAttribute("ERROR_MESSAGE", errorMessage);
                 request.getSession().removeAttribute("ERROR_MESSAGE");
-            }
-
-            int entriesPerPage = 15; // Fixed number of entries per page
-            int currentPage = 1;
-            if (request.getParameter("page") != null) {
-                currentPage = Integer.parseInt(request.getParameter("page"));
             }
 
             // get product details page
@@ -80,13 +75,10 @@ public class GetProductsController extends HttpServlet {
                 request.setAttribute("PARENT_PRODUCT_NAME", parentProductName);
                 url = ADD_PRODUCT_DETAIL_PAGE;
             } else {
-                int totalProducts = productDAO.getTotalProducts();
-                List<ProductDTO> productList = productDAO.getProductsByPage(currentPage, entriesPerPage);
+                List<ProductDTO> productList = productDAO.getAllProducts();
                 List<BrandDTO> brands = dao.getAllBrands();
                 request.setAttribute("BRAND_LIST", brands);
                 request.setAttribute("PRODUCT_LIST", productList);
-                request.setAttribute("CURRENT_PAGE", currentPage);
-                request.setAttribute("TOTAL_PAGES", (int) Math.ceil((double) totalProducts / entriesPerPage));
 
                 for (ProductDTO product : productList) {
                     List<CategoryDTO> categories = categoryDAO.getCategoriesByProductID(product.getProductID());
