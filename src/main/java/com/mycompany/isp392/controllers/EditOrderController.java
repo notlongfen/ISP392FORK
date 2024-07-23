@@ -8,6 +8,7 @@ import com.mycompany.isp392.order.OrderDTO;
 import com.mycompany.isp392.order.OrderDetailsDTO;
 import com.mycompany.isp392.product.ManageProductDTO;
 import com.mycompany.isp392.product.ProductDAO;
+import com.mycompany.isp392.product.ProductDTO;
 import com.mycompany.isp392.product.ProductDetailsDTO;
 import com.mycompany.isp392.promotion.PromotionDAO;
 import com.mycompany.isp392.promotion.PromotionDTO;
@@ -104,11 +105,11 @@ public class EditOrderController extends HttpServlet {
                     for (OrderDetailsDTO orderDetailsDTO : listOrderDetails) {
                         ProductDAO productDAO = new ProductDAO();
                         ProductDetailsDTO productDetailsDTO = productDAO.getProductDetailsByID(orderDetailsDTO.getProductDetailsID());
-
+                        ProductDTO productDTO = productDAO.getProductByID(orderDetailsDTO.getProductID());
                         int productDetailID = productDetailsDTO.getProductDetailsID();
                         // int quantity = productDetailsDTO.getStockQuantity() - orderDetailsDTO.getQuantity(); WRONG CAUSE THE DATABASE DAO
                         productDAO.updateQuantittyAfterCheckout(orderDetailsDTO.getProductID(), productDetailID, orderDetailsDTO.getQuantity());
-                        productDAO.updateNumberOfPurchasing(orderDetailsDTO.getProductID(), orderDetailsDTO.getQuantity());
+                        productDAO.updateNumberOfPurchasing(orderDetailsDTO.getProductID(), productDTO.getNumberOfPurchase() + orderDetailsDTO.getQuantity());
                     }
                 }
 
