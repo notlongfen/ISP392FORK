@@ -160,11 +160,47 @@
                 </div>
             </div>
         </div>
+        <!-- Modal -->
+        <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title" id="errorModalLabel">Error</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="list-group list-group-flush">
+                            <%  
+                                String errorMessage = (String) request.getAttribute("ERROR_LOGIN");
+                                if (errorMessage != null) {
+                                %>
+                            <li class="list-group-item list-group-item-danger"><%= errorMessage %></li>
+                                <% } %>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <link rel="stylesheet" href="styles.css">
         <jsp:include page="US_footer.jsp" />
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var hasError = <%= (request.getAttribute("ERROR_LOGIN") != null ? "true" : "false") %>;
+                if (hasError) {
+                    var errorModal = new bootstrap.Modal(document.getElementById('errorModal'), {});
+                    errorModal.show();
+                }
+            });
+        </script>
     </body>
 
 </html>

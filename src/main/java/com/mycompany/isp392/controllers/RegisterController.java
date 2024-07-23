@@ -48,7 +48,7 @@ public class RegisterController extends HttpServlet {
                 checkValidation = false;
             }
             // Check phone length
-            if (String.valueOf(phone).length() != 9 && String.valueOf(phone).length() != 10) {
+            if (String.valueOf(phone).length() != 9 || String.valueOf(phone).length() != 10) {
                 userError.setPhoneError("Phone number must be 9 or 10 digits.");
                 checkValidation = false;
             }

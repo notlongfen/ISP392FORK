@@ -13,6 +13,8 @@
 <%@page import="com.mycompany.isp392.promotion.ManagePromotionDTO"%>
 <%@page import="com.mycompany.isp392.category.ManageCategoryDTO"%>
 <%@page import="com.mycompany.isp392.order.ManageOrderDTO"%>
+<%@page import="java.text.NumberFormat"%>
+<%@page import="java.util.Locale"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -112,6 +114,7 @@
 
                                                 <tr>
                                                     <%
+                                                        NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
     // Fetch the list of ManageBrandDTO objects from the session
     List<ManageBrandDTO> manage = (List<ManageBrandDTO>) session.getAttribute("manageBrand");
     if (manage != null && !manage.isEmpty()) {

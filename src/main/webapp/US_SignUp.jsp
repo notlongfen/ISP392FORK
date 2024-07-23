@@ -105,6 +105,33 @@
                 </div>
             </div>
         </div>
+        <!-- Modal -->
+        <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title" id="errorModalLabel">Error</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="list-group list-group-flush">
+                            <%  
+                                String errorMessage = (String) request.getAttribute("USER_ERROR");
+                                if (errorMessage != null) {
+                                %>
+                            <li class="list-group-item list-group-item-danger"><%= errorMessage %></li>
+                                <% } %>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <a class="scroll-to-top rounded" href="#page-top">
             <i class="fas fa-angle-up"></i>
         </a>
@@ -179,7 +206,13 @@
                 confirmPassword.setAttribute("type", type);
                 this.classList.toggle("fa-eye-slash");
             });
-
+            document.addEventListener('DOMContentLoaded', function () {
+                var hasError = <%= (request.getAttribute("USER_ERROR") != null ? "true" : "false") %>;
+                if (hasError) {
+                    var errorModal = new bootstrap.Modal(document.getElementById('errorModal'), {});
+                    errorModal.show();
+                }
+            });
         </script>
     </body>
 </html>
